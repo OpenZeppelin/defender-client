@@ -1,0 +1,10 @@
+{
+  "name": "defender-relay-send",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Igor Yalovoy <igor@openzeppelin.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/defender-client": "../../"
+  }
+}
