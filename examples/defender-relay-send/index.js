@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { Relayer } = require('@openzeppelin/defender-client');
 
 const relayer = new Relayer(

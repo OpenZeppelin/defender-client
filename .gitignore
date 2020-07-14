@@ -6,3 +6,4 @@ build
 .openzeppelin
 *.tgz
 coverage
+.env
