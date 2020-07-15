@@ -23,7 +23,6 @@ export async function authenticate(authenticationData: UserPass): Promise<string
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: function (result) {
-        console.log(`API key ${authenticationData.Username}`);
         const token = result.getIdToken().getJwtToken();
         resolve(token);
       },
