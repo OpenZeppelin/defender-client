@@ -1,3 +1,3 @@
-import { Relayer } from './relayer';
+import { Relayer, RelayerTransactionPayload, RelayerTransactionObject } from './relayer';
 
-export { Relayer };
+export { Relayer, RelayerTransactionObject, RelayerTransactionPayload };

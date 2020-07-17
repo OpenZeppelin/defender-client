@@ -3,8 +3,8 @@ require('dotenv').config();
 const { Relayer } = require('@openzeppelin/defender-client');
 
 const relayer = new Relayer(
-  'ACtX8ZkLPYErUsLeKtGrJbUhQnFzTRyJ',
-  '5QikYq5rpKN7pFjAHsXhDEwH7qsFqjHujSBXbCGZTjDWm8CnguPv63wvp7hEdpw5',
+  '6u9s2HRkkM86i8vcibfXRhA5Ag3k3MpZ',
+  '5EwMnhwMiWCPkND5QQX6BDz361Jnhb4tNaWQovM4nHZNVakcQzHzjo66f3CCgVzJ',
 );
 
 async function send() {
@@ -25,9 +25,9 @@ async function query(id) {
 (async () => {
   try {
     if (process.argv.length > 2) {
-      query(process.argv[2]);
+      await query(process.argv[2]);
     } else {
-      send();
+      await send();
     }
   } catch (e) {
     console.log(e);

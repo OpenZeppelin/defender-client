@@ -2,7 +2,19 @@ import { authenticate } from './auth';
 import { createApi } from './api';
 import { AxiosInstance } from 'axios';
 
-export type RelayerTransactionPayload = {};
+export type Address = string;
+export type BigUInt = string | number;
+export type Hex = string;
+export type Speed = 'safeLow' | 'average' | 'fast' | 'fastest';
+
+export type RelayerTransactionPayload = {
+  to: Address;
+  value?: BigUInt;
+  data?: Hex;
+  speed?: Speed;
+  gasLimit: BigUInt;
+};
+
 export type RelayerTransactionObject = {};
 
 export class Relayer {
