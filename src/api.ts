@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { pick } from 'lodash';
 
-export const ApiUrl = process.env.API_URL || 'https://jdspau484f.execute-api.us-west-2.amazonaws.com/prod/';
+export const ApiUrl = process.env.API_URL || 'http://api.defender.openzeppelin.com/';
 
 export function createApi(key: string, token: string): AxiosInstance {
   const instance = axios.create({
