@@ -6,6 +6,7 @@ export type Address = string;
 export type BigUInt = string | number;
 export type Hex = string;
 export type Speed = 'safeLow' | 'average' | 'fast' | 'fastest';
+export type Status = 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed';
 
 export type RelayerTransactionPayload = {
   to: Address;
@@ -23,10 +24,11 @@ export type RelayerTransaction = {
   from: Address;
   value: string;
   data: string;
+  speed: Speed;
   gasPrice: number;
   gasLimit: number;
   nonce: number;
-  status: string;
+  status: Status;
   chainId: number;
 };
 
