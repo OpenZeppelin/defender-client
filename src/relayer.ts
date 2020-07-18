@@ -6,6 +6,7 @@ export type Address = string;
 export type BigUInt = string | number;
 export type Hex = string;
 export type Speed = 'safeLow' | 'average' | 'fast' | 'fastest';
+export type Status = 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed';
 
 export type RelayerTransactionPayload = {
   to: Address;
@@ -15,7 +16,21 @@ export type RelayerTransactionPayload = {
   gasLimit: BigUInt;
 };
 
-export type RelayerTransactionObject = {};
+// from openzeppelin/defender/models/src/types/tx.res.ts
+export type RelayerTransaction = {
+  transactionId: string;
+  hash: string;
+  to: Address;
+  from: Address;
+  value: string;
+  data: string;
+  speed: Speed;
+  gasPrice: number;
+  gasLimit: number;
+  nonce: number;
+  status: Status;
+  chainId: number;
+};
 
 export class Relayer {
   private token!: string;
@@ -34,13 +49,13 @@ export class Relayer {
     this.api = createApi(this.ApiKey, this.token);
   }
 
-  public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransactionObject> {
+  public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
     await this.initialization;
-    return (await this.api.post('/txs', payload)) as RelayerTransactionObject;
+    return (await this.api.post('/txs', payload)) as RelayerTransaction;
   }
 
-  public async query(id: string): Promise<RelayerTransactionObject> {
+  public async query(id: string): Promise<RelayerTransaction> {
     await this.initialization;
-    return (await this.api.get(`txs/${id}`)) as RelayerTransactionObject;
+    return (await this.api.get(`txs/${id}`)) as RelayerTransaction;
   }
 }
