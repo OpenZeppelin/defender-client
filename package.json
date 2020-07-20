@@ -1,12 +1,11 @@
 {
-  "name": "@openzeppelin/defender-client",
+  "name": "defender-relay-client",
   "version": "0.1.0",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "compile": "rm -rf lib && tsc",
-    "test:integration": "node scripts/run-integration-test.js",
     "test:unit": "jest --verbose",
     "test": "npm run test:unit && npm run test:integration",
     "watch": "tsc -w",
