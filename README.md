@@ -1,4 +1,4 @@
-# Defender Relay client
+# Defender Relay Client
 
 Defender Relay lets you spin up private relayers to send transactions to any public Ethereum network. Each relayer has its own secure private key, and a set of API keys. You can send transactions via your relayers by POSTing to the Defender HTTP API, or using this library.
 
