@@ -7,7 +7,7 @@
   "scripts": {
     "compile": "rm -rf lib && tsc",
     "test:unit": "jest --verbose",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "npm run test:unit",
     "watch": "tsc -w",
     "lint": "yarn lint:check --fix",
     "lint:check": "npx eslint 'src/**/*.{js,ts}' --quiet"
