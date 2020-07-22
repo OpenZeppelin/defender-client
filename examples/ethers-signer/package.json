@@ -1,0 +1,13 @@
+{
+  "name": "ethers-signer",
+  "private": true,
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Santiago Palladino <santiago@openzeppelin.com>",
+  "license": "MIT",
+  "dependencies": {
+    "defender-relay-client": "link:../../",
+    "dotenv": "^8.2.0",
+    "ethers": "^5.0.7"
+  }
+}
