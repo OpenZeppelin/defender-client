@@ -4,8 +4,9 @@
   "main": "index.js",
   "author": "Igor Yalovoy <igor@openzeppelin.com>",
   "license": "MIT",
+  "private": true,
   "dependencies": {
-    "@openzeppelin/defender-client": "../../",
+    "defender-relay-client": "link:../../",
     "dotenv": "^8.2.0"
   }
 }

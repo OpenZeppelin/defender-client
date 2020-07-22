@@ -1,10 +1,10 @@
 require('dotenv').config();
 
-const { Relayer } = require('@openzeppelin/defender-client');
+const { Relayer } = require('defender-relay-client');
 
 const relayer = new Relayer(
-  '6u9s2HRkkM86i8vcibfXRhA5Ag3k3MpZ',
-  '5EwMnhwMiWCPkND5QQX6BDz361Jnhb4tNaWQovM4nHZNVakcQzHzjo66f3CCgVzJ',
+  process.env.RELAYER_API_KEY,
+  process.env.RELAYER_API_SECRET,
 );
 
 async function send() {
