@@ -1,5 +1,7 @@
 import { authenticate } from './auth';
-import { mockAuthenticateUser } from './__mocks__/amazon-cognito-identity-js';
+const { mockAuthenticateUser } = require('./__mocks__/amazon-cognito-identity-js');
+
+// jest.mock('amazon-cognito-identity-js');
 
 const authData = {
   Username: 'user',
