@@ -22,19 +22,25 @@ const allowedTransactionKeys: Array<string> = [
 ];
 
 export type DefenderTransactionRequest = TransactionRequest & { speed: Speed };
+export type DefenderRelaySignerOptions = { speed?: Speed; from: string };
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
 
 export class DefenderRelaySigner extends Signer {
   private readonly relayer: Relayer;
 
-  constructor(private apiKey: string, private apiSecret: string, readonly provider: Provider, readonly from: string) {
+  constructor(
+    private apiKey: string,
+    private apiSecret: string,
+    readonly provider: Provider,
+    readonly options: DefenderRelaySignerOptions,
+  ) {
     super();
     this.relayer = new Relayer(apiKey, apiSecret);
   }
 
   public async getAddress(): Promise<string> {
-    return this.from;
+    return this.options.from;
   }
 
   public async signMessage(message: string | Bytes): Promise<string> {
@@ -46,7 +52,7 @@ export class DefenderRelaySigner extends Signer {
   }
 
   public connect(provider: Provider): Signer {
-    return new DefenderRelaySigner(this.apiKey, this.apiSecret, provider, this.from);
+    return new DefenderRelaySigner(this.apiKey, this.apiSecret, provider, this.options);
   }
 
   public async sendTransaction(transaction: Deferrable<DefenderTransactionRequest>): Promise<TransactionResponse> {
@@ -94,6 +100,10 @@ export class DefenderRelaySigner extends Signer {
           },
         );
       });
+    }
+
+    if (!tx.speed) {
+      tx.speed = this.options.speed || 'average';
     }
 
     return await resolveProperties(tx);
