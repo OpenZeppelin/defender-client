@@ -1,7 +1,6 @@
 import { authenticate } from './auth';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { mockAuthenticateUser } = require('./__mocks__/amazon-cognito-identity-js');
-
-// jest.mock('amazon-cognito-identity-js');
 
 const authData = {
   Username: 'user',
