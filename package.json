@@ -42,7 +42,7 @@
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },
-  "optionalDependencies": {
+  "peerDependencies": {
     "@ethersproject/abstract-provider": "^5.0.2",
     "@ethersproject/abstract-signer": "^5.0.2"
   }
