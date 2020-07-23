@@ -21,6 +21,8 @@
   "author": "Igor Yalovoy <igor@openzeppelin.com>",
   "license": "MIT",
   "devDependencies": {
+    "@ethersproject/abstract-provider": "^5.0.2",
+    "@ethersproject/abstract-signer": "^5.0.2",
     "@types/jest": "^24.0.23",
     "@types/lodash": "^4.14.157",
     "@types/node": "^12.12.7",
