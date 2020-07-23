@@ -2,6 +2,8 @@
 
 Defender Relay lets you spin up private relayers to send transactions to any public Ethereum network. Each relayer has its own secure private key, and a set of API keys. You can send transactions via your relayers by POSTing to the Defender HTTP API, or using this library.
 
+This library also includes an ethers.js signer, that uses the Relay to sign and broadcast its transactions.
+
 ## Install
 
 ```bash
@@ -73,3 +75,39 @@ Defender will update the transaction `status` every minute, marking it as `confi
 The `query` function is important to monitor the transaction status, since Defender may choose to _resubmit the transaction with a different gas price_, effectively changing its hash. This means that, if you monitor your transaction only via `getTransactionReceipt(tx.hash)` calls to a node, you may not get the latest info if it was replaced.
 
 Defender may replace a transaction by increasing its gas price if it has not been mined for a period of time, and the gas price costs have increased since the transaction was originally submitted. Also, in a case where a transaction consistently fails to be mined, Defender may replace it by a _no-op_ (a transaction with no value or data) in order to advance the sender account nonce.
+
+## Ethers.js
+
+You can use the `defender-relay-client` with [ethers.js v5](https://github.com/ethers-io/ethers.js/) directly. The package exports a `DefenderRelaySigner` [signer](https://docs.ethers.io/v5/api/signer/) that is used to send transaction.
+
+Make sure to have `ethers` installed in your project, and initialize a new defender signer instance like:
+
+```js
+const { DefenderRelaySigner } = require('defender-relay-client/lib/ethers');
+const { ethers } = require('ethers');
+
+const provider = ethers.getDefaultProvider(NETWORK);
+const signer = new DefenderRelaySigner(
+  API_KEY, 
+  API_SECRET, 
+  provider, 
+  { 
+    from: RELAYER_ADDRESS, 
+    speed: 'fast' 
+  });
+```
+
+You can then use it to send any transactions, such as executing a contract function. The `tx` object returned will be a regular ethers.js `TransactionResponse` object, with the addition of Defender's `transactionId` field.
+
+```js
+const erc20 = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
+const tx = await erc20.functions.transfer(beneficiary, 1e18.toString());
+const mined = await tx.wait();
+```
+
+### Limitations
+
+The current implementation of the `DefenderRelaySigner` for ethers.js has the following limitations:
+- The signer requires the relayer sender address that corresponds to the API key to be provided during construction. Future versions will fetch this automatically from Defender.
+- Due to validations set up in `ethers.js`, it is not possible to specify the transaction `speed` for an individual transaction when sending it. It must be set during the signer construction, and will be used for all transactions sent through it.
+- A `wait` on the transaction to be mined will only wait for the current transaction hash (see [Querying](#Querying)). If Defender Relayer replaces the transaction with a different one, this operation will time out. This is ok for fast transactions, since Defender only reprices after a few minutes. But if you expect the transaction to take a long time to be mined, then ethers' `wait` may not work. Future versions will also include an ethers provider aware of this.
