@@ -29,8 +29,6 @@ describe('Relayer', () => {
   describe('sendTransaction', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.sendTransaction(payload);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
       expect(relayer.api.post).toBeCalledWith('/txs', payload);
     });
   });
@@ -38,8 +36,6 @@ describe('Relayer', () => {
   describe('query', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.query('42');
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
       expect(relayer.api.get).toBeCalledWith('txs/42');
     });
   });
