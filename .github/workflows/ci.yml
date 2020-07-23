@@ -1,0 +1,69 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use node@12
+      uses: actions/setup-node@v1
+      with: { node-version: '12.x' }
+
+    - name: Node modules cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: |
+          ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          ~/.cache/node-gyp-cache
+        key: "${{ runner.os }}-yarn-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}"
+        restore-keys: |
+          ${{ runner.os }}-yarn-${{ env.cache-name }}-
+      env:
+        cache-name: v4
+
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
+
+    - name: Check linting
+      run: yarn lint:check
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-20.04
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use node@12
+      uses: actions/setup-node@v1
+      with: { node-version: '12.x' }
+
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Node modules cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: |
+          ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          ~/.cache/node-gyp-cache
+        key: "${{ runner.os }}-yarn-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}"
+        restore-keys: |
+          ${{ runner.os }}-yarn-${{ env.cache-name }}-
+      env:
+        cache-name: v4
+
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
+
+    - name: Run tests
+      run: yarn test
