@@ -5,7 +5,7 @@
   "author": "Igor Yalovoy <igor@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "@openzeppelin/defender-client": "../../",
+    "defender-relay-client": "../../",
     "dotenv": "^8.2.0"
   }
 }

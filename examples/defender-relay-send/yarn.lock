@@ -2,15 +2,6 @@
 # yarn lockfile v1
 
 
-"@openzeppelin/defender-client@../../":
-  version "0.1.0"
-  dependencies:
-    amazon-cognito-identity-js "^4.3.3"
-    axios "^0.19.2"
-    find-up "^4.1.0"
-    lodash "^4.17.19"
-    node-fetch "^2.6.0"
-
 amazon-cognito-identity-js@^4.3.3:
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/amazon-cognito-identity-js/-/amazon-cognito-identity-js-4.3.3.tgz#1b940fbd0d9e7eeb78f8944b8dc2a06ea01f1b5f"
@@ -52,6 +43,24 @@ debug@=3.1.0:
   integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
   dependencies:
     ms "2.0.0"
+
+defender-relay-client@../../:
+  version "0.1.0"
+  dependencies:
+    amazon-cognito-identity-js "^4.3.3"
+    axios "^0.19.2"
+    find-up "^4.1.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
+"defender-relay-client@file:../..":
+  version "0.1.0"
+  dependencies:
+    amazon-cognito-identity-js "^4.3.3"
+    axios "^0.19.2"
+    find-up "^4.1.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
 
 dotenv@^8.2.0:
   version "8.2.0"
