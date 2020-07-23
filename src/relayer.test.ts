@@ -1,3 +1,4 @@
+import { AxiosInstance } from 'axios';
 import { Relayer } from './relayer';
 import * as auth from './auth';
 import * as api from './api';
@@ -5,15 +6,17 @@ import * as api from './api';
 jest.mock('./auth');
 jest.mock('./api');
 
+type TestRelayer = Omit<Relayer, 'api'> & { api: AxiosInstance };
+
 describe('Relayer', () => {
-  let relayer: Relayer;
+  let relayer: TestRelayer;
   const payload = {
     to: '0x0',
     gasLimit: 21000,
   };
 
   beforeEach(async function () {
-    relayer = new Relayer('key', 'secret');
+    relayer = (new Relayer('key', 'secret') as unknown) as TestRelayer;
   });
 
   describe('constructor', () => {
