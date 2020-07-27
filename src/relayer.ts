@@ -38,6 +38,8 @@ export class Relayer {
   private initialization: Promise<void>;
 
   public constructor(private ApiKey: string, private ApiSecret: string) {
+    if (!ApiKey) throw new Error(`API key is required`);
+    if (!ApiSecret) throw new Error(`API secret is required`);
     this.initialization = this.init();
   }
 

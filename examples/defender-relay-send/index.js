@@ -2,7 +2,10 @@ require('dotenv').config();
 
 const { Relayer } = require('defender-relay-client');
 
-const relayer = new Relayer(process.env.API_KEY, process.env.API_SECRET);
+const relayer = new Relayer(
+  process.env.RELAYER_API_KEY,
+  process.env.RELAYER_API_SECRET,
+);
 
 async function send() {
   const txResponse = await relayer.sendTransaction({
