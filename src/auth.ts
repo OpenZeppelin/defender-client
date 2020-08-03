@@ -4,16 +4,16 @@ import { AuthenticationDetails, CognitoUserPool, CognitoUser } from 'amazon-cogn
 
 global.fetch = require('node-fetch');
 
-export const RelayerPoolId = process.env.RELAY_POOL_ID || 'us-west-2_iLmIggsiy';
-export const RelayerPoolClientId = process.env.RELAY_POOL_CLIENT_ID || '1bpd19lcr33qvg5cr3oi79rdap';
+export const RelayerPoolId = () => process.env.RELAY_POOL_ID || 'us-west-2_iLmIggsiy';
+export const RelayerPoolClientId = () => process.env.RELAY_POOL_CLIENT_ID || '1bpd19lcr33qvg5cr3oi79rdap';
 
 type UserPass = { Username: string; Password: string };
 
 export async function authenticate(authenticationData: UserPass): Promise<string> {
   const authenticationDetails = new AuthenticationDetails(authenticationData);
   const poolData = {
-    UserPoolId: RelayerPoolId,
-    ClientId: RelayerPoolClientId,
+    UserPoolId: RelayerPoolId(),
+    ClientId: RelayerPoolClientId(),
   };
 
   const userPool = new CognitoUserPool(poolData);
