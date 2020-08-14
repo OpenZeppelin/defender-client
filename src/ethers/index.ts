@@ -4,7 +4,7 @@ import { Bytes, hexlify } from '@ethersproject/bytes';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import { Deferrable, resolveProperties, shallowCopy } from '@ethersproject/properties';
-import { Relayer, Speed } from '../relayer';
+import { Relayer, Speed, Credentials } from '../relayer';
 import { Transaction } from '@ethersproject/transactions';
 
 const logger = new Logger(`defender-relay-client`);
@@ -30,13 +30,12 @@ export class DefenderRelaySigner extends Signer {
   private readonly relayer: Relayer;
 
   constructor(
-    private apiKey: string,
-    private apiSecret: string,
+    readonly credentials: Credentials,
     readonly provider: Provider,
     readonly options: DefenderRelaySignerOptions,
   ) {
     super();
-    this.relayer = new Relayer(apiKey, apiSecret);
+    this.relayer = new Relayer(credentials);
   }
 
   public async getAddress(): Promise<string> {
@@ -52,7 +51,7 @@ export class DefenderRelaySigner extends Signer {
   }
 
   public connect(provider: Provider): Signer {
-    return new DefenderRelaySigner(this.apiKey, this.apiSecret, provider, this.options);
+    return new DefenderRelaySigner(this.credentials, provider, this.options);
   }
 
   public async sendTransaction(transaction: Deferrable<DefenderTransactionRequest>): Promise<TransactionResponse> {

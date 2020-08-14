@@ -16,7 +16,7 @@ describe('Relayer', () => {
   };
 
   beforeEach(async function () {
-    relayer = (new Relayer('key', 'secret') as unknown) as TestRelayer;
+    relayer = (new Relayer({ apiKey: 'key', apiSecret: 'secret' }) as unknown) as TestRelayer;
   });
 
   describe('constructor', () => {
