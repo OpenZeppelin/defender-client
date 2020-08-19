@@ -16,7 +16,8 @@
     "lib",
     "!*.test.js",
     "!*.test.js.map",
-    "!*.test.d.ts"
+    "!*.test.d.ts",
+    "!*__mocks__"
   ],
   "author": "Igor Yalovoy <igor@openzeppelin.com>",
   "license": "MIT",
