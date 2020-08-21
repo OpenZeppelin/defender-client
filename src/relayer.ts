@@ -34,17 +34,19 @@ export type RelayerTransaction = {
   chainId: number;
 };
 
-type Credentials = ApiCredentials | AutotaskCredentials;
-type ApiCredentials = { apiKey: string; apiSecret: string };
-type AutotaskCredentials = { credentials: string; relayerARN: string };
+export type RelayerParams = ApiRelayerParams | AutotaskRelayerParams;
+type ApiRelayerParams = { apiKey: string; apiSecret: string };
+type AutotaskRelayerParams = { credentials: string; relayerARN: string };
 
-function isAutotaskCredentials(credentials: AutotaskCredentials | ApiCredentials): credentials is AutotaskCredentials {
-  const autotaskCredentials = credentials as AutotaskCredentials;
+function isAutotaskCredentials(
+  credentials: AutotaskRelayerParams | ApiRelayerParams,
+): credentials is AutotaskRelayerParams {
+  const autotaskCredentials = credentials as AutotaskRelayerParams;
   return !!autotaskCredentials.credentials;
 }
 
-function isApiCredentials(credentials: AutotaskCredentials | ApiCredentials): credentials is ApiCredentials {
-  const apiCredentials = credentials as ApiCredentials;
+function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams): credentials is ApiRelayerParams {
+  const apiCredentials = credentials as ApiRelayerParams;
   return !!apiCredentials.apiKey && !!apiCredentials.apiSecret;
 }
 
@@ -67,15 +69,15 @@ export class AutotaskRelayer implements IRelayer {
   private lambda: AWS.Lambda;
   private relayerARN: string;
 
-  public constructor(credentials: AutotaskCredentials) {
-    this.relayerARN = credentials.relayerARN;
-    const creds = JSON.parse(credentials.credentials);
+  public constructor(params: AutotaskRelayerParams) {
+    this.relayerARN = params.relayerARN;
+    const creds = JSON.parse(params.credentials);
     this.lambda = new AWS.Lambda({
-      // credentials: {
-      //   accessKeyId: creds.AccessKeyId,
-      //   secretAccessKey: creds.SecretAccessKey,
-      //   sessionToken: creds.SessionToken,
-      // },
+      credentials: {
+        accessKeyId: creds.AccessKeyId,
+        secretAccessKey: creds.SecretAccessKey,
+        sessionToken: creds.SessionToken,
+      },
     });
   }
 
@@ -112,7 +114,7 @@ export class ApiRelayer implements IRelayer {
   private apiKey: string;
   private apiSecret: string;
 
-  public constructor(credentials: ApiCredentials) {
+  public constructor(credentials: ApiRelayerParams) {
     if (!credentials.apiSecret) throw new Error(`API key is required`);
     if (!credentials.apiSecret) throw new Error(`API secret is required`);
     this.apiKey = credentials.apiKey;
@@ -142,7 +144,7 @@ export class ApiRelayer implements IRelayer {
 export class Relayer implements IRelayer {
   private relayer: IRelayer;
 
-  public constructor(credentials: Credentials) {
+  public constructor(credentials: RelayerParams) {
     if (isAutotaskCredentials(credentials)) {
       this.relayer = new AutotaskRelayer(credentials);
     } else if (isApiCredentials(credentials)) {
@@ -159,27 +161,4 @@ export class Relayer implements IRelayer {
   public query(id: string): Promise<RelayerTransaction> {
     return this.relayer.query(id);
   }
-}
-
-async function main() {
-  const relayerARN =
-    'arn:aws:lambda:us-east-1:598931145132:function:ylv-moscow-dev-proxy-relayer:DEFAULT_TENANT_8091ada2-32a0-4ccb-969b-811fd368506e';
-  const relayer = new AutotaskRelayer({ credentials: '{}', relayerARN });
-  const txRes = await relayer.sendTransaction({
-    to: '0xc7dd3ff5b387db0130854fe5f141a78586f417c6',
-    value: 100,
-    speed: 'fast',
-    gasLimit: '1000000',
-  });
-
-  console.log(txRes);
-  console.log(await relayer.query(txRes.transactionId));
-  // console.log(await relayer.query((undefined as unknown) as string));
-  // console.log(await relayer.query('512f4db2-5277-4b75-98a0-87089d78be63'));
-}
-
-if (require.main === module) {
-  main()
-    .then(console.log)
-    .catch((err) => console.error(`ERROR!`, err));
 }

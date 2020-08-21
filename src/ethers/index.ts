@@ -4,7 +4,7 @@ import { Bytes, hexlify } from '@ethersproject/bytes';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import { Deferrable, resolveProperties, shallowCopy } from '@ethersproject/properties';
-import { Relayer, Speed, Credentials } from '../relayer';
+import { Relayer, Speed, RelayerParams } from '../relayer';
 import { Transaction } from '@ethersproject/transactions';
 
 const logger = new Logger(`defender-relay-client`);
@@ -30,7 +30,7 @@ export class DefenderRelaySigner extends Signer {
   private readonly relayer: Relayer;
 
   constructor(
-    readonly credentials: Credentials,
+    readonly credentials: RelayerParams,
     readonly provider: Provider,
     readonly options: DefenderRelaySignerOptions,
   ) {
