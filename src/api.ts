@@ -1,11 +1,11 @@
 import axios, { AxiosInstance } from 'axios';
 import { pick } from 'lodash';
 
-export const ApiUrl = process.env.API_URL || 'http://api.defender.openzeppelin.com/';
+export const ApiUrl = () => process.env.API_URL || 'http://api.defender.openzeppelin.com/';
 
 export function createApi(key: string, token: string): AxiosInstance {
   const instance = axios.create({
-    baseURL: ApiUrl,
+    baseURL: ApiUrl(),
     headers: {
       'X-Api-Key': key,
       Authorization: `Bearer ${token}`,
