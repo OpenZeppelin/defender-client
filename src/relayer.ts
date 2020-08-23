@@ -18,6 +18,17 @@ export type RelayerTransactionPayload = {
   gasLimit: BigUInt;
 };
 
+export interface SignMessagePayload {
+  message: Hex;
+}
+
+export interface SignMessagePayload {
+  sig: Hex;
+  r: Hex;
+  s: Hex;
+  v: number;
+}
+
 // from openzeppelin/defender/models/src/types/tx.res.ts
 export type RelayerTransaction = {
   transactionId: string;
@@ -53,6 +64,7 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
 interface IRelayer {
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
+  sign(payload: SignMessagePayload): Promise<SignMessagePayload>;
 }
 
 type SendTxPayload = {
@@ -63,6 +75,11 @@ type SendTxPayload = {
 type QueryPayload = {
   action: 'get-tx';
   payload: string;
+};
+
+type SignPayload = {
+  action: 'sign';
+  payload: SignMessagePayload;
 };
 
 export class AutotaskRelayer implements IRelayer {
@@ -92,7 +109,14 @@ export class AutotaskRelayer implements IRelayer {
     });
   }
 
-  private async execute<T>(payload: SendTxPayload | QueryPayload): Promise<T> {
+  public async sign(payload: SignMessagePayload): Promise<SignMessagePayload> {
+    return this.execute({
+      action: 'sign' as const,
+      payload: payload,
+    });
+  }
+
+  private async execute<T>(payload: SendTxPayload | QueryPayload | SignPayload): Promise<T> {
     const result = await this.lambda
       .invoke({
         FunctionName: this.relayerARN,
@@ -135,6 +159,11 @@ export class ApiRelayer implements IRelayer {
     return (await this.api.post('/txs', payload)) as RelayerTransaction;
   }
 
+  public async sign(payload: SignMessagePayload): Promise<SignMessagePayload> {
+    await this.initialization;
+    return (await this.api.post('/sign', payload)) as SignMessagePayload;
+  }
+
   public async query(id: string): Promise<RelayerTransaction> {
     await this.initialization;
     return (await this.api.get(`txs/${id}`)) as RelayerTransaction;
@@ -152,6 +181,9 @@ export class Relayer implements IRelayer {
     } else {
       throw new Error(`Missing params`);
     }
+  }
+  sign(payload: SignMessagePayload): Promise<SignMessagePayload> {
+    return this.relayer.sign(payload);
   }
 
   public sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
