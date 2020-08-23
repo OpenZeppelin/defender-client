@@ -2,7 +2,8 @@ require('dotenv').config();
 
 const { Relayer } = require('defender-relay-client');
 
-const relayer = new Relayer(process.env.RELAYER_API_KEY, process.env.RELAYER_API_SECRET);
+const params = { apiKey: process.env.API_KEY, apiSecret: process.env.API_SECRET };
+const relayer = new Relayer(params);
 
 async function send() {
   const txResponse = await relayer.sendTransaction({
@@ -12,6 +13,11 @@ async function send() {
     gasLimit: '1000000',
   });
   console.log('txResponse', txResponse);
+}
+
+async function sign(msg) {
+  const signResponse = await relayer.sign({ message: msg });
+  console.log('signResponse', signResponse);
 }
 
 async function query(id) {
@@ -25,6 +31,7 @@ async function query(id) {
       await query(process.argv[2]);
     } else {
       await send();
+      await sign('0xdead');
     }
   } catch (e) {
     console.log(e);
