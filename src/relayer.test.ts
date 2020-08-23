@@ -1,22 +1,22 @@
 import { AxiosInstance } from 'axios';
-import { Relayer } from './relayer';
+import { Relayer, ApiRelayer } from './relayer';
 import * as auth from './auth';
 import * as api from './api';
 
 jest.mock('./auth');
 jest.mock('./api');
 
-type TestRelayer = Omit<Relayer, 'api'> & { api: AxiosInstance };
+type TestApiRelayer = Omit<ApiRelayer, 'api'> & { api: AxiosInstance };
 
 describe('Relayer', () => {
-  let relayer: TestRelayer;
+  let relayer: TestApiRelayer;
   const payload = {
     to: '0x0',
     gasLimit: 21000,
   };
 
   beforeEach(async function () {
-    relayer = (new Relayer({ apiKey: 'key', apiSecret: 'secret' }) as unknown) as TestRelayer;
+    relayer = (new ApiRelayer({ apiKey: 'key', apiSecret: 'secret' }) as unknown) as TestApiRelayer;
   });
 
   describe('constructor', () => {
