@@ -22,7 +22,7 @@ export interface SignMessagePayload {
   message: Hex;
 }
 
-export interface SignMessagePayload {
+export interface SignedMessagePayload {
   sig: Hex;
   r: Hex;
   s: Hex;
@@ -64,7 +64,7 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
 interface IRelayer {
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
-  sign(payload: SignMessagePayload): Promise<SignMessagePayload>;
+  sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
 }
 
 type SendTxPayload = {
@@ -109,7 +109,7 @@ export class AutotaskRelayer implements IRelayer {
     });
   }
 
-  public async sign(payload: SignMessagePayload): Promise<SignMessagePayload> {
+  public async sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
     return this.execute({
       action: 'sign' as const,
       payload: payload,
@@ -159,9 +159,9 @@ export class ApiRelayer implements IRelayer {
     return (await this.api.post('/txs', payload)) as RelayerTransaction;
   }
 
-  public async sign(payload: SignMessagePayload): Promise<SignMessagePayload> {
+  public async sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
     await this.initialization;
-    return (await this.api.post('/sign', payload)) as SignMessagePayload;
+    return (await this.api.post('/sign', payload)) as SignedMessagePayload;
   }
 
   public async query(id: string): Promise<RelayerTransaction> {
@@ -182,7 +182,8 @@ export class Relayer implements IRelayer {
       throw new Error(`Missing params`);
     }
   }
-  sign(payload: SignMessagePayload): Promise<SignMessagePayload> {
+
+  sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
     return this.relayer.sign(payload);
   }
 

@@ -1,6 +1,7 @@
+import { toUtf8Bytes } from '@ethersproject/strings';
 import { Provider, TransactionRequest, TransactionResponse } from '@ethersproject/abstract-provider';
 import { Signer } from '@ethersproject/abstract-signer';
-import { Bytes, hexlify } from '@ethersproject/bytes';
+import { Bytes, hexlify, joinSignature } from '@ethersproject/bytes';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import { Deferrable, resolveProperties, shallowCopy } from '@ethersproject/properties';
@@ -42,10 +43,25 @@ export class DefenderRelaySigner extends Signer {
     return this.options.from;
   }
 
+  // Returns the signed prefixed-message. This MUST treat:
+  // - Bytes as a binary message
+  // - string as a UTF8-message
+  // i.e. "0x1234" is a SIX (6) byte string, NOT 2 bytes of data
   public async signMessage(message: string | Bytes): Promise<string> {
-    throw new Error('DefenderRelaySigner#signMessage: method not yet supported');
+    if (typeof message === 'string') {
+      message = toUtf8Bytes(message);
+    }
+
+    const sig = await this.relayer.sign({
+      message: hexlify(message),
+    });
+    return joinSignature(sig);
   }
 
+  // Signs a transaxction and returns the fully serialized, signed transaction.
+  // The EXACT transaction MUST be signed, and NO additional properties to be added.
+  // - This MAY throw if signing transactions is not supports, but if
+  //   it does, sentTransaction MUST be overridden.
   public async signTransaction(transaction: Deferrable<TransactionRequest>): Promise<string> {
     throw new Error('DefenderRelaySigner#signTransaction: method not yet supported');
   }
