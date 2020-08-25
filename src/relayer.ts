@@ -1,4 +1,3 @@
-import AWS from 'aws-sdk';
 import { authenticate } from './auth';
 import { createApi } from './api';
 import { AxiosInstance } from 'axios';
@@ -46,8 +45,8 @@ export type RelayerTransaction = {
 };
 
 export type RelayerParams = ApiRelayerParams | AutotaskRelayerParams;
-type ApiRelayerParams = { apiKey: string; apiSecret: string };
-type AutotaskRelayerParams = { credentials: string; relayerARN: string };
+export type ApiRelayerParams = { apiKey: string; apiSecret: string };
+export type AutotaskRelayerParams = { credentials: string; relayerARN: string };
 
 function isAutotaskCredentials(
   credentials: AutotaskRelayerParams | ApiRelayerParams,
@@ -61,75 +60,26 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
   return !!apiCredentials.apiKey && !!apiCredentials.apiSecret;
 }
 
-interface IRelayer {
+export interface IRelayer {
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
   sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
 }
 
-type SendTxPayload = {
+export type SendTxPayload = {
   action: 'send-tx';
   payload: RelayerTransactionPayload;
 };
 
-type QueryPayload = {
+export type QueryPayload = {
   action: 'get-tx';
   payload: string;
 };
 
-type SignPayload = {
+export type SignPayload = {
   action: 'sign';
   payload: SignMessagePayload;
 };
-
-export class AutotaskRelayer implements IRelayer {
-  private lambda: AWS.Lambda;
-  private relayerARN: string;
-
-  public constructor(params: AutotaskRelayerParams) {
-    this.relayerARN = params.relayerARN;
-    const creds = JSON.parse(params.credentials);
-    this.lambda = new AWS.Lambda({
-      credentials: {
-        accessKeyId: creds.AccessKeyId,
-        secretAccessKey: creds.SecretAccessKey,
-        sessionToken: creds.SessionToken,
-      },
-    });
-  }
-
-  public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
-    return this.execute({ action: 'send-tx', payload });
-  }
-
-  public async query(id: string): Promise<RelayerTransaction> {
-    return this.execute({
-      action: 'get-tx' as const,
-      payload: id,
-    });
-  }
-
-  public async sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
-    return this.execute({
-      action: 'sign' as const,
-      payload: payload,
-    });
-  }
-
-  private async execute<T>(payload: SendTxPayload | QueryPayload | SignPayload): Promise<T> {
-    const result = await this.lambda
-      .invoke({
-        FunctionName: this.relayerARN,
-        Payload: JSON.stringify(payload),
-        InvocationType: 'RequestResponse',
-      })
-      .promise();
-    if (result.FunctionError) {
-      throw new Error(`Failed to execute with payload ${util.inspect(payload)}: ${result.FunctionError}`);
-    }
-    return JSON.parse(result.Payload as string) as T;
-  }
-}
 
 export class ApiRelayer implements IRelayer {
   private token!: string;
@@ -175,6 +125,8 @@ export class Relayer implements IRelayer {
 
   public constructor(credentials: RelayerParams) {
     if (isAutotaskCredentials(credentials)) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { AutotaskRelayer } = require('./autotask-relayer');
       this.relayer = new AutotaskRelayer(credentials);
     } else if (isApiCredentials(credentials)) {
       this.relayer = new ApiRelayer(credentials);

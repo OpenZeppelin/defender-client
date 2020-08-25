@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "defender-relay-client": "../../"
+    "defender-relay-client": "../../",
+    "dotenv": "^8.2.0"
   }
 }

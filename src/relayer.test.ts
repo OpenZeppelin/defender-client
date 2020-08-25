@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
-import { ApiRelayer, AutotaskRelayer } from './relayer';
+import { ApiRelayer } from './relayer';
+import { AutotaskRelayer } from './autotask-relayer';
 import * as auth from './auth';
 import * as api from './api';
 
