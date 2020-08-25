@@ -78,7 +78,7 @@ Defender may replace a transaction by increasing its gas price if it has not bee
 
 ## Signing
 
-You can sign any hex string (`0x123213`) using a `sign` of the relayer. Pay attention, that message has to be a **hex string**.
+You can sign any hex string (`0x123213`) using a `sign` method of the relayer. Pay attention, that the message has to be a **hex string**.
 
 ```js
   const signResponse = await relayer.sign({ message: msg });
@@ -146,7 +146,7 @@ The current implementation of the `DefenderRelaySigner` for ethers.js has the fo
 
 Defender Autotasks natively support integration with Defender Relay, allowing to send transactions without providing API keys.
 
-In your autotask's code, just `require('defender-relay-client');` and construct a new relayer instance using autotask's event `new Relayer(event);`. This will give you a fully capable of sending transactions relayer object.
+In your autotask's code, just `require('defender-relay-client')` and construct a new relayer instance using autotask's event argument—`new Relayer(event)`. This will give you a fully capable of sending transactions relayer object.
 
 ```js
 
