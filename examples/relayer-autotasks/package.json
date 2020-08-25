@@ -1,0 +1,10 @@
+{
+  "name": "relayer-autotasks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "defender-relay-client": "../../",
+    "dotenv": "^8.2.0"
+  }
+}
