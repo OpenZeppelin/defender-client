@@ -20,7 +20,7 @@ Start by creating a new relayer in Defender for a network of your choice, and wr
 
 ```js
 import { Relayer } from 'defender-relay-client';
-const relayer = new Relayer(API_KEY, API_SECRET);
+const relayer = new Relayer({apiKey: API_KEY, apiSecret: API_SECRET});
 ```
 
 And use the relayer instance to send a transaction:
@@ -76,6 +76,27 @@ The `query` function is important to monitor the transaction status, since Defen
 
 Defender may replace a transaction by increasing its gas price if it has not been mined for a period of time, and the gas price costs have increased since the transaction was originally submitted. Also, in a case where a transaction consistently fails to be mined, Defender may replace it by a _no-op_ (a transaction with no value or data) in order to advance the sender account nonce.
 
+## Signing
+
+You can sign any hex string (`0x123213`) using a `sign` of the relayer. Pay attention, that message has to be a **hex string**.
+
+```js
+  const signResponse = await relayer.sign({ message: msg });
+```
+
+### Return data
+
+Once your data is signed, the following response will be returned:
+
+```js
+export interface SignedMessagePayload {
+    sig: Hex;
+    r: Hex;
+    s: Hex;
+    v: number;
+}
+```
+
 ## Ethers.js
 
 You can use the `defender-relay-client` with [ethers.js v5](https://github.com/ethers-io/ethers.js/) directly. The package exports a `DefenderRelaySigner` [signer](https://docs.ethers.io/v5/api/signer/) that is used to send transaction.
@@ -105,9 +126,46 @@ const tx = await erc20.functions.transfer(beneficiary, 1e18.toString());
 const mined = await tx.wait();
 ```
 
+
+### Signing
+
+`signMessage` method is supported as well, allowing to sign an arbitrary data with a relayer key.
+
+```js
+  const sig = await signer.signMessage('Funds are safu!');
+```
+
 ### Limitations
 
 The current implementation of the `DefenderRelaySigner` for ethers.js has the following limitations:
 - The signer requires the relayer sender address that corresponds to the API key to be provided during construction. Future versions will fetch this automatically from Defender.
 - Due to validations set up in `ethers.js`, it is not possible to specify the transaction `speed` for an individual transaction when sending it. It must be set during the signer construction, and will be used for all transactions sent through it.
 - A `wait` on the transaction to be mined will only wait for the current transaction hash (see [Querying](#Querying)). If Defender Relayer replaces the transaction with a different one, this operation will time out. This is ok for fast transactions, since Defender only reprices after a few minutes. But if you expect the transaction to take a long time to be mined, then ethers' `wait` may not work. Future versions will also include an ethers provider aware of this.
+
+## Using with Autotasks
+
+Defender Autotasks natively support integration with Defender Relay, allowing to send transactions without providing API keys.
+
+In your autotask's code, just `require('defender-relay-client');` and construct a new relayer instance using autotask's event `new Relayer(event);`. This will give you a fully capable of sending transactions relayer object.
+
+```js
+
+const Web3 = require('web3');
+const { Relayer } = require('defender-relay-client');
+
+exports.handler =  async function(event, context) {
+  const relayer = new Relayer(event);
+
+  const txRes = await relayer.sendTransaction({
+    to: '0xc7dd3ff5b387db0130854fe5f141a78586f417c6',
+    value: 100,
+    speed: 'fast',
+    gasLimit: '1000000',
+  });
+  console.log(txRes);
+
+  return txRes.hash;
+}
+
+
+```

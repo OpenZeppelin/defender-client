@@ -28,7 +28,7 @@ async function main() {
   const sig = await signer.signMessage('0xdead');
   console.log(`Signature is ${sig}`);
 
-  const sigAddress = await ethers.utils.verifyMessage('funds are safu!', sig);
+  const sigAddress = await ethers.utils.verifyMessage('Funds are safu!', sig);
   console.log(`Signature address is ${sigAddress}, should be the same as relayer address ${mined.from}`);
 }
 
