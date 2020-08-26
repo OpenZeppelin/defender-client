@@ -149,8 +149,6 @@ Defender Autotasks natively support integration with Defender Relay, allowing to
 In your autotask's code, just `require('defender-relay-client')` and construct a new relayer instance using autotask's event argument—`new Relayer(event)`. This will give you a fully capable of sending transactions relayer object.
 
 ```js
-
-const Web3 = require('web3');
 const { Relayer } = require('defender-relay-client');
 
 exports.handler =  async function(event, context) {
