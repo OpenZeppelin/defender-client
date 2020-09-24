@@ -10,7 +10,7 @@ async function send() {
     to: '0xc7dd3ff5b387db0130854fe5f141a78586f417c6',
     value: 100,
     speed: 'fast',
-    gasLimit: '1000000',
+    gasLimit: '24000',
   });
   console.log('txResponse', txResponse);
 }
