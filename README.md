@@ -37,9 +37,24 @@ const tx = await relayer.sendTransaction({
 
 The `sendTransaction` call returns once the transaction has been _signed_ by the relayer. To monitor the transaction status, see [Querying](#Querying) below.
 
+### Gas Price
+If you know the best gas price for your transaction you can specify it in `sendTransaction` call.
+
+```js
+const tx = await relayer.sendTransaction({
+  to: '0x6b175474e89094c44da98b954eedeac495271d0f',
+  value: '0x16345785d8a0000',
+  data: '0x5af3107a',
+  gasPrice: 1e7,
+  gasLimit: 100000
+});
+```
+
+Note, `gasPrice` and `speed` can't be set at the same time.
+
 ### Speed
 
-Instead of accepting a fixed `gasPrice`, the relayer accepts a `speed` parameter that can be one of `safeLow`, `average`, `fast`, or `fastest`. The relayer will determine the gas price based on these values from [ethgasstation](https://ethgasstation.info/), and update it regularly by resubmitting your transaction if it fails to get mined.
+Instead of providing a fixed `gasPrice`, the relayer accepts a `speed` parameter that can be one of `safeLow`, `average`, `fast`, or `fastest`. The relayer will determine the gas price based on these values from [ethgasstation](https://ethgasstation.info/), and update it regularly by resubmitting your transaction if it fails to get mined.
 
 ### Return data
 
