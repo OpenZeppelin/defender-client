@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { ApiRelayer } from './relayer';
+import { ApiRelayer, RelayerTransaction, RelayerTransactionPayload } from './relayer';
 import { AutotaskRelayer } from './autotask-relayer';
 import * as auth from './auth';
 import * as api from './api';
@@ -13,9 +13,10 @@ type TestAutotaskRelayer = Omit<AutotaskRelayer, 'lambda' | 'relayerARN'> & { la
 
 describe('ApiRelayer', () => {
   let relayer: TestApiRelayer;
-  const payload = {
+  const payload: RelayerTransactionPayload = {
     to: '0x0',
     gasLimit: 21000,
+    speed: 'fast',
   };
 
   beforeEach(async function () {
@@ -51,7 +52,7 @@ describe('AutotaskRelayer', () => {
     SessionToken: 'token',
   };
   let relayer: TestAutotaskRelayer;
-  const payload = {
+  const payload: RelayerTransactionPayload = {
     to: '0x0',
     gasLimit: 21000,
   };

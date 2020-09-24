@@ -1,7 +1,6 @@
 import { authenticate } from './auth';
 import { createApi } from './api';
 import { AxiosInstance } from 'axios';
-import util from 'util';
 
 export type Address = string;
 export type BigUInt = string | number;
@@ -9,13 +8,24 @@ export type Hex = string;
 export type Speed = 'safeLow' | 'average' | 'fast' | 'fastest';
 export type Status = 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed';
 
-export type RelayerTransactionPayload = {
-  to: Address;
-  value?: BigUInt;
-  data?: Hex;
-  speed?: Speed;
-  gasLimit: BigUInt;
-};
+import { OneOf, XOR } from './utility-types';
+
+export type RelayerTransactionPayload = XOR<
+  {
+    to: Address;
+    value?: BigUInt;
+    data?: Hex;
+    gasLimit: BigUInt;
+    speed?: Speed;
+  },
+  {
+    to: Address;
+    value?: BigUInt;
+    data?: Hex;
+    gasLimit: BigUInt;
+    gasPrice: BigUInt;
+  }
+>;
 
 export interface SignMessagePayload {
   message: Hex;
