@@ -8,24 +8,14 @@ export type Hex = string;
 export type Speed = 'safeLow' | 'average' | 'fast' | 'fastest';
 export type Status = 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed';
 
-import { OneOf, XOR } from './utility-types';
-
-export type RelayerTransactionPayload = XOR<
-  {
-    to: Address;
-    value?: BigUInt;
-    data?: Hex;
-    gasLimit: BigUInt;
-    speed?: Speed;
-  },
-  {
-    to: Address;
-    value?: BigUInt;
-    data?: Hex;
-    gasLimit: BigUInt;
-    gasPrice: BigUInt;
-  }
->;
+export type RelayerTransactionPayload = {
+  to: Address;
+  value?: BigUInt;
+  data?: Hex;
+  gasLimit: BigUInt;
+  gasPrice?: BigUInt;
+  speed?: Speed;
+};
 
 export interface SignMessagePayload {
   message: Hex;
