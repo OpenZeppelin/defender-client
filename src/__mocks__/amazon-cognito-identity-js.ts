@@ -1,7 +1,7 @@
 const token = 'token';
 const mockAuthenticateUser = jest.fn((details, callbacks) => {
   callbacks.onSuccess({
-    getIdToken: () => ({
+    getAccessToken: () => ({
       getJwtToken: () => token,
     }),
   });
