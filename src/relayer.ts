@@ -1,6 +1,7 @@
 import { authenticate } from './auth';
 import { createApi } from './api';
 import { AxiosInstance } from 'axios';
+import util from 'util';
 
 export type Address = string;
 export type BigUInt = string | number;
@@ -12,9 +13,8 @@ export type RelayerTransactionPayload = {
   to: Address;
   value?: BigUInt;
   data?: Hex;
-  gasLimit: BigUInt;
-  gasPrice?: BigUInt;
   speed?: Speed;
+  gasLimit: BigUInt;
 };
 
 export interface SignMessagePayload {
