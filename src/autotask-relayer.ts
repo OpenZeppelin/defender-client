@@ -19,14 +19,18 @@ export class AutotaskRelayer implements IRelayer {
 
   public constructor(params: AutotaskRelayerParams) {
     this.relayerARN = params.relayerARN;
-    const creds = JSON.parse(params.credentials);
-    this.lambda = new AWS.Lambda({
-      credentials: {
-        accessKeyId: creds.AccessKeyId,
-        secretAccessKey: creds.SecretAccessKey,
-        sessionToken: creds.SessionToken,
-      },
-    });
+    const creds = params.credentials ? JSON.parse(params.credentials) : undefined;
+    this.lambda = new AWS.Lambda(
+      creds
+        ? {
+            credentials: {
+              accessKeyId: creds.AccessKeyId,
+              secretAccessKey: creds.SecretAccessKey,
+              sessionToken: creds.SessionToken,
+            },
+          }
+        : undefined,
+    );
   }
 
   public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
