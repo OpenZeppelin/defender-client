@@ -2,7 +2,11 @@
 
 import { AuthenticationDetails, CognitoUserPool, CognitoUser } from 'amazon-cognito-identity-js';
 
-global.fetch = require('node-fetch');
+// https://github.com/node-fetch/node-fetch/issues/450#issuecomment-387045223
+// in order to support:
+// commonjs code without bundling i.e. node app.js
+// commonjs code with webpack bundling
+global.fetch = require('node-fetch').default;
 
 export const RelayerPoolId = () => process.env.RELAY_POOL_ID || 'us-west-2_iLmIggsiy';
 export const RelayerPoolClientId = () => process.env.RELAY_POOL_CLIENT_ID || '1bpd19lcr33qvg5cr3oi79rdap';

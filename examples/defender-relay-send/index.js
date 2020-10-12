@@ -7,10 +7,10 @@ const relayer = new Relayer(params);
 
 async function send() {
   const txResponse = await relayer.sendTransaction({
-    to: '0xc7dd3ff5b387db0130854fe5f141a78586f417c6',
-    value: 100,
+    to: '0x179810822f56b0e79469189741a3fa5f2f9a7631',
+    value: 1e18 * 2,
     speed: 'fast',
-    gasLimit: '1000000',
+    gasLimit: '21000',
   });
   console.log('txResponse', txResponse);
 }
