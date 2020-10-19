@@ -1,17 +1,31 @@
 import AWS from 'aws-sdk';
-import util from 'util';
 
 import {
-  IRelayer,
   AutotaskRelayerParams,
-  RelayerTransactionPayload,
-  RelayerTransaction,
-  SignMessagePayload,
-  SignedMessagePayload,
-  SendTxPayload,
+  IRelayer,
   QueryPayload,
+  RelayerTransaction,
+  RelayerTransactionPayload,
+  SendTxPayload,
+  SignedMessagePayload,
+  SignMessagePayload,
   SignPayload,
 } from './relayer';
+
+// do our best to get .errorMessage, but return object by default
+function cleanError(payload: any): string {
+  if (!payload) {
+    return 'Error occurred, but error payload was not defined';
+  }
+  try {
+    const errMsg = JSON.parse(payload.toString()).errorMessage;
+    if (errMsg) {
+      return errMsg;
+    }
+  } catch (e) {}
+  return payload;
+}
+
 
 export class AutotaskRelayer implements IRelayer {
   private lambda: AWS.Lambda;
@@ -60,7 +74,7 @@ export class AutotaskRelayer implements IRelayer {
       })
       .promise();
     if (result.FunctionError) {
-      throw new Error(`Failed to execute with payload ${util.inspect(payload)}: ${result.FunctionError}`);
+      throw new Error(`Error while attempting ${payload.action}: ${cleanError(result.Payload)}`)
     }
     return JSON.parse(result.Payload as string) as T;
   }
