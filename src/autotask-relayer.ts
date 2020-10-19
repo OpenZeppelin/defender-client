@@ -26,7 +26,6 @@ function cleanError(payload: any): string {
   return payload;
 }
 
-
 export class AutotaskRelayer implements IRelayer {
   private lambda: AWS.Lambda;
   private relayerARN: string;
@@ -74,7 +73,7 @@ export class AutotaskRelayer implements IRelayer {
       })
       .promise();
     if (result.FunctionError) {
-      throw new Error(`Error while attempting ${payload.action}: ${cleanError(result.Payload)}`)
+      throw new Error(`Error while attempting ${payload.action}: ${cleanError(result.Payload)}`);
     }
     return JSON.parse(result.Payload as string) as T;
   }
