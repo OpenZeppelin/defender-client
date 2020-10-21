@@ -89,8 +89,9 @@ export class ApiRelayer implements IRelayer {
   private apiSecret: string;
 
   public constructor(params: ApiRelayerParams) {
-    if (!params.apiSecret) throw new Error(`API key is required`);
+    if (!params.apiKey) throw new Error(`API key is required`);
     if (!params.apiSecret) throw new Error(`API secret is required`);
+
     this.apiKey = params.apiKey;
     this.apiSecret = params.apiSecret;
     this.initialization = this.init();
@@ -131,7 +132,7 @@ export class Relayer implements IRelayer {
     } else if (isApiCredentials(credentials)) {
       this.relayer = new ApiRelayer(credentials);
     } else {
-      throw new Error(`Missing params`);
+      throw new Error(`API key/secret pair or credentials are required to create a relayer.`);
     }
   }
 
