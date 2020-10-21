@@ -84,7 +84,6 @@ export type SignPayload = {
 export class ApiRelayer implements IRelayer {
   private token!: string;
   private api!: AxiosInstance;
-  private initialization: Promise<void>;
   private apiKey: string;
   private apiSecret: string;
 
@@ -93,7 +92,6 @@ export class ApiRelayer implements IRelayer {
     if (!params.apiSecret) throw new Error(`API secret is required`);
     this.apiKey = params.apiKey;
     this.apiSecret = params.apiSecret;
-    this.initialization = this.init();
   }
 
   private async init(): Promise<void> {
@@ -105,17 +103,17 @@ export class ApiRelayer implements IRelayer {
   }
 
   public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
-    await this.initialization;
+    if (!this.api) await this.init();
     return (await this.api.post('/txs', payload)) as RelayerTransaction;
   }
 
   public async sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
-    await this.initialization;
+    if (!this.api) await this.init();
     return (await this.api.post('/sign', payload)) as SignedMessagePayload;
   }
 
   public async query(id: string): Promise<RelayerTransaction> {
-    await this.initialization;
+    if (!this.api) await this.init();
     return (await this.api.get(`txs/${id}`)) as RelayerTransaction;
   }
 }
