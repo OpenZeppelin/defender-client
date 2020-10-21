@@ -13,7 +13,7 @@ import {
 } from './relayer';
 
 // do our best to get .errorMessage, but return object by default
-function cleanError(payload: any): string {
+function cleanError(payload: string): string {
   if (!payload) {
     return 'Error occurred, but error payload was not defined';
   }
