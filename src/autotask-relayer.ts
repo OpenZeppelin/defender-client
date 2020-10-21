@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import { _Blob } from 'aws-sdk/clients/lambda';
 
 import {
   AutotaskRelayerParams,
@@ -13,7 +14,7 @@ import {
 } from './relayer';
 
 // do our best to get .errorMessage, but return object by default
-function cleanError(payload: string): string {
+function cleanError(payload?: _Blob): _Blob {
   if (!payload) {
     return 'Error occurred, but error payload was not defined';
   }
