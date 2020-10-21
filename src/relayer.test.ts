@@ -44,7 +44,6 @@ describe('ApiRelayer', () => {
 
     test('throw an init exception at the correct context', async () => {
       relayer.init = () => {
-        console.log('will throw');
         throw new Error('Init failed');
       };
       await expect(relayer.sendTransaction(payload)).rejects.toThrow(/init failed/i);
