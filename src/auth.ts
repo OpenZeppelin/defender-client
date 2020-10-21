@@ -6,6 +6,7 @@ import { AuthenticationDetails, CognitoUserPool, CognitoUser } from 'amazon-cogn
 // in order to support:
 // commonjs code without bundling i.e. node app.js
 // commonjs code with webpack bundling
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 global.fetch = require('node-fetch').default;
 
 export const RelayerPoolId = () => process.env.RELAY_POOL_ID || 'us-west-2_iLmIggsiy';
