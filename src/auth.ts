@@ -27,8 +27,8 @@ export async function authenticate(authenticationData: UserPass): Promise<string
 
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: function (result) {
-        const token = result.getAccessToken().getJwtToken();
+      onSuccess: function (session) {
+        const token = session.getAccessToken().getJwtToken();
         resolve(token);
       },
       onFailure: function (err) {
