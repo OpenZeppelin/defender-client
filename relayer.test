@@ -1,0 +1,41 @@
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2msrc/[22m[1mauth.test.ts[22m
+  authenticate
+    [32m✓[39m [2mpasses correct arguments to Cognito (3ms)[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2msrc/[22m[1mapi.test.ts[22m
+  createApi
+    [32m✓[39m [2mpasses correct arguments to axois (1ms)[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2msrc/[22m[1mrelayer.test.ts[22m
+  ApiRelayer
+    constructor
+      [32m✓[39m [2msets API key and secret (1ms)[22m
+      [32m✓[39m [2mdoesn't call init more than once[22m
+      [32m✓[39m [2mthrow an init exception at the correct context (3ms)[22m
+    renew Id token on timeout
+      [32m✓[39m [2mat sendTransaction (1ms)[22m
+    sendTransaction
+      [32m✓[39m [2mpasses correct arguments to the API[22m
+    query
+      [32m✓[39m [2mpasses correct arguments to the API (1ms)[22m
+    sign
+      [32m✓[39m [2msigns a hex string[22m
+
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2msrc/[22m[1mautotask-relayer.test.ts[22m
+  AutotaskRelayer
+    constructor
+      [32m✓[39m [2mcalls init (1ms)[22m
+    sendTransaction
+      [32m✓[39m [2mpasses correct arguments to the API (1ms)[22m
+      [32m✓[39m [2mparses lambda error correctly (2ms)[22m
+      [32m✓[39m [2mparses garbage error[22m
+    sign
+      [32m✓[39m [2mpasses correct arguments to the API (1ms)[22m
+    query
+      [32m✓[39m [2mpasses correct arguments to the API[22m
+
+[1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 total
+[1mTests:       [22m[1m[32m15 passed[39m[22m, 15 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        1.181s
+[2mRan all test suites[22m[2m.[22m
