@@ -1,6 +1,5 @@
 import { AxiosInstance } from 'axios';
 import { ApiRelayer } from './relayer';
-import { AutotaskRelayer } from './autotask-relayer';
 import * as auth from './auth';
 import * as api from './api';
 
@@ -13,6 +12,7 @@ type TestApiRelayer = Omit<ApiRelayer, 'api'> & {
   apiKey: string;
   apiSecret: string;
   init: () => Promise<void>;
+  wrapApiCall: <T>(fn: () => Promise<T>) => Promise<T>;
 };
 
 describe('ApiRelayer', () => {
@@ -48,6 +48,39 @@ describe('ApiRelayer', () => {
       };
       await expect(relayer.sendTransaction(payload)).rejects.toThrow(/init failed/i);
       expect(relayer.api).toBe(undefined);
+    });
+  });
+
+  describe('renew Id token on timeout', () => {
+    beforeEach(async () => {
+      await relayer.init();
+    });
+
+    test('at sendTransaction', async () => {
+      relayer.api.post = jest.fn().mockImplementation(() => {
+        return Promise.reject({ response: { status: 401, statusText: 'Unauthorized' } });
+      });
+      await relayer.sendTransaction(payload);
+      expect(relayer.api.post).toBeCalledWith('/txs', payload);
+      expect(initSpy).toBeCalled();
+    });
+
+    test('at sign', async () => {
+      relayer.api.post = jest.fn().mockImplementation(() => {
+        return Promise.reject({ response: { status: 401, statusText: 'Unauthorized' } });
+      });
+      await relayer.sign({ message: '0xdead' });
+      expect(relayer.api.post).toBeCalledWith('/sign', { message: '0xdead' });
+      expect(initSpy).toBeCalled();
+    });
+
+    test('at query', async () => {
+      relayer.api.get = jest.fn().mockImplementation(() => {
+        return Promise.reject({ response: { status: 401, statusText: 'Unauthorized' } });
+      });
+      await relayer.query('42');
+      expect(relayer.api.get).toBeCalledWith('txs/42');
+      expect(initSpy).toBeCalled();
     });
   });
 

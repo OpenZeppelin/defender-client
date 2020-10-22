@@ -1,7 +1,6 @@
 import { authenticate } from './auth';
 import { createApi } from './api';
 import { AxiosInstance } from 'axios';
-import util from 'util';
 
 export type Address = string;
 export type BigUInt = string | number;
@@ -103,19 +102,36 @@ export class ApiRelayer implements IRelayer {
     this.api = createApi(this.apiKey, this.token);
   }
 
-  public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
+  private async wrapApiCall<T>(fn: () => Promise<T>): Promise<T> {
     if (!this.api) await this.init();
-    return (await this.api.post('/txs', payload)) as RelayerTransaction;
+    try {
+      return await fn();
+    } catch (error) {
+      // this means ID token has expired so we'll recreate session and try again
+      if (error.response.status === 401 && error.response.statusText === 'Unauthorized') {
+        await this.init();
+        return await fn();
+      }
+      throw error;
+    }
+  }
+
+  public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
+    return this.wrapApiCall(async () => {
+      return (await this.api.post('/txs', payload)) as RelayerTransaction;
+    });
   }
 
   public async sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
-    if (!this.api) await this.init();
-    return (await this.api.post('/sign', payload)) as SignedMessagePayload;
+    return this.wrapApiCall(async () => {
+      return (await this.api.post('/sign', payload)) as SignedMessagePayload;
+    });
   }
 
   public async query(id: string): Promise<RelayerTransaction> {
-    if (!this.api) await this.init();
-    return (await this.api.get(`txs/${id}`)) as RelayerTransaction;
+    return this.wrapApiCall(async () => {
+      return (await this.api.get(`txs/${id}`)) as RelayerTransaction;
+    });
   }
 }
 
