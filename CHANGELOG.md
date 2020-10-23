@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 0.2.7 (2020-23-10)
+### Added
+* Renew Id token upon expiration
+
+### Changed
+* Better error message for Relayer Params
+
+### Fixed
+ * Handle initialization errors correctly
+
 ## 0.2.6 (2020-12-09)
 ### Fixed
  * Change node-fetch import to work correctly with webpack bundling
