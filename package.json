@@ -1,6 +1,6 @@
 {
   "name": "defender-relay-client",
-  "version": "0.2.7",
+  "version": "0.2.7-rc.0",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
