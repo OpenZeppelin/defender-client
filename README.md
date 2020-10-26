@@ -48,7 +48,7 @@ The returned transaction object `tx` will have the following shape:
 ```ts
 transactionId: string; // Defender transaction identifier
 hash: string; // Ethereum transaction hash
-to: string; 
+to: string;
 from: string;
 value: string;
 data: string;
@@ -109,12 +109,14 @@ const { ethers } = require('ethers');
 
 const provider = ethers.getDefaultProvider(NETWORK);
 const signer = new DefenderRelaySigner(
-  API_KEY, 
-  API_SECRET, 
-  provider, 
-  { 
-    from: RELAYER_ADDRESS, 
-    speed: 'fast' 
+  {
+    apiKey: API_KEY,
+    apiSecret: API_SECRET
+  },
+  provider,
+  {
+    from: RELAYER_ADDRESS,
+    speed: 'fast'
   });
 ```
 
@@ -125,7 +127,6 @@ const erc20 = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
 const tx = await erc20.functions.transfer(beneficiary, 1e18.toString());
 const mined = await tx.wait();
 ```
-
 
 ### Signing
 

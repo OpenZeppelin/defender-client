@@ -8,10 +8,17 @@ const ERC20Address = '0x6Ea25933e24320B38fED3a654a92948BECd28915';
 async function main() {
   const provider = ethers.getDefaultProvider('rinkeby');
   const address = '0x387b06760c45dc01edbb202d54f8624440c6e025';
-  const signer = new DefenderRelaySigner({ apiKey: process.env.API_KEY, apiSecret: process.env.API_SECRET }, provider, {
-    from: address,
-    speed: 'fast',
-  });
+  const signer = new DefenderRelaySigner(
+    {
+      apiKey: process.env.API_KEY,
+      apiSecret: process.env.API_SECRET,
+    },
+    provider,
+    {
+      from: address,
+      speed: 'fast',
+    },
+  );
   const erc20 = new ethers.Contract(ERC20Address, ERC20Abi, signer);
   const beneficiary = await ethers.Wallet.createRandom().getAddress();
 
