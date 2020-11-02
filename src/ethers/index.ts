@@ -23,12 +23,13 @@ const allowedTransactionKeys: Array<string> = [
 ];
 
 export type DefenderTransactionRequest = TransactionRequest & { speed: Speed };
-export type DefenderRelaySignerOptions = { speed?: Speed; from: string };
+export type DefenderRelaySignerOptions = { speed?: Speed };
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
 
 export class DefenderRelaySigner extends Signer {
   private readonly relayer: Relayer;
+  private address?: string;
 
   constructor(
     readonly credentials: RelayerParams,
@@ -40,7 +41,12 @@ export class DefenderRelaySigner extends Signer {
   }
 
   public async getAddress(): Promise<string> {
-    return this.options.from;
+    // cache value because it does not change
+    if (!this.address) {
+      const r = await this.relayer.getRelayer();
+      this.address = r.address;
+    }
+    return this.address;
   }
 
   // Returns the signed prefixed-message. This MUST treat:
@@ -104,6 +110,8 @@ export class DefenderRelaySigner extends Signer {
       tx.to = Promise.resolve(tx.to).then((to) => this.resolveName(to!));
     }
 
+    tx.from = await this.getAddress();
+
     if (tx.gasLimit == null) {
       tx.gasLimit = this.estimateGas(tx).catch((error) => {
         return logger.throwError(
@@ -133,20 +141,6 @@ export class DefenderRelaySigner extends Signer {
       }
     }
 
-    const tx = shallowCopy(transaction);
-
-    if (tx.from == null) {
-      tx.from = this.getAddress();
-    } else {
-      // Make sure any provided address matches this signer
-      tx.from = Promise.all([Promise.resolve(tx.from), this.getAddress()]).then((result) => {
-        if (result[0] !== result[1]) {
-          logger.throwArgumentError('from address mismatch', 'transaction', transaction);
-        }
-        return result[0];
-      });
-    }
-
-    return tx;
+    return transaction;
   }
 }
