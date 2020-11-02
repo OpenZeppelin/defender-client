@@ -27,6 +27,16 @@ export interface SignedMessagePayload {
   v: number;
 }
 
+export interface RelayerModel {
+  relayerId: string;
+  name: string;
+  address: string;
+  network: string;
+  paused: boolean;
+  createdAt: string;
+  pendingTxCost: string;
+}
+
 // from openzeppelin/defender/models/src/types/tx.res.ts
 export type RelayerTransaction = {
   transactionId: string;
@@ -60,6 +70,7 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
 }
 
 export interface IRelayer {
+  getRelayer(): Promise<RelayerModel>;
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
   sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
@@ -78,6 +89,10 @@ export type QueryPayload = {
 export type SignPayload = {
   action: 'sign';
   payload: SignMessagePayload;
+};
+
+export type GetSelfPayload = {
+  action: 'get-self';
 };
 
 export class ApiRelayer implements IRelayer {
@@ -116,6 +131,12 @@ export class ApiRelayer implements IRelayer {
     }
   }
 
+  public async getRelayer(): Promise<RelayerModel> {
+    return this.wrapApiCall(async () => {
+      return (await this.api.get('/relayer')) as RelayerModel;
+    });
+  }
+
   public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
     return this.wrapApiCall(async () => {
       return (await this.api.post('/txs', payload)) as RelayerTransaction;
@@ -152,7 +173,11 @@ export class Relayer implements IRelayer {
     }
   }
 
-  sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
+  public getRelayer(): Promise<RelayerModel> {
+    return this.relayer.getRelayer();
+  }
+
+  public sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
     return this.relayer.sign(payload);
   }
 

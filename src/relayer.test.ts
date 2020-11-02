@@ -92,6 +92,14 @@ describe('ApiRelayer', () => {
     });
   });
 
+  describe('getRelayer', () => {
+    test('passes correct arguments to the API', async () => {
+      await relayer.getRelayer();
+      expect(relayer.api.get).toBeCalledWith('/relayer');
+      expect(initSpy).toBeCalled();
+    });
+  });
+
   describe('query', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.query('42');

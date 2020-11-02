@@ -3,8 +3,10 @@ import { _Blob } from 'aws-sdk/clients/lambda';
 
 import {
   AutotaskRelayerParams,
+  GetSelfPayload,
   IRelayer,
   QueryPayload,
+  RelayerModel,
   RelayerTransaction,
   RelayerTransactionPayload,
   SendTxPayload,
@@ -51,6 +53,12 @@ export class AutotaskRelayer implements IRelayer {
     return this.execute({ action: 'send-tx', payload });
   }
 
+  public async getRelayer(): Promise<RelayerModel> {
+    return this.execute({
+      action: 'get-self' as const,
+    });
+  }
+
   public async query(id: string): Promise<RelayerTransaction> {
     return this.execute({
       action: 'get-tx' as const,
@@ -65,7 +73,7 @@ export class AutotaskRelayer implements IRelayer {
     });
   }
 
-  private async execute<T>(payload: SendTxPayload | QueryPayload | SignPayload): Promise<T> {
+  private async execute<T>(payload: SendTxPayload | QueryPayload | SignPayload | GetSelfPayload): Promise<T> {
     const result = await this.lambda
       .invoke({
         FunctionName: this.relayerARN,
