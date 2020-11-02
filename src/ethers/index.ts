@@ -29,6 +29,7 @@ type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction
 
 export class DefenderRelaySigner extends Signer {
   private readonly relayer: Relayer;
+  private address?: string;
 
   constructor(
     readonly credentials: RelayerParams,
@@ -40,8 +41,12 @@ export class DefenderRelaySigner extends Signer {
   }
 
   public async getAddress(): Promise<string> {
-    const r = await this.relayer.getRelayer();
-    return r.address;
+    // cache value because it does not change
+    if (!this.address) {
+      const r = await this.relayer.getRelayer();
+      this.address = r.address;
+    }
+    return this.address;
   }
 
   // Returns the signed prefixed-message. This MUST treat:
