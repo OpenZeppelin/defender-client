@@ -10,7 +10,8 @@
     "test": "npm run test:unit",
     "watch": "tsc -w",
     "lint": "yarn lint:check --fix",
-    "lint:check": "npx eslint 'src/**/*.{js,ts}' --quiet"
+    "lint:check": "npx eslint 'src/**/*.{js,ts}' --quiet",
+    "prepublishOnly": "npm run compile"
   },
   "files": [
     "lib",
