@@ -108,16 +108,8 @@ const { DefenderRelaySigner } = require('defender-relay-client/lib/ethers');
 const { ethers } = require('ethers');
 
 const provider = ethers.getDefaultProvider(NETWORK);
-const signer = new DefenderRelaySigner(
-  {
-    apiKey: API_KEY,
-    apiSecret: API_SECRET
-  },
-  provider,
-  {
-    from: RELAYER_ADDRESS,
-    speed: 'fast'
-  });
+const credentials = { apiKey: API_KEY, apiSecret: API_SECRET };
+const signer = new DefenderRelaySigner(credentials, provider, { speed: 'fast' };
 ```
 
 You can then use it to send any transactions, such as executing a contract function. The `tx` object returned will be a regular ethers.js `TransactionResponse` object, with the addition of Defender's `transactionId` field.
@@ -139,21 +131,18 @@ const mined = await tx.wait();
 ### Limitations
 
 The current implementation of the `DefenderRelaySigner` for ethers.js has the following limitations:
-- The signer requires the relayer sender address that corresponds to the API key to be provided during construction. Future versions will fetch this automatically from Defender.
 - Due to validations set up in `ethers.js`, it is not possible to specify the transaction `speed` for an individual transaction when sending it. It must be set during the signer construction, and will be used for all transactions sent through it.
 - A `wait` on the transaction to be mined will only wait for the current transaction hash (see [Querying](#Querying)). If Defender Relayer replaces the transaction with a different one, this operation will time out. This is ok for fast transactions, since Defender only reprices after a few minutes. But if you expect the transaction to take a long time to be mined, then ethers' `wait` may not work. Future versions will also include an ethers provider aware of this.
 
 ## Using with Autotasks
 
-Defender Autotasks natively support integration with Defender Relay, allowing to send transactions without providing API keys.
-
-In your autotask's code, just `require('defender-relay-client')` and construct a new relayer instance using autotask's event argument—`new Relayer(event)`. This will give you a fully capable of sending transactions relayer object.
+Defender Autotasks natively support integration with Defender Relay, allowing to send transactions without providing API keys. In your autotask's code, just `require('defender-relay-client')` and construct a new relayer instance using the `credentials` object injected by the autotask. This will give you a relayer object already configured.
 
 ```js
 const { Relayer } = require('defender-relay-client');
 
-exports.handler =  async function(event, context) {
-  const relayer = new Relayer(event);
+exports.handler =  async function(credentials) {
+  const relayer = new Relayer(credentials);
 
   const txRes = await relayer.sendTransaction({
     to: '0xc7dd3ff5b387db0130854fe5f141a78586f417c6',
@@ -161,10 +150,8 @@ exports.handler =  async function(event, context) {
     speed: 'fast',
     gasLimit: '1000000',
   });
-  console.log(txRes);
 
+  console.log(txRes);
   return txRes.hash;
 }
-
-
 ```
