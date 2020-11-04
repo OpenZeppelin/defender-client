@@ -110,8 +110,6 @@ export class DefenderRelaySigner extends Signer {
       tx.to = Promise.resolve(tx.to).then((to) => this.resolveName(to!));
     }
 
-    tx.from = await this.getAddress();
-
     if (tx.gasLimit == null) {
       tx.gasLimit = this.estimateGas(tx).catch((error) => {
         return logger.throwError(
@@ -140,7 +138,15 @@ export class DefenderRelaySigner extends Signer {
         logger.throwArgumentError('invalid transaction key: ' + key, 'transaction', transaction);
       }
     }
+    const tx = shallowCopy(transaction);
 
-    return transaction;
+    tx.from = Promise.all([Promise.resolve(tx.from), this.getAddress()]).then((result) => {
+      if (result[0] != null && result[0] !== result[1]) {
+        logger.throwArgumentError('from address mismatch', 'transaction', transaction);
+      }
+      return result[1];
+    });
+
+    return tx;
   }
 }
