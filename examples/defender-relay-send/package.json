@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "defender-relay-client": "link:../../",
+    "defender-relay-client": "../../defender-relay-client-v1.0.1.tgz",
     "dotenv": "^8.2.0"
   }
 }

@@ -20,14 +20,17 @@ async function main() {
   const erc20 = new ethers.Contract(ERC20Address, ERC20Abi, signer);
   const beneficiary = await ethers.Wallet.createRandom().getAddress();
 
+  const addr = await signer.getAddress();
+  console.log(`Relayer address is ${addr}`);
+
   console.log(`Sending approve transaction for ${beneficiary} to token ${ERC20Address}...`);
-  const tx = await erc20.functions.approve(beneficiary, (1e18).toString());
+  const tx = await erc20.approve(beneficiary, (1e18).toString());
   console.log(`Transaction sent:`, tx);
 
   const mined = await tx.wait();
   console.log(`Transaction mined:`, mined);
 
-  const allowance = await erc20.functions.allowance(tx.from, beneficiary);
+  const allowance = await erc20.allowance(tx.from, beneficiary);
   console.log(`Allowance now is:`, allowance.toString());
 
   const sig = await signer.signMessage('0xdead');
