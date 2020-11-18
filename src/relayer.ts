@@ -99,7 +99,7 @@ export class Relayer implements IRelayer {
   public constructor(credentials: RelayerParams) {
     if (isAutotaskCredentials(credentials)) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { AutotaskRelayer } = require('./autotask-relayer');
+      const { AutotaskRelayer } = require('./autotask');
       this.relayer = new AutotaskRelayer(credentials);
     } else if (isApiCredentials(credentials)) {
       this.relayer = new ApiRelayer(credentials);
