@@ -11,20 +11,23 @@ export class DefenderRelayProvider extends StaticJsonRpcProvider {
     this.relayer = new Relayer(credentials);
   }
 
-  send(method: string, params: Array<any>): Promise<any> {
+  async send(method: string, params: Array<any>): Promise<any> {
     const request = { method, params };
     this.emit('debug', { action: 'request', request, provider: this });
-
-    return this.relayer.call(method, params).then(
-      (result) => {
-        this.emit('debug', { action: 'response', request, response: result, provider: this });
-        return result;
-      },
-      (error) => {
-        this.emit('debug', { action: 'response', error: error, request: request, provider: this });
+    try {
+      const result = await this.relayer.call(method, params);
+      this.emit('debug', { action: 'response', request, response: result, provider: this });
+      if (result.error) {
+        const error: any = new Error(result.error.message);
+        error.code = result.error.code;
+        error.data = result.error.data;
         throw error;
-      },
-    );
+      }
+      return result.result;
+    } catch (error) {
+      this.emit('debug', { action: 'response', error, request: request, provider: this });
+      throw error;
+    }
   }
 
   getSigner(): JsonRpcSigner {

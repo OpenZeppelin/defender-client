@@ -62,6 +62,7 @@ export type JsonRpcResponse = {
   error?: {
     code: number;
     message: string;
+    data?: string;
   };
 };
 

@@ -1,22 +1,16 @@
 require('dotenv').config();
 
-const { DefenderRelaySigner } = require('defender-relay-client/lib/ethers');
+const { DefenderRelaySigner, DefenderRelayProvider } = require('defender-relay-client/lib/ethers');
 const { ethers } = require('ethers');
 const ERC20Abi = require('./erc20.json');
 const ERC20Address = '0x6Ea25933e24320B38fED3a654a92948BECd28915';
 
 async function main() {
-  const provider = ethers.getDefaultProvider('rinkeby');
-  const signer = new DefenderRelaySigner(
-    {
-      apiKey: process.env.API_KEY,
-      apiSecret: process.env.API_SECRET,
-    },
-    provider,
-    {
-      speed: 'fast',
-    },
-  );
+  const creds = { apiKey: process.env.API_KEY, apiSecret: process.env.API_SECRET };
+  
+  const provider = new DefenderRelayProvider(creds);
+  const signer = new DefenderRelaySigner(creds, provider, { speed: 'fast' });
+
   const erc20 = new ethers.Contract(ERC20Address, ERC20Abi, signer);
   const beneficiary = await ethers.Wallet.createRandom().getAddress();
 
