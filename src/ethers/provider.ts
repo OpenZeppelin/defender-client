@@ -1,5 +1,5 @@
 import { JsonRpcSigner, Network, StaticJsonRpcProvider } from '@ethersproject/providers';
-import { ApiUrl } from '../api';
+import { ApiUrl } from '../api/api';
 import { Relayer, RelayerParams } from '../relayer';
 import { DefenderRelaySigner } from './signer';
 

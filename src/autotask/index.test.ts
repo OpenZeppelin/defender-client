@@ -1,4 +1,4 @@
-import { AutotaskRelayer } from './autotask-relayer';
+import { AutotaskRelayer } from '.';
 
 type TestAutotaskRelayer = Omit<AutotaskRelayer, 'lambda' | 'relayerARN'> & { lambda: AWS.Lambda; relayerARN: string };
 

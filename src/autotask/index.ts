@@ -10,7 +10,7 @@ import {
   RelayerTransactionPayload,
   SignedMessagePayload,
   SignMessagePayload,
-} from './relayer';
+} from '../relayer';
 
 
 export type SendTxRequest = {
