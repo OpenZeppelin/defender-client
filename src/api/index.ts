@@ -1,7 +1,16 @@
 import { authenticate } from './auth';
 import { createApi } from './api';
 import { AxiosInstance } from 'axios';
-import { ApiRelayerParams, IRelayer, JsonRpcResponse, RelayerModel, RelayerTransaction, RelayerTransactionPayload, SignedMessagePayload, SignMessagePayload } from '../relayer';
+import {
+  ApiRelayerParams,
+  IRelayer,
+  JsonRpcResponse,
+  RelayerModel,
+  RelayerTransaction,
+  RelayerTransactionPayload,
+  SignedMessagePayload,
+  SignMessagePayload,
+} from '../relayer';
 
 export class ApiRelayer implements IRelayer {
   private token!: string;
@@ -67,10 +76,12 @@ export class ApiRelayer implements IRelayer {
 
   public async call(method: string, params: string[]): Promise<JsonRpcResponse> {
     return this.wrapApiCall(async () => {
-      return (await this.api.post(
-        `/relayer/jsonrpc`, 
-        { method, params, jsonrpc: '2.0', id: this.jsonRpcRequestNextId++ }
-      )) as JsonRpcResponse;
+      return (await this.api.post(`/relayer/jsonrpc`, {
+        method,
+        params,
+        jsonrpc: '2.0',
+        id: this.jsonRpcRequestNextId++,
+      })) as JsonRpcResponse;
     });
   }
 }

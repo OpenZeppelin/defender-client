@@ -1,4 +1,4 @@
-import { ApiRelayer } from "./api";
+import { ApiRelayer } from './api';
 
 export type Address = string;
 export type BigUInt = string | number;
@@ -63,14 +63,14 @@ export type JsonRpcResponse = {
     code: number;
     message: string;
   };
-}
+};
 
 export type JsonRpcRequest = {
   id: number;
   jsonrpc: '2.0';
   method: string;
   params: string[];
-}
+};
 
 function isAutotaskCredentials(
   credentials: AutotaskRelayerParams | ApiRelayerParams,

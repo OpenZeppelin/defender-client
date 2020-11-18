@@ -3,15 +3,14 @@ import { _Blob } from 'aws-sdk/clients/lambda';
 import {
   AutotaskRelayerParams,
   IRelayer,
-  JsonRpcRequest, 
-  JsonRpcResponse, 
+  JsonRpcRequest,
+  JsonRpcResponse,
   RelayerModel,
   RelayerTransaction,
   RelayerTransactionPayload,
   SignedMessagePayload,
   SignMessagePayload,
 } from '../relayer';
-
 
 export type SendTxRequest = {
   action: 'send-tx';

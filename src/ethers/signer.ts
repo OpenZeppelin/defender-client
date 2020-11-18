@@ -28,7 +28,7 @@ export type DefenderRelaySignerOptions = { speed?: Speed };
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
 
 function isRelayer(params: RelayerParams | Relayer): params is Relayer {
-  return !!((params as any).getRelayer);
+  return !!(params as any).getRelayer;
 }
 
 export class DefenderRelaySigner extends Signer {

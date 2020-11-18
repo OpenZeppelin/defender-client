@@ -107,7 +107,8 @@ describe('AutotaskRelayer', () => {
       expect(relayer.lambda.invoke).toBeCalledWith({
         FunctionName: 'arn',
         InvocationType: 'RequestResponse',
-        Payload: '{"action":"json-rpc-query","payload":{"method":"eth_call","params":["0xa","0xb"],"jsonrpc":"2.0","id":0}}',
+        Payload:
+          '{"action":"json-rpc-query","payload":{"method":"eth_call","params":["0xa","0xb"],"jsonrpc":"2.0","id":0}}',
       });
     });
   });
