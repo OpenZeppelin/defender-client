@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { Relayer } = require('defender-relay-client');
+const { Relayer, VERSION } = require('defender-relay-client');
 
 const params = { apiKey: process.env.API_KEY, apiSecret: process.env.API_SECRET };
 const relayer = new Relayer(params);
@@ -45,6 +45,7 @@ async function balance(addr) {
       console.error(`Usage: node index.js query|get|send|sign|balance`);
       process.exit(1);
     }
+    console.log(`Using client version`, VERSION);
     switch (action) {
       case 'query': return await query(process.argv[3]);
       case 'get': return await get();
