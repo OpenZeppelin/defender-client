@@ -1,19 +1,43 @@
 import AWS from 'aws-sdk';
 import { _Blob } from 'aws-sdk/clients/lambda';
-
 import {
   AutotaskRelayerParams,
-  GetSelfPayload,
   IRelayer,
-  QueryPayload,
+  JsonRpcRequest, 
+  JsonRpcResponse, 
   RelayerModel,
   RelayerTransaction,
   RelayerTransactionPayload,
-  SendTxPayload,
   SignedMessagePayload,
   SignMessagePayload,
-  SignPayload,
 } from './relayer';
+
+
+export type SendTxRequest = {
+  action: 'send-tx';
+  payload: RelayerTransactionPayload;
+};
+
+export type GetTxRequest = {
+  action: 'get-tx';
+  payload: string;
+};
+
+export type SignRequest = {
+  action: 'sign';
+  payload: SignMessagePayload;
+};
+
+export type GetSelfRequest = {
+  action: 'get-self';
+};
+
+export type JsonRpcCallRequest = {
+  action: 'json-rpc-query';
+  payload: JsonRpcRequest;
+};
+
+export type Request = SendTxRequest | GetTxRequest | SignRequest | GetSelfRequest | JsonRpcCallRequest;
 
 // do our best to get .errorMessage, but return object by default
 function cleanError(payload?: _Blob): _Blob {
@@ -32,8 +56,10 @@ function cleanError(payload?: _Blob): _Blob {
 export class AutotaskRelayer implements IRelayer {
   private lambda: AWS.Lambda;
   private relayerARN: string;
+  private jsonRpcRequestNextId: number;
 
   public constructor(params: AutotaskRelayerParams) {
+    this.jsonRpcRequestNextId = 0;
     this.relayerARN = params.relayerARN;
     const creds = params.credentials ? JSON.parse(params.credentials) : undefined;
     this.lambda = new AWS.Lambda(
@@ -73,16 +99,23 @@ export class AutotaskRelayer implements IRelayer {
     });
   }
 
-  private async execute<T>(payload: SendTxPayload | QueryPayload | SignPayload | GetSelfPayload): Promise<T> {
+  public async call(method: string, params: string[]): Promise<JsonRpcResponse> {
+    return this.execute({
+      action: 'json-rpc-query' as const,
+      payload: { method, params, jsonrpc: '2.0', id: this.jsonRpcRequestNextId++ },
+    });
+  }
+
+  private async execute<T>(request: Request): Promise<T> {
     const result = await this.lambda
       .invoke({
         FunctionName: this.relayerARN,
-        Payload: JSON.stringify(payload),
+        Payload: JSON.stringify(request),
         InvocationType: 'RequestResponse',
       })
       .promise();
     if (result.FunctionError) {
-      throw new Error(`Error while attempting ${payload.action}: ${cleanError(result.Payload)}`);
+      throw new Error(`Error while attempting ${request.action}: ${cleanError(result.Payload)}`);
     }
     return JSON.parse(result.Payload as string) as T;
   }

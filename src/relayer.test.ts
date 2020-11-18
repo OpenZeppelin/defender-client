@@ -115,4 +115,13 @@ describe('ApiRelayer', () => {
       expect(initSpy).toBeCalled();
     });
   });
+
+  describe('call', () => {
+    test('calls json-rpc endpoint', async () => {
+      await relayer.call('eth_call', ['0xa', '0xb']);
+      const payload = { jsonrpc: '2.0', id: 0, method: 'eth_call', params: ['0xa', '0xb'] };
+      expect(relayer.api.post).toBeCalledWith('/relayer/jsonrpc', payload);
+      expect(initSpy).toBeCalled();
+    });
+  });
 });

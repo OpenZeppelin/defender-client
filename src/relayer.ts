@@ -57,6 +57,23 @@ export type RelayerParams = ApiRelayerParams | AutotaskRelayerParams;
 export type ApiRelayerParams = { apiKey: string; apiSecret: string };
 export type AutotaskRelayerParams = { credentials: string; relayerARN: string };
 
+export type JsonRpcResponse = {
+  id: number | null;
+  jsonrpc: '2.0';
+  result: any;
+  error?: {
+    code: number;
+    message: string;
+  };
+}
+
+export type JsonRpcRequest = {
+  id: number;
+  jsonrpc: '2.0';
+  method: string;
+  params: string[];
+}
+
 function isAutotaskCredentials(
   credentials: AutotaskRelayerParams | ApiRelayerParams,
 ): credentials is AutotaskRelayerParams {
@@ -74,32 +91,15 @@ export interface IRelayer {
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
   sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
+  call(method: string, params: string[]): Promise<JsonRpcResponse>;
 }
-
-export type SendTxPayload = {
-  action: 'send-tx';
-  payload: RelayerTransactionPayload;
-};
-
-export type QueryPayload = {
-  action: 'get-tx';
-  payload: string;
-};
-
-export type SignPayload = {
-  action: 'sign';
-  payload: SignMessagePayload;
-};
-
-export type GetSelfPayload = {
-  action: 'get-self';
-};
 
 export class ApiRelayer implements IRelayer {
   private token!: string;
   private api!: AxiosInstance;
   private apiKey: string;
   private apiSecret: string;
+  private jsonRpcRequestNextId: number;
 
   public constructor(params: ApiRelayerParams) {
     if (!params.apiKey) throw new Error(`API key is required`);
@@ -107,6 +107,7 @@ export class ApiRelayer implements IRelayer {
 
     this.apiKey = params.apiKey;
     this.apiSecret = params.apiSecret;
+    this.jsonRpcRequestNextId = 1;
   }
 
   private async init(): Promise<void> {
@@ -154,6 +155,15 @@ export class ApiRelayer implements IRelayer {
       return (await this.api.get(`txs/${id}`)) as RelayerTransaction;
     });
   }
+
+  public async call(method: string, params: string[]): Promise<JsonRpcResponse> {
+    return this.wrapApiCall(async () => {
+      return (await this.api.post(
+        `relayer/jsonrpc`, 
+        { method, params, jsonrpc: '2.0', id: this.jsonRpcRequestNextId++ }
+      )) as JsonRpcResponse;
+    });
+  }
 }
 
 export class Relayer implements IRelayer {
@@ -187,5 +197,9 @@ export class Relayer implements IRelayer {
 
   public query(id: string): Promise<RelayerTransaction> {
     return this.relayer.query(id);
+  }
+
+  public call(method: string, params: string[]): Promise<JsonRpcResponse> {
+    return this.relayer.call(method, params);
   }
 }
