@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { ApiRelayer } from './relayer';
+import { ApiRelayer } from '.';
 import * as auth from './auth';
 import * as api from './api';
 
@@ -112,6 +112,15 @@ describe('ApiRelayer', () => {
     test('signs a hex string', async () => {
       await relayer.sign({ message: '0xdead' });
       expect(relayer.api.post).toBeCalledWith('/sign', { message: '0xdead' });
+      expect(initSpy).toBeCalled();
+    });
+  });
+
+  describe('call', () => {
+    test('calls json-rpc endpoint', async () => {
+      await relayer.call('eth_call', ['0xa', '0xb']);
+      const payload = { jsonrpc: '2.0', id: 1, method: 'eth_call', params: ['0xa', '0xb'] };
+      expect(relayer.api.post).toBeCalledWith('/relayer/jsonrpc', payload);
       expect(initSpy).toBeCalled();
     });
   });

@@ -1,4 +1,4 @@
-import { AutotaskRelayer } from './autotask-relayer';
+import { AutotaskRelayer } from '.';
 
 type TestAutotaskRelayer = Omit<AutotaskRelayer, 'lambda' | 'relayerARN'> & { lambda: AWS.Lambda; relayerARN: string };
 
@@ -97,6 +97,18 @@ describe('AutotaskRelayer', () => {
         FunctionName: 'arn',
         InvocationType: 'RequestResponse',
         Payload: '{"action":"get-tx","payload":"42"}',
+      });
+    });
+  });
+
+  describe('call', () => {
+    test('passes correct arguments to the API', async () => {
+      await relayer.call('eth_call', ['0xa', '0xb']);
+      expect(relayer.lambda.invoke).toBeCalledWith({
+        FunctionName: 'arn',
+        InvocationType: 'RequestResponse',
+        Payload:
+          '{"action":"json-rpc-query","payload":{"method":"eth_call","params":["0xa","0xb"],"jsonrpc":"2.0","id":0}}',
       });
     });
   });

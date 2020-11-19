@@ -1,6 +1,4 @@
-import { authenticate } from './auth';
-import { createApi } from './api';
-import { AxiosInstance } from 'axios';
+import { ApiRelayer } from './api';
 
 export type Address = string;
 export type BigUInt = string | number;
@@ -57,6 +55,24 @@ export type RelayerParams = ApiRelayerParams | AutotaskRelayerParams;
 export type ApiRelayerParams = { apiKey: string; apiSecret: string };
 export type AutotaskRelayerParams = { credentials: string; relayerARN: string };
 
+export type JsonRpcResponse = {
+  id: number | null;
+  jsonrpc: '2.0';
+  result: any;
+  error?: {
+    code: number;
+    message: string;
+    data?: string;
+  };
+};
+
+export type JsonRpcRequest = {
+  id: number;
+  jsonrpc: '2.0';
+  method: string;
+  params: string[];
+};
+
 function isAutotaskCredentials(
   credentials: AutotaskRelayerParams | ApiRelayerParams,
 ): credentials is AutotaskRelayerParams {
@@ -74,86 +90,7 @@ export interface IRelayer {
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
   sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
-}
-
-export type SendTxPayload = {
-  action: 'send-tx';
-  payload: RelayerTransactionPayload;
-};
-
-export type QueryPayload = {
-  action: 'get-tx';
-  payload: string;
-};
-
-export type SignPayload = {
-  action: 'sign';
-  payload: SignMessagePayload;
-};
-
-export type GetSelfPayload = {
-  action: 'get-self';
-};
-
-export class ApiRelayer implements IRelayer {
-  private token!: string;
-  private api!: AxiosInstance;
-  private apiKey: string;
-  private apiSecret: string;
-
-  public constructor(params: ApiRelayerParams) {
-    if (!params.apiKey) throw new Error(`API key is required`);
-    if (!params.apiSecret) throw new Error(`API secret is required`);
-
-    this.apiKey = params.apiKey;
-    this.apiSecret = params.apiSecret;
-  }
-
-  private async init(): Promise<void> {
-    this.token = await authenticate({
-      Username: this.apiKey,
-      Password: this.apiSecret,
-    });
-    this.api = createApi(this.apiKey, this.token);
-  }
-
-  private async wrapApiCall<T>(fn: () => Promise<T>): Promise<T> {
-    if (!this.api) await this.init();
-    try {
-      return await fn();
-    } catch (error) {
-      // this means ID token has expired so we'll recreate session and try again
-      if (error.response.status === 401 && error.response.statusText === 'Unauthorized') {
-        await this.init();
-        return await fn();
-      }
-      throw error;
-    }
-  }
-
-  public async getRelayer(): Promise<RelayerModel> {
-    return this.wrapApiCall(async () => {
-      return (await this.api.get('/relayer')) as RelayerModel;
-    });
-  }
-
-  public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
-    return this.wrapApiCall(async () => {
-      return (await this.api.post('/txs', payload)) as RelayerTransaction;
-    });
-  }
-
-  public async sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
-    return this.wrapApiCall(async () => {
-      return (await this.api.post('/sign', payload)) as SignedMessagePayload;
-    });
-  }
-
-  public async query(id: string): Promise<RelayerTransaction> {
-    return this.wrapApiCall(async () => {
-      return (await this.api.get(`txs/${id}`)) as RelayerTransaction;
-    });
-  }
+  call(method: string, params: string[]): Promise<JsonRpcResponse>;
 }
 
 export class Relayer implements IRelayer {
@@ -162,7 +99,7 @@ export class Relayer implements IRelayer {
   public constructor(credentials: RelayerParams) {
     if (isAutotaskCredentials(credentials)) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { AutotaskRelayer } = require('./autotask-relayer');
+      const { AutotaskRelayer } = require('./autotask');
       this.relayer = new AutotaskRelayer(credentials);
     } else if (isApiCredentials(credentials)) {
       this.relayer = new ApiRelayer(credentials);
@@ -187,5 +124,9 @@ export class Relayer implements IRelayer {
 
   public query(id: string): Promise<RelayerTransaction> {
     return this.relayer.query(id);
+  }
+
+  public call(method: string, params: string[]): Promise<JsonRpcResponse> {
+    return this.relayer.call(method, params);
   }
 }
