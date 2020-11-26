@@ -60,7 +60,7 @@ status: 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed';
 speed: 'safeLow' | 'average' | 'fast' | 'fastest';
 ```
 
-## Querying
+## Querying transactions
 
 The `relayer` object also has a `query` function that returns a transaction object as described above. This method receives the `transactionId`, **not** the transaction `hash`:
 
@@ -97,9 +97,17 @@ export interface SignedMessagePayload {
 }
 ```
 
+## Network calls
+
+You can also use Defender for making arbitrary JSON RPC calls to the network via the `call` method. All JSON RPC methods are supported, except for event filters and websocket subscriptions.
+
+```js
+const balance = await relayer.call('eth_getBalance', ['0x6b175474e89094c44da98b954eedeac495271d0f', 'latest']);
+```
+
 ## Ethers.js
 
-You can use the `defender-relay-client` with [ethers.js v5](https://github.com/ethers-io/ethers.js/) directly. The package exports a `DefenderRelaySigner` [signer](https://docs.ethers.io/v5/api/signer/) that is used to send transaction.
+You can use the `defender-relay-client` with [ethers.js v5](https://github.com/ethers-io/ethers.js/) directly. The package exports a `DefenderRelaySigner` [signer](https://docs.ethers.io/v5/api/signer/) that is used to send transactions, and a `DefenderRelayProvider` [provider](https://docs.ethers.io/v5/api/providers/) that is used to make calls to the network through Defender.
 
 Make sure to have `ethers` installed in your project, and initialize a new defender signer instance like:
 
@@ -107,8 +115,8 @@ Make sure to have `ethers` installed in your project, and initialize a new defen
 const { DefenderRelaySigner } = require('defender-relay-client/lib/ethers');
 const { ethers } = require('ethers');
 
-const provider = ethers.getDefaultProvider(NETWORK);
 const credentials = { apiKey: API_KEY, apiSecret: API_SECRET };
+const provider = new DefenderRelayProvider(credentials);
 const signer = new DefenderRelaySigner(credentials, provider, { speed: 'fast' };
 ```
 
@@ -120,12 +128,10 @@ const tx = await erc20.functions.transfer(beneficiary, 1e18.toString());
 const mined = await tx.wait();
 ```
 
-### Signing
-
-`signMessage` method is supported as well, allowing to sign an arbitrary data with a relayer key.
+The `signMessage` method is supported as well, allowing to sign an arbitrary data with a relayer key.
 
 ```js
-  const sig = await signer.signMessage('Funds are safu!');
+const signed = await signer.signMessage('Funds are safu!');
 ```
 
 ### Limitations
