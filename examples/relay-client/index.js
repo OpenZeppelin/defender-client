@@ -15,6 +15,8 @@ async function send() {
     to: '0x179810822f56b0e79469189741a3fa5f2f9a7631',
     value: 1,
     speed: 'fast',
+    // gasPrice: 1000000,
+    // validUntil: new Date(Date.now() + 5000),
     gasLimit: '21000',
   });
   console.log('txResponse', JSON.stringify(txResponse, null, 2));
@@ -47,11 +49,16 @@ async function balance(addr) {
     }
     console.log(`Using client version`, VERSION);
     switch (action) {
-      case 'query': return await query(process.argv[3]);
-      case 'get': return await get();
-      case 'send': return await send();
-      case 'sign': return await sign(process.argv[3]);
-      case 'balance': return await balance(process.argv[3]);
+      case 'query':
+        return await query(process.argv[3]);
+      case 'get':
+        return await get();
+      case 'send':
+        return await send();
+      case 'sign':
+        return await sign(process.argv[3]);
+      case 'balance':
+        return await balance(process.argv[3]);
       default:
         console.error(`Unknown action ${process.argv[2]}`);
         process.exit(1);

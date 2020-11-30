@@ -22,7 +22,7 @@ const allowedTransactionKeys: Array<string> = [
   'speed',
 ];
 
-export type DefenderTransactionRequest = TransactionRequest & { speed: Speed };
+export type DefenderTransactionRequest = TransactionRequest & { speed?: Speed };
 export type DefenderRelaySignerOptions = { speed?: Speed };
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
@@ -87,11 +87,13 @@ export class DefenderRelaySigner extends Signer {
     if (!tx.to) throw new Error('DefenderRelaySigner#sendTransacton: contract creation not yet supported');
     if (!tx.gasLimit) throw new Error('DefenderRelaySigner#sendTransacton: relayer gas estimation not yet supported');
 
+    console.log('tx', tx);
     const relayedTransaction = await this.relayer.sendTransaction({
       to: tx.to,
       gasLimit: hexlify(tx.gasLimit),
       data: tx.data ? hexlify(tx.data) : undefined,
       speed: tx.speed,
+      gasPrice: tx.gasPrice ? hexlify(tx.gasPrice) : undefined,
       value: tx.value ? hexlify(tx.value) : undefined,
     });
 
@@ -127,8 +129,8 @@ export class DefenderRelaySigner extends Signer {
       });
     }
 
-    if (!tx.speed) {
-      tx.speed = this.options.speed || 'average';
+    if (!tx.speed && !tx.gasPrice) {
+      tx.speed = this.options.speed || 'fast';
     }
 
     return await resolveProperties(tx);

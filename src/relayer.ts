@@ -11,7 +11,9 @@ export type RelayerTransactionPayload = {
   value?: BigUInt;
   data?: Hex;
   speed?: Speed;
+  gasPrice?: BigUInt;
   gasLimit: BigUInt;
+  validUntil?: string;
 };
 
 export interface SignMessagePayload {
@@ -49,6 +51,7 @@ export type RelayerTransaction = {
   nonce: number;
   status: Status;
   chainId: number;
+  validUntil: string;
 };
 
 export type RelayerParams = ApiRelayerParams | AutotaskRelayerParams;
