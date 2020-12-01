@@ -388,14 +388,9 @@ debug@=3.1.0:
   dependencies:
     ms "2.0.0"
 
-defender-relay-client@../../:
-  version "0.3.0"
-  dependencies:
-    amazon-cognito-identity-js "^4.3.3"
-    axios "^0.19.2"
-    find-up "^4.1.0"
-    lodash "^4.17.19"
-    node-fetch "^2.6.0"
+"defender-relay-client@link:../..":
+  version "0.0.0"
+  uid ""
 
 dotenv@^8.2.0:
   version "8.2.0"
