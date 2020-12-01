@@ -2,6 +2,9 @@ import { JsonRpcSigner, Network, StaticJsonRpcProvider } from '@ethersproject/pr
 import { ApiUrl } from '../api/api';
 import { Relayer, RelayerParams } from '../relayer';
 import { DefenderRelaySigner } from './signer';
+import { defineReadOnly, getStatic } from '@ethersproject/properties';
+import { Networkish } from '@ethersproject/networks';
+import { BigNumber } from '@ethersproject/bignumber';
 
 export class DefenderRelayProvider extends StaticJsonRpcProvider {
   private relayer: Relayer;
@@ -9,6 +12,46 @@ export class DefenderRelayProvider extends StaticJsonRpcProvider {
   constructor(readonly credentials: RelayerParams) {
     super(ApiUrl());
     this.relayer = new Relayer(credentials);
+  }
+
+  async detectNetwork(): Promise<Network> {
+    if (this.network != null) {
+      return this.network;
+    }
+
+    // Logic from JsonRpcProvider.detectNetwork
+    let chainId = null;
+    try {
+      chainId = await this.send('eth_chainId', []);
+    } catch (error) {
+      try {
+        chainId = await this.send('net_version', []);
+      } catch (error) {
+        // Key difference from JsonRpcProvider.detectNetwork logic
+        // This surfaces error to caller (like QuotaExceeded) instead of squashing it
+        throw error;
+      }
+    }
+
+    if (chainId === null) {
+      throw new Error('could not detect chainId');
+    }
+
+    // Logic from JsonRpcProvider.detectNetwork
+    const getNetwork = getStatic<(network: Networkish) => Network>(this.constructor, 'getNetwork');
+    const network = getNetwork(BigNumber.from(chainId).toNumber());
+
+    if (!network) {
+      throw new Error('could not detect network');
+    }
+
+    // Logic from StaticJsonRpcProvider.detectNetwork
+    if (this._network == null) {
+      defineReadOnly(this, '_network', network);
+      this.emit('network', network, null);
+    }
+
+    return network;
   }
 
   async send(method: string, params: Array<any>): Promise<any> {
