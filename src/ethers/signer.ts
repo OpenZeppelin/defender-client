@@ -22,8 +22,10 @@ const allowedTransactionKeys: Array<string> = [
   'speed',
 ];
 
-export type DefenderTransactionRequest = TransactionRequest & Partial<{ speed: Speed, validUntil: Date | string }>;
-export type DefenderRelaySignerOptions = Partial<Pick<TransactionRequest, 'gasPrice'> & { speed: Speed, validForSeconds: number }>;
+export type DefenderTransactionRequest = TransactionRequest & Partial<{ speed: Speed; validUntil: Date | string }>;
+export type DefenderRelaySignerOptions = Partial<
+  Pick<TransactionRequest, 'gasPrice'> & { speed: Speed; validForSeconds: number }
+>;
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
 
@@ -97,7 +99,7 @@ export class DefenderRelaySigner extends Signer {
       speed: tx.speed,
       gasPrice: tx.gasPrice ? hexlify(tx.gasPrice) : undefined,
       value: tx.value ? hexlify(tx.value) : undefined,
-      validUntil: tx.validUntil ? (new Date(tx.validUntil).toISOString()) : undefined,
+      validUntil: tx.validUntil ? new Date(tx.validUntil).toISOString() : undefined,
     });
 
     return (this.provider as ProviderWithWrapTransaction)._wrapTransaction(
