@@ -9,7 +9,8 @@ async function main() {
   const creds = { apiKey: process.env.API_KEY, apiSecret: process.env.API_SECRET };
   
   const provider = new DefenderRelayProvider(creds);
-  const signer = new DefenderRelaySigner(creds, provider, { speed: 'fast' });
+  const validUntil = (new Date(Date.now() + 120 * 1000)).toISOString();
+  const signer = new DefenderRelaySigner(creds, provider, { speed: 'fast', validUntil });
 
   const erc20 = new ethers.Contract(ERC20Address, ERC20Abi, signer);
   const beneficiary = await ethers.Wallet.createRandom().getAddress();
@@ -18,7 +19,7 @@ async function main() {
   console.log(`Relayer address is ${addr}`);
 
   console.log(`Sending approve transaction for ${beneficiary} to token ${ERC20Address}...`);
-  const tx = await erc20.approve(beneficiary, (1e18).toString());
+  const tx = await erc20.approve(beneficiary, (1e17).toString());
   console.log(`Transaction sent:`, tx);
 
   const mined = await tx.wait();

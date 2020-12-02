@@ -2,7 +2,7 @@ import { toUtf8Bytes } from '@ethersproject/strings';
 import { Provider, TransactionRequest, TransactionResponse } from '@ethersproject/abstract-provider';
 import { Signer } from '@ethersproject/abstract-signer';
 import { Bytes, hexlify, joinSignature } from '@ethersproject/bytes';
-import { BigNumber } from '@ethersproject/bignumber';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import { Deferrable, resolveProperties, shallowCopy } from '@ethersproject/properties';
 import { Relayer, Speed, RelayerParams } from '../relayer';
@@ -22,8 +22,10 @@ const allowedTransactionKeys: Array<string> = [
   'speed',
 ];
 
-export type DefenderTransactionRequest = TransactionRequest & { speed?: Speed };
-export type DefenderRelaySignerOptions = { speed?: Speed };
+export type DefenderTransactionRequest = TransactionRequest & Partial<{ speed: Speed; validUntil: Date | string }>;
+export type DefenderRelaySignerOptions = Partial<
+  Pick<TransactionRequest, 'gasPrice'> & { speed: Speed; validForSeconds: number }
+>;
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
 
@@ -38,10 +40,13 @@ export class DefenderRelaySigner extends Signer {
   constructor(
     readonly relayerCredentials: RelayerParams | Relayer,
     readonly provider: Provider,
-    readonly options: DefenderRelaySignerOptions,
+    readonly options: DefenderRelaySignerOptions = {},
   ) {
     super();
     this.relayer = isRelayer(relayerCredentials) ? relayerCredentials : new Relayer(relayerCredentials);
+    if (options && options.speed && options.gasPrice) {
+      throw new Error(`Cannot set both speed and fixed gasPrice`);
+    }
   }
 
   public async getAddress(): Promise<string> {
@@ -94,6 +99,7 @@ export class DefenderRelaySigner extends Signer {
       speed: tx.speed,
       gasPrice: tx.gasPrice ? hexlify(tx.gasPrice) : undefined,
       value: tx.value ? hexlify(tx.value) : undefined,
+      validUntil: tx.validUntil ? new Date(tx.validUntil).toISOString() : undefined,
     });
 
     return (this.provider as ProviderWithWrapTransaction)._wrapTransaction(
@@ -129,7 +135,15 @@ export class DefenderRelaySigner extends Signer {
     }
 
     if (!tx.speed && !tx.gasPrice) {
-      tx.speed = this.options.speed || 'fast';
+      if (this.options.gasPrice) {
+        tx.gasPrice = this.options.gasPrice;
+      } else if (this.options.speed) {
+        tx.speed = this.options.speed;
+      }
+    }
+
+    if (!tx.validUntil && this.options.validForSeconds) {
+      tx.validUntil = new Date(Date.now() + this.options.validForSeconds * 1000);
     }
 
     return await resolveProperties(tx);
