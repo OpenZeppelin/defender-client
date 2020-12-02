@@ -22,7 +22,7 @@ const allowedTransactionKeys: Array<string> = [
   'speed',
 ];
 
-export type DefenderTransactionRequest = TransactionRequest & { speed: Speed };
+export type DefenderTransactionRequest = TransactionRequest & { speed?: Speed };
 export type DefenderRelaySignerOptions = { speed?: Speed };
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
@@ -92,6 +92,7 @@ export class DefenderRelaySigner extends Signer {
       gasLimit: hexlify(tx.gasLimit),
       data: tx.data ? hexlify(tx.data) : undefined,
       speed: tx.speed,
+      gasPrice: tx.gasPrice ? hexlify(tx.gasPrice) : undefined,
       value: tx.value ? hexlify(tx.value) : undefined,
     });
 
@@ -127,8 +128,8 @@ export class DefenderRelaySigner extends Signer {
       });
     }
 
-    if (!tx.speed) {
-      tx.speed = this.options.speed || 'average';
+    if (!tx.speed && !tx.gasPrice) {
+      tx.speed = this.options.speed || 'fast';
     }
 
     return await resolveProperties(tx);
