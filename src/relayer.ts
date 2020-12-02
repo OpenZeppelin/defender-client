@@ -122,6 +122,12 @@ export class Relayer implements IRelayer {
   }
 
   public sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
+    if (payload.speed && payload.gasPrice) {
+      throw new Error("Both tx's speed and gas price are set. Use either of them.");
+    }
+    if (payload.validUntil && new Date(payload.validUntil).getTime() < new Date().getTime()) {
+      throw new Error('The validUntil time cannot be in the past');
+    }
     return this.relayer.sendTransaction(payload);
   }
 
