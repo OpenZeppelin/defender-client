@@ -89,7 +89,6 @@ export class DefenderRelaySigner extends Signer {
     this._checkProvider('sendTransaction');
 
     const tx = await this.populateTransaction(transaction);
-    if (!tx.to) throw new Error('DefenderRelaySigner#sendTransacton: contract creation not yet supported');
     if (!tx.gasLimit) throw new Error('DefenderRelaySigner#sendTransacton: relayer gas estimation not yet supported');
 
     const relayedTransaction = await this.relayer.sendTransaction({

@@ -7,7 +7,7 @@ export type Speed = 'safeLow' | 'average' | 'fast' | 'fastest';
 export type Status = 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed';
 
 export type RelayerTransactionPayload = {
-  to: Address;
+  to?: Address;
   value?: BigUInt;
   data?: Hex;
   speed?: Speed;
