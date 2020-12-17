@@ -43,8 +43,8 @@ export type RelayerTransaction = {
   hash: string;
   to: Address;
   from: Address;
-  value: string;
-  data: string;
+  value?: string;
+  data?: string;
   speed: Speed;
   gasPrice: number;
   gasLimit: number;

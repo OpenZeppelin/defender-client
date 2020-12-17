@@ -106,8 +106,10 @@ export class DefenderRelaySigner extends Signer {
         ...relayedTransaction,
         gasLimit: BigNumber.from(relayedTransaction.gasLimit),
         gasPrice: BigNumber.from(relayedTransaction.gasPrice),
-        value: BigNumber.from(relayedTransaction.value),
+        value: BigNumber.from(relayedTransaction.value ?? 0),
+        data: relayedTransaction.data ?? '',
       },
+
       relayedTransaction.hash,
     );
   }
