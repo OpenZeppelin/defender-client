@@ -40,6 +40,13 @@ async function balance(addr) {
   console.log(`eth_getBalance`, JSON.stringify(balance, null, 2));
 }
 
+async function jsonrpc(method, payload) {
+  if (!method) throw new Error(`Missing method`);
+  if (!payload) throw new Error(`Missing payload`);
+  const result = await relayer.call(method, JSON.parse(payload));
+  console.log(method, JSON.stringify(result, null, 2));
+}
+
 (async () => {
   try {
     const action = process.argv[2];
@@ -59,6 +66,8 @@ async function balance(addr) {
         return await sign(process.argv[3]);
       case 'balance':
         return await balance(process.argv[3]);
+      case 'jsonrpc':
+        return await jsonrpc(process.argv[3], process.argv[4]);
       default:
         console.error(`Unknown action ${process.argv[2]}`);
         process.exit(1);
