@@ -1,5 +1,4 @@
-import { authenticate } from './auth';
-import { createApi } from './api';
+import { createAuthenticatedApi } from 'defender-base-client';
 import { AxiosInstance } from 'axios';
 import {
   ApiRelayerParams,
@@ -12,8 +11,11 @@ import {
   SignMessagePayload,
 } from '../relayer';
 
+export const RelayerPoolId = () => process.env.DEFENDER_RELAY_POOL_ID || 'us-west-2_iLmIggsiy';
+export const RelayerPoolClientId = () => process.env.DEFENDER_RELAY_POOL_CLIENT_ID || '1bpd19lcr33qvg5cr3oi79rdap';
+export const RelayerApiUrl = () => process.env.DEFENDER_RELAY_API_URL || 'http://api.defender.openzeppelin.com/';
+
 export class ApiRelayer implements IRelayer {
-  private token!: string;
   private api!: AxiosInstance;
   private apiKey: string;
   private apiSecret: string;
@@ -29,11 +31,9 @@ export class ApiRelayer implements IRelayer {
   }
 
   private async init(): Promise<void> {
-    this.token = await authenticate({
-      Username: this.apiKey,
-      Password: this.apiSecret,
-    });
-    this.api = createApi(this.apiKey, this.token);
+    const userPass = { Username: this.apiKey, Password: this.apiSecret };
+    const poolData = { UserPoolId: RelayerPoolId(), ClientId: RelayerPoolClientId() };
+    this.api = await createAuthenticatedApi(userPass, poolData, RelayerApiUrl());
   }
 
   private async wrapApiCall<T>(fn: () => Promise<T>): Promise<T> {

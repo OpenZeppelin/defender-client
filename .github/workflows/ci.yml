@@ -30,6 +30,9 @@ jobs:
     - name: Install dependencies
       run: yarn --frozen-lockfile
 
+    - name: Check build
+      run: yarn build
+
     - name: Check linting
       run: yarn lint:check
 

@@ -1,15 +1,17 @@
 import axios from 'axios';
 import { createApi } from './api';
 
-const ApiUrl = process.env.API_URL || 'http://api.defender.openzeppelin.com/';
+jest.mock('axios');
+
+const apiUrl = 'http://api.defender.openzeppelin.com/';
 const key = 'key';
 const token = 'token';
 
 describe('createApi', () => {
   test('passes correct arguments to axois', () => {
-    createApi(key, token);
+    createApi(key, token, apiUrl);
     expect(axios.create).toBeCalledWith({
-      baseURL: ApiUrl,
+      baseURL: apiUrl,
       headers: {
         'X-Api-Key': key,
         Authorization: `Bearer ${token}`,

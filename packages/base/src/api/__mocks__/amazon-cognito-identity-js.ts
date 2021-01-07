@@ -12,5 +12,6 @@ module.exports = {
   CognitoUser: jest.fn(() => ({
     authenticateUser: mockAuthenticateUser,
   })),
+  CognitoUserPool: jest.fn(),
   mockAuthenticateUser,
 };
