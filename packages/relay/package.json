@@ -1,0 +1,40 @@
+{
+  "name": "defender-relay-client",
+  "version": "1.2.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "test": "yarn test:unit",
+    "test:unit": "jest --verbose",
+    "watch": "tsc -w",
+    "prepublishOnly": "yarn build"
+  },
+  "files": [
+    "lib",
+    "!*.test.js",
+    "!*.test.js.map",
+    "!*.test.d.ts",
+    "!*__mocks__"
+  ],
+  "author": "Igor Yalovoy <igor@openzeppelin.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@ethersproject/abstract-provider": "^5.0.2",
+    "@ethersproject/abstract-signer": "^5.0.2",
+    "@ethersproject/providers": "^5.0.5",
+    "aws-sdk": "^2.733.0"
+  },
+  "dependencies": {
+    "amazon-cognito-identity-js": "^4.3.3",
+    "axios": "^0.19.2",
+    "lodash": "^4.17.19",
+    "node-fetch": "^2.6.0"
+  },
+  "peerDependencies": {
+    "@ethersproject/abstract-provider": "^5.0.2",
+    "@ethersproject/abstract-signer": "^5.0.2",
+    "@ethersproject/providers": "^5.0.5"
+  }
+}

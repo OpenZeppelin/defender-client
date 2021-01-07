@@ -2,7 +2,7 @@
   "extends": "code-style/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "./lib",
+    "outDir": "./lib"
   },
   "include": ["./src"]
 }
