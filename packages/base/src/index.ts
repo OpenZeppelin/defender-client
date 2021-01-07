@@ -1,12 +1,6 @@
-import { AxiosInstance } from 'axios';
-import { createApi } from './api/api';
-import { UserPass, PoolData, authenticate } from './api/auth';
+export { createApi, createAuthenticatedApi } from './api/api';
+export { authenticate } from './api/auth';
+export { BaseApiClient } from './api/client';
 
-export { authenticate };
-export { createApi };
-
-export async function createAuthenticatedApi(userPass: UserPass, poolData: PoolData, apiUrl: string): Promise<AxiosInstance> {
-  const token = await authenticate(userPass, poolData);
-  const api = createApi(userPass.Username, token, apiUrl);
-  return api;
-}
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+export const VERSION = require('../package.json').version;
