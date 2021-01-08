@@ -1,5 +1,5 @@
-import { AxiosInstance } from "axios";
-import { createAuthenticatedApi } from "./api";
+import { AxiosInstance } from 'axios';
+import { createAuthenticatedApi } from './api';
 
 export abstract class BaseApiClient {
   private api: AxiosInstance | undefined;
@@ -10,7 +10,7 @@ export abstract class BaseApiClient {
   protected abstract getPoolClientId(): string;
   protected abstract getApiUrl(): string;
 
-  public constructor(params: { apiKey: string, apiSecret: string }) {
+  public constructor(params: { apiKey: string; apiSecret: string }) {
     if (!params.apiKey) throw new Error(`API key is required`);
     if (!params.apiSecret) throw new Error(`API secret is required`);
 

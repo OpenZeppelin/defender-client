@@ -1,4 +1,4 @@
-import { ExternalApiCreateProposalRequest } from "./proposal";
+import { ExternalApiCreateProposalRequest } from './proposal';
 
 export interface ExternalApiProposalResponse extends ExternalApiCreateProposalRequest {
   contractId: string;

@@ -1,6 +1,6 @@
-import { BaseApiClient } from "../../base/lib";
-import { ExternalApiCreateProposalRequest as CreateProposalRequest } from "./models/proposal";
-import { ExternalApiProposalResponse as ProposalResponse } from "./models/response";
+import { BaseApiClient } from '../../base/lib';
+import { ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
+import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
 
 function getEnv(name: string): string {
   const value = process.env[name];
@@ -8,11 +8,11 @@ function getEnv(name: string): string {
   return value;
 }
 
-export class AdminClient extends BaseApiClient {  
+export class AdminClient extends BaseApiClient {
   protected getPoolId(): string {
     return getEnv('DEFENDER_ADMIN_POOL_ID');
   }
-  
+
   protected getPoolClientId(): string {
     return getEnv('DEFENDER_ADMIN_POOL_CLIENT_ID');
   }
@@ -22,7 +22,7 @@ export class AdminClient extends BaseApiClient {
   }
 
   public async createProposal(proposal: CreateProposalRequest): Promise<ProposalResponse> {
-    return this.apiCall(async api => {
+    return this.apiCall(async (api) => {
       return (await api.post('/proposals', proposal)) as ProposalResponse;
     });
   }

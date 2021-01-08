@@ -12,7 +12,7 @@ import {
 
 export const RelayerApiUrl = () => process.env.DEFENDER_RELAY_API_URL || 'http://api.defender.openzeppelin.com/';
 
-export class ApiRelayer extends BaseApiClient implements IRelayer {  
+export class ApiRelayer extends BaseApiClient implements IRelayer {
   private jsonRpcRequestNextId: number;
 
   public constructor(params: ApiRelayerParams) {
@@ -23,11 +23,11 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
   protected getPoolId(): string {
     return process.env.DEFENDER_RELAY_POOL_ID || 'us-west-2_iLmIggsiy';
   }
-  
+
   protected getPoolClientId(): string {
     return process.env.DEFENDER_RELAY_POOL_CLIENT_ID || '1bpd19lcr33qvg5cr3oi79rdap';
   }
-  
+
   protected getApiUrl(): string {
     return RelayerApiUrl();
   }

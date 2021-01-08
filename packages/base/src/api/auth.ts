@@ -14,7 +14,7 @@ import { AuthenticationDetails, CognitoUserPool, CognitoUser } from 'amazon-cogn
 global.fetch = require('node-fetch').default;
 
 export type UserPass = { Username: string; Password: string };
-export type PoolData = { UserPoolId: string, ClientId: string };
+export type PoolData = { UserPoolId: string; ClientId: string };
 
 export async function authenticate(authenticationData: UserPass, poolData: PoolData): Promise<string> {
   const authenticationDetails = new AuthenticationDetails(authenticationData);

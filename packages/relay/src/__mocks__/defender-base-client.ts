@@ -1,6 +1,5 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance } from 'axios';
 
-// @ts-ignore
 abstract class MockBaseApiClient extends jest.requireActual('defender-base-client').BaseApiClient {
   private api: AxiosInstance | undefined;
   protected async init(): Promise<void> {
@@ -18,5 +17,5 @@ module.exports = {
     post: jest.fn(),
     get: jest.fn(),
   })),
-  BaseApiClient: MockBaseApiClient
+  BaseApiClient: MockBaseApiClient,
 };
