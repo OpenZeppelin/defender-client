@@ -2,7 +2,7 @@ import { AdminClient } from './api';
 import { ExternalApiCreateProposalRequest } from './models/proposal';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
 
-type UpgradeParams = {
+export type UpgradeParams = {
   title?: string;
   description?: string;
   newImplementation: string;
