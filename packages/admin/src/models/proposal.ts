@@ -16,10 +16,10 @@ export interface ExternalApiCreateProposalRequest {
   description: string;
   type: ProposalType;
   metadata?: ProposalMetadata;
-  via: Address;
+  via?: Address;
   viaType?: 'EOA' | 'Contract' | 'Multisig' | 'Gnosis Safe' | 'Gnosis Multisig' | 'Unknown';
-  functionInterface: ProposalTargetFunction;
-  functionInputs: ProposalFunctionInputs;
+  functionInterface?: ProposalTargetFunction;
+  functionInputs?: ProposalFunctionInputs;
 }
 export interface ProposalMetadata {
   newImplementationAddress: Address;
