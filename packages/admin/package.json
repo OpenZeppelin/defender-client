@@ -9,7 +9,7 @@
     "test": "yarn test:unit",
     "test:unit": "jest --verbose --passWithNoTests",
     "watch": "tsc -w",
-    "prepublishOnly": "yarn build"
+    "prepare": "yarn build"
   },
   "files": [
     "lib",
