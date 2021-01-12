@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { UpgradesClient } = require('defender-admin-client');
+const { AdminClient } = require('defender-admin-client');
 
 const proxy = '0xB07b1C80371915dEFd254d1C57BeF2bDe6D3b610';
 const newImplementation = '0x86690db6c757fcc71ff1b69cf24529e5ab6481fb';
@@ -8,7 +8,7 @@ const network = 'rinkeby';
 
 async function main() {
   const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };
-  const client = new UpgradesClient(creds);
+  const client = new AdminClient(creds);
 
   const proposal = await client.proposeUpgrade({ newImplementation }, { network, address: proxy });
   const siteUrl = process.env.SITE_URL || 'https://defender.openzeppelin.com';
