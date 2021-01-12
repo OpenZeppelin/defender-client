@@ -1,4 +1,4 @@
-import { BaseApiClient } from '../../base/lib';
+import { BaseApiClient } from 'defender-base-client';
 import { ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
 
