@@ -6,4 +6,4 @@ lib
 .openzeppelin
 *.tgz
 coverage
-.env
+*.env
