@@ -1,11 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
 import { pick } from 'lodash';
+import { authenticate, PoolData, UserPass } from './auth';
 
-export const ApiUrl = () => process.env.API_URL || 'http://api.defender.openzeppelin.com/';
-
-export function createApi(key: string, token: string): AxiosInstance {
+export function createApi(key: string, token: string, apiUrl: string): AxiosInstance {
   const instance = axios.create({
-    baseURL: ApiUrl(),
+    baseURL: apiUrl,
     headers: {
       'X-Api-Key': key,
       Authorization: `Bearer ${token}`,
@@ -24,4 +23,14 @@ export function createApi(key: string, token: string): AxiosInstance {
   );
 
   return instance;
+}
+
+export async function createAuthenticatedApi(
+  userPass: UserPass,
+  poolData: PoolData,
+  apiUrl: string,
+): Promise<AxiosInstance> {
+  const token = await authenticate(userPass, poolData);
+  const api = createApi(userPass.Username, token, apiUrl);
+  return api;
 }

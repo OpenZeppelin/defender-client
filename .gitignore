@@ -2,8 +2,8 @@ node_modules
 .zos.session
 zos.*
 build
-/lib
+lib
 .openzeppelin
 *.tgz
 coverage
-*.env
+.env

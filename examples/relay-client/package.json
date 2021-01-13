@@ -1,12 +1,12 @@
 {
-  "name": "defender-relay-send",
-  "version": "0.1.0",
+  "name": "example-relayer-send",
+  "version": "1.3.0-rc.4",
   "main": "index.js",
   "author": "Igor Yalovoy <igor@openzeppelin.com>",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "defender-relay-client": "../../defender-relay-client-v1.0.1.tgz",
+    "defender-relay-client": "1.3.0-rc.4",
     "dotenv": "^8.2.0"
   }
 }

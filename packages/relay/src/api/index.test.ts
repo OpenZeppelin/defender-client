@@ -1,18 +1,15 @@
 import { AxiosInstance } from 'axios';
 import { ApiRelayer } from '.';
-import * as auth from './auth';
-import * as api from './api';
 
-jest.mock('./auth');
-jest.mock('./api');
+jest.mock('defender-base-client');
 jest.mock('aws-sdk');
+jest.mock('axios');
 
 type TestApiRelayer = Omit<ApiRelayer, 'api'> & {
   api: AxiosInstance;
   apiKey: string;
   apiSecret: string;
   init: () => Promise<void>;
-  wrapApiCall: <T>(fn: () => Promise<T>) => Promise<T>;
 };
 
 describe('ApiRelayer', () => {
