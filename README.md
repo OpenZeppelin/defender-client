@@ -24,6 +24,12 @@ The following publishes a release candidate with the npm tag `next`:
 yarn run lerna publish v1.3.0-rc.4 --preid rc --dist-tag next --pre-dist-tag next --exact
 ```
 
+And to publish the final release:
+
+```
+yarn run lerna publish --exact
+```
+
 ## Examples
 
 The `examples` repo has sample code for both clients. Note that most examples rely on dotenv for loading API keys and secrets. Note that you can set the following environment variables to control to which instance your client will connect to, which is useful for testing against your own Defender instance:
