@@ -28,11 +28,11 @@ To create a `custom` action proposal, you need to provide the function interface
 
 ```js
 await client.createProposal({
-  contract: { address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E', network: 'rinkeby' } // Target contract
+  contract: { address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E', network: 'rinkeby' }, // Target contract
   title: 'Adjust fee to 10%', // Title of the proposal
   description: 'Adjust the contract fee collected per action to 10%', // Description of the proposal
   type: 'custom', // Use 'custom' for custom admin actions
-  functionInterface: { name: 'setFee', inputs: [{ type: 'uint256', name: 'fee' }], // Function ABI
+  functionInterface: { name: 'setFee', inputs: [{ type: 'uint256', name: 'fee' }] }, // Function ABI
   functionInputs: ['10'], // Arguments to the function
   via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', // Multisig address
   viaType: 'Gnosis Safe', // Either Gnosis Safe or Gnosis Multisig
