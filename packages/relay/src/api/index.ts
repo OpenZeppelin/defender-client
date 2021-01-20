@@ -10,7 +10,7 @@ import {
   SignMessagePayload,
 } from '../relayer';
 
-export const RelayerApiUrl = () => process.env.DEFENDER_RELAY_API_URL || 'http://api.defender.openzeppelin.com/';
+export const RelayerApiUrl = () => process.env.DEFENDER_RELAY_API_URL || 'https://api.defender.openzeppelin.com/';
 
 export class ApiRelayer extends BaseApiClient implements IRelayer {
   private jsonRpcRequestNextId: number;
