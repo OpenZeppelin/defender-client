@@ -20,8 +20,7 @@ async function main() {
     viaType: 'Gnosis Safe',
   });
   
-  const siteUrl = process.env.SITE_URL || 'https://defender.openzeppelin.com';
-  console.log(`${siteUrl}/#/admin/contracts/${proposal.contractId}/proposals/${proposal.proposalId}`);
+  console.log(proposal.url);
 }
 
 if (require.main === module) {
