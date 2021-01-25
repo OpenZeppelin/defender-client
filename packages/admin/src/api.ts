@@ -36,7 +36,7 @@ export class AdminClient extends BaseApiClient {
   public async proposeUpgrade(
     params: UpgradeParams,
     contract: CreateProposalRequest['contract'],
-  ): Promise<ProposalResponse> {
+  ): Promise<ProposalResponseWithUrl> {
     const request: CreateProposalRequest = {
       contract,
       type: 'upgrade',
