@@ -1,6 +1,6 @@
-// Copied from openzeppelin/defender/models/src/types/proposal-api.req.d.ts
+import { Network } from 'defender-base-client';
 
-export type Network = 'mainnet' | 'ropsten' | 'rinkeby' | 'kovan' | 'goerli' | 'xdai' | 'sokol';
+// Copied from openzeppelin/defender/models/src/types/proposal-api.req.d.ts
 export type Address = string;
 export type ProposalType = 'upgrade' | 'custom';
 export type ProposalFunctionInputs = (string | boolean | (string | boolean)[])[];
