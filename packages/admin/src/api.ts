@@ -1,12 +1,17 @@
 import { BaseApiClient } from 'defender-base-client';
 import { ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
+import { getProposalUrl } from './utils';
 
 type UpgradeParams = {
   title?: string;
   description?: string;
   newImplementation: string;
 };
+
+export interface ProposalResponseWithUrl extends ProposalResponse {
+  url: string;
+}
 
 export class AdminClient extends BaseApiClient {
   protected getPoolId(): string {
@@ -21,9 +26,10 @@ export class AdminClient extends BaseApiClient {
     return process.env.DEFENDER_ADMIN_API_URL || 'https://defender-api.openzeppelin.com/admin/';
   }
 
-  public async createProposal(proposal: CreateProposalRequest): Promise<ProposalResponse> {
+  public async createProposal(proposal: CreateProposalRequest): Promise<ProposalResponseWithUrl> {
     return this.apiCall(async (api) => {
-      return (await api.post('/proposals', proposal)) as ProposalResponse;
+      const response = (await api.post('/proposals', proposal)) as ProposalResponse;
+      return { ...response, url: getProposalUrl(response) };
     });
   }
 
