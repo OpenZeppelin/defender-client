@@ -1,5 +1,6 @@
 import { BaseApiClient } from 'defender-base-client';
-import { ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
+import { capitalize } from 'lodash';
+import { Address, ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
 import { getProposalUrl } from './utils';
 
@@ -7,6 +8,13 @@ type UpgradeParams = {
   title?: string;
   description?: string;
   newImplementation: string;
+};
+
+type PauseParams = {
+  title?: string;
+  description?: string;
+  via: Address;
+  viaType: 'EOA' | 'Contract' | 'Multisig' | 'Gnosis Safe' | 'Gnosis Multisig' | 'Unknown';
 };
 
 export interface ProposalResponseWithUrl extends ProposalResponse {
@@ -45,6 +53,39 @@ export class AdminClient extends BaseApiClient {
       },
       title: params.title ?? `Upgrade to ${params.newImplementation.slice(0, 10)}`,
       description: params.description ?? `Upgrade contract implementation to ${params.newImplementation}`,
+    };
+    return this.createProposal(request);
+  }
+
+  public async proposePause(
+    params: PauseParams,
+    contract: CreateProposalRequest['contract'],
+  ): Promise<ProposalResponseWithUrl> {
+    return this.proposePauseabilityAction(params, contract, 'pause');
+  }
+
+  public async proposeUnpause(
+    params: PauseParams,
+    contract: CreateProposalRequest['contract'],
+  ): Promise<ProposalResponseWithUrl> {
+    return this.proposePauseabilityAction(params, contract, 'unpause');
+  }
+
+  private async proposePauseabilityAction(
+    params: PauseParams,
+    contract: CreateProposalRequest['contract'],
+    action: 'pause' | 'unpause'
+  ): Promise<ProposalResponseWithUrl> {
+    const request: CreateProposalRequest = {
+      contract,
+      type: 'pause',
+      via: params.via,
+      viaType: params.viaType,
+      metadata: {
+        action,
+      },
+      title: params.title ?? `${capitalize(action)} contract`,
+      description: params.description ?? `${capitalize(action)} contract`,
     };
     return this.createProposal(request);
   }
