@@ -9,7 +9,15 @@ async function main() {
   const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };
   const client = new AdminClient(creds);
 
-  const proposal = await client.proposePause({ title: 'Pause contract' }, { network, address });
+  const proposal = await client.proposePause(
+    {
+      title: 'Pause contract',
+      via: '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1',
+      viaType: 'Gnosis Safe',
+    },
+    { network, address }
+  );
+
   const siteUrl = process.env.SITE_URL || 'https://defender.openzeppelin.com';
   console.log(`${siteUrl}/#/admin/contracts/${proposal.contractId}/proposals/${proposal.proposalId}`);
 }
