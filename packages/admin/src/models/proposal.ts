@@ -2,7 +2,7 @@ import { Network } from 'defender-base-client';
 
 // Copied from openzeppelin/defender/models/src/types/proposal-api.req.d.ts
 export type Address = string;
-export type ProposalType = 'upgrade' | 'custom';
+export type ProposalType = 'upgrade' | 'custom' | 'pause';
 export type ProposalFunctionInputs = (string | boolean | (string | boolean)[])[];
 
 export interface ExternalApiCreateProposalRequest {
@@ -22,7 +22,8 @@ export interface ExternalApiCreateProposalRequest {
   functionInputs?: ProposalFunctionInputs;
 }
 export interface ProposalMetadata {
-  newImplementationAddress: Address;
+  newImplementationAddress?: Address;
+  action?: 'pause' | 'unpause';
 }
 export interface ProposalTargetFunction {
   name?: string;
