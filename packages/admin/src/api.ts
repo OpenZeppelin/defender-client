@@ -1,6 +1,7 @@
 import { BaseApiClient } from 'defender-base-client';
 import { capitalize } from 'lodash';
 import { Address, ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
+import { Contract } from './models/contract';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
 import { getProposalUrl } from './utils';
 
@@ -32,6 +33,18 @@ export class AdminClient extends BaseApiClient {
 
   protected getApiUrl(): string {
     return process.env.DEFENDER_ADMIN_API_URL || 'https://defender-api.openzeppelin.com/admin/';
+  }
+
+  public async addContract(contract: Contract): Promise<Contract> {
+    return this.apiCall(async (api) => {
+      return (await api.put('/contracts', contract)) as Contract;
+    });
+  }
+
+  public async listContracts(): Promise<Contract[]> {
+    return this.apiCall(async (api) => {
+      return (await api.get('/contracts')) as Contract[];
+    });
   }
 
   public async createProposal(proposal: CreateProposalRequest): Promise<ProposalResponseWithUrl> {
