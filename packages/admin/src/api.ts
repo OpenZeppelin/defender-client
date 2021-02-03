@@ -87,7 +87,7 @@ export class AdminClient extends BaseApiClient {
   private async proposePauseabilityAction(
     params: PauseParams,
     contract: CreateProposalRequest['contract'],
-    action: 'pause' | 'unpause'
+    action: 'pause' | 'unpause',
   ): Promise<ProposalResponseWithUrl> {
     const request: CreateProposalRequest = {
       contract,
