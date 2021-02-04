@@ -87,10 +87,9 @@ Alternatively, you can add any contract explicitly by using the `addContract` me
 await client.addContract({ 
   network: 'rinkeby', 
   address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E',
-  name: 'My contract', // Name of the contract if it is created along with this proposal
-  abi: '[...]', // ABI to set for this contract if it is created
+  name: 'My contract',
+  abi: '[...]',
 });
 ```
 
  You can also list all contracts in your Defender Admin dashboard via `listContracts`.
- 
