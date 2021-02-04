@@ -2,7 +2,7 @@
 
 Defender Admin acts as an interface to manage your smart contract project through one or more secure multi-signature contracts. Defender Admin holds no control at all over your system, which is fully controlled by the keys of the signers.
 
-To interact with your contracts, you create _proposals_ that need to be reviewed and approved by the other members of the multi-signature wallets. These proposals can be created directly in the Defender web application, or using this library.
+To interact with your contracts, you create _proposals_ that need to be reviewed and approved by the other members of the multi-signature wallets. These proposals can be created directly in the Defender web application, or using this library. You can also rely on this library to add your contracts to the Defender Admin dashboard.
 
 
 ## Install
@@ -24,6 +24,8 @@ const { AdminClient } = require('defender-admin-client');
 const client = new AdminClient({apiKey: API_KEY, apiSecret: API_SECRET});
 ```
 
+### Action proposals
+
 To create a `custom` action proposal, you need to provide the function interface (which you can extract from the contract's ABI), its inputs, and the multisig that will be used for approving it:
 
 ```js
@@ -39,6 +41,8 @@ await client.createProposal({
 });
 ```
 
+### Upgrade proposals
+
 To create an `upgrade` action proposal, just provide the proxy contract network and address, along with the new implementation address, and Defender will automatically resolve the rest:
 
 ```js
@@ -46,6 +50,8 @@ const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' }
 await client.proposeUpgrade({ newImplementation }, contract);
 ```
+
+### Pause proposals
 
 To create `pause` and `unpause` action proposals, you need to provide the contract network and address, as well as the multisig that will be used for approving it. Defender takes care of the rest:
 
@@ -75,4 +81,16 @@ const contract = {
 await client.proposeUpgrade({ newImplementation }, contract);
 ```
 
-Note that, if the contract already exists in Defender Admin, then `name` and `abi` will be ignored.
+Alternatively, you can add any contract explicitly by using the `addContract` method, and setting network, address, name, and ABI. The same method can be used to update the contract's name or ABI.
+
+```js
+await client.addContract({ 
+  network: 'rinkeby', 
+  address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E',
+  name: 'My contract', // Name of the contract if it is created along with this proposal
+  abi: '[...]', // ABI to set for this contract if it is created
+});
+```
+
+ You can also list all contracts in your Defender Admin dashboard via `listContracts`.
+ 
