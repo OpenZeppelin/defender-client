@@ -8,15 +8,15 @@ type SourceFiles = {
 
 export class AutotaskClient extends BaseApiClient {
   protected getPoolId(): string {
-    return process.env.DEFENDER_ADMIN_POOL_ID || 'us-west-2_94f3puJWv';
+    return process.env.DEFENDER_AUTOTASK_POOL_ID || 'us-west-2_94f3puJWv';
   }
 
   protected getPoolClientId(): string {
-    return process.env.DEFENDER_ADMIN_POOL_CLIENT_ID || '40e58hbc7pktmnp9i26hh5nsav';
+    return process.env.DEFENDER_AUTOTASK_POOL_CLIENT_ID || '40e58hbc7pktmnp9i26hh5nsav';
   }
 
   protected getApiUrl(): string {
-    return process.env.DEFENDER_ADMIN_API_URL || 'https://defender-api.openzeppelin.com/admin/';
+    return process.env.DEFENDER_AUTOTASK_API_URL || 'https://defender-api.openzeppelin.com/autotask/';
   }
 
   public async updateCodeFromZip(autotaskId: string, zippedCode: Buffer): Promise<void> {

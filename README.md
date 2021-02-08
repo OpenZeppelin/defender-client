@@ -32,7 +32,7 @@ yarn run lerna publish --exact
 
 ## Examples
 
-The `examples` repo has sample code for both clients. Note that most examples rely on dotenv for loading API keys and secrets. Note that you can set the following environment variables to control to which instance your client will connect to, which is useful for testing against your own Defender instance:
+The `examples` repo has sample code for both clients. Note that most examples rely on dotenv for loading API keys and secrets. Note that you can set the following environment variables to control to which instance your client will connect to, which is useful for testing against your Defender development instance:
 
 ```
 # Example config for the staging stack
@@ -42,4 +42,7 @@ DEFENDER_RELAY_POOL_CLIENT_ID=jj6l7lk0mqaqndip1uk8c25l1
 DEFENDER_ADMIN_API_URL=https://9j6aedbm6j.execute-api.us-east-1.amazonaws.com/stg/
 DEFENDER_ADMIN_POOL_ID=us-east-1_pvjTSNl94
 DEFENDER_ADMIN_POOL_CLIENT_ID=1ogvjnp52dd8p8mk2a7cdnj04e
+DEFENDER_AUTOTASK_API_URL=https://9j6aedbm6j.execute-api.us-east-1.amazonaws.com/stg/
+DEFENDER_AUTOTASK_POOL_ID=us-east-1_pvjTSNl94
+DEFENDER_AUTOTASK_POOL_CLIENT_ID=1ogvjnp52dd8p8mk2a7cdnj04e
 ```
