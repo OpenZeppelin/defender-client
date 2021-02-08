@@ -52,7 +52,7 @@ await client.updateCodeFromFolder(autotaskId, './path/to/code');
 
 You can also provide the set of files and their content, and the client will generate and upload the zip file for you:
 ```js
-await client.updateCodeFromFolder(autotaskId, {
+await client.updateCodeFromSources(autotaskId, {
   'index.js': 'exports.handler = function() { return 42; }'
 });
 ```
