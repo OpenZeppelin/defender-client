@@ -5,7 +5,7 @@ import { Bytes, hexlify, joinSignature } from '@ethersproject/bytes';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import { Deferrable, resolveProperties, shallowCopy } from '@ethersproject/properties';
-import { Relayer, Speed, RelayerParams } from '../relayer';
+import { Relayer, Speed, RelayerParams, isRelayer } from '../relayer';
 import { Transaction } from '@ethersproject/transactions';
 
 const logger = new Logger(`defender-relay-client`);
@@ -28,10 +28,6 @@ export type DefenderRelaySignerOptions = Partial<
 >;
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
-
-function isRelayer(params: RelayerParams | Relayer): params is Relayer {
-  return !!(params as any).getRelayer;
-}
 
 export class DefenderRelaySigner extends Signer {
   private readonly relayer: Relayer;
