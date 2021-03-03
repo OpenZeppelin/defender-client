@@ -80,7 +80,7 @@ export class DefenderRelaySenderProvider {
     }
 
     // Default by sending to base provider
-    return this.base.sendAsync.call(this.base, payload, callback);
+    return (this.base.sendAsync ?? this.base.send).call(this.base, payload, callback);
   }
 
   protected async _getAccounts(params: any[]): Promise<string[]> {
@@ -89,7 +89,8 @@ export class DefenderRelaySenderProvider {
 
   protected async _sendTransaction(params: any[]): Promise<string> {
     const tx = params[0] as Web3TxPayload;
-    if (tx.from && tx.from.toLowerCase() !== (await this.getAddress()).toLowerCase()) {
+    const relayerAddress = (await this.getAddress()).toLowerCase();
+    if (tx.from && tx.from.toLowerCase() !== relayerAddress) {
       throw new Error(`Cannot send transaction from ${tx.from}`);
     }
 
@@ -97,9 +98,15 @@ export class DefenderRelaySenderProvider {
       tx.gas ??
       (await promisify(this.send.bind(this))({
         method: 'eth_estimateGas',
-        params,
+        params: [{ from: relayerAddress, gasLimit: 1e6, ...tx }],
         jsonrpc: '2.0',
-      }).then((response) => response?.result.toString()));
+        id: 1,
+      }).then((response) => {
+        if (response?.error) {
+          throw new Error(`Error estimating gas for transaction: ${JSON.stringify(response.error)}`);
+        }
+        return response?.result?.toString();
+      }));
 
     const txWithSpeed = this.options.speed ? { ...omit(tx, 'gasPrice'), speed: this.options.speed } : tx;
 
