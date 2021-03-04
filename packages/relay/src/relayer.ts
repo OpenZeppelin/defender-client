@@ -96,6 +96,10 @@ export interface IRelayer {
   call(method: string, params: string[]): Promise<JsonRpcResponse>;
 }
 
+export function isRelayer(params: any): params is Relayer {
+  return typeof params === 'object' && !!params.getRelayer;
+}
+
 export class Relayer implements IRelayer {
   private relayer: IRelayer;
 
