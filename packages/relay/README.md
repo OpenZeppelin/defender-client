@@ -2,7 +2,7 @@
 
 Defender Relay lets you spin up private relayers to send transactions to any public Ethereum network. Each relayer has its own secure private key, and a set of API keys. You can send transactions via your relayers by POSTing to the Defender HTTP API, or using this library.
 
-This library also includes an ethers.js signer, that uses the Relay to sign and broadcast its transactions.
+This library also includes an [ethers.js](https://docs.ethers.io/v5/) signer and a [web3.js](https://web3js.readthedocs.io/) provider, that uses the Relay to sign and broadcast its transactions.
 
 ## Install
 
@@ -140,15 +140,46 @@ The current implementation of the `DefenderRelaySigner` for ethers.js has the fo
 - Due to validations set up in `ethers.js`, it is not possible to specify the transaction `speed` for an individual transaction when sending it. It must be set during the signer construction, and will be used for all transactions sent through it.
 - A `wait` on the transaction to be mined will only wait for the current transaction hash (see [Querying](#Querying)). If Defender Relayer replaces the transaction with a different one, this operation will time out. This is ok for fast transactions, since Defender only reprices after a few minutes. But if you expect the transaction to take a long time to be mined, then ethers' `wait` may not work. Future versions will also include an ethers provider aware of this.
 
-## Using with Autotasks
+## Web3.js 
 
-Defender Autotasks natively support integration with Defender Relay, allowing to send transactions without providing API keys. In your autotask's code, just `require('defender-relay-client')` and construct a new relayer instance using the `credentials` object injected by the autotask. This will give you a relayer object already configured.
+You can also use the `defender-relay-client` with [web3.js](https://web3js.readthedocs.io/) via a `DefenderRelayProvider` which routes all JSON RPC calls through Defender, and uses a Relayer for signing and broadcasting transactions.
+
+```js
+const { DefenderRelayProvider } = require('defender-relay-client/lib/web3');
+const { Web3 } = require('web3');
+
+const credentials = { apiKey: API_KEY, apiSecret: API_SECRET };
+const provider = new DefenderRelayProvider(credentials, { speed: 'fast' });
+const web3 = new Web3(provider);
+```
+
+You can then use the `web3` instance to query and send transactions as you would normally do:
+
+```js
+const [from] = await web3.eth.getAccounts();
+const erc20 = new web3.eth.Contract(ERC20_ABI, ERC20_ADDRESS, { from });
+const tx = await erc20.methods.transfer(beneficiary, (1e18).toString()).send();
+```
+
+You can also sign messages using the Relayer key via the `sign` method:
+
+```js
+const signature = await web3.eth.sign('0xdead', from);
+```
+
+The package also includes two composable lower-level providers, the `DefenderRelaySenderProvider` and `DefenderRelayQueryProvider`. The former intercepts all `sendTransaction` methods and serves them via the Relayer, while the latter uses Defender's JSON RPC interface for all method calls. The `DefenderRelayProvider` shown above combines the two.
+
+Note that these web3.js providers currently have the same limitations as the ethers.js one described above.
+
+## Using in Autotasks
+
+[Defender Autotasks](https://docs.openzeppelin.com/defender/autotasks) natively support integration with Defender Relay, allowing to send transactions without providing API keys. In your autotask's code, just `require('defender-relay-client')` and construct a new relayer instance using the `credentials` object injected by the autotask. This will give you a relayer object already configured.
 
 ```js
 const { Relayer } = require('defender-relay-client');
 
-exports.handler =  async function(credentials) {
-  const relayer = new Relayer(credentials);
+exports.handler =  async function(event) {
+  const relayer = new Relayer(event);
 
   const txRes = await relayer.sendTransaction({
     to: '0xc7dd3ff5b387db0130854fe5f141a78586f417c6',
