@@ -146,7 +146,7 @@ You can also use the `defender-relay-client` with [web3.js](https://web3js.readt
 
 ```js
 const { DefenderRelayProvider } = require('defender-relay-client/lib/web3');
-const { Web3 } = require('web3');
+const Web3 = require('web3');
 
 const credentials = { apiKey: API_KEY, apiSecret: API_SECRET };
 const provider = new DefenderRelayProvider(credentials, { speed: 'fast' });
