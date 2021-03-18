@@ -1,8 +1,35 @@
 import { findKey } from 'lodash';
 
-export type Network = 'mainnet' | 'ropsten' | 'rinkeby' | 'kovan' | 'goerli' | 'xdai' | 'sokol' | 'fuse';
+export type Network =
+  | 'mainnet'
+  | 'ropsten'
+  | 'rinkeby'
+  | 'kovan'
+  | 'goerli'
+  | 'xdai'
+  | 'sokol'
+  | 'fuse'
+  | 'bsc'
+  | 'bsctest'
+  | 'fantom'
+  | 'fantomtest'
+  | 'moonbase';
 
-export const Networks: Network[] = ['mainnet', 'ropsten', 'rinkeby', 'kovan', 'goerli', 'xdai', 'sokol', 'fuse'];
+export const Networks: Network[] = [
+  'mainnet',
+  'rinkeby',
+  'ropsten',
+  'kovan',
+  'goerli',
+  'xdai',
+  'sokol',
+  'fuse',
+  'bsc',
+  'bsctest',
+  'fantom',
+  'fantomtest',
+  'moonbase',
+];
 
 export function isValidNetwork(text: string): text is Network {
   return (Networks as string[]).includes(text);
@@ -25,4 +52,9 @@ const chainIds: { [key in Network]: number } = {
   xdai: 100,
   sokol: 77,
   fuse: 122,
+  bsc: 56,
+  bsctest: 97,
+  fantom: 250,
+  fantomtest: 0xfa2,
+  moonbase: 1287,
 };
