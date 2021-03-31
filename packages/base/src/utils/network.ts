@@ -13,7 +13,9 @@ export type Network =
   | 'bsctest'
   | 'fantom'
   | 'fantomtest'
-  | 'moonbase';
+  | 'moonbase'
+  | 'matic'
+  | 'mumbai';
 
 export const Networks: Network[] = [
   'mainnet',
@@ -29,6 +31,8 @@ export const Networks: Network[] = [
   'fantom',
   'fantomtest',
   'moonbase',
+  'matic',
+  'mumbai',
 ];
 
 export function isValidNetwork(text: string): text is Network {
@@ -57,4 +61,6 @@ const chainIds: { [key in Network]: number } = {
   fantom: 250,
   fantomtest: 0xfa2,
   moonbase: 1287,
+  matic: 137,
+  mumbai: 80001,
 };
