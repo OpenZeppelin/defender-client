@@ -8,6 +8,9 @@ import { getProposalUrl } from './utils';
 type UpgradeParams = {
   title?: string;
   description?: string;
+  proxyAdmin?: string;
+  via?: Address;
+  viaType?: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
   newImplementation: string;
 };
 
@@ -15,7 +18,7 @@ type PauseParams = {
   title?: string;
   description?: string;
   via: Address;
-  viaType: 'EOA' | 'Contract' | 'Multisig' | 'Gnosis Safe' | 'Gnosis Multisig' | 'Unknown';
+  viaType: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
 };
 
 export interface ProposalResponseWithUrl extends ProposalResponse {
@@ -63,9 +66,12 @@ export class AdminClient extends BaseApiClient {
       type: 'upgrade',
       metadata: {
         newImplementationAddress: params.newImplementation,
+        proxyAdminAddress: params.proxyAdmin,
       },
       title: params.title ?? `Upgrade to ${params.newImplementation.slice(0, 10)}`,
       description: params.description ?? `Upgrade contract implementation to ${params.newImplementation}`,
+      via: params.via,
+      viaType: params.viaType,
     };
     return this.createProposal(request);
   }

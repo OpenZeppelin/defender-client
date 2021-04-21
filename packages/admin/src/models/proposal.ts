@@ -23,6 +23,7 @@ export interface ExternalApiCreateProposalRequest {
 }
 export interface ProposalMetadata {
   newImplementationAddress?: Address;
+  proxyAdminAddress?: Address;
   action?: 'pause' | 'unpause';
 }
 export interface ProposalTargetFunction {
