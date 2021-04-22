@@ -51,6 +51,27 @@ const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C7
 await client.proposeUpgrade({ newImplementation }, contract);
 ```
 
+If your proxies do not implement the [EIP1967 admin slot](https://eips.ethereum.org/EIPS/eip-1967#admin-address), you will need to provide either the [`ProxyAdmin` contract](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/proxy/transparent/ProxyAdmin.sol) or the Account with rights to execute the upgrade, as shown below.
+
+#### Explicit ProxyAdmin
+
+```js
+const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
+const proxyAdmin = '0x2fC100f1BeA4ACCD5dA5e5ed725D763c90e8ca96';
+const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' }
+await client.proposeUpgrade({ newImplementation, proxyAdmin }, contract);
+```
+
+#### Explicit owner account
+
+```js
+const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
+const via = '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1';
+const viaType = 'Gnosis Safe'; // or 'Gnosis Multisig', or 'EOA'
+const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' }
+await client.proposeUpgrade({ newImplementation, via, viaType }, contract);
+```
+
 ### Pause proposals
 
 To create `pause` and `unpause` action proposals, you need to provide the contract network and address, as well as the multisig that will be used for approving it. Defender takes care of the rest:
