@@ -1,5 +1,3 @@
-import AWS from 'aws-sdk';
-import { _Blob } from 'aws-sdk/clients/lambda';
 import {
   AutotaskRelayerParams,
   IRelayer,
@@ -11,6 +9,8 @@ import {
   SignedMessagePayload,
   SignMessagePayload,
 } from '../relayer';
+
+import { BaseAutotaskClient } from 'defender-base-client/lib/autotask';
 
 export type SendTxRequest = {
   action: 'send-tx';
@@ -38,40 +38,12 @@ export type JsonRpcCallRequest = {
 
 export type Request = SendTxRequest | GetTxRequest | SignRequest | GetSelfRequest | JsonRpcCallRequest;
 
-// do our best to get .errorMessage, but return object by default
-function cleanError(payload?: _Blob): _Blob {
-  if (!payload) {
-    return 'Error occurred, but error payload was not defined';
-  }
-  try {
-    const errMsg = JSON.parse(payload.toString()).errorMessage;
-    if (errMsg) {
-      return errMsg;
-    }
-  } catch (e) {}
-  return payload;
-}
-
-export class AutotaskRelayer implements IRelayer {
-  private lambda: AWS.Lambda;
-  private relayerARN: string;
+export class AutotaskRelayer extends BaseAutotaskClient implements IRelayer {
   private jsonRpcRequestNextId: number;
 
   public constructor(params: AutotaskRelayerParams) {
+    super(params.credentials, params.relayerARN);
     this.jsonRpcRequestNextId = 0;
-    this.relayerARN = params.relayerARN;
-    const creds = params.credentials ? JSON.parse(params.credentials) : undefined;
-    this.lambda = new AWS.Lambda(
-      creds
-        ? {
-            credentials: {
-              accessKeyId: creds.AccessKeyId,
-              secretAccessKey: creds.SecretAccessKey,
-              sessionToken: creds.SessionToken,
-            },
-          }
-        : undefined,
-    );
   }
 
   public async sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
@@ -103,19 +75,5 @@ export class AutotaskRelayer implements IRelayer {
       action: 'json-rpc-query' as const,
       payload: { method, params, jsonrpc: '2.0', id: this.jsonRpcRequestNextId++ },
     });
-  }
-
-  private async execute<T>(request: Request): Promise<T> {
-    const result = await this.lambda
-      .invoke({
-        FunctionName: this.relayerARN,
-        Payload: JSON.stringify(request),
-        InvocationType: 'RequestResponse',
-      })
-      .promise();
-    if (result.FunctionError) {
-      throw new Error(`Error while attempting ${request.action}: ${cleanError(result.Payload)}`);
-    }
-    return JSON.parse(result.Payload as string) as T;
   }
 }
