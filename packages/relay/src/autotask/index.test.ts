@@ -1,6 +1,7 @@
 import { AutotaskRelayer } from '.';
+import Lambda from 'aws-sdk/clients/lambda'
 
-type TestAutotaskRelayer = Omit<AutotaskRelayer, 'lambda' | 'relayerARN'> & { lambda: AWS.Lambda; relayerARN: string };
+type TestAutotaskRelayer = Omit<AutotaskRelayer, 'lambda' | 'relayerARN'> & { lambda: Lambda; arn: string };
 
 describe('AutotaskRelayer', () => {
   const credentials = {
@@ -8,11 +9,13 @@ describe('AutotaskRelayer', () => {
     SecretAccessKey: 'accessKey',
     SessionToken: 'token',
   };
-  let relayer: TestAutotaskRelayer;
+  
   const payload = {
     to: '0x0',
     gasLimit: 21000,
   };
+
+  let relayer: TestAutotaskRelayer;
 
   beforeEach(async function () {
     relayer = (new AutotaskRelayer({
@@ -23,7 +26,7 @@ describe('AutotaskRelayer', () => {
 
   describe('constructor', () => {
     test('calls init', () => {
-      expect(relayer.relayerARN).toBe('arn');
+      expect(relayer.arn).toBe('arn');
       expect(relayer.lambda).not.toBeNull();
     });
   });
@@ -49,7 +52,7 @@ describe('AutotaskRelayer', () => {
           },
         };
       });
-      await expect(relayer.sendTransaction(payload)).rejects.toThrow('Error while attempting send-tx: error msg');
+      await expect(relayer.sendTransaction(payload)).rejects.toThrow('Error while attempting request: error msg');
     });
 
     // if we can't make sense of the error format, we just return it
@@ -64,7 +67,7 @@ describe('AutotaskRelayer', () => {
           },
         };
       });
-      await expect(relayer.sendTransaction(payload)).rejects.toThrow('Error while attempting send-tx: garbage error');
+      await expect(relayer.sendTransaction(payload)).rejects.toThrow('Error while attempting request: garbage error');
     });
   });
 
