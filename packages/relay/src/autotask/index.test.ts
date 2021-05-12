@@ -1,5 +1,5 @@
 import { AutotaskRelayer } from '.';
-import Lambda from 'aws-sdk/clients/lambda'
+import Lambda from 'aws-sdk/clients/lambda';
 
 type TestAutotaskRelayer = Omit<AutotaskRelayer, 'lambda' | 'relayerARN'> & { lambda: Lambda; arn: string };
 
@@ -9,7 +9,7 @@ describe('AutotaskRelayer', () => {
     SecretAccessKey: 'accessKey',
     SessionToken: 'token',
   };
-  
+
   const payload = {
     to: '0x0',
     gasLimit: 21000,
