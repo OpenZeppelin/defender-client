@@ -23,7 +23,11 @@ export class KeyValueStoreClient extends BaseAutotaskClient {
   }
 
   public async put(key: string, value: string): Promise<void> {
-    // TODO: Validate maxlength
+    if (typeof key !== 'string') throw new Error(`Key must be a string`);
+    if (value && typeof value !== 'string') throw new Error(`Value must be a string`);
+    if (key.length > 1024) throw new Error(`Key size cannot exceed 1024 characters`);
+    if (value && value.length > 300 * 1024) throw new Error(`Value size cannot exceed 300 KB`);
+
     const request: KeyValueStoreRequest = { action: 'put', key, value };
     return this.execute(request);
   }
