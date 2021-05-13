@@ -104,6 +104,17 @@ describe('AutotaskRelayer', () => {
     });
   });
 
+  describe('list', () => {
+    test('passes correct arguments to the API', async () => {
+      await relayer.list({ limit: 20 });
+      expect(relayer.lambda.invoke).toBeCalledWith({
+        FunctionName: 'arn',
+        InvocationType: 'RequestResponse',
+        Payload: '{"action":"list-txs","payload":{"limit":20}}',
+      });
+    });
+  });
+
   describe('call', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.call('eth_call', ['0xa', '0xb']);

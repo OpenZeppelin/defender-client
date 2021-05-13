@@ -3,6 +3,7 @@ import {
   IRelayer,
   JsonRpcRequest,
   JsonRpcResponse,
+  ListTransactionsRequest,
   RelayerModel,
   RelayerTransaction,
   RelayerTransactionPayload,
@@ -60,6 +61,13 @@ export class AutotaskRelayer extends BaseAutotaskClient implements IRelayer {
     return this.execute({
       action: 'get-tx' as const,
       payload: id,
+    });
+  }
+
+  public async list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]> {
+    return this.execute({
+      action: 'list-txs' as const,
+      payload: criteria ?? {},
     });
   }
 
