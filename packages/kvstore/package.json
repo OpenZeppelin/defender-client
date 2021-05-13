@@ -1,5 +1,5 @@
 {
-  "name": "defender-admin-client",
+  "name": "defender-kvstore-client",
   "version": "1.7.0-store.0",
   "description": "",
   "main": "./lib/index.js",

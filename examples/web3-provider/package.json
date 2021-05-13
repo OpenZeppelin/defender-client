@@ -1,12 +1,12 @@
 {
   "name": "example-web3-provider",
-  "version": "1.5.1",
+  "version": "1.7.0-store.0",
   "private": true,
   "main": "index.js",
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "defender-relay-client": "1.5.1",
+    "defender-relay-client": "1.7.0-store.0",
     "dotenv": "^8.2.0",
     "web3": "^1.3.4"
   }
