@@ -34,6 +34,11 @@ async function query(id) {
   console.log('txUpdate', txUpdate);
 }
 
+async function list() {
+  const list = await relayer.list({ limit: 3 });
+  console.log(list.map(tx => JSON.stringify(tx, null, 2)).join('\n'));
+}
+
 async function balance(addr) {
   if (!addr) throw new Error(`Missing address`);
   const balance = await relayer.call('eth_getBalance', [addr, 'latest']);
@@ -66,6 +71,8 @@ async function jsonrpc(method, payload) {
         return await sign(process.argv[3]);
       case 'balance':
         return await balance(process.argv[3]);
+      case 'list':
+        return await list();
       case 'jsonrpc':
         return await jsonrpc(process.argv[3], process.argv[4]);
       default:

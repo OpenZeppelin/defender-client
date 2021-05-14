@@ -68,6 +68,16 @@ The `relayer` object also has a `query` function that returns a transaction obje
 const latestTx = await relayer.query(tx.transactionId);
 ```
 
+Alternatively, the `relayer` can also be used to `list` the latest transactions sent, optionally filtering by status and creation time.
+
+```js
+const since = await relayer.list({
+  since: new Date(Date.now() - 60 * 1000),
+  status: 'pending', // can be 'pending', 'mined', or 'failed'
+  limit: 5,
+})
+```
+
 Defender will update the transaction `status` every minute, marking it as `confirmed` after 12 confirmations. The transaction information will be stored for 30 days.
 
 ### Why querying?

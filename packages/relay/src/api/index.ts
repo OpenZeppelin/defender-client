@@ -3,6 +3,7 @@ import {
   ApiRelayerParams,
   IRelayer,
   JsonRpcResponse,
+  ListTransactionsRequest,
   RelayerModel,
   RelayerTransaction,
   RelayerTransactionPayload,
@@ -53,6 +54,12 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
   public async query(id: string): Promise<RelayerTransaction> {
     return this.apiCall(async (api) => {
       return (await api.get(`txs/${id}`)) as RelayerTransaction;
+    });
+  }
+
+  public async list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]> {
+    return this.apiCall(async (api) => {
+      return (await api.get(`txs`, { params: criteria ?? {} })) as RelayerTransaction[];
     });
   }
 

@@ -105,6 +105,14 @@ describe('ApiRelayer', () => {
     });
   });
 
+  describe('list', () => {
+    test('passes correct arguments to the API', async () => {
+      await relayer.list({ limit: 10 });
+      expect(relayer.api.get).toBeCalledWith('txs', { params: { limit: 10 } });
+      expect(initSpy).toBeCalled();
+    });
+  });
+
   describe('sign', () => {
     test('signs a hex string', async () => {
       await relayer.sign({ message: '0xdead' });

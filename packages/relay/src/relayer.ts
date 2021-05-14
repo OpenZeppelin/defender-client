@@ -88,10 +88,18 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
   return !!apiCredentials.apiKey && !!apiCredentials.apiSecret;
 }
 
+// Copied from defender/models/src/types/tx-list.req.d.ts
+export type ListTransactionsRequest = {
+  status?: 'pending' | 'mined' | 'failed';
+  since?: Date;
+  limit?: number;
+};
+
 export interface IRelayer {
   getRelayer(): Promise<RelayerModel>;
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
+  list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]>;
   sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
   call(method: string, params: string[]): Promise<JsonRpcResponse>;
 }
@@ -137,6 +145,10 @@ export class Relayer implements IRelayer {
 
   public query(id: string): Promise<RelayerTransaction> {
     return this.relayer.query(id);
+  }
+
+  public list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]> {
+    return this.relayer.list(criteria);
   }
 
   public call(method: string, params: string[]): Promise<JsonRpcResponse> {
