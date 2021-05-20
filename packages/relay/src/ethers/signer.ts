@@ -86,8 +86,9 @@ export class DefenderRelaySigner extends Signer {
 
     const tx = await this.populateTransaction(transaction);
     if (!tx.gasLimit) throw new Error('DefenderRelaySigner#sendTransacton: relayer gas estimation not yet supported');
+    const nonce = tx.nonce === undefined ? undefined : BigNumber.from(tx.nonce).toNumber();
 
-    const relayedTransaction = await this.relayer.sendTransaction({
+    const payload = {
       to: tx.to,
       gasLimit: hexlify(tx.gasLimit),
       data: tx.data ? hexlify(tx.data) : undefined,
@@ -95,7 +96,11 @@ export class DefenderRelaySigner extends Signer {
       gasPrice: tx.gasPrice ? hexlify(tx.gasPrice) : undefined,
       value: tx.value ? hexlify(tx.value) : undefined,
       validUntil: tx.validUntil ? new Date(tx.validUntil).toISOString() : undefined,
-    });
+    };
+
+    const relayedTransaction = nonce
+      ? await this.relayer.replaceTransaction(nonce, payload)
+      : await this.relayer.sendTransaction(payload);
 
     return (this.provider as ProviderWithWrapTransaction)._wrapTransaction(
       {

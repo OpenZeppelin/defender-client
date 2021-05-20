@@ -14,6 +14,7 @@ type Web3TxPayload = {
   data: string | undefined;
   to: string | undefined;
   from: string | undefined;
+  nonce: string | undefined;
 };
 
 export type DefenderRelaySenderOptions = Partial<{ gasPrice: BigUInt; speed: Speed; validForSeconds: number }>;
@@ -28,7 +29,7 @@ export class DefenderRelaySenderProvider {
   constructor(
     protected base: AbstractProvider,
     relayerCredentials: RelayerParams | Relayer,
-    protected options: DefenderRelaySenderOptions,
+    protected options: DefenderRelaySenderOptions = {},
   ) {
     this._delegateToProvider(base);
     this.relayer = isRelayer(relayerCredentials) ? relayerCredentials : new Relayer(relayerCredentials);
@@ -109,12 +110,11 @@ export class DefenderRelaySenderProvider {
       }));
 
     const txWithSpeed = this.options.speed ? { ...omit(tx, 'gasPrice'), speed: this.options.speed } : tx;
+    const payload = { ...this.options, ...txWithSpeed, gasLimit };
 
-    const sent = await this.relayer.sendTransaction({
-      ...this.options,
-      ...txWithSpeed,
-      gasLimit,
-    });
+    const sent = tx.nonce
+      ? await this.relayer.replaceTransaction(parseInt(tx.nonce), payload)
+      : await this.relayer.sendTransaction(payload);
 
     this.txHashToId.set(sent.hash, sent.transactionId);
     return sent.hash;

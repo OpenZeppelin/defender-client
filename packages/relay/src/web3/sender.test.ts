@@ -1,0 +1,189 @@
+import { mock } from 'jest-mock-extended';
+import { pick } from 'lodash';
+import Web3 from 'web3';
+import { AbiItem } from 'web3-utils';
+import { Relayer, RelayerTransaction } from '../relayer';
+import { DefenderRelayQueryProvider } from './query';
+import { DefenderRelaySenderOptions, DefenderRelaySenderProvider } from './sender';
+
+type DefenderRelaySenderProviderWithOptions = DefenderRelaySenderProvider & { options: DefenderRelaySenderOptions };
+
+describe('web3/sender', () => {
+  const relayer = mock<Relayer>();
+  const provider = mock<DefenderRelayQueryProvider>();
+  const from = '0xe800aaf7b88110298433e9d436a92d582119da96';
+  const replacedHash = '0xc62660fd5929bfb45f4e6a1d9aac2db52badc635def9bcbf9ead5721d2d0c355';
+
+  const tx: RelayerTransaction = {
+    chainId: 4,
+    from,
+    gasLimit: 60000,
+    gasPrice: 1e9,
+    hash: '0xdfd0144b0ed02b10ee1ca5a6ead42709d1ce495ecb6d28d9c8dfcb0146bd94ed',
+    nonce: 30,
+    speed: 'safeLow',
+    status: 'sent',
+    to: '0xc7464dbcA260A8faF033460622B23467Df5AEA42',
+    transactionId: '1',
+    validUntil: '2031-05-19T23:09:47.129Z',
+    data: '0x01',
+    value: '0x02',
+  };
+
+  const transferAbi: AbiItem[] = [
+    {
+      inputs: [
+        { internalType: 'address', name: 'recipient', type: 'address' },
+        { internalType: 'uint256', name: 'amount', type: 'uint256' },
+      ],
+      name: 'transfer',
+      outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+  ];
+
+  let sender: DefenderRelaySenderProviderWithOptions;
+  let web3: Web3;
+
+  beforeEach(() => {
+    jest.resetAllMocks();
+
+    relayer.getRelayer.mockResolvedValue({
+      network: 'rinkeby',
+      address: from,
+      relayerId: '1',
+      createdAt: '',
+      name: 'My relayer',
+      paused: false,
+      pendingTxCost: '0',
+    });
+
+    provider.sendAsync.mockImplementation((payload, callback) => {
+      const result = (value: any) =>
+        callback(null, {
+          result: value,
+          jsonrpc: '2.0',
+          id: typeof payload.id === 'number' ? payload.id! : parseInt(payload.id!),
+        });
+
+      switch (payload.method) {
+        case 'eth_gasPrice':
+          return result('0x3b9aca00');
+        case 'eth_estimateGas':
+          return result('0xea60');
+        case 'eth_getTransactionReceipt':
+          return result(null);
+        case 'eth_subscribe':
+          return result('0x9cef478923ff08bf67fde6c64013158d');
+        default:
+          console.log(payload);
+      }
+    });
+
+    sender = new DefenderRelaySenderProvider(provider, relayer) as DefenderRelaySenderProviderWithOptions;
+    web3 = new Web3(sender);
+  });
+
+  // const expectSentTx = (actual: TransactionResponse) => {
+  //   expect(actual).toEqual(expect.objectContaining({
+  //     ...tx,
+  //     value: BigNumber.from(tx.value),
+  //     gasPrice: BigNumber.from(tx.gasPrice),
+  //     gasLimit: BigNumber.from(tx.gasLimit),
+  //   }));
+  // }
+
+  it('sends a tx with speed', async () => {
+    relayer.sendTransaction.mockResolvedValue(tx);
+
+    sender.options.speed = 'safeLow';
+    const request = pick(tx, 'from', 'to', 'data', 'value');
+    const sent = await new Promise((resolve) => web3.eth.sendTransaction(request).on('transactionHash', resolve));
+
+    expect(sent).toEqual(tx.hash);
+    expect(relayer.sendTransaction).toHaveBeenCalledWith({
+      ...request,
+      gasLimit: '0xea60',
+      speed: tx.speed,
+      gasPrice: undefined,
+      validUntil: undefined,
+    });
+  });
+
+  it('sends a tx with fixed gas price', async () => {
+    relayer.sendTransaction.mockResolvedValue(tx);
+
+    sender.options.speed = undefined;
+    const request = pick(tx, 'from', 'to', 'data', 'value', 'gasLimit', 'gasPrice');
+    const sent = await new Promise((resolve) => web3.eth.sendTransaction(request).on('transactionHash', resolve));
+
+    expect(sent).toEqual(tx.hash);
+    expect(relayer.sendTransaction).toHaveBeenCalledWith({
+      ...request,
+      gasLimit: '0xea60',
+      speed: undefined,
+      gasPrice: '0x3b9aca00',
+    });
+  });
+
+  it('replaces a tx by nonce', async () => {
+    relayer.replaceTransaction.mockResolvedValue({ ...tx, hash: replacedHash });
+
+    const request = pick(tx, 'from', 'to', 'data', 'value', 'gasLimit', 'nonce');
+    const sent = await new Promise((resolve) => web3.eth.sendTransaction(request).on('transactionHash', resolve));
+
+    expect(sent).toEqual(replacedHash);
+    expect(relayer.replaceTransaction).toHaveBeenCalledWith(30, {
+      ...request,
+      gasLimit: '0xea60',
+      speed: undefined,
+      gasPrice: '0x3b9aca00',
+    });
+
+    relayer.replaceTransaction.mockResolvedValue(tx);
+  });
+
+  it('sends a contract tx', async () => {
+    relayer.sendTransaction.mockResolvedValue(tx);
+
+    sender.options.speed = 'safeLow';
+    const contract = new web3.eth.Contract(transferAbi, tx.to, { from });
+    const sent = await new Promise((resolve) =>
+      contract.methods.transfer(from, '0x02').send().on('transactionHash', resolve),
+    );
+
+    expect(sent).toEqual(tx.hash);
+    expect(relayer.sendTransaction).toHaveBeenCalledWith({
+      ...pick(tx, 'from', 'gaslimit', 'speed'),
+      data: contract.methods.transfer(from, '0x02').encodeABI(),
+      to: tx.to.toLowerCase(),
+      gasLimit: '0xea60',
+      speed: tx.speed,
+      gasPrice: undefined,
+      validUntil: undefined,
+    });
+  });
+
+  it('replaces a contract tx', async () => {
+    relayer.replaceTransaction.mockResolvedValue(tx);
+
+    sender.options.speed = 'safeLow';
+    const contract = new web3.eth.Contract(transferAbi, tx.to, { from });
+    const sent = await new Promise((resolve) =>
+      contract.methods.transfer(from, '0x02').send({ nonce: tx.nonce }).on('transactionHash', resolve),
+    );
+
+    expect(sent).toEqual(tx.hash);
+    expect(relayer.replaceTransaction).toHaveBeenCalledWith(30, {
+      ...pick(tx, 'from', 'gaslimit', 'speed'),
+      nonce: '0x1e',
+      data: contract.methods.transfer(from, '0x02').encodeABI(),
+      to: tx.to.toLowerCase(),
+      gasLimit: '0xea60',
+      speed: tx.speed,
+      gasPrice: undefined,
+      validUntil: undefined,
+    });
+  });
+});
