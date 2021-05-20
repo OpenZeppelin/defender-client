@@ -15,8 +15,16 @@ async function send() {
     to: '0x179810822f56b0e79469189741a3fa5f2f9a7631',
     value: 1,
     speed: 'fast',
-    // gasPrice: 1000000,
-    // validUntil: new Date(Date.now() + 5000),
+    gasLimit: '21000',
+  });
+  console.log('txResponse', JSON.stringify(txResponse, null, 2));
+}
+
+async function replace(id) {
+  const txResponse = await relayer.replaceTransactionById(id, {
+    to: '0x179810822f56b0e79469189741a3fa5f2f9a7631',
+    value: 2,
+    speed: 'fast',
     gasLimit: '21000',
   });
   console.log('txResponse', JSON.stringify(txResponse, null, 2));
@@ -67,6 +75,8 @@ async function jsonrpc(method, payload) {
         return await get();
       case 'send':
         return await send();
+      case 'replace':
+        return await replace(process.argv[3]);
       case 'sign':
         return await sign(process.argv[3]);
       case 'balance':

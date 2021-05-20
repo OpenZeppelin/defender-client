@@ -25,20 +25,25 @@ async function main() {
   console.log(`Relayer address is ${addr}`);
 
   console.log(`Sending approve transaction for ${beneficiary} to token ${ERC20Address}...`);
-  const tx = await erc20.approve(beneficiary, (1e17).toString());
+  const tx = await erc20.approve(beneficiary, (1e17).toString(), { gasPrice: 1e8 });
   console.log(`Transaction sent:`, tx);
 
-  const mined = await tx.wait();
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  console.log(`Replacing tx with higher gas price...`);
+  const replaceTx = await erc20.approve(beneficiary, (1e17).toString(), { nonce: tx.nonce, gasPrice: 1e10 });
+  console.log(`Transaction replaced:`, replaceTx);
+
+  const mined = await replaceTx.wait();
   console.log(`Transaction mined:`, mined);
 
-  const allowance = await erc20.allowance(tx.from, beneficiary);
+  const allowance = await erc20.allowance(replaceTx.from, beneficiary);
   console.log(`Allowance now is:`, allowance.toString());
 
   const sig = await signer.signMessage('0xdead');
   console.log(`Signature is ${sig}`);
 
-  const sigAddress = await ethers.utils.verifyMessage('Funds are safu!', sig);
-  console.log(`Signature address is ${sigAddress}, should be the same as relayer address ${mined.from}`);
+  const sigAddress = ethers.utils.verifyMessage('Funds are safu!', sig);
+  console.log(`Signature address is ${sigAddress} matching relayer address ${mined.from}`);
 }
 
 if (require.main === module) {

@@ -86,6 +86,23 @@ The `query` function is important to monitor the transaction status, since Defen
 
 Defender may replace a transaction by increasing its gas price if it has not been mined for a period of time, and the gas price costs have increased since the transaction was originally submitted. Also, in a case where a transaction consistently fails to be mined, Defender may replace it by a _no-op_ (a transaction with no value or data) in order to advance the sender account nonce.
 
+### Replacing transactions
+
+You can use the relayer methods `replaceTransactionById` or `replaceTransactionByNonce` to replace a transaction given its nonce or transactionId (not hash) if it has not been mined yet. You can use this to increase the speed of a transaction, or replace your tx by an empty value transfer (with a gas limit of 21000) to cancel a transaction that is no longer valid.
+
+```js
+// Cancel a transaction with nonce 42 by sending a zero-value transfer to replace it
+const tx = await relayer.replaceTransactionByNonce(42, {
+  to: '0x6b175474e89094c44da98b954eedeac495271d0f',
+  value: '0x00',
+  data: '0x',
+  speed: 'fastest',
+  gasLimit: 21000
+});
+```
+
+You can also replace by nonce using the `ethers.js` and `web3.js` adapters listed below.
+
 ## Signing
 
 You can sign any hex string (`0x123213`) using a `sign` method of the relayer. Pay attention, that the message has to be a **hex string**.

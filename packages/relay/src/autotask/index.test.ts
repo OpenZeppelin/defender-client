@@ -71,6 +71,26 @@ describe('AutotaskRelayer', () => {
     });
   });
 
+  describe('replaceTransaction', () => {
+    test('passes nonce to the API', async () => {
+      await relayer.replaceTransactionByNonce(10, payload);
+      expect(relayer.lambda.invoke).toBeCalledWith({
+        FunctionName: 'arn',
+        InvocationType: 'RequestResponse',
+        Payload: '{"action":"replace-tx","payload":{"to":"0x0","gasLimit":21000,"nonce":10}}',
+      });
+    });
+
+    test('passes txId to the API', async () => {
+      await relayer.replaceTransactionById('123-456-abc', payload);
+      expect(relayer.lambda.invoke).toBeCalledWith({
+        FunctionName: 'arn',
+        InvocationType: 'RequestResponse',
+        Payload: '{"action":"replace-tx","payload":{"to":"0x0","gasLimit":21000,"transactionId":"123-456-abc"}}',
+      });
+    });
+  });
+
   describe('getRelayer', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.getRelayer();

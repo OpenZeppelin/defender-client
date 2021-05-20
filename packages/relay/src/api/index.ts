@@ -45,6 +45,21 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
     });
   }
 
+  public async replaceTransactionById(id: string, payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
+    return this.apiCall(async (api) => {
+      return (await api.put(`/txs/${id}`, payload)) as RelayerTransaction;
+    });
+  }
+
+  public async replaceTransactionByNonce(
+    nonce: number,
+    payload: RelayerTransactionPayload,
+  ): Promise<RelayerTransaction> {
+    return this.apiCall(async (api) => {
+      return (await api.put(`/txs/${nonce}`, payload)) as RelayerTransaction;
+    });
+  }
+
   public async sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
     return this.apiCall(async (api) => {
       return (await api.post('/sign', payload)) as SignedMessagePayload;

@@ -88,6 +88,15 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
   return !!apiCredentials.apiKey && !!apiCredentials.apiSecret;
 }
 
+function validatePayload(payload: RelayerTransactionPayload) {
+  if (payload.speed && payload.gasPrice) {
+    throw new Error("Both tx's speed and gas price are set. Only set one of them.");
+  }
+  if (payload.validUntil && new Date(payload.validUntil).getTime() < new Date().getTime()) {
+    throw new Error('The validUntil time cannot be in the past');
+  }
+}
+
 // Copied from defender/models/src/types/tx-list.req.d.ts
 export type ListTransactionsRequest = {
   status?: 'pending' | 'mined' | 'failed';
@@ -98,6 +107,8 @@ export type ListTransactionsRequest = {
 export interface IRelayer {
   getRelayer(): Promise<RelayerModel>;
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
+  replaceTransactionById(id: string, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
+  replaceTransactionByNonce(nonce: number, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
   list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]>;
   sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
@@ -134,13 +145,18 @@ export class Relayer implements IRelayer {
   }
 
   public sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
-    if (payload.speed && payload.gasPrice) {
-      throw new Error("Both tx's speed and gas price are set. Use either of them.");
-    }
-    if (payload.validUntil && new Date(payload.validUntil).getTime() < new Date().getTime()) {
-      throw new Error('The validUntil time cannot be in the past');
-    }
+    validatePayload(payload);
     return this.relayer.sendTransaction(payload);
+  }
+
+  public replaceTransactionById(id: string, payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
+    validatePayload(payload);
+    return this.relayer.replaceTransactionById(id, payload);
+  }
+
+  public replaceTransactionByNonce(nonce: number, payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
+    validatePayload(payload);
+    return this.relayer.replaceTransactionByNonce(nonce, payload);
   }
 
   public query(id: string): Promise<RelayerTransaction> {
