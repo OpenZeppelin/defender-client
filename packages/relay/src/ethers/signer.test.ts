@@ -114,14 +114,14 @@ describe('ethers/signer', () => {
   });
 
   it('replaces a tx by nonce', async () => {
-    relayer.replaceTransaction.mockResolvedValue(tx);
+    relayer.replaceTransactionByNonce.mockResolvedValue(tx);
 
     const signer = new DefenderRelaySigner(relayer, provider, { speed: 'safeLow' });
     const request = pick(tx, 'to', 'data', 'value', 'gasLimit', 'nonce');
     const sent = await signer.sendTransaction(request);
 
     expectSentTx(sent);
-    expect(relayer.replaceTransaction).toHaveBeenCalledWith(30, {
+    expect(relayer.replaceTransactionByNonce).toHaveBeenCalledWith(30, {
       ...omit(request, 'nonce'),
       gasLimit: '0xea60',
       speed: tx.speed,
@@ -152,7 +152,7 @@ describe('ethers/signer', () => {
   });
 
   it('replaces a contract tx', async () => {
-    relayer.replaceTransaction.mockResolvedValue(tx);
+    relayer.replaceTransactionByNonce.mockResolvedValue(tx);
     provider.estimateGas.mockResolvedValueOnce(BigNumber.from('0xea60'));
     provider.getCode.mockResolvedValueOnce('0x010203');
 
@@ -161,7 +161,7 @@ describe('ethers/signer', () => {
     const sent = await contract.transfer(from, '0x02', { nonce: tx.nonce });
 
     expectSentTx(sent);
-    expect(relayer.replaceTransaction).toHaveBeenCalledWith(30, {
+    expect(relayer.replaceTransactionByNonce).toHaveBeenCalledWith(30, {
       data: contract.interface.encodeFunctionData('transfer', [from, '0x02']),
       gasLimit: '0xea60',
       speed: 'safeLow',

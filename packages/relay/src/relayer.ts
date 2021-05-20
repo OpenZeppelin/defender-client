@@ -90,7 +90,7 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
 
 function validatePayload(payload: RelayerTransactionPayload) {
   if (payload.speed && payload.gasPrice) {
-    throw new Error("Both tx's speed and gas price are set. Use either of them.");
+    throw new Error("Both tx's speed and gas price are set. Only set one of them.");
   }
   if (payload.validUntil && new Date(payload.validUntil).getTime() < new Date().getTime()) {
     throw new Error('The validUntil time cannot be in the past');
@@ -107,7 +107,8 @@ export type ListTransactionsRequest = {
 export interface IRelayer {
   getRelayer(): Promise<RelayerModel>;
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
-  replaceTransaction(idOrNonce: string | number, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
+  replaceTransactionById(id: string, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
+  replaceTransactionByNonce(nonce: number, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
   list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]>;
   sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
@@ -148,14 +149,14 @@ export class Relayer implements IRelayer {
     return this.relayer.sendTransaction(payload);
   }
 
-  public replaceTransaction(
-    idOrNonce: string | number,
-    payload: RelayerTransactionPayload,
-  ): Promise<RelayerTransaction> {
+  public replaceTransactionById(id: string, payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
     validatePayload(payload);
-    if (typeof idOrNonce === 'string' && idOrNonce.match(/^(0x)?[A-Fa-f0-9]{64}$/))
-      throw new Error(`Cannot replace tx by hash (only nonce and txId are supported)`);
-    return this.relayer.replaceTransaction(idOrNonce, payload);
+    return this.relayer.replaceTransactionById(id, payload);
+  }
+
+  public replaceTransactionByNonce(nonce: number, payload: RelayerTransactionPayload): Promise<RelayerTransaction> {
+    validatePayload(payload);
+    return this.relayer.replaceTransactionByNonce(nonce, payload);
   }
 
   public query(id: string): Promise<RelayerTransaction> {

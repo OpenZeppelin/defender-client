@@ -113,7 +113,7 @@ export class DefenderRelaySenderProvider {
     const payload = { ...this.options, ...txWithSpeed, gasLimit };
 
     const sent = tx.nonce
-      ? await this.relayer.replaceTransaction(parseInt(tx.nonce), payload)
+      ? await this.relayer.replaceTransactionByNonce(parseInt(tx.nonce), payload)
       : await this.relayer.sendTransaction(payload);
 
     this.txHashToId.set(sent.hash, sent.transactionId);

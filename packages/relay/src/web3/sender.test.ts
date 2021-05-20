@@ -128,20 +128,20 @@ describe('web3/sender', () => {
   });
 
   it('replaces a tx by nonce', async () => {
-    relayer.replaceTransaction.mockResolvedValue({ ...tx, hash: replacedHash });
+    relayer.replaceTransactionByNonce.mockResolvedValue({ ...tx, hash: replacedHash });
 
     const request = pick(tx, 'from', 'to', 'data', 'value', 'gasLimit', 'nonce');
     const sent = await new Promise((resolve) => web3.eth.sendTransaction(request).on('transactionHash', resolve));
 
     expect(sent).toEqual(replacedHash);
-    expect(relayer.replaceTransaction).toHaveBeenCalledWith(30, {
+    expect(relayer.replaceTransactionByNonce).toHaveBeenCalledWith(30, {
       ...request,
       gasLimit: '0xea60',
       speed: undefined,
       gasPrice: '0x3b9aca00',
     });
 
-    relayer.replaceTransaction.mockResolvedValue(tx);
+    relayer.replaceTransactionByNonce.mockResolvedValue(tx);
   });
 
   it('sends a contract tx', async () => {
@@ -166,7 +166,7 @@ describe('web3/sender', () => {
   });
 
   it('replaces a contract tx', async () => {
-    relayer.replaceTransaction.mockResolvedValue(tx);
+    relayer.replaceTransactionByNonce.mockResolvedValue(tx);
 
     sender.options.speed = 'safeLow';
     const contract = new web3.eth.Contract(transferAbi, tx.to, { from });
@@ -175,7 +175,7 @@ describe('web3/sender', () => {
     );
 
     expect(sent).toEqual(tx.hash);
-    expect(relayer.replaceTransaction).toHaveBeenCalledWith(30, {
+    expect(relayer.replaceTransactionByNonce).toHaveBeenCalledWith(30, {
       ...pick(tx, 'from', 'gaslimit', 'speed'),
       nonce: '0x1e',
       data: contract.methods.transfer(from, '0x02').encodeABI(),

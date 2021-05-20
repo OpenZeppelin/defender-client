@@ -88,11 +88,11 @@ Defender may replace a transaction by increasing its gas price if it has not bee
 
 ### Replacing transactions
 
-You can use the relayer method `replaceTransaction` to replace a transaction given its nonce or transactionId (not hash) if it has not been mined yet. You can use this to increase the speed of a transaction, or replace your tx by an empty value transfer (with a gas limit of 21000) to cancel a transaction that is no longer valid.
+You can use the relayer methods `replaceTransactionById` or `replaceTransactionByNonce` to replace a transaction given its nonce or transactionId (not hash) if it has not been mined yet. You can use this to increase the speed of a transaction, or replace your tx by an empty value transfer (with a gas limit of 21000) to cancel a transaction that is no longer valid.
 
 ```js
 // Cancel a transaction with nonce 42 by sending a zero-value transfer to replace it
-const tx = await relayer.replaceTransaction(42, {
+const tx = await relayer.replaceTransactionByNonce(42, {
   to: '0x6b175474e89094c44da98b954eedeac495271d0f',
   value: '0x00',
   data: '0x',

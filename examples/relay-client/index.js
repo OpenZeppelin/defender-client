@@ -21,7 +21,7 @@ async function send() {
 }
 
 async function replace(id) {
-  const txResponse = await relayer.replaceTransaction(id, {
+  const txResponse = await relayer.replaceTransactionById(id, {
     to: '0x179810822f56b0e79469189741a3fa5f2f9a7631',
     value: 2,
     speed: 'fast',

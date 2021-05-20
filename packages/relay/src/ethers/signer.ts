@@ -99,7 +99,7 @@ export class DefenderRelaySigner extends Signer {
     };
 
     const relayedTransaction = nonce
-      ? await this.relayer.replaceTransaction(nonce, payload)
+      ? await this.relayer.replaceTransactionByNonce(nonce, payload)
       : await this.relayer.sendTransaction(payload);
 
     return (this.provider as ProviderWithWrapTransaction)._wrapTransaction(

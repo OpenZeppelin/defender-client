@@ -73,7 +73,7 @@ describe('AutotaskRelayer', () => {
 
   describe('replaceTransaction', () => {
     test('passes nonce to the API', async () => {
-      await relayer.replaceTransaction(10, payload);
+      await relayer.replaceTransactionByNonce(10, payload);
       expect(relayer.lambda.invoke).toBeCalledWith({
         FunctionName: 'arn',
         InvocationType: 'RequestResponse',
@@ -82,7 +82,7 @@ describe('AutotaskRelayer', () => {
     });
 
     test('passes txId to the API', async () => {
-      await relayer.replaceTransaction('123-456-abc', payload);
+      await relayer.replaceTransactionById('123-456-abc', payload);
       expect(relayer.lambda.invoke).toBeCalledWith({
         FunctionName: 'arn',
         InvocationType: 'RequestResponse',

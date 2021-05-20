@@ -51,15 +51,19 @@ export class AutotaskRelayer extends BaseAutotaskClient implements IRelayer {
     return this.execute({ action: 'send-tx', payload });
   }
 
-  public async replaceTransaction(
-    nonceOrId: string | number,
+  public async replaceTransactionById(
+    transactionId: string,
     txPayload: RelayerTransactionPayload,
   ): Promise<RelayerTransaction> {
-    const payload: RelayerTransactionPayload & { nonce?: number; transactionId?: string } = { ...txPayload };
-    if (typeof nonceOrId === 'number') payload.nonce = nonceOrId;
-    else if (nonceOrId.match(/^\d+$/)) payload.nonce = parseInt(nonceOrId);
-    else payload.transactionId = nonceOrId;
+    const payload: RelayerTransactionPayload & { transactionId: string } = { ...txPayload, transactionId };
+    return this.execute({ action: 'replace-tx', payload });
+  }
 
+  public async replaceTransactionByNonce(
+    nonce: number,
+    txPayload: RelayerTransactionPayload,
+  ): Promise<RelayerTransaction> {
+    const payload: RelayerTransactionPayload & { nonce: number } = { ...txPayload, nonce };
     return this.execute({ action: 'replace-tx', payload });
   }
 
