@@ -25,7 +25,8 @@ You can interact with your key-value store through an instance of the `KeyValueS
 ```js
 const { KeyValueStoreClient } = require('defender-kvstore-client');
 
-exports.handler =  async function(event) {
+exports.handler = async function(event) {
+  // Creates an instance of the key-value store client
   const store = new KeyValueStoreClient(event);
 
   // Associates myValue to myKey
@@ -36,6 +37,22 @@ exports.handler =  async function(event) {
   
   // Deletes the entry for myKey
   await store.del('myKey');
+}
+```
+
+## Local development
+
+The Defender key-value store is only accessible from within an Autotask. To simplify local development, you can create an instance of a `KeyValueStoreClient` providing an object with a `path` property. The client will use a local json file at that path for all operations.
+
+```js
+const { KeyValueStoreClient } = require('defender-kvstore-client');
+
+async function local() {
+  // Creates an instance of the client that will write to a local file
+  const store = new KeyValueStoreClient({ path: '/tmp/foo/store.json' });
+
+  // The store.json file will contain { myKey: myValue }
+  await store.put('myKey', 'myValue');
 }
 ```
 

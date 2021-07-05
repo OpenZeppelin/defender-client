@@ -1,74 +1,53 @@
-import { KeyValueStoreClient } from '.';
-import Lambda from 'aws-sdk/clients/lambda';
+import { KeyValueStoreClient, KeyValueStoreCreateParams } from '.';
+import { KeyValueStoreAutotaskClient } from './autotask';
+import { KeyValueStoreLocalClient } from './local';
+import { IKeyValueStoreClient } from './types';
 
-jest.mock('aws-sdk/clients/lambda', () => require('../__mocks__/aws-sdk/clients/lambda'));
-
-type TestClient = Omit<KeyValueStoreClient, 'lambda'> & { lambda: Lambda };
+class TestClient extends KeyValueStoreClient {
+  public getImplementation(): IKeyValueStoreClient {
+    return this.implementation;
+  }
+}
 
 describe('KeyValueStoreClient', () => {
-  const credentials = {
-    AccessKeyId: 'keyId',
-    SecretAccessKey: 'accessKey',
-    SessionToken: 'token',
-  };
+  describe('create', () => {
+    test('creates a local client', async () => {
+      const client = new TestClient({ path: '/tmp/foo' });
+      expect(client.getImplementation()).toBeInstanceOf(KeyValueStoreLocalClient);
+    });
 
-  let client: TestClient;
-
-  beforeEach(async function () {
-    client = (new KeyValueStoreClient({
-      credentials: JSON.stringify(credentials),
-      kvstoreARN: 'arn',
-    }) as unknown) as TestClient;
-  });
-
-  describe('get', () => {
-    test('calls kvstore function', async () => {
-      (client.lambda.invoke as jest.Mock).mockImplementationOnce(() => ({
-        promise: () => Promise.resolve({ Payload: JSON.stringify('myvalue') }),
-      }));
-
-      const result = await client.get('mykey');
-
-      expect(result).toEqual('myvalue');
-      expect(client.lambda.invoke).toBeCalledWith({
-        FunctionName: 'arn',
-        InvocationType: 'RequestResponse',
-        Payload: '{"action":"get","key":"mykey"}',
+    test('creates an autotask client', async () => {
+      const credentials = JSON.stringify({
+        AccessKeyId: 'keyId',
+        SecretAccessKey: 'accessKey',
+        SessionToken: 'token',
       });
+
+      const client = new TestClient({ credentials, kvstoreARN: 'bar' });
+      expect(client.getImplementation()).toBeInstanceOf(KeyValueStoreAutotaskClient);
+    });
+
+    test('fails to create a client', async () => {
+      expect(() => {
+        new TestClient({} as KeyValueStoreCreateParams);
+      }).toThrowError(/Invalid create params/i);
     });
   });
 
-  describe('del', () => {
-    test('calls kvstore function', async () => {
-      await client.del('mykey');
-      expect(client.lambda.invoke).toBeCalledWith({
-        FunctionName: 'arn',
-        InvocationType: 'RequestResponse',
-        Payload: '{"action":"del","key":"mykey"}',
-      });
-    });
-  });
-
-  describe('put', () => {
-    test('calls kvstore function', async () => {
-      await client.put('mykey', 'myvalue');
-      expect(client.lambda.invoke).toBeCalledWith({
-        FunctionName: 'arn',
-        InvocationType: 'RequestResponse',
-        Payload: '{"action":"put","key":"mykey","value":"myvalue"}',
-      });
+  describe('validate', () => {
+    let client: TestClient;
+    beforeEach(() => {
+      client = new TestClient({ path: '/tmp/foo' });
     });
 
     test('validates length', async () => {
       await expect(() => client.put('a'.repeat(1025), 'myvalue')).rejects.toThrowError(/key size/i);
       await expect(() => client.put('mykey', 'a'.repeat(300 * 1024 + 1))).rejects.toThrowError(/value size/i);
-      expect(client.lambda.invoke).not.toHaveBeenCalled();
     });
 
     test('validates type', async () => {
       await expect(() => client.put((42 as unknown) as string, 'myvalue')).rejects.toThrowError(/string/i);
       await expect(() => client.put('mykey', (42 as unknown) as string)).rejects.toThrowError(/string/i);
-      expect(client.lambda.invoke).not.toHaveBeenCalled();
     });
   });
 });

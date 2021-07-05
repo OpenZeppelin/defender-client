@@ -1,25 +1,32 @@
-import { BaseAutotaskClient } from 'defender-base-client/lib/autotask';
+import {
+  IKeyValueStoreClient,
+  isAutotaskCreateParams,
+  isLocalCreateParams,
+  KeyValueStoreCreateParams,
+  LocalKeyValueStoreCreateParams,
+} from './types';
 
-type KeyValueStoreCreateParams = {
-  credentials: string;
-  kvstoreARN: string;
-};
+export { KeyValueStoreCreateParams, LocalKeyValueStoreCreateParams };
 
-// Imported from defender/models/src/types/key-value-store.req.d.ts
-interface KeyValueStoreRequest {
-  action: 'put' | 'get' | 'del';
-  key: string;
-  value?: string;
-}
+export class KeyValueStoreClient implements IKeyValueStoreClient {
+  protected implementation: IKeyValueStoreClient;
 
-export class KeyValueStoreClient extends BaseAutotaskClient {
-  public constructor(params: KeyValueStoreCreateParams) {
-    super(params.credentials, params.kvstoreARN);
+  public constructor(params: KeyValueStoreCreateParams | LocalKeyValueStoreCreateParams) {
+    if (isAutotaskCreateParams(params)) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { KeyValueStoreAutotaskClient } = require('./autotask');
+      this.implementation = new KeyValueStoreAutotaskClient(params);
+    } else if (isLocalCreateParams(params)) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { KeyValueStoreLocalClient } = require('./local');
+      this.implementation = new KeyValueStoreLocalClient(params);
+    } else {
+      throw new Error(`Invalid create params for KeyValueStoreClient`);
+    }
   }
 
   public async get(key: string): Promise<string | undefined> {
-    const request: KeyValueStoreRequest = { action: 'get', key };
-    return this.execute(request);
+    return this.implementation.get(key);
   }
 
   public async put(key: string, value: string): Promise<void> {
@@ -28,13 +35,11 @@ export class KeyValueStoreClient extends BaseAutotaskClient {
     if (key.length > 1024) throw new Error(`Key size cannot exceed 1024 characters`);
     if (value && value.length > 300 * 1024) throw new Error(`Value size cannot exceed 300 KB`);
 
-    const request: KeyValueStoreRequest = { action: 'put', key, value };
-    return this.execute(request);
+    return this.implementation.put(key, value);
   }
 
   public async del(key: string): Promise<void> {
-    const request: KeyValueStoreRequest = { action: 'del', key };
-    return this.execute(request);
+    return this.implementation.del(key);
   }
 }
 
