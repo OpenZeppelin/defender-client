@@ -1,0 +1,25 @@
+{
+  "name": "defender-autotask-utils",
+  "version": "1.7.0",
+  "description": "Utils library for writing Defender Autotasks",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "test": "yarn test:unit",
+    "test:unit": "jest --verbose --passWithNoTests",
+    "watch": "tsc -w",
+    "prepare": "yarn build"
+  },
+  "files": [
+    "lib",
+    "!*.test.js",
+    "!*.test.js.map",
+    "!*.test.d.ts",
+    "!*__mocks__"
+  ],
+  "author": "Santiago Palladino <santiago@openzeppelin.com>",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
