@@ -17,7 +17,7 @@ export interface ExternalApiCreateProposalRequest {
   type: ProposalType;
   metadata?: ProposalMetadata;
   via?: Address;
-  viaType?: 'EOA' | 'Contract' | 'Multisig' | 'Gnosis Safe' | 'Gnosis Multisig' | 'Unknown';
+  viaType?: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
   functionInterface?: ProposalTargetFunction;
   functionInputs?: ProposalFunctionInputs;
 }
@@ -25,6 +25,7 @@ export interface ProposalMetadata {
   newImplementationAddress?: Address;
   proxyAdminAddress?: Address;
   action?: 'pause' | 'unpause';
+  operationType?: 'call' | 'delegateCall';
 }
 export interface ProposalTargetFunction {
   name?: string;
