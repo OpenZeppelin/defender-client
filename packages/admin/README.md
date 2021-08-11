@@ -41,6 +41,21 @@ await client.createProposal({
 });
 ```
 
+#### Issuing DELEGATECALLs
+
+When invoking a function via a Gnosis Safe, it's possible to call it via a `DELEGATECALL` instruction instead of a regular call. This has the effect of executing the code in the called contract _in the context of the multisig_, meaning any operations that affect storage will affect the multisig, and any calls to additional contracts will be executed as if the `msg.sender` were the multisig. To do this, add a `metadata` parameter with the value `{ operationType: 'delegateCall' }` to your `createProposal` call:
+
+```js
+await client.createProposal({
+  // ... Include all parameters from the example above
+  via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', // Multisig address
+  viaType: 'Gnosis Safe', // Must be Gnosis Safe to handle delegate calls
+  metadata: { operationType: 'delegateCall' }, // Issue a delegatecall instead of a regular call
+});
+```
+
+Note that this can potentially brick your multisig, if the contract you delegatecall into accidentally modifies the multisig's storage, rendering it unusable. Make sure you understand the risks before issuing a delegatecall.
+
 ### Upgrade proposals
 
 To create an `upgrade` action proposal, just provide the proxy contract network and address, along with the new implementation address, and Defender will automatically resolve the rest:
