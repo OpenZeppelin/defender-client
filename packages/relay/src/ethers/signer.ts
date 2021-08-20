@@ -162,7 +162,7 @@ export class DefenderRelaySigner extends Signer {
     const tx = shallowCopy(transaction);
 
     tx.from = Promise.all([Promise.resolve(tx.from), this.getAddress()]).then((result) => {
-      if (result[0] != null && result[0] !== result[1]) {
+      if (!!result[0] && result[0].toLowerCase() !== result[1].toLowerCase()) {
         logger.throwArgumentError('from address mismatch', 'transaction', transaction);
       }
       return result[1];
