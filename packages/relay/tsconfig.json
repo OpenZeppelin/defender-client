@@ -6,6 +6,6 @@
     "skipLibCheck": true,
     "sourceMap": false
   },
-  "include": ["./src"],
+  "include": ["./src", "../sentinel/src/api/example.ts"],
   "exclude": ["**/*.test.ts", "**/__mocks__/*"]
 }
