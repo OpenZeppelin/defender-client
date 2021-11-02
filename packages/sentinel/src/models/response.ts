@@ -6,3 +6,7 @@ export interface ExternalApiSentinelResponse extends SaveSubscriberRequest {
   createdAt?: string;
   network: Network;
 }
+
+export interface DeletedSentinelResponse {
+  message: string;
+}

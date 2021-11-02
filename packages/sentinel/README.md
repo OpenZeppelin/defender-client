@@ -1,130 +1,175 @@
 # Defender Sentinel Client
 
-Defender Admin acts as an interface to manage your smart contract project through one or more secure multi-signature contracts. Defender Admin holds no control at all over your system, which is fully controlled by the keys of the signers.
+Defender Sentinel allows you to monitor transactions by defining conditions on events, functions, and transaction parameters, and notifying via email, slack, telegram, discord, Autotasks, and more.
 
-To interact with your contracts, you create _proposals_ that need to be reviewed and approved by the other members of the multi-signature wallets. These proposals can be created directly in the Defender web application, or using this library. You can also rely on this library to add your contracts to the Defender Admin dashboard.
+Further information can be found on the OZ documentation page: https://docs.openzeppelin.com/defender/sentinel
 
 ## Install
 
 ```bash
-npm install defender-admin-client
+npm install defender-sentinel-client
 ```
 
 ```bash
-yarn add defender-admin-client
+yarn add defender-sentinel-client
 ```
 
 ## Usage
 
-Start by creating a new _Team API Key_ in Defender, and granting it the capability to create new proposals. Use the newly created API key to initialize an instance of the Admin client.
+Start by creating a new _Team API Key_ in Defender, and granting it the capability to manage sentinels. Use the newly created API key to initialize an instance of the Sentinel client.
 
 ```js
-const { AdminClient } = require('defender-admin-client');
-const client = new AdminClient({ apiKey: API_KEY, apiSecret: API_SECRET });
+const { SentinelClient } = require('defender-sentinel-client');
+const client = new SentinelClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
-### Action proposals
+### List Sentinels
 
-To create a `custom` action proposal, you need to provide the function interface (which you can extract from the contract's ABI), its inputs, and the multisig that will be used for approving it:
+To list existing sentinels, you can call the `list` function on the client, which returns a `SentinelResponse[]` object:
 
 ```js
-await client.createProposal({
-  contract: { address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E', network: 'rinkeby' }, // Target contract
-  title: 'Adjust fee to 10%', // Title of the proposal
-  description: 'Adjust the contract fee collected per action to 10%', // Description of the proposal
-  type: 'custom', // Use 'custom' for custom admin actions
-  functionInterface: { name: 'setFee', inputs: [{ type: 'uint256', name: 'fee' }] }, // Function ABI
-  functionInputs: ['10'], // Arguments to the function
-  via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', // Multisig address
-  viaType: 'Gnosis Safe', // Either Gnosis Safe or Gnosis Multisig
+await client.list();
+```
+
+### Create a Notification
+
+A sentinel requires a notification configuration to alert the right channels in case an event is triggered.
+In order to do so, you can either use an existing notification ID (from another sentinel for example), or create a new one.
+
+The following notification channels are available:
+
+- email
+- slack
+- discord
+- telegram
+- datadog
+
+The `addNotificationChannel` function requires the `NotificationType` and `NotificationRequest` parameters respectively, and returns a `NotificationResponse` object.
+
+```js
+const notification = await client.addNotificationChannel('email', {
+  name: 'MyEmailNotification',
+  config: {
+    emails: ['john@example.com'],
+  },
+  paused: false,
 });
 ```
 
-#### Issuing DELEGATECALLs
+### Create a Sentinel
 
-When invoking a function via a Gnosis Safe, it's possible to call it via a `DELEGATECALL` instruction instead of a regular call. This has the effect of executing the code in the called contract _in the context of the multisig_, meaning any operations that affect storage will affect the multisig, and any calls to additional contracts will be executed as if the `msg.sender` were the multisig. To do this, add a `metadata` parameter with the value `{ operationType: 'delegateCall' }` to your `createProposal` call:
+To create a new sentinel, you need to provide a block watcher ID, name, pause-state, address rules, alert threshold and notification configuration. This request is exported as type `CreateSentinelRequest`.
+
+An example is provided below. This sentinel will be named `MyNewSentinel` and will be monitoring the `renounceOwnership` function on the `0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2` contract on the Rinkeby network.
+The alert threshold is set to 2 times within 1 hour, and the user will be notified via email.
+
+The `blockWatcherId` options can be retrieved by calling:
 
 ```js
-await client.createProposal({
-  // ... Include all parameters from the example above
-  via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', // Multisig address
-  viaType: 'Gnosis Safe', // Must be Gnosis Safe to handle delegate calls
-  metadata: { operationType: 'delegateCall' }, // Issue a delegatecall instead of a regular call
-});
+const blockwatchers = await client.listBlockwatchers();
+const blockWatcherId = blockwatchers.find((blockwatcher) => blockwatcher.network === 'rinkeby').blockWatcherId;
 ```
 
-Note that this can potentially brick your multisig, if the contract you delegatecall into accidentally modifies the multisig's storage, rendering it unusable. Make sure you understand the risks before issuing a delegatecall.
-
-### Upgrade proposals
-
-To create an `upgrade` action proposal, just provide the proxy contract network and address, along with the new implementation address, and Defender will automatically resolve the rest:
+`listBlockwatchers` returns a `BlockWatcher[]` object.
 
 ```js
-const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
-const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
-await client.proposeUpgrade({ newImplementation }, contract);
-```
-
-If your proxies do not implement the [EIP1967 admin slot](https://eips.ethereum.org/EIPS/eip-1967#admin-address), you will need to provide either the [`ProxyAdmin` contract](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/proxy/transparent/ProxyAdmin.sol) or the Account with rights to execute the upgrade, as shown below.
-
-#### Explicit ProxyAdmin
-
-```js
-const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
-const proxyAdmin = '0x2fC100f1BeA4ACCD5dA5e5ed725D763c90e8ca96';
-const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
-await client.proposeUpgrade({ newImplementation, proxyAdmin }, contract);
-```
-
-#### Explicit owner account
-
-```js
-const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
-const via = '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1';
-const viaType = 'Gnosis Safe'; // or 'Gnosis Multisig', or 'EOA'
-const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
-await client.proposeUpgrade({ newImplementation, via, viaType }, contract);
-```
-
-### Pause proposals
-
-To create `pause` and `unpause` action proposals, you need to provide the contract network and address, as well as the multisig that will be used for approving it. Defender takes care of the rest:
-
-```js
-const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
-
-// Create a pause proposal
-await client.proposePause({ via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', viaType: 'Gnosis Safe' }, contract);
-
-// Create an unpause proposal
-await client.proposeUnpause({ via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', viaType: 'Gnosis Safe' }, contract);
-```
-
-Note that for `pause` and `unpause` proposals to work, your contract ABI must include corresponding `pause()` and `unpause()` functions.
-
-## Adding Contracts
-
-If you create a new proposal for a Contract that has not yet been added to Defender Admin, it will be automatically added with an autogenerated name and an empty ABI. You can optionally control these values by providing values for them in the `contract` object of the proposal:
-
-```js
-const contract = {
-  network: 'rinkeby',
-  address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E',
-  name: 'My contract', // Name of the contract if it is created along with this proposal
-  abi: '[...]', // ABI to set for this contract if it is created
+const requestParameters = {
+  blockWatcherId: 'rinkeby-1',
+  name: 'MyNewSentinel',
+  paused: false,
+  addressRules: [
+    {
+      conditions: [
+        {
+          eventConditions: [],
+          txConditions: [],
+          functionConditions: [
+            {
+              functionSignature: 'renounceOwnership()',
+              expression: undefined,
+            },
+          ],
+        },
+      ],
+      autotaskCondition: undefined,
+      address: '0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
+      abi: '[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{...}]',
+    },
+  ],
+  alertThreshold: {
+    amount: 2,
+    windowSeconds: 3600,
+  },
+  notifyConfig: {
+    notifications: [
+      {
+        // Or use an existing notification ID and type
+        notificationId: notification.notificationId,
+        type: notification.type,
+      },
+    ],
+    autotaskId: undefined,
+    timeoutMs: 0,
+  },
 };
-await client.proposeUpgrade({ newImplementation }, contract);
 ```
 
-Alternatively, you can add any contract explicitly by using the `addContract` method, and setting network, address, name, and ABI. The same method can be used to update the contract's name or ABI.
+Once you have these parameters all setup, you can create a sentinel by calling the `create` function on the client. This will return a `SentinelResponse` object.
 
 ```js
-await client.addContract({
-  network: 'rinkeby',
-  address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E',
-  name: 'My contract',
-  abi: '[...]',
-});
+await client.create(requestParameters);
 ```
 
-You can also list all contracts in your Defender Admin dashboard via `listContracts`.
+### Retrieve a Sentinel
+
+You can retrieve a sentinel by ID. This will return a `SentinelResponse` object.
+
+```js
+await client.get('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
+```
+
+### Update a Sentinel
+
+To update a sentinel, you can call the `update` function on the client. This will require the sentinel ID and a `CreateSentinelRequest` object as parameters:
+
+```js
+await client.update('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1', requestParameters);
+```
+
+### Delete a Sentinel
+
+You can delete a sentinel by ID. This will return a `DeletedSentinelResponse` object.
+
+```js
+await client.delete('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
+```
+
+### Pause and unpause a Sentinel
+
+You can pause and unpause a sentinel by ID. This will return a `SentinelResponse` object.
+
+```js
+await client.pause('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
+await client.unpause('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
+```
+
+### Failed Requests
+
+Failed requests might return the following example response object:
+
+```js
+{
+  response: {
+    status: 404,
+    statusText: 'Not Found',
+    data: {
+      message: 'subscriber with id 8181d9e0-88ce-4db0-802a-2b56e2e6a7b1 not found.'
+    }
+  },
+  message: 'Request failed with status code 404',
+  request: {
+    path: '/subscribers/8181d9e0-88ce-4db0-802a-2b56e2e6a7b1',
+    method: 'GET'
+  }
+}
+```

@@ -1,6 +1,7 @@
+import { NotificationType } from './notification';
+
 // Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
 export type Address = string;
-export type NotificationType = 'slack' | 'email' | 'discord' | 'telegram' | 'datadog';
 
 export interface SaveSubscriberRequest {
   blockWatcherId: string;

@@ -1,6 +1,12 @@
 import { BaseApiClient } from 'defender-base-client';
 import { SaveSubscriberRequest as CreateSentinelRequest } from '../models/subscriber';
-import { ExternalApiSentinelResponse as SentinelResponse } from '../models/response';
+import { DeletedSentinelResponse, ExternalApiSentinelResponse as SentinelResponse } from '../models/response';
+import {
+  NotificationSummary as NotificationResponse,
+  NotificationType,
+  SaveNotificationRequest as NotificationRequest,
+} from '../models/notification';
+import { BlockWatcher } from '../models/blockwatcher';
 
 export class SentinelClient extends BaseApiClient {
   protected getPoolId(): string {
@@ -37,14 +43,18 @@ export class SentinelClient extends BaseApiClient {
 
   public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<SentinelResponse> {
     return this.apiCall(async (api) => {
-      const response = (await api.put('/subscribers/' + sentinelId, sentinel)) as SentinelResponse;
+      const currentSentinel = (await api.get('/subscribers/' + sentinelId)) as CreateSentinelRequest;
+      const response = (await api.put('/subscribers/' + sentinelId, {
+        ...currentSentinel,
+        ...sentinel,
+      })) as SentinelResponse;
       return response;
     });
   }
 
-  public async delete(sentinelId: string): Promise<SentinelResponse> {
+  public async delete(sentinelId: string): Promise<DeletedSentinelResponse> {
     return this.apiCall(async (api) => {
-      const response = (await api.delete('/subscribers/' + sentinelId)) as SentinelResponse;
+      const response = (await api.delete('/subscribers/' + sentinelId)) as DeletedSentinelResponse;
       return response;
     });
   }
@@ -64,6 +74,23 @@ export class SentinelClient extends BaseApiClient {
         ...sentinel,
         paused: false,
       })) as SentinelResponse;
+      return response;
+    });
+  }
+
+  public async addNotificationChannel(
+    type: NotificationType,
+    notification: NotificationRequest,
+  ): Promise<NotificationResponse> {
+    return this.apiCall(async (api) => {
+      const response = (await api.post('/notifications/' + type, notification)) as NotificationResponse;
+      return response;
+    });
+  }
+
+  public async listBlockwatchers(): Promise<BlockWatcher[]> {
+    return this.apiCall(async (api) => {
+      const response = (await api.get('/blockwatchers')) as BlockWatcher[];
       return response;
     });
   }
