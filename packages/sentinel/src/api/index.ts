@@ -1,5 +1,5 @@
 import { BaseApiClient } from 'defender-base-client';
-import { SaveSubscriberRequest as CreateSentinelRequest } from '../models/subscriber';
+import { CreateSubscriberRequest as CreateSentinelRequest } from '../models/subscriber';
 import { DeletedSentinelResponse, ExternalApiSentinelResponse as SentinelResponse } from '../models/response';
 import {
   NotificationSummary as NotificationResponse,
@@ -28,8 +28,9 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async create(sentinel: CreateSentinelRequest): Promise<SentinelResponse> {
+    const blockWatcherId = await this.getBlockwatcherIdByNetwork(sentinel.network);
     return this.apiCall(async (api) => {
-      const response = (await api.post('/subscribers', sentinel)) as SentinelResponse;
+      const response = (await api.post('/subscribers', { ...sentinel, blockWatcherId })) as SentinelResponse;
       return response;
     });
   }
@@ -42,11 +43,13 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<SentinelResponse> {
+    const currentSentinel = (await this.get(sentinelId)) as CreateSentinelRequest;
+    const blockWatcherId = await this.getBlockwatcherIdByNetwork(sentinel.network);
     return this.apiCall(async (api) => {
-      const currentSentinel = (await api.get('/subscribers/' + sentinelId)) as CreateSentinelRequest;
       const response = (await api.put('/subscribers/' + sentinelId, {
         ...currentSentinel,
         ...sentinel,
+        blockWatcherId,
       })) as SentinelResponse;
       return response;
     });
@@ -78,7 +81,7 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async addNotificationChannel(
+  public async createNotificationChannel(
     type: NotificationType,
     notification: NotificationRequest,
   ): Promise<NotificationResponse> {
@@ -88,10 +91,21 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async listBlockwatchers(): Promise<BlockWatcher[]> {
+  public async listNotificationChannels(): Promise<NotificationResponse[]> {
+    return this.apiCall(async (api) => {
+      const response = (await api.get('/notifications')) as NotificationResponse[];
+      return response;
+    });
+  }
+
+  private async listBlockwatchers(): Promise<BlockWatcher[]> {
     return this.apiCall(async (api) => {
       const response = (await api.get('/blockwatchers')) as BlockWatcher[];
       return response;
     });
+  }
+
+  private async getBlockwatcherIdByNetwork(network: string): Promise<string | undefined> {
+    return (await this.listBlockwatchers()).find((blockwatcher) => blockwatcher.network === network)?.blockWatcherId;
   }
 }

@@ -2,7 +2,7 @@
 
 Defender Sentinel allows you to monitor transactions by defining conditions on events, functions, and transaction parameters, and notifying via email, slack, telegram, discord, Autotasks, and more.
 
-Further information can be found on the OZ documentation page: https://docs.openzeppelin.com/defender/sentinel
+Further information can be found on the OpenZeppelin documentation page: https://docs.openzeppelin.com/defender/sentinel
 
 ## Install
 
@@ -44,10 +44,10 @@ The following notification channels are available:
 - telegram
 - datadog
 
-The `addNotificationChannel` function requires the `NotificationType` and `NotificationRequest` parameters respectively, and returns a `NotificationResponse` object.
+The `createNotificationChannel` function requires the `NotificationType` and `NotificationRequest` parameters respectively, and returns a `NotificationResponse` object.
 
 ```js
-const notification = await client.addNotificationChannel('email', {
+const notification = await client.createNotificationChannel('email', {
   name: 'MyEmailNotification',
   config: {
     emails: ['john@example.com'],
@@ -56,25 +56,25 @@ const notification = await client.addNotificationChannel('email', {
 });
 ```
 
+You can also list existing notification channels:
+
+```js
+const notificationChannels = await client.listNotificationChannels();
+const { notificationId, type } = notificationChannels[0];
+```
+
+This returns a `NotificationResponse[]` object.
+
 ### Create a Sentinel
 
-To create a new sentinel, you need to provide a block watcher ID, name, pause-state, address rules, alert threshold and notification configuration. This request is exported as type `CreateSentinelRequest`.
+To create a new sentinel, you need to provide the network, name, pause-state, address rules, alert threshold and notification configuration. This request is exported as type `CreateSentinelRequest`.
 
 An example is provided below. This sentinel will be named `MyNewSentinel` and will be monitoring the `renounceOwnership` function on the `0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2` contract on the Rinkeby network.
 The alert threshold is set to 2 times within 1 hour, and the user will be notified via email.
 
-The `blockWatcherId` options can be retrieved by calling:
-
-```js
-const blockwatchers = await client.listBlockwatchers();
-const blockWatcherId = blockwatchers.find((blockwatcher) => blockwatcher.network === 'rinkeby').blockWatcherId;
-```
-
-`listBlockwatchers` returns a `BlockWatcher[]` object.
-
 ```js
 const requestParameters = {
-  blockWatcherId: 'rinkeby-1',
+  network: 'rinkeby',
   name: 'MyNewSentinel',
   paused: false,
   addressRules: [
