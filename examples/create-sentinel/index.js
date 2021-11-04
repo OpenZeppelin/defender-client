@@ -6,6 +6,13 @@ const { SentinelClient } = require('defender-sentinel-client');
 async function main() {
     const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };
     const client = new SentinelClient(creds);
+
+    // Retrieve a list of all block watchers
+    const blockwatchers = await client.listBlockwatchers();
+    // OR select a block watcher for your desired network
+    const blockWatchersForNetwork = await client.getBlockwatcherIdByNetwork('rinkeby');
+    const blockWatcherId = blockWatchersForNetwork[0].blockWatcherId;
+
     let notification;
 
     // use an existing notification channel
@@ -26,7 +33,7 @@ async function main() {
 
     // populate the request parameters
     const requestParameters = {
-        network: 'rinkeby',
+        blockWatcherId,
         name: 'MyNewSentinel',
         paused: false,
         addressRules: [

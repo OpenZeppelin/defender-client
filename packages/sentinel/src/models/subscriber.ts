@@ -1,15 +1,5 @@
 import { NotificationType } from './notification';
 
-type Modify<T, R> = Omit<T, keyof R> & R;
-
-export type CreateSubscriberRequest = Modify<
-  SaveSubscriberRequest,
-  {
-    blockWatcherId?: string;
-    network: string;
-  }
->;
-
 // Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
 export type Address = string;
 export interface SaveSubscriberRequest {

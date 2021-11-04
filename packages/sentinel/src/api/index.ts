@@ -1,5 +1,5 @@
 import { BaseApiClient } from 'defender-base-client';
-import { CreateSubscriberRequest as CreateSentinelRequest } from '../models/subscriber';
+import { SaveSubscriberRequest as CreateSentinelRequest } from '../models/subscriber';
 import { DeletedSentinelResponse, ExternalApiSentinelResponse as SentinelResponse } from '../models/response';
 import {
   NotificationSummary as NotificationResponse,
@@ -28,9 +28,8 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async create(sentinel: CreateSentinelRequest): Promise<SentinelResponse> {
-    const blockWatcherId = await this.getBlockwatcherIdByNetwork(sentinel.network);
     return this.apiCall(async (api) => {
-      const response = (await api.post('/subscribers', { ...sentinel, blockWatcherId })) as SentinelResponse;
+      const response = (await api.post('/subscribers', sentinel)) as SentinelResponse;
       return response;
     });
   }
@@ -44,12 +43,10 @@ export class SentinelClient extends BaseApiClient {
 
   public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<SentinelResponse> {
     const currentSentinel = (await this.get(sentinelId)) as CreateSentinelRequest;
-    const blockWatcherId = await this.getBlockwatcherIdByNetwork(sentinel.network);
     return this.apiCall(async (api) => {
       const response = (await api.put('/subscribers/' + sentinelId, {
         ...currentSentinel,
         ...sentinel,
-        blockWatcherId,
       })) as SentinelResponse;
       return response;
     });
@@ -98,14 +95,14 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  private async listBlockwatchers(): Promise<BlockWatcher[]> {
+  public async listBlockwatchers(): Promise<BlockWatcher[]> {
     return this.apiCall(async (api) => {
       const response = (await api.get('/blockwatchers')) as BlockWatcher[];
       return response;
     });
   }
 
-  private async getBlockwatcherIdByNetwork(network: string): Promise<string | undefined> {
-    return (await this.listBlockwatchers()).find((blockwatcher) => blockwatcher.network === network)?.blockWatcherId;
+  public async getBlockwatcherIdByNetwork(network: string): Promise<BlockWatcher[]> {
+    return (await this.listBlockwatchers()).filter((blockwatcher) => blockwatcher.network === network);
   }
 }
