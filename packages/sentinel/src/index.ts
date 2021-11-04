@@ -1,5 +1,3 @@
-import { BlockWatcher } from './models/blockwatcher';
-
 export { SentinelClient } from './api';
 export { SaveSubscriberRequest as CreateSentinelRequest } from './models/subscriber';
 export { ExternalApiSentinelResponse as SentinelResponse, DeletedSentinelResponse } from './models/response';
