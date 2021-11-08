@@ -129,6 +129,45 @@ Once you have these parameters all setup, you can create a sentinel by calling t
 await client.create(requestParameters);
 ```
 
+If you wish to trigger the sentinel based on additional events, you could append another `ConditionSet` object to the list, for example:
+
+```js
+conditions: [
+        ...
+        {
+          eventConditions: [
+            {
+              eventSignature: "OwnershipTransferred(address,address)",
+              expression: "\"0xf5453Ac1b5A978024F0469ea36Be25887EA812b5,0x6B9501462d48F7e78Ba11c98508ee16d29a03412\""
+            }
+          ],
+          txConditions: [
+            {
+              status: "any", // success, failed or any
+              expression: "nonce>5"
+            }
+          ],
+          functionConditions: [],
+        },
+      ],
+```
+
+Additionally, the sentinel could invoke an autotask to further evaluate. Documentation around this can be found here: https://docs.openzeppelin.com/defender/sentinel#autotask_conditions.
+
+```js
+addressRules: [
+    {
+      conditions: [
+        ...
+      ],
+      autotaskCondition: {
+        autotaskId: "3dcfee82-f5bd-43e3-8480-0676e5c28964"
+      },
+      ...
+    },
+  ],
+```
+
 ### Retrieve a Sentinel
 
 You can retrieve a sentinel by ID. This will return a `CreateSentinelResponse` object.
