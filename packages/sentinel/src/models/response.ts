@@ -4,4 +4,4 @@ export interface DeletedSentinelResponse {
   message: string;
 }
 
-export interface CreateSentinelResponse extends CreateBlockSubscriberResponse {}
+export type CreateSentinelResponse = CreateBlockSubscriberResponse;
