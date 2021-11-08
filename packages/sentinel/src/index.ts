@@ -1,6 +1,6 @@
 export { SentinelClient } from './api';
-export { SaveSubscriberRequest as CreateSentinelRequest } from './models/subscriber';
-export { ExternalApiSentinelResponse as SentinelResponse, DeletedSentinelResponse } from './models/response';
+export { CreateBlockSubscriberRequest as CreateSentinelRequest } from './models/subscriber';
+export { CreateSentinelResponse, DeletedSentinelResponse } from './models/response';
 export {
   NotificationType,
   SaveNotificationRequest as NotificationRequest,

@@ -1,6 +1,6 @@
 import { BaseApiClient } from 'defender-base-client';
-import { SaveSubscriberRequest as CreateSentinelRequest } from '../models/subscriber';
-import { DeletedSentinelResponse, ExternalApiSentinelResponse as SentinelResponse } from '../models/response';
+import { CreateBlockSubscriberRequest as CreateSentinelRequest } from '../models/subscriber';
+import { DeletedSentinelResponse, CreateSentinelResponse } from '../models/response';
 import {
   NotificationSummary as NotificationResponse,
   NotificationType,
@@ -21,33 +21,33 @@ export class SentinelClient extends BaseApiClient {
     return process.env.DEFENDER_SENTINEL_API_URL || 'https://defender-api.openzeppelin.com/sentinel/';
   }
 
-  public async list(): Promise<SentinelResponse[]> {
+  public async list(): Promise<CreateSentinelResponse[]> {
     return this.apiCall(async (api) => {
-      return (await api.get('/subscribers')) as SentinelResponse[];
+      return (await api.get('/subscribers')) as CreateSentinelResponse[];
     });
   }
 
-  public async create(sentinel: CreateSentinelRequest): Promise<SentinelResponse> {
+  public async create(sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
     return this.apiCall(async (api) => {
-      const response = (await api.post('/subscribers', sentinel)) as SentinelResponse;
+      const response = (await api.post('/subscribers', sentinel)) as CreateSentinelResponse;
       return response;
     });
   }
 
-  public async get(sentinelId: string): Promise<SentinelResponse> {
+  public async get(sentinelId: string): Promise<CreateSentinelResponse> {
     return this.apiCall(async (api) => {
-      const response = (await api.get('/subscribers/' + sentinelId)) as SentinelResponse;
+      const response = (await api.get('/subscribers/' + sentinelId)) as CreateSentinelResponse;
       return response;
     });
   }
 
-  public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<SentinelResponse> {
+  public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
     const currentSentinel = (await this.get(sentinelId)) as CreateSentinelRequest;
     return this.apiCall(async (api) => {
       const response = (await api.put('/subscribers/' + sentinelId, {
         ...currentSentinel,
         ...sentinel,
-      })) as SentinelResponse;
+      })) as CreateSentinelResponse;
       return response;
     });
   }
@@ -59,21 +59,24 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async pause(sentinelId: string): Promise<SentinelResponse> {
+  public async pause(sentinelId: string): Promise<CreateSentinelRequest> {
     return this.apiCall(async (api) => {
       const sentinel = (await api.get('/subscribers/' + sentinelId)) as CreateSentinelRequest;
-      const response = (await api.put('/subscribers/' + sentinelId, { ...sentinel, paused: true })) as SentinelResponse;
+      const response = (await api.put('/subscribers/' + sentinelId, {
+        ...sentinel,
+        paused: true,
+      })) as CreateSentinelRequest;
       return response;
     });
   }
 
-  public async unpause(sentinelId: string): Promise<SentinelResponse> {
+  public async unpause(sentinelId: string): Promise<CreateSentinelRequest> {
     return this.apiCall(async (api) => {
       const sentinel = (await api.get('/subscribers/' + sentinelId)) as CreateSentinelRequest;
       const response = (await api.put('/subscribers/' + sentinelId, {
         ...sentinel,
         paused: false,
-      })) as SentinelResponse;
+      })) as CreateSentinelRequest;
       return response;
     });
   }

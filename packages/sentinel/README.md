@@ -25,7 +25,7 @@ const client = new SentinelClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 
 ### List Sentinels
 
-To list existing sentinels, you can call the `list` function on the client, which returns a `SentinelResponse[]` object:
+To list existing sentinels, you can call the `list` function on the client, which returns a `CreateSentinelResponse[]` object:
 
 ```js
 await client.list();
@@ -123,7 +123,7 @@ const requestParameters = {
 };
 ```
 
-Once you have these parameters all setup, you can create a sentinel by calling the `create` function on the client. This will return a `SentinelResponse` object.
+Once you have these parameters all setup, you can create a sentinel by calling the `create` function on the client. This will return a `CreateSentinelResponse` object.
 
 ```js
 await client.create(requestParameters);
@@ -131,7 +131,7 @@ await client.create(requestParameters);
 
 ### Retrieve a Sentinel
 
-You can retrieve a sentinel by ID. This will return a `SentinelResponse` object.
+You can retrieve a sentinel by ID. This will return a `CreateSentinelResponse` object.
 
 ```js
 await client.get('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
@@ -155,7 +155,7 @@ await client.delete('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
 
 ### Pause and unpause a Sentinel
 
-You can pause and unpause a sentinel by ID. This will return a `SentinelResponse` object.
+You can pause and unpause a sentinel by ID. This will return a `CreateSentinelResponse` object.
 
 ```js
 await client.pause('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);

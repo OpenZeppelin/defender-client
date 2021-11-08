@@ -1,16 +1,86 @@
+// Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
+
+import { Network } from './blockwatcher';
 import { NotificationType } from './notification';
 
-// Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
-export type Address = string;
-export interface SaveSubscriberRequest {
-  blockWatcherId: string;
+export interface BaseCreateSubscriberRequest {
   name: string;
   paused: boolean;
-  addressRules: AddressRule[];
   alertThreshold?: Threshold;
   notifyConfig?: Notifications;
 }
 
+export interface BaseCreateSubscriberResponse extends BaseCreateSubscriberRequest {
+  subscriberId: string;
+  createdAt?: string;
+}
+
+export interface CreateFortaSubscriberRequest extends BaseCreateSubscriberRequest {
+  fortaRule: FortaRule;
+  type: 'FORTA';
+  network?: Network;
+}
+
+export interface CreateBlockSubscriberRequest extends BaseCreateSubscriberRequest {
+  addressRules: AddressRule[];
+  blockWatcherId: string;
+  network: Network;
+  type: 'BLOCK';
+}
+
+export interface CreateFortaSubscriberResponse extends BaseCreateSubscriberResponse, CreateFortaSubscriberRequest {
+  fortaLastProcessedTime?: string;
+}
+
+export interface CreateBlockSubscriberResponse extends BaseCreateSubscriberResponse, CreateBlockSubscriberRequest {}
+
+export interface FortaRule {
+  addresses?: Address[];
+  agentIDs?: string[];
+  conditions: FortaConditionSet;
+  autotaskCondition?: AutotaskCondition;
+}
+export interface FortaConditionSet {
+  alertIDs?: string[];
+  minimumScannerCount: number;
+  severity?: number;
+}
+
+export enum SubscriberType {
+  BLOCK = 'BLOCK',
+  FORTA = 'FORTA',
+}
+
+export const FortaAlertSeverity: { [key: string]: number } = {
+  UNKNOWN: 0,
+  INFO: 1,
+  LOW: 2,
+  MEDIUM: 3,
+  HIGH: 4,
+  CRITICAL: 5,
+};
+
+export interface FortaAlert {
+  addresses: string[];
+  severity: string;
+  alert_id: string;
+  scanner_count: number;
+  name: string;
+  description: string;
+  hash: string;
+  network: string;
+  protocol: string;
+  type: string;
+  source: {
+    tx_hash: string;
+    agent: {
+      id: string;
+      name: string;
+    };
+  };
+}
+
+export type Address = string;
 export interface AddressRule {
   conditions: ConditionSet[];
   autotaskCondition?: AutotaskCondition;
