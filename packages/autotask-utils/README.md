@@ -31,12 +31,35 @@ Event data injected by Defender when invoking an Autotask. Includes credentials 
 Example usage for a Sentinel trigger event:
 
 ```typescript
-import { AutotaskEvent, SentinelTriggerEvent } from 'defender-autotask-utils';
+import {
+  AutotaskEvent,
+  SentinelTriggerEvent,
+  SubscriberType,
+  BlockTriggerEvent,
+  FortaTriggerEvent,
+} from 'defender-autotask-utils';
 
 export async function handler(event: AutotaskEvent) {
   const payload = event.request.body as SentinelTriggerEvent;
-  const { transaction, matchReasons } = payload.transaction;
-  // ...
+
+  // You can either check the payload type to destructure the correct properties
+  if (payload.type == SubscriberType.BLOCK) {
+    const { transaction, matchReasons } = payload;
+  } else if (payload.type == SubscriberType.FORTA) {
+    const { alert, matchReasons } = payload;
+  }
+
+  // Or if you know what type of sentinel you'll be using
+
+  // Contract Sentinel
+  const contractPayload = event.request.body as BlockTriggerEvent;
+  const { transaction, matchReasons } = contractPayload;
+  // Forta Sentinel
+  const fortaPayload = event.request.body as FortaTriggerEvent;
+  const { alert, matchReasons } = fortaPayload;
+
+  // Rest of logic...
+}
 }
 ```
 
@@ -45,25 +68,29 @@ export async function handler(event: AutotaskEvent) {
 When invoked as a [Sentinel condition](https://docs.openzeppelin.com/defender/sentinel#autotask_conditions), the Autotask is expected to return the list of matches, refined from the set of potential transactions initially matched by the Sentinel.
 
 ```typescript
-import { 
-  AutotaskEvent, 
-  SentinelConditionRequest, 
-  SentinelConditionResponse, 
-  SentinelConditionMatch 
+import {
+  AutotaskEvent,
+  SentinelConditionRequest,
+  SentinelConditionResponse,
+  SentinelConditionMatch,
+  SubscriberType,
 } from 'defender-autotask-utils';
 
 export async function handler(event: AutotaskEvent): Promise<SentinelConditionResponse> {
   const { events } = event.request.body as SentinelConditionRequest;
   const matches: SentinelConditionMatch[] = [];
-  
-  for (const match of events) {
-    // Custom logic to decide whether this tx should be matched by the Sentinel
-    if (!triggerTx(match)) continue;
 
+  for (const match of events) {
+    if (match.type == SubscriberType.BLOCK) {
+      // Custom logic to decide whether this tx should be matched by the Sentinel
+      if (!shouldMatch(match.transaction)) continue;
+    } else if (match.type == SubscriberType.FORTA) {
+      if (!shouldMatch(match.alert)) continue;
+    }
     // Metadata can be any JSON-marshalable object (or undefined)
-    matches.push({ hash: match.hash, metadata: { "id": "myCustomId" } });
+    matches.push({ hash: match.hash, metadata: { id: 'myCustomId' } });
   }
 
-  return { matches }
+  return { matches };
 }
 ```
