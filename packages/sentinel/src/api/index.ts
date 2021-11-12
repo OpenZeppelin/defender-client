@@ -35,7 +35,7 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async create(sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
-    const newSentinel = this.constructSentinelRequest(sentinel);
+    const newSentinel = await this.constructSentinelRequest(sentinel);
     return this.apiCall(async (api) => {
       const response = (await api.post('/subscribers', newSentinel)) as CreateSentinelResponse;
       return response;
@@ -51,7 +51,7 @@ export class SentinelClient extends BaseApiClient {
 
   public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
     const currentSentinel = (await this.get(sentinelId)) as CreateBlockSubscriberRequest;
-    const newSentinel = this.constructSentinelRequest(sentinel);
+    const newSentinel = await this.constructSentinelRequest(sentinel);
     return this.apiCall(async (api) => {
       const response = (await api.put('/subscribers/' + sentinelId, {
         ...currentSentinel,
@@ -140,9 +140,15 @@ export class SentinelClient extends BaseApiClient {
       }
     });
 
+    let newConditions = sentinel.conditions;
+    if (sentinel.txCondition) {
+      newConditions = sentinel.conditions.map((condition) => {
+        return { ...condition, txConditions: [{ status: 'any', expression: sentinel.txCondition }] };
+      });
+    }
     const conditions = getSentinelConditions([
       {
-        conditions: sentinel.conditions,
+        conditions: newConditions,
         abi: sentinel.abi,
         address: sentinel.address,
       },

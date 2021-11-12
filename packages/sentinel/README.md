@@ -65,15 +65,6 @@ const { notificationId, type } = notificationChannels[0];
 
 This returns a `NotificationResponse[]` object.
 
-### List Blockwatchers
-
-To list blockwatchers, you can call the `listBlockwatchers` function from client. Alternatively, you could retrieve the `blockWatcherId` for a given network by calling `getBlockwatcherIdByNetwork`.
-
-```js
-const blockwatchers = await client.listBlockwatchers();
-const { blockWatcherId } = await client.getBlockwatcherIdByNetwork('rinkeby')[0];
-```
-
 ### Create a Sentinel
 
 To create a new sentinel, you need to provide the blockwatcher ID, name, pause-state, address rules, alert threshold and notification configuration. This request is exported as type `CreateSentinelRequest`.
@@ -83,43 +74,34 @@ The alert threshold is set to 2 times within 1 hour, and the user will be notifi
 
 ```js
 const requestParameters = {
-  blockWatcherId,
+  network: 'rinkeby',
+  // optional
+  blockOffset: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
   name: 'MyNewSentinel',
+  address: '0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
+  abi: '[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{...}]',
+  // optional
   paused: false,
-  addressRules: [
+  conditions: [
     {
-      conditions: [
-        {
-          eventConditions: [],
-          txConditions: [],
-          functionConditions: [
-            {
-              functionSignature: 'renounceOwnership()',
-              expression: undefined,
-            },
-          ],
-        },
-      ],
-      autotaskCondition: undefined,
-      address: '0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
-      abi: '[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{...}]',
+      eventConditions: [],
+      functionConditions: [{ functionSignature: 'renounceOwnership()' }],
     },
   ],
+  // optional
+  txCondition: undefined,
+  // optional
+  autotaskCondition: '3dcfee82-f5bd-43e3-8480-0676e5c28964',
+  // optional
+  autotaskTrigger: undefined,
+  // optional
   alertThreshold: {
     amount: 2,
     windowSeconds: 3600,
   },
-  notifyConfig: {
-    notifications: [
-      {
-        // Or use an existing notification ID and type
-        notificationId: notification.notificationId,
-        type: notification.type,
-      },
-    ],
-    autotaskId: undefined,
-    timeoutMs: 0,
-  },
+  // optional
+  alertTimeoutMs: 0,
+  notificationChannels: [notification.notificationId],
 };
 ```
 
@@ -133,39 +115,32 @@ If you wish to trigger the sentinel based on additional events, you could append
 
 ```js
 conditions: [
-        ...
         {
+          functionConditions: [{ functionSignature: 'renounceOwnership()' }],
           eventConditions: [
             {
               eventSignature: "OwnershipTransferred(address,address)",
               expression: "\"0xf5453Ac1b5A978024F0469ea36Be25887EA812b5,0x6B9501462d48F7e78Ba11c98508ee16d29a03412\""
             }
           ],
-          txConditions: [
-            {
-              status: "any", // success, failed or any
-              expression: "nonce>5"
-            }
-          ],
-          functionConditions: [],
         },
       ],
+```
+
+You could also apply a transaction condition by modifying the `txCondition` property:
+Possible variables: `value`, `gasPrice`, `gasUsed`, `to`, `from`, `nonce`, `status` ('success', 'failed' or 'any'), `input`, or `transactionIndex`.
+
+```js
+txCondition: 'gasPrice > 0',
 ```
 
 Additionally, the sentinel could invoke an autotask to further evaluate. Documentation around this can be found here: https://docs.openzeppelin.com/defender/sentinel#autotask_conditions.
 
 ```js
-addressRules: [
-    {
-      conditions: [
-        ...
-      ],
-      autotaskCondition: {
-        autotaskId: "3dcfee82-f5bd-43e3-8480-0676e5c28964"
-      },
-      ...
-    },
-  ],
+// If other conditions match, the sentinel will invoke this autotask to further evaluate.
+autotaskCondition: '3dcfee82-f5bd-43e3-8480-0676e5c28964',
+// Define autotask within the notification configuration
+autotaskTrigger: '1abfee11-a5bc-51e5-1180-0675a5b24c61',
 ```
 
 ### Retrieve a Sentinel

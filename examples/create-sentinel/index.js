@@ -7,14 +7,7 @@ async function main() {
     const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };
     const client = new SentinelClient(creds);
 
-    // Retrieve a list of all block watchers
-    const blockwatchers = await client.listBlockwatchers();
-    // OR select a block watcher for your desired network
-    const blockWatchersForNetwork = await client.getBlockwatcherIdByNetwork('rinkeby');
-    const blockWatcherId = blockWatchersForNetwork[0].blockWatcherId;
-
     let notification;
-
     // use an existing notification channel
     const notificationChannels = await client.listNotificationChannels()
     if (notificationChannels.length > 0) {
@@ -32,46 +25,40 @@ async function main() {
     }
 
     // populate the request parameters
+
     const requestParameters = {
-        blockWatcherId,
+        network: 'rinkeby',
+        // optional
+        blockOffset: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
         name: 'MyNewSentinel',
+        address: '0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
+        abi: JSON.stringify(abi),
+        // optional
         paused: false,
-        addressRules: [
+        conditions: [
             {
-                conditions: [
-                    {
-                        eventConditions: [],
-                        txConditions: [],
-                        functionConditions: [
-                            {
-                                functionSignature: 'renounceOwnership()',
-                                expression: undefined,
-                            },
-                        ],
-                    },
+                eventConditions: [
+                    { eventSignature: 'OwnershipTransferred(address,address)', expression: 'previousOwner=0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2' },
+                    { eventSignature: 'Transfer(address,address,uint256)' }
                 ],
-                autotaskCondition: undefined,
-                address: '0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
-                abi: JSON.stringify(abi)
-            },
+                functionConditions: [{ functionSignature: 'renounceOwnership()' }],
+            }
         ],
+        // optional
+        txCondition: 'gasPrice > 0',
+        // optional
+        autotaskCondition: '3dcfee82-f5bd-43e3-8480-0676e5c28964',
+        // optional
+        autotaskTrigger: undefined,
+        // optional
         alertThreshold: {
             amount: 2,
             windowSeconds: 3600,
         },
-        notifyConfig: {
-            // populate this with either an existing nofitication channel object
-            // OR the newly created notification object
-            notifications: [
-                {
-                    notificationId: notification.notificationId,
-                    type: notification.type,
-                },
-            ],
-            autotaskId: undefined,
-            timeoutMs: 0,
-        },
-    };
+        // optional
+        alertTimeoutMs: 0,
+        notificationChannels: [notification.notificationId],
+    }
 
     // call create with the request parameters
     const sentinelResponse = await client.create(requestParameters);
