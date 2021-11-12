@@ -29,7 +29,7 @@ async function main() {
     const requestParameters = {
         network: 'rinkeby',
         // optional
-        blockOffset: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
+        confirmLevel: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
         name: 'MyNewSentinel',
         address: '0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
         abi: JSON.stringify(abi),

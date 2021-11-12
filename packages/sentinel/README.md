@@ -76,7 +76,7 @@ The alert threshold is set to 2 times within 1 hour, and the user will be notifi
 const requestParameters = {
   network: 'rinkeby',
   // optional
-  blockOffset: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
+  confirmLevel: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
   name: 'MyNewSentinel',
   address: '0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
   abi: '[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{...}]',

@@ -119,16 +119,16 @@ export class SentinelClient extends BaseApiClient {
   }
 
   private async constructSentinelRequest(sentinel: CreateSentinelRequest): Promise<CreateBlockSubscriberRequest> {
-    const blockWatcher = await this.getBlockwatcherIdByNetwork(sentinel.network);
+    const blockWatchers = await this.getBlockwatcherIdByNetwork(sentinel.network);
     let blockWatcherId =
-      blockWatcher.length > 0 ? _.sortBy(blockWatcher, ['confirmLevel']).reverse()[0].blockWatcherId : undefined;
+      blockWatchers.length > 0 ? _.sortBy(blockWatchers, ['confirmLevel']).reverse()[0].blockWatcherId : undefined;
 
-    if (sentinel.blockOffset) {
-      blockWatcherId = blockWatcher.find((watcher) => watcher.confirmLevel === sentinel.blockOffset)?.blockWatcherId;
+    if (sentinel.confirmLevel) {
+      blockWatcherId = blockWatchers.find((watcher) => watcher.confirmLevel === sentinel.confirmLevel)?.blockWatcherId;
     }
 
     if (!blockWatcherId) {
-      throw new Error('Block Watcher does not exist.');
+      throw new Error(`Provided network and confirmLevel do not match a block watcher.`);
     }
 
     const notifications: NotificationReference[] = [];

@@ -1,6 +1,6 @@
 export interface ExternalCreateSubscriberRequest {
   network: string;
-  blockOffset?: number;
+  confirmLevel?: number;
   name: string;
   address: string;
   abi?: string;
