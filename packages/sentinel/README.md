@@ -54,6 +54,40 @@ const notification = await client.createNotificationChannel('email', {
   },
   paused: false,
 });
+
+const notification = await client.createNotificationChannel('slack', {
+  name: 'MySlackNotification',
+  config: {
+    url: 'https://slack.com/url/key',
+  },
+  paused: false,
+});
+
+const notification = await client.createNotificationChannel('telegram', {
+  name: 'MyTelegramNotification',
+  config: {
+    botToken: 'abcd',
+    chatId: '123',
+  },
+  paused: false,
+});
+
+const notification = await client.createNotificationChannel('discord', {
+  name: 'MyDiscordNotification',
+  config: {
+    url: 'https://discord.com/url/key',
+  },
+  paused: false,
+});
+
+const notification = await client.createNotificationChannel('datadog', {
+  name: 'MyDatadogNotification',
+  config: {
+    apiKey: 'abcd',
+    metricPrefix: 'prefix',
+  },
+  paused: false,
+});
 ```
 
 You can also list existing notification channels:
