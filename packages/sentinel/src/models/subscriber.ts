@@ -1,3 +1,18 @@
+export interface ExternalCreateSubscriberRequest {
+  network: string;
+  blockOffset?: number;
+  name: string;
+  address: string;
+  abi?: string;
+  paused?: boolean;
+  conditions: ConditionSet[];
+  txCondition?: string;
+  autotaskCondition?: string;
+  autotaskTrigger?: string;
+  alertThreshold?: Threshold;
+  alertTimeoutMs?: number;
+  notificationChannels: string[];
+}
 // Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
 
 import { Network } from './blockwatcher';
@@ -120,4 +135,25 @@ export interface NotificationReference {
   notificationId: string;
   type: NotificationType;
   [k: string]: unknown;
+}
+
+// Copied from ui/src/components/sentinel/types.ts
+
+import { EventFragment, FunctionFragment } from '@ethersproject/abi';
+
+export type Description = EventFragment | FunctionFragment;
+export type Condition = EventCondition | FunctionCondition | undefined;
+
+export interface Conditions {
+  txExpression: string;
+  events: ConditionField[];
+  functions: ConditionField[];
+}
+export interface ConditionField {
+  description: Description;
+  signature: string;
+  inputs: (string | undefined)[];
+  expression: string;
+  error: string | undefined;
+  selected: boolean;
 }

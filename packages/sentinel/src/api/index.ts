@@ -1,12 +1,19 @@
 import { BaseApiClient } from 'defender-base-client';
-import { CreateBlockSubscriberRequest as CreateSentinelRequest } from '../models/subscriber';
+import {
+  CreateBlockSubscriberRequest,
+  ExternalCreateSubscriberRequest as CreateSentinelRequest,
+  NotificationReference,
+} from '../models/subscriber';
 import { DeletedSentinelResponse, CreateSentinelResponse } from '../models/response';
 import {
   NotificationSummary as NotificationResponse,
   NotificationType,
   SaveNotificationRequest as NotificationRequest,
 } from '../models/notification';
-import { BlockWatcher } from '../models/blockwatcher';
+import { BlockWatcher, Network } from '../models/blockwatcher';
+
+import _ from 'lodash';
+import getConditionSets, { getSentinelConditions } from '../utils';
 
 export class SentinelClient extends BaseApiClient {
   protected getPoolId(): string {
@@ -28,8 +35,9 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async create(sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
+    const newSentinel = this.constructSentinelRequest(sentinel);
     return this.apiCall(async (api) => {
-      const response = (await api.post('/subscribers', sentinel)) as CreateSentinelResponse;
+      const response = (await api.post('/subscribers', newSentinel)) as CreateSentinelResponse;
       return response;
     });
   }
@@ -42,11 +50,12 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
-    const currentSentinel = (await this.get(sentinelId)) as CreateSentinelRequest;
+    const currentSentinel = (await this.get(sentinelId)) as CreateBlockSubscriberRequest;
+    const newSentinel = this.constructSentinelRequest(sentinel);
     return this.apiCall(async (api) => {
       const response = (await api.put('/subscribers/' + sentinelId, {
         ...currentSentinel,
-        ...sentinel,
+        ...newSentinel,
       })) as CreateSentinelResponse;
       return response;
     });
@@ -107,5 +116,58 @@ export class SentinelClient extends BaseApiClient {
 
   public async getBlockwatcherIdByNetwork(network: string): Promise<BlockWatcher[]> {
     return (await this.listBlockwatchers()).filter((blockwatcher) => blockwatcher.network === network);
+  }
+
+  private async constructSentinelRequest(sentinel: CreateSentinelRequest): Promise<CreateBlockSubscriberRequest> {
+    const blockWatcher = await this.getBlockwatcherIdByNetwork(sentinel.network);
+    let blockWatcherId =
+      blockWatcher.length > 0 ? _.sortBy(blockWatcher, ['confirmLevel']).reverse()[0].blockWatcherId : undefined;
+
+    if (sentinel.blockOffset) {
+      blockWatcherId = blockWatcher.find((watcher) => watcher.confirmLevel === sentinel.blockOffset)?.blockWatcherId;
+    }
+
+    if (!blockWatcherId) {
+      throw new Error('Block Watcher does not exist.');
+    }
+
+    const notifications: NotificationReference[] = [];
+    const notificationChannels = await this.listNotificationChannels();
+
+    notificationChannels.map((channel) => {
+      if (sentinel.notificationChannels.includes(channel.notificationId)) {
+        notifications.push(channel);
+      }
+    });
+
+    const conditions = getSentinelConditions([
+      {
+        conditions: sentinel.conditions,
+        abi: sentinel.abi,
+        address: sentinel.address,
+      },
+    ]);
+
+    return {
+      blockWatcherId,
+      name: sentinel.name,
+      alertThreshold: sentinel.alertThreshold,
+      notifyConfig: {
+        notifications,
+        autotaskId: sentinel.autotaskTrigger ?? undefined,
+        timeoutMs: sentinel.alertTimeoutMs ?? 0,
+      },
+      paused: sentinel.paused ? sentinel.paused : false,
+      addressRules: [
+        {
+          conditions: getConditionSets(conditions.txExpression, conditions.events, conditions.functions),
+          autotaskCondition: sentinel.autotaskCondition ? { autotaskId: sentinel.autotaskCondition } : undefined,
+          address: sentinel.address,
+          abi: sentinel.abi,
+        },
+      ],
+      network: sentinel.network as Network,
+      type: 'BLOCK',
+    };
   }
 }
