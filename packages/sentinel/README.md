@@ -101,7 +101,7 @@ This returns a `NotificationResponse[]` object.
 
 ### Create a Sentinel
 
-To create a new sentinel, you need to provide the blockwatcher ID, name, pause-state, address rules, alert threshold and notification configuration. This request is exported as type `CreateSentinelRequest`.
+To create a new sentinel, you need to provide the network, name, pause-state, conditions, alert threshold and notification configuration. This request is exported as type `CreateSentinelRequest`.
 
 An example is provided below. This sentinel will be named `MyNewSentinel` and will be monitoring the `renounceOwnership` function on the `0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2` contract on the Rinkeby network.
 The alert threshold is set to 2 times within 1 hour, and the user will be notified via email.
