@@ -182,7 +182,7 @@ autotaskTrigger: '1abfee11-a5bc-51e5-1180-0675a5b24c61',
 You can retrieve a sentinel by ID. This will return a `CreateSentinelResponse` object.
 
 ```js
-await client.get('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
+await client.get('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1');
 ```
 
 ### Update a Sentinel
@@ -198,7 +198,7 @@ await client.update('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1', requestParameters);
 You can delete a sentinel by ID. This will return a `DeletedSentinelResponse` object.
 
 ```js
-await client.delete('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
+await client.delete('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1');
 ```
 
 ### Pause and unpause a Sentinel
@@ -206,8 +206,8 @@ await client.delete('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
 You can pause and unpause a sentinel by ID. This will return a `CreateSentinelResponse` object.
 
 ```js
-await client.pause('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
-await client.unpause('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1);
+await client.pause('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1');
+await client.unpause('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1');
 ```
 
 ### Failed Requests
