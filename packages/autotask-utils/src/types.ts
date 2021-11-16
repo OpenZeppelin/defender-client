@@ -95,27 +95,48 @@ export interface SentinelConditionMatch {
 /**
  * Represents an object matched by a Sentinel
  */
-export interface SentinelTriggerEvent {
+export type SentinelTriggerEvent = BlockTriggerEvent | FortaTriggerEvent;
+
+export interface BlockTriggerEvent {
+  type: 'BLOCK';
   hash: string;
   timestamp: number;
   blockNumber: string;
   blockHash: string;
   transaction: EthReceipt;
   matchReasons: SentinelConditionSummary[];
-  sentinel: SentinelSubscriberSummary;
+  sentinel: BlockSubscriberSummary;
+  metadata?: { [k: string]: unknown };
+}
+
+export interface FortaTriggerEvent {
+  type: 'FORTA';
+  hash: string;
+  alert: FortaAlert;
+  matchReasons: FortaConditionSummary[];
+  sentinel: FortaSubscriberSummary;
   metadata?: { [k: string]: unknown };
 }
 
 /**
  * Summary of a Sentinel definition
  */
-export interface SentinelSubscriberSummary {
+export type SentinelSubscriberSummary = FortaSubscriberSummary | BlockSubscriberSummary;
+
+export interface BlockSubscriberSummary {
   id: string;
   name: string;
   network: string;
   address: string;
   confirmBlocks: number;
   abi: Record<string, unknown> | undefined;
+}
+
+export interface FortaSubscriberSummary {
+  id: string;
+  name: string;
+  addresses: string[];
+  agents: string[];
 }
 
 interface SentinelBaseConditionSummary {
@@ -144,6 +165,16 @@ interface TransactionConditionSummary extends SentinelBaseConditionSummary {
   type: 'transaction';
 }
 
+export interface AlertIdConditionSummary {
+  type: 'alert-id';
+  value: string;
+}
+
+export interface SeverityConditionSummary {
+  type: 'severity';
+  value: string;
+}
+
 /**
  * Summary of a user-defined Sentinel condition
  */
@@ -153,6 +184,7 @@ export type SentinelConditionSummary =
   | FunctionConditionSummary
   | EventConditionSummary;
 
+export type FortaConditionSummary = AlertIdConditionSummary | SeverityConditionSummary;
 /**
  * Ethereum transaction receipt
  */
@@ -184,4 +216,31 @@ export interface EthLog {
   topics: string[];
   transactionHash: string;
   transactionIndex: string;
+}
+
+/**
+ * Forta Alert
+ */
+export interface FortaAlert {
+  addresses: string[];
+  severity: string;
+  alert_id: string;
+  scanner_count: number;
+  name: string;
+  description: string;
+  hash: string;
+  protocol: string;
+  type: string;
+  source: {
+    tx_hash: string;
+    agent: {
+      id: string;
+      name: string;
+    };
+  };
+}
+
+export enum SubscriberType {
+  BLOCK = 'BLOCK',
+  FORTA = 'FORTA',
 }
