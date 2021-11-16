@@ -116,14 +116,12 @@ const requestParameters = {
   abi: '[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{...}]',
   // optional
   paused: false,
-  conditions: [
-    {
-      eventConditions: [],
-      functionConditions: [{ functionSignature: 'renounceOwnership()' }],
-    },
-  ],
   // optional
-  txCondition: undefined,
+  eventConditions: [],
+  // optional
+  functionConditions: [{ functionSignature: 'renounceOwnership()' }],
+  // optional
+  txCondition: 'gasPrice > 0',
   // optional
   autotaskCondition: '3dcfee82-f5bd-43e3-8480-0676e5c28964',
   // optional
@@ -145,20 +143,16 @@ Once you have these parameters all setup, you can create a sentinel by calling t
 await client.create(requestParameters);
 ```
 
-If you wish to trigger the sentinel based on additional events, you could append another `ConditionSet` object to the list, for example:
+If you wish to trigger the sentinel based on additional events, you could add another `ConditionSet` object to the list, for example:
 
 ```js
-conditions: [
-        {
-          functionConditions: [{ functionSignature: 'renounceOwnership()' }],
-          eventConditions: [
-            {
-              eventSignature: "OwnershipTransferred(address,address)",
-              expression: "\"0xf5453Ac1b5A978024F0469ea36Be25887EA812b5,0x6B9501462d48F7e78Ba11c98508ee16d29a03412\""
-            }
-          ],
-        },
-      ],
+functionConditions: [{ functionSignature: 'renounceOwnership()' }],
+eventConditions: [
+  {
+    eventSignature: "OwnershipTransferred(address,address)",
+    expression: "\"0xf5453Ac1b5A978024F0469ea36Be25887EA812b5,0x6B9501462d48F7e78Ba11c98508ee16d29a03412\""
+  }
+]
 ```
 
 You could also apply a transaction condition by modifying the `txCondition` property:

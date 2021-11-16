@@ -13,7 +13,6 @@ import {
 
 import { Interface, EventFragment, FunctionFragment } from '@ethersproject/abi';
 import { isTransactionMethod } from '../models/ethers';
-import { err, ok, Result } from '../models/result';
 
 // converts to payload for save API
 export default function getConditionSets(
@@ -83,11 +82,10 @@ export default function getConditionSets(
 export function toConditionField(description: Description, condition: Condition): ConditionField {
   const field: ConditionField = {
     description,
-    selected: false,
     signature: description.format(),
     inputs: description.inputs.map((i) => i.name).filter(Boolean),
+    selected: false,
     expression: '',
-    error: '',
   };
 
   if (condition) {
@@ -150,36 +148,17 @@ export function getSentinelConditions(addressRules: AddressRule[]): Conditions {
 
 export function getAbiInterface(abi: string | undefined): Interface | undefined {
   if (!abi) return;
-  const result = parseAbi(abi);
-  if (result.isOk()) return result.value;
-}
-/**
- * Attempts to fix common "mistakes" when copy pasting an ABI.
- * For example, if a user copies a string literal set to a variable
- * in a script, quotes will be escaped with \, so we need to remove
- * wrapping quotes and replace \ with no-character.
- * As we learn from what users are putting here in production we could
- * make it smarter, at least for reasonable conversions like the one
- * we just described.
- * @param abi an ABI entered by the user into the UI
- */
-export const sanitize = (abi: string): string => {
-  let sanitizedAbi = abi.trim();
-
-  if (sanitizedAbi.startsWith('"') && sanitizedAbi.endsWith('"')) {
-    sanitizedAbi = sanitizedAbi.substr(1, sanitizedAbi.length - 2);
-    sanitizedAbi = sanitizedAbi.replace(/\\"/g, '"');
-    sanitizedAbi = sanitizedAbi.replace(/\\'/g, "'");
-  }
-
-  return sanitizedAbi;
-};
-
-export const parseAbi = (abi: string): Result<Interface, string> => {
   try {
-    const sanitizedAbi = sanitize(abi);
-    return ok(new Interface(sanitizedAbi));
+    return parseAbi(abi);
   } catch (e) {
-    return err('Please enter a valid ABI');
+    return undefined;
+  }
+}
+
+export const parseAbi = (abi: string): Interface => {
+  try {
+    return new Interface(abi);
+  } catch (e) {
+    throw new Error('Please enter a valid ABI');
   }
 };

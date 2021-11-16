@@ -5,7 +5,8 @@ export interface ExternalCreateSubscriberRequest {
   address: string;
   abi?: string;
   paused?: boolean;
-  conditions: ConditionSet[];
+  eventConditions?: EventCondition[];
+  functionConditions?: FunctionCondition[];
   txCondition?: string;
   autotaskCondition?: string;
   autotaskTrigger?: string;
@@ -154,6 +155,5 @@ export interface ConditionField {
   signature: string;
   inputs: (string | undefined)[];
   expression: string;
-  error: string | undefined;
   selected: boolean;
 }

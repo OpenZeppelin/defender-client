@@ -30,20 +30,16 @@ async function main() {
         network: 'rinkeby',
         // optional
         confirmLevel: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
-        name: 'MyNewSentinel',
+        name: 'MyNewSentinel2',
         address: '0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
         abi: JSON.stringify(abi),
         // optional
         paused: false,
-        conditions: [
-            {
-                eventConditions: [
-                    { eventSignature: 'OwnershipTransferred(address,address)', expression: 'previousOwner=0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2' },
-                    { eventSignature: 'Transfer(address,address,uint256)' }
-                ],
-                functionConditions: [{ functionSignature: 'renounceOwnership()' }],
-            }
+        eventConditions: [
+            { eventSignature: 'OwnershipTransferred(address,address)', expression: 'previousOwner=0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2' },
+            { eventSignature: 'Transfer(address,address,uint256)' }
         ],
+        functionConditions: [{ functionSignature: 'renounceOwnership()' }],
         // optional
         txCondition: 'gasPrice > 0',
         // optional

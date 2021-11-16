@@ -1,5 +1,7 @@
 import { BaseApiClient } from 'defender-base-client';
 import {
+  AddressRule,
+  ConditionSet,
   CreateBlockSubscriberRequest,
   ExternalCreateSubscriberRequest as CreateSentinelRequest,
   NotificationReference,
@@ -140,12 +142,28 @@ export class SentinelClient extends BaseApiClient {
       }
     });
 
-    let newConditions = sentinel.conditions;
-    if (sentinel.txCondition) {
-      newConditions = sentinel.conditions.map((condition) => {
-        return { ...condition, txConditions: [{ status: 'any', expression: sentinel.txCondition }] };
+    let newConditions: ConditionSet[] = [];
+
+    if (sentinel.eventConditions) {
+      sentinel.eventConditions.map((condition) => {
+        newConditions.push({
+          eventConditions: [condition],
+          txConditions: sentinel.txCondition ? [{ status: 'any', expression: sentinel.txCondition }] : [],
+          functionConditions: [],
+        });
       });
     }
+
+    if (sentinel.functionConditions) {
+      sentinel.functionConditions.map((condition) => {
+        newConditions.push({
+          eventConditions: [],
+          txConditions: sentinel.txCondition ? [{ status: 'any', expression: sentinel.txCondition }] : [],
+          functionConditions: [condition],
+        });
+      });
+    }
+
     const conditions = getSentinelConditions([
       {
         conditions: newConditions,
