@@ -229,7 +229,6 @@ export interface FortaAlert {
   name: string;
   description: string;
   hash: string;
-  network: string;
   protocol: string;
   type: string;
   source: {
