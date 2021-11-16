@@ -1,6 +1,5 @@
 import { BaseApiClient } from 'defender-base-client';
 import {
-  AddressRule,
   ConditionSet,
   CreateBlockSubscriberRequest,
   ExternalCreateSubscriberRequest as CreateSentinelRequest,
@@ -142,7 +141,7 @@ export class SentinelClient extends BaseApiClient {
       }
     });
 
-    let newConditions: ConditionSet[] = [];
+    const newConditions: ConditionSet[] = [];
 
     if (sentinel.eventConditions) {
       sentinel.eventConditions.map((condition) => {
