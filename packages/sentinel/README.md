@@ -143,7 +143,7 @@ Once you have these parameters all setup, you can create a sentinel by calling t
 await client.create(requestParameters);
 ```
 
-If you wish to trigger the sentinel based on additional events, you could add another `ConditionSet` object, for example:
+If you wish to trigger the sentinel based on additional events, you could add another `EventCondition` or `FunctionCondition` object, for example:
 
 ```js
 functionConditions: [{ functionSignature: 'renounceOwnership()' }],
