@@ -5,7 +5,41 @@ const { SentinelClient } = require('defender-sentinel-client');
 
 async function main() {
     const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };
+    console.log("Attempting to connect with:", creds);
     const client = new SentinelClient(creds);
+
+    // Succeeds
+    const notifs = await client.listNotificationChannels()
+    console.log("List notifications: ", notifs.length)
+
+    const blockWatchers = await client.listBlockwatchers()
+    console.log("List blockwatchers: ", blockWatchers.length)
+
+    const sentinels = await client.list()
+    console.log("List sentinels: ", sentinels.length)
+
+    const blockwatcherWithNetwork = await client.getBlockwatcherIdByNetwork('rinkeby')
+    console.log("List blockwatchers for rinkeby: ", blockwatcherWithNetwork.length)
+
+
+    // Fails
+    const createNotifRes = await client.createNotificationChannel('email', {
+        name: 'MyEmailNotification',
+        config: {
+            emails: ['john@example.com']
+        },
+        paused: false
+    })
+    console.log("Create a notification:", createNotifRes);
+
+    const pauseSentinel = await client.pause('ae0750d7-7d6f-427c-946e-f3352acf655e');
+    console.log("Pause a sentinel:", pauseSentinel);
+
+    const getSentinel = await client.get('ae0750d7-7d6f-427c-946e-f3352acf655e');
+    console.log("Get a sentinel:", getSentinel);
+
+
+
 
     let notification;
     // use an existing notification channel
@@ -30,7 +64,7 @@ async function main() {
         network: 'rinkeby',
         // optional
         confirmLevel: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
-        name: 'MyNewSentinel',
+        name: 'MyNewSentinel111',
         address: '0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
         abi: JSON.stringify(abi),
         // optional
