@@ -37,6 +37,8 @@ import {
   SubscriberType,
   BlockTriggerEvent,
   FortaTriggerEvent,
+  isTxAlert,
+  isBlockAlert,
 } from 'defender-autotask-utils';
 
 export async function handler(event: AutotaskEvent) {
@@ -58,8 +60,14 @@ export async function handler(event: AutotaskEvent) {
   const fortaPayload = event.request.body as FortaTriggerEvent;
   const { alert, matchReasons } = fortaPayload;
 
+  // For forta Alerts you can check whether the alert is related to a transaction or a block
+  if (isTxAlert(alert)) {
+    // Do something here
+  } else if (isBlockAlert(alert)) {
+    // Do something here
+  }
+
   // Rest of logic...
-}
 }
 ```
 
@@ -74,6 +82,8 @@ import {
   SentinelConditionResponse,
   SentinelConditionMatch,
   SubscriberType,
+  isTxAlert,
+  isBlockAlert,
 } from 'defender-autotask-utils';
 
 export async function handler(event: AutotaskEvent): Promise<SentinelConditionResponse> {
@@ -85,6 +95,12 @@ export async function handler(event: AutotaskEvent): Promise<SentinelConditionRe
       // Custom logic to decide whether this tx should be matched by the Sentinel
       if (!shouldMatch(match.transaction)) continue;
     } else if (match.type == SubscriberType.FORTA) {
+      // For forta alerts you can check whether the alert is related to a transaction or a block
+      if (isTxAlert(match.alert)) {
+        // Do something here
+      } else if (isBlockAlert(match.alert)) {
+        // Do something here
+      }
       if (!shouldMatch(match.alert)) continue;
     }
     // Metadata can be any JSON-marshalable object (or undefined)
