@@ -237,6 +237,9 @@ export interface FortaAlert {
       id: string;
       name: string;
     };
+    block: {
+      chain_id: number;
+    };
   };
 }
 
