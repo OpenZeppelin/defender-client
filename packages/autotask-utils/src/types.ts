@@ -221,8 +221,22 @@ export interface EthLog {
 /**
  * Forta Alert
  */
-export interface FortaAlert {
+export type FortaAlert = TxAlert | BlockAlert;
+
+export type TxAlert = TFortaAlert & {
   addresses: string[];
+  source: Source & {
+    tx_hash: string;
+  };
+  alertType: 'TX';
+};
+
+export type BlockAlert = TFortaAlert & {
+  alertType: 'BLOCK';
+};
+
+interface TFortaAlert {
+  addresses?: string[];
   severity: string;
   alert_id: string;
   scanner_count: number;
@@ -231,13 +245,33 @@ export interface FortaAlert {
   hash: string;
   protocol: string;
   type: string;
-  source: {
-    tx_hash: string;
-    agent: {
-      id: string;
-      name: string;
-    };
+  source: Source;
+  alertType?: 'TX' | 'BLOCK';
+}
+
+interface Source {
+  tx_hash?: string;
+  agent: {
+    id: string;
+    name: string;
   };
+  block: {
+    chain_id: number;
+    hash: string;
+  };
+}
+
+export function isTxAlert(alert: FortaAlert): alert is TxAlert {
+  return (alert as TxAlert).alertType === 'TX';
+}
+
+export function isBlockAlert(alert: FortaAlert): alert is BlockAlert {
+  return (alert as BlockAlert).alertType === 'BLOCK';
+}
+
+export enum AlertType {
+  TX = 'TX',
+  BLOCK = 'BLOCK',
 }
 
 export enum SubscriberType {
