@@ -25,5 +25,6 @@
     "defender-base-client": "1.12.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
-  }
+  },
+  "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e"
 }
