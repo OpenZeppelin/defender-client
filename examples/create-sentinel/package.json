@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "defender-sentinel-client": "1.11.0",
+    "defender-sentinel-client": "1.12.1",
     "dotenv": "^8.2.0"
   }
 }
