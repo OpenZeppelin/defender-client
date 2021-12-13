@@ -130,6 +130,7 @@ export interface BlockSubscriberSummary {
   address: string;
   confirmBlocks: number;
   abi: Record<string, unknown> | undefined;
+  chainId: number;
 }
 
 export interface FortaSubscriberSummary {
@@ -137,6 +138,8 @@ export interface FortaSubscriberSummary {
   name: string;
   addresses: string[];
   agents: string[];
+  network?: string;
+  chainId?: number;
 }
 
 interface SentinelBaseConditionSummary {
