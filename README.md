@@ -1,6 +1,13 @@
 # Defender Clients
 
-Monorepo that contains Defender typescript clients.
+Monorepo that contains Defender typescript clients. Check out the individual packages for more info:
+
+- [defender-admin-client](packages/admin)
+- [defender-autotask-client](packages/autotask-client)
+- [defender-autotask-utils](packages/autotask-utils)
+- [defender-kvstore-client](packages/kvstore)
+- [defender-relay-client](packages/relay)
+- [defender-sentinel-client](packages/sentinel)
 
 ## Development Setup
 
