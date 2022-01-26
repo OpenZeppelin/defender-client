@@ -12,6 +12,8 @@ export type Network =
   | 'fantom'
   | 'fantomtest'
   | 'moonbase'
+  | 'moonriver'
+  | 'moonbeam'
   | 'matic'
   | 'mumbai'
   | 'avalanche'
