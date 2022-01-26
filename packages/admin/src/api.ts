@@ -44,9 +44,9 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
-  public async listContracts(): Promise<Contract[]> {
+  public async listContracts(): Promise<Omit<Contract, 'abi'>[]> {
     return this.apiCall(async (api) => {
-      return (await api.get('/contracts')) as Contract[];
+      return (await api.get('/contracts')) as Omit<Contract, 'abi'>[];
     });
   }
 
