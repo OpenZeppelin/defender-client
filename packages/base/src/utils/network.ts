@@ -97,6 +97,6 @@ const chainIds: { [key in Network]: number } = {
   'arbitrum-rinkeby': 421611,
   celo: 42220,
   alfajores: 44787,
-  ['harmony-s0']: 1666600000,
-  ['harmony-test-s0']: 1666700000,
+  'harmony-s0': 1666600000,
+  'harmony-test-s0': 1666700000,
 };
