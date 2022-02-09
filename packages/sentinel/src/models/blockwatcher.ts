@@ -23,7 +23,9 @@ export type Network =
   | 'optimistic'
   | 'optimistic-kovan'
   | 'celo'
-  | 'alfajores';
+  | 'alfajores'
+  | 'harmony-s0'
+  | 'harmony-test-s0';
 
 export interface BlockWatcherOptions {
   processBlockAttempts?: number;
