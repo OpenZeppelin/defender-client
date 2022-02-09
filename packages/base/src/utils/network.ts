@@ -56,7 +56,7 @@ export const Networks: Network[] = [
   'celo',
   'alfajores',
   'harmony-s0',
-  'harmony-test-s0'
+  'harmony-test-s0',
 ];
 
 export function isValidNetwork(text: string): text is Network {
