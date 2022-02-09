@@ -2,8 +2,8 @@ import { findKey } from 'lodash';
 
 export type Network =
   | 'mainnet'
-  | 'ropsten'
   | 'rinkeby'
+  | 'ropsten'
   | 'kovan'
   | 'goerli'
   | 'xdai'
@@ -14,8 +14,18 @@ export type Network =
   | 'fantom'
   | 'fantomtest'
   | 'moonbase'
+  | 'moonriver'
+  | 'moonbeam'
   | 'matic'
-  | 'mumbai';
+  | 'mumbai'
+  | 'avalanche'
+  | 'fuji'
+  | 'optimistic'
+  | 'optimistic-kovan'
+  | 'arbitrum'
+  | 'arbitrum-rinkeby'
+  | 'celo'
+  | 'alfajores';
 
 export const Networks: Network[] = [
   'mainnet',
@@ -31,8 +41,18 @@ export const Networks: Network[] = [
   'fantom',
   'fantomtest',
   'moonbase',
+  'moonriver',
+  'moonbeam',
   'matic',
   'mumbai',
+  'avalanche',
+  'fuji',
+  'optimistic',
+  'optimistic-kovan',
+  'arbitrum',
+  'arbitrum-rinkeby',
+  'celo',
+  'alfajores',
 ];
 
 export function isValidNetwork(text: string): text is Network {
@@ -49,10 +69,10 @@ export function toChainId(network: Network): number | undefined {
 
 const chainIds: { [key in Network]: number } = {
   mainnet: 1,
-  ropsten: 3,
   rinkeby: 4,
-  goerli: 5,
+  ropsten: 3,
   kovan: 42,
+  goerli: 5,
   xdai: 100,
   sokol: 77,
   fuse: 122,
@@ -61,6 +81,16 @@ const chainIds: { [key in Network]: number } = {
   fantom: 250,
   fantomtest: 0xfa2,
   moonbase: 1287,
+  moonriver: 1285,
+  moonbeam: 1284,
   matic: 137,
   mumbai: 80001,
+  avalanche: 0xa86a,
+  fuji: 0xa869,
+  optimistic: 10,
+  'optimistic-kovan': 69,
+  arbitrum: 42161,
+  'arbitrum-rinkeby': 421611,
+  celo: 42220,
+  alfajores: 44787,
 };
