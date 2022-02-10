@@ -5,7 +5,7 @@ import {
   ExternalCreateSubscriberRequest as CreateSentinelRequest,
   NotificationReference,
 } from '../models/subscriber';
-import { DeletedSentinelResponse, CreateSentinelResponse } from '../models/response';
+import { DeletedSentinelResponse, CreateSentinelResponse, ListSentinelResponse } from '../models/response';
 import {
   NotificationSummary as NotificationResponse,
   NotificationType,
@@ -29,9 +29,9 @@ export class SentinelClient extends BaseApiClient {
     return process.env.DEFENDER_SENTINEL_API_URL || 'https://defender-api.openzeppelin.com/sentinel/';
   }
 
-  public async list(): Promise<CreateSentinelResponse[]> {
+  public async list(): Promise<ListSentinelResponse> {
     return this.apiCall(async (api) => {
-      return (await api.get('/subscribers')) as CreateSentinelResponse[];
+      return (await api.get('/subscribers')) as ListSentinelResponse;
     });
   }
 
