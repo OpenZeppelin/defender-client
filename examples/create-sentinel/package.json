@@ -1,6 +1,6 @@
 {
   "name": "example-create-sentinel",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "private": true,
   "main": "index.js",
   "author": "Nami Shah <nami@openzeppelin.com>",
@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "defender-sentinel-client": "^1.13.0",
+    "defender-sentinel-client": "^1.14.0",
     "dotenv": "^8.2.0"
   }
 }
