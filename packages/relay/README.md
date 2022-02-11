@@ -139,12 +139,12 @@ You can use the `defender-relay-client` with [ethers.js v5](https://github.com/e
 Make sure to have `ethers` installed in your project, and initialize a new defender signer instance like:
 
 ```js
-const { DefenderRelaySigner } = require('defender-relay-client/lib/ethers');
+const { DefenderRelayProvider, DefenderRelaySigner } = require('defender-relay-client/lib/ethers');
 const { ethers } = require('ethers');
 
 const credentials = { apiKey: API_KEY, apiSecret: API_SECRET };
 const provider = new DefenderRelayProvider(credentials);
-const signer = new DefenderRelaySigner(credentials, provider, { speed: 'fast' };
+const signer = new DefenderRelaySigner(credentials, provider, { speed: 'fast' });
 ```
 
 You can then use it to send any transactions, such as executing a contract function. The `tx` object returned will be a regular ethers.js `TransactionResponse` object, with the addition of Defender's `transactionId` field.
