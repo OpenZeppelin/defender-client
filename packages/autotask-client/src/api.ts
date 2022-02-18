@@ -1,5 +1,7 @@
 import { BaseApiClient } from 'defender-base-client';
 import { zipFolder, zipSources } from './zip';
+import { ListAutotaskResponse, CreateAutotaskResponse } from './models/response';
+import { CreateAutotaskRequest } from './models/config';
 
 type SourceFiles = {
   'index.js': string;
@@ -16,7 +18,20 @@ export class AutotaskClient extends BaseApiClient {
   }
 
   protected getApiUrl(): string {
-    return process.env.DEFENDER_AUTOTASK_API_URL || 'https://defender-api.openzeppelin.com/autotask/';
+    return process.env.DEFENDER_AUTOTASK_API_URL || 'https://defender-api.openzeppelin.com';
+  }
+
+  public async list(): Promise<ListAutotaskResponse> {
+    return this.apiCall(async (api) => {
+      return (await api.get('/autotasks/summary')) as ListAutotaskResponse;
+    });
+  }
+
+  public async get(autotaskId: string): Promise<CreateAutotaskResponse> {
+    return this.apiCall(async (api) => {
+      const response = (await api.get(`/autotasks/${autotaskId}`)) as CreateAutotaskResponse;
+      return response;
+    });
   }
 
   public async updateCodeFromZip(autotaskId: string, zippedCode: Buffer): Promise<void> {
@@ -36,7 +51,14 @@ export class AutotaskClient extends BaseApiClient {
 
   private async updateCode(autotaskId: string, encodedZippedCode: string): Promise<void> {
     return this.apiCall(async (api) => {
-      return await api.put(`/autotasks/${autotaskId}/code`, { encodedZippedCode });
+      return await api.put(`/autotask/autotasks/${autotaskId}/code`, { encodedZippedCode });
+    });
+  }
+
+  public async create(autotask: CreateAutotaskRequest): Promise<CreateAutotaskResponse> {
+    return this.apiCall(async (api) => {
+      const response = (await api.post('/autotasks', autotask)) as CreateAutotaskResponse;
+      return response;
     });
   }
 }
