@@ -21,10 +21,11 @@
   "author": "Nami Shah <nami@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "defender-base-client": "^1.16.0",
     "lodash": "^4.17.19",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "@ethersproject/abi": "^5.5.0"
   },
   "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e"
 }
