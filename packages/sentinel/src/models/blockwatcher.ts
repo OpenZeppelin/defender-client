@@ -24,6 +24,8 @@ export type Network =
   | 'arbitrum-rinkeby'
   | 'celo'
   | 'alfajores'
+  | 'harmony-s0'
+  | 'harmony-test-s0'
   | 'aurora'
   | 'auroratest';
 

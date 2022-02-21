@@ -26,6 +26,8 @@ export type Network =
   | 'arbitrum-rinkeby'
   | 'celo'
   | 'alfajores'
+  | 'harmony-s0'
+  | 'harmony-test-s0'
   | 'aurora'
   | 'auroratest';
 
@@ -55,6 +57,8 @@ export const Networks: Network[] = [
   'arbitrum-rinkeby',
   'celo',
   'alfajores',
+  'harmony-s0',
+  'harmony-test-s0',
   'aurora',
   'auroratest',
 ];
@@ -97,6 +101,8 @@ const chainIds: { [key in Network]: number } = {
   'arbitrum-rinkeby': 421611,
   celo: 42220,
   alfajores: 44787,
+  'harmony-s0': 1666600000,
+  'harmony-test-s0': 1666700000,
   aurora: 1313161554,
   auroratest: 1313161555,
 };
