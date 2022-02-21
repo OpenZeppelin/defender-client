@@ -25,7 +25,9 @@ export type Network =
   | 'arbitrum'
   | 'arbitrum-rinkeby'
   | 'celo'
-  | 'alfajores';
+  | 'alfajores'
+  | 'aurora'
+  | 'auroratest';
 
 export const Networks: Network[] = [
   'mainnet',
@@ -53,6 +55,8 @@ export const Networks: Network[] = [
   'arbitrum-rinkeby',
   'celo',
   'alfajores',
+  'aurora',
+  'auroratest',
 ];
 
 export function isValidNetwork(text: string): text is Network {
@@ -93,4 +97,6 @@ const chainIds: { [key in Network]: number } = {
   'arbitrum-rinkeby': 421611,
   celo: 42220,
   alfajores: 44787,
+  aurora: 1313161554,
+  auroratest: 1313161555,
 };

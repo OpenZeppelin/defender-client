@@ -1,7 +1,7 @@
 export type Network =
   | 'mainnet'
-  | 'ropsten'
   | 'rinkeby'
+  | 'ropsten'
   | 'kovan'
   | 'goerli'
   | 'xdai'
@@ -18,12 +18,14 @@ export type Network =
   | 'mumbai'
   | 'avalanche'
   | 'fuji'
-  | 'arbitrum'
-  | 'arbitrum-rinkeby'
   | 'optimistic'
   | 'optimistic-kovan'
+  | 'arbitrum'
+  | 'arbitrum-rinkeby'
   | 'celo'
-  | 'alfajores';
+  | 'alfajores'
+  | 'aurora'
+  | 'auroratest';
 
 export interface BlockWatcherOptions {
   processBlockAttempts?: number;
