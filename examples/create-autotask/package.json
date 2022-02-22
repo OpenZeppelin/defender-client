@@ -1,12 +1,12 @@
 {
-  "name": "example-update-autotask",
+  "name": "example-create-autotask",
   "version": "1.10.0",
   "private": true,
   "main": "index.js",
-  "author": "Santiago Palladino <santiago@openzeppelin.com>",
+  "author": "Nami Shah <nami@openzeppelin.com>",
   "license": "MIT",
   "scripts": {
-    "update-code": "node update-code.js"
+    "run": "node index.js"
   },
   "dependencies": {
     "defender-autotask-client": "1.10.0",
