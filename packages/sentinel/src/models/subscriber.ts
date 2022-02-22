@@ -1,4 +1,5 @@
 export interface ExternalCreateSubscriberRequest {
+  type: string;
   network: string;
   confirmLevel?: number;
   name: string;
@@ -13,6 +14,7 @@ export interface ExternalCreateSubscriberRequest {
   alertThreshold?: Threshold;
   alertTimeoutMs?: number;
   notificationChannels: string[];
+  fortaRule: FortaRule;
 }
 // Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
 
@@ -43,6 +45,8 @@ export interface CreateBlockSubscriberRequest extends BaseCreateSubscriberReques
   network: Network;
   type: 'BLOCK';
 }
+
+export type CreateSentinelRequest = CreateFortaSubscriberRequest | CreateBlockSubscriberRequest;
 
 export interface CreateFortaSubscriberResponse extends BaseCreateSubscriberResponse, CreateFortaSubscriberRequest {
   fortaLastProcessedTime?: string;

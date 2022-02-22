@@ -1,8 +1,10 @@
 import { BaseApiClient } from 'defender-base-client';
 import {
   ConditionSet,
+  CreateSentinelRequest,
   CreateBlockSubscriberRequest,
-  ExternalCreateSubscriberRequest as CreateSentinelRequest,
+  CreateFortaSubscriberRequest,
+  ExternalCreateSubscriberRequest,
   NotificationReference,
 } from '../models/subscriber';
 import { DeletedSentinelResponse, CreateSentinelResponse, ListSentinelResponse } from '../models/response';
@@ -35,8 +37,9 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async create(sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
+  public async create(sentinel: ExternalCreateSubscriberRequest): Promise<CreateSentinelResponse> {
     const newSentinel = await this.constructSentinelRequest(sentinel);
+    
     return this.apiCall(async (api) => {
       const response = (await api.post('/subscribers', newSentinel)) as CreateSentinelResponse;
       return response;
@@ -50,8 +53,8 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
-    const currentSentinel = (await this.get(sentinelId)) as CreateBlockSubscriberRequest;
+  public async update(sentinelId: string, sentinel: ExternalCreateSubscriberRequest): Promise<CreateSentinelResponse> {
+    const currentSentinel = (await this.get(sentinelId)) as CreateSentinelResponse;
     const newSentinel = await this.constructSentinelRequest(sentinel);
     return this.apiCall(async (api) => {
       const response = (await api.put('/subscribers/' + sentinelId, {
@@ -119,7 +122,50 @@ export class SentinelClient extends BaseApiClient {
     return (await this.listBlockwatchers()).filter((blockwatcher) => blockwatcher.network === network);
   }
 
-  private async constructSentinelRequest(sentinel: CreateSentinelRequest): Promise<CreateBlockSubscriberRequest> {
+  private async constructSentinelRequest(sentinel: ExternalCreateSubscriberRequest): Promise<CreateSentinelRequest> {
+    let newSentinel;
+
+    switch (sentinel.type) {
+      case "BLOCK":        
+        newSentinel = await this.constructBlockSentinelRequest(sentinel);
+      case "FORTA":
+        newSentinel = await this.constructFortaSentinelRequest(sentinel);
+    }
+
+    if (!newSentinel) {
+      throw new Error(`Invalid type!`);
+    }
+
+    return newSentinel;
+  }
+
+  private async constructFortaSentinelRequest(sentinel: ExternalCreateSubscriberRequest): Promise<CreateFortaSubscriberRequest> {
+    const notifications: NotificationReference[] = [];
+    const notificationChannels = await this.listNotificationChannels();
+
+    notificationChannels.map((channel) => {
+      if (sentinel.notificationChannels.includes(channel.notificationId)) {
+        notifications.push(channel);
+      }
+    });
+
+    return {
+      name: sentinel.name,
+      alertThreshold: sentinel.alertThreshold,
+      notifyConfig: {
+        notifications,
+        autotaskId: sentinel.autotaskTrigger ?? undefined,
+        timeoutMs: sentinel.alertTimeoutMs ?? 0,
+      },
+      paused: sentinel.paused ? sentinel.paused : false,
+      // FORTA specific config parameters
+      fortaRule: sentinel.fortaRule,
+      type: 'FORTA',
+      network: sentinel.network as Network,
+    };
+  }
+
+  private async constructBlockSentinelRequest(sentinel: ExternalCreateSubscriberRequest): Promise<CreateBlockSubscriberRequest> {
     const blockWatchers = await this.getBlockwatcherIdByNetwork(sentinel.network);
     let blockWatcherId =
       blockWatchers.length > 0 ? _.sortBy(blockWatchers, ['confirmLevel']).reverse()[0].blockWatcherId : undefined;
@@ -172,7 +218,6 @@ export class SentinelClient extends BaseApiClient {
     ]);
 
     return {
-      blockWatcherId,
       name: sentinel.name,
       alertThreshold: sentinel.alertThreshold,
       notifyConfig: {
@@ -181,6 +226,7 @@ export class SentinelClient extends BaseApiClient {
         timeoutMs: sentinel.alertTimeoutMs ?? 0,
       },
       paused: sentinel.paused ? sentinel.paused : false,
+      // BLOCK specific config parameters
       addressRules: [
         {
           conditions: getConditionSets(conditions.txExpression, conditions.events, conditions.functions),
@@ -189,6 +235,7 @@ export class SentinelClient extends BaseApiClient {
           abi: sentinel.abi,
         },
       ],
+      blockWatcherId,      
       network: sentinel.network as Network,
       type: 'BLOCK',
     };
