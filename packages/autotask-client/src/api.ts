@@ -1,4 +1,5 @@
 import { BaseApiClient } from 'defender-base-client';
+import { AutotaskListResponse } from './models/response';
 import { zipFolder, zipSources } from './zip';
 
 type SourceFiles = {
@@ -17,6 +18,12 @@ export class AutotaskClient extends BaseApiClient {
 
   protected getApiUrl(): string {
     return process.env.DEFENDER_AUTOTASK_API_URL || 'https://defender-api.openzeppelin.com/autotask/';
+  }
+
+  public async list(): Promise<AutotaskListResponse> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/autotasks`);
+    });
   }
 
   public async updateCodeFromZip(autotaskId: string, zippedCode: Buffer): Promise<void> {
