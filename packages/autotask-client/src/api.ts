@@ -1,12 +1,17 @@
 import { BaseApiClient } from 'defender-base-client';
-import { AutotaskListResponse } from './models/response';
+import { CreateAutotaskRequest } from './models/autotask';
+import {
+  AutotaskListResponse,
+  AutotaskGetResponse,
+  AutotaskDeleteResponse,
+  AutotaskCreateResponse,
+} from './models/response';
 import { zipFolder, zipSources } from './zip';
 
 type SourceFiles = {
   'index.js': string;
   [name: string]: string;
 };
-
 export class AutotaskClient extends BaseApiClient {
   protected getPoolId(): string {
     return process.env.DEFENDER_AUTOTASK_POOL_ID || 'us-west-2_94f3puJWv';
@@ -26,18 +31,48 @@ export class AutotaskClient extends BaseApiClient {
     });
   }
 
+  public async get(autotaskId: string): Promise<AutotaskGetResponse> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/autotasks/${autotaskId}`);
+    });
+  }
+
+  public async delete(autotaskId: string): Promise<AutotaskDeleteResponse> {
+    return this.apiCall(async (api) => {
+      return await api.delete(`/autotasks/${autotaskId}`);
+    });
+  }
+
+  public async create(autotask: CreateAutotaskRequest): Promise<AutotaskCreateResponse> {
+    return this.apiCall(async (api) => {
+      return await api.post(`/autotasks`, autotask);
+    });
+  }
+
+  public getEncodedZippedCodeFromBuffer(code: Buffer): string {
+    return code.toString('base64');
+  }
+
+  public async getEncodedZippedCodeFromSources(code: SourceFiles): Promise<string> {
+    return await zipSources(code);
+  }
+
+  public async getEncodedZippedCodeFromFolder(code: string): Promise<string> {
+    return await zipFolder(code);
+  }
+
   public async updateCodeFromZip(autotaskId: string, zippedCode: Buffer): Promise<void> {
-    const encodedZippedCode = zippedCode.toString('base64');
+    const encodedZippedCode = this.getEncodedZippedCodeFromBuffer(zippedCode);
     return this.updateCode(autotaskId, encodedZippedCode);
   }
 
   public async updateCodeFromSources(autotaskId: string, sources: SourceFiles): Promise<void> {
-    const encodedZippedCode = await zipSources(sources);
+    const encodedZippedCode = await this.getEncodedZippedCodeFromSources(sources);
     return this.updateCode(autotaskId, encodedZippedCode);
   }
 
   public async updateCodeFromFolder(autotaskId: string, path: string): Promise<void> {
-    const encodedZippedCode = await zipFolder(path);
+    const encodedZippedCode = await this.getEncodedZippedCodeFromFolder(path);
     return this.updateCode(autotaskId, encodedZippedCode);
   }
 

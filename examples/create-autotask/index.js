@@ -6,10 +6,18 @@ async function main() {
   const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };
   const client = new AutotaskClient(creds);
 
-  console.log(client);
+  const myAutotask = {
+    name: "my-autotask",
+    encodedZippedCode: await client.getEncodedZippedCodeFromFolder('./code'),
+    trigger: {
+      type: 'schedule',
+      frequencyMinutes: 1500,
+    },
+    paused: false
+  };
 
-  const autotasks = await client.list();
-  console.log(autotasks);
+  const createdAutotask = await client.create(myAutotask);
+  console.log(createdAutotask)
 }
 
 if (require.main === module) {

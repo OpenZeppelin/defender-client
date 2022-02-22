@@ -5,3 +5,11 @@ export type AutotaskListResponse = {
   keyValueStoreItemsCount: number;
   runsQuotaUsage: number;
 };
+
+export type AutotaskGetResponse = Autotask;
+
+export type AutotaskCreateResponse = Autotask;
+
+export type AutotaskDeleteResponse = {
+  message: string;
+};
