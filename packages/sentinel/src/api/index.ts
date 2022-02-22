@@ -31,22 +31,20 @@ export class SentinelClient extends BaseApiClient {
 
   public async list(): Promise<ListSentinelResponse> {
     return this.apiCall(async (api) => {
-      return (await api.get('/subscribers')) as ListSentinelResponse;
+      return await api.get(`/subscribers`);
     });
   }
 
   public async create(sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
     const newSentinel = await this.constructSentinelRequest(sentinel);
     return this.apiCall(async (api) => {
-      const response = (await api.post('/subscribers', newSentinel)) as CreateSentinelResponse;
-      return response;
+      return await api.post(`/subscribers`, newSentinel);
     });
   }
 
   public async get(sentinelId: string): Promise<CreateSentinelResponse> {
     return this.apiCall(async (api) => {
-      const response = (await api.get('/subscribers/' + sentinelId)) as CreateSentinelResponse;
-      return response;
+      return await api.get(`/subscribers/${sentinelId}`);
     });
   }
 
@@ -54,40 +52,36 @@ export class SentinelClient extends BaseApiClient {
     const currentSentinel = (await this.get(sentinelId)) as CreateBlockSubscriberRequest;
     const newSentinel = await this.constructSentinelRequest(sentinel);
     return this.apiCall(async (api) => {
-      const response = (await api.put('/subscribers/' + sentinelId, {
+      return await api.put(`/subscribers/${sentinelId}`, {
         ...currentSentinel,
         ...newSentinel,
-      })) as CreateSentinelResponse;
-      return response;
+      });
     });
   }
 
   public async delete(sentinelId: string): Promise<DeletedSentinelResponse> {
     return this.apiCall(async (api) => {
-      const response = (await api.delete('/subscribers/' + sentinelId)) as DeletedSentinelResponse;
-      return response;
+      return await api.delete(`/subscribers/${sentinelId}`);
     });
   }
 
   public async pause(sentinelId: string): Promise<CreateSentinelRequest> {
     return this.apiCall(async (api) => {
-      const sentinel = (await api.get('/subscribers/' + sentinelId)) as CreateSentinelRequest;
-      const response = (await api.put('/subscribers/' + sentinelId, {
+      const sentinel = (await api.get(`/subscribers/${sentinelId}`)) as CreateSentinelRequest;
+      return await api.put(`/subscribers/${sentinelId}`, {
         ...sentinel,
         paused: true,
-      })) as CreateSentinelRequest;
-      return response;
+      });
     });
   }
 
   public async unpause(sentinelId: string): Promise<CreateSentinelRequest> {
     return this.apiCall(async (api) => {
-      const sentinel = (await api.get('/subscribers/' + sentinelId)) as CreateSentinelRequest;
-      const response = (await api.put('/subscribers/' + sentinelId, {
+      const sentinel = (await api.get(`/subscribers/${sentinelId}`)) as CreateSentinelRequest;
+      return await api.put(`/subscribers/${sentinelId}`, {
         ...sentinel,
         paused: false,
-      })) as CreateSentinelRequest;
-      return response;
+      });
     });
   }
 
@@ -96,22 +90,19 @@ export class SentinelClient extends BaseApiClient {
     notification: NotificationRequest,
   ): Promise<NotificationResponse> {
     return this.apiCall(async (api) => {
-      const response = (await api.post('/notifications/' + type, notification)) as NotificationResponse;
-      return response;
+      return await api.post(`/notifications/${type}`, notification);
     });
   }
 
   public async listNotificationChannels(): Promise<NotificationResponse[]> {
     return this.apiCall(async (api) => {
-      const response = (await api.get('/notifications')) as NotificationResponse[];
-      return response;
+      return await api.get(`/notifications`);
     });
   }
 
   public async listBlockwatchers(): Promise<BlockWatcher[]> {
     return this.apiCall(async (api) => {
-      const response = (await api.get('/blockwatchers')) as BlockWatcher[];
-      return response;
+      return await api.get(`/blockwatchers`);
     });
   }
 
