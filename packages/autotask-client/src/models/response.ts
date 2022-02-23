@@ -6,9 +6,7 @@ export type AutotaskListResponse = {
   runsQuotaUsage: number;
 };
 
-export type AutotaskGetResponse = Autotask;
-
-export type AutotaskCreateResponse = Autotask;
+export type AutotaskResponse = Autotask;
 
 export type AutotaskDeleteResponse = {
   message: string;

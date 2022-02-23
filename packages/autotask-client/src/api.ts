@@ -1,11 +1,6 @@
 import { BaseApiClient } from 'defender-base-client';
-import { CreateAutotaskRequest } from './models/autotask';
-import {
-  AutotaskListResponse,
-  AutotaskGetResponse,
-  AutotaskDeleteResponse,
-  AutotaskCreateResponse,
-} from './models/response';
+import { CreateAutotaskRequest, UpdateAutotaskRequest } from './models/autotask';
+import { AutotaskListResponse, AutotaskResponse, AutotaskDeleteResponse } from './models/response';
 import { zipFolder, zipSources } from './zip';
 
 type SourceFiles = {
@@ -31,7 +26,7 @@ export class AutotaskClient extends BaseApiClient {
     });
   }
 
-  public async get(autotaskId: string): Promise<AutotaskGetResponse> {
+  public async get(autotaskId: string): Promise<AutotaskResponse> {
     return this.apiCall(async (api) => {
       return await api.get(`/autotasks/${autotaskId}`);
     });
@@ -43,9 +38,15 @@ export class AutotaskClient extends BaseApiClient {
     });
   }
 
-  public async create(autotask: CreateAutotaskRequest): Promise<AutotaskCreateResponse> {
+  public async create(autotask: CreateAutotaskRequest): Promise<AutotaskResponse> {
     return this.apiCall(async (api) => {
       return await api.post(`/autotasks`, autotask);
+    });
+  }
+
+  public async update(autotask: UpdateAutotaskRequest): Promise<AutotaskResponse> {
+    return this.apiCall(async (api) => {
+      return await api.put(`/autotasks/`, autotask);
     });
   }
 

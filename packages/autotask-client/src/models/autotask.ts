@@ -10,6 +10,11 @@ export interface CreateAutotaskRequest {
   paused: boolean;
 }
 
+export interface UpdateAutotaskRequest extends Omit<CreateAutotaskRequest, 'encodedZippedCode'> {
+  autotaskId: string;
+  encodedZippedCode?: string;
+}
+
 export interface ScheduleTrigger {
   type: 'schedule';
   frequencyMinutes?: number;
