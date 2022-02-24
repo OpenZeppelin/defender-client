@@ -53,7 +53,7 @@ const { AutotaskClient } = require('defender-autotask-client');
 const client = new AutotaskClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
-#### List
+**List**
 
 To list your current autotasks, simply call the `list` function.
 
@@ -61,7 +61,7 @@ To list your current autotasks, simply call the `list` function.
 await client.list();
 ```
 
-#### Create
+**Create**
 
 To create a new autotask, construct an `CreateAutotaskRequest` object.
 
@@ -86,7 +86,7 @@ const myAutotask: CreateAutotaskRequest = { name: "myAutotask", paused: false, .
 await client.create(myAutotask);
 ```
 
-#### Retrieve
+**Retrieve**
 
 To retrieve one of your autotask, call the `get` function with the autotask Id.
 
@@ -94,7 +94,7 @@ To retrieve one of your autotask, call the `get` function with the autotask Id.
 await client.get('671d1f80-99e3-4829-aa15-f01e3298e428');
 ```
 
-#### Update
+**Update**
 
 To update an existing autotask, construct an `UpdateAutotaskRequest` object.
 
@@ -120,7 +120,7 @@ const myAutotask: UpdateAutotaskRequest = { name: "myAutotask-V2", paused: true,
 await client.update(myAutotask);
 ```
 
-#### Delete
+**Delete**
 
 To delete one of your autotask, call the `delete` function with the autotask Id.
 
@@ -128,7 +128,7 @@ To delete one of your autotask, call the `delete` function with the autotask Id.
 await client.delete('671d1f80-99e3-4829-aa15-f01e3298e428');
 ```
 
-#### Update Code
+**Update Code**
 
 To update the code of an existing Autotask, zip it and upload it using the client, providing the ID of the Autotask to update:
 
