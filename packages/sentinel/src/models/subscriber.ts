@@ -67,35 +67,6 @@ export enum SubscriberType {
   FORTA = 'FORTA',
 }
 
-export const FortaAlertSeverity: { [key: string]: number } = {
-  UNKNOWN: 0,
-  INFO: 1,
-  LOW: 2,
-  MEDIUM: 3,
-  HIGH: 4,
-  CRITICAL: 5,
-};
-
-export interface FortaAlert {
-  addresses: string[];
-  severity: string;
-  alert_id: string;
-  scanner_count: number;
-  name: string;
-  description: string;
-  hash: string;
-  network: string;
-  protocol: string;
-  type: string;
-  source: {
-    tx_hash: string;
-    agent: {
-      id: string;
-      name: string;
-    };
-  };
-}
-
 export type Address = string;
 export interface AddressRule {
   conditions: ConditionSet[];
@@ -130,6 +101,7 @@ export interface Threshold {
 export interface Notifications {
   notifications: NotificationReference[];
   autotaskId?: string;
+  messageBody?: string;
   timeoutMs: number;
 }
 export interface NotificationReference {
