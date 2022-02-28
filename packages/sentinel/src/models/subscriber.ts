@@ -2,7 +2,7 @@ export interface ExternalCreateSubscriberRequest {
   network: string;
   confirmLevel?: number;
   name: string;
-  address: string;
+  addresses: string[];
   abi?: string;
   paused?: boolean;
   eventConditions?: EventCondition[];
@@ -100,7 +100,7 @@ export type Address = string;
 export interface AddressRule {
   conditions: ConditionSet[];
   autotaskCondition?: AutotaskCondition;
-  address: Address;
+  addresses: Address[];
   abi?: string;
 }
 export interface ConditionSet {
