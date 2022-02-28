@@ -1,9 +1,13 @@
 import { BaseApiClient } from 'defender-base-client';
 import {
   ConditionSet,
-  CreateBlockSubscriberRequest,
+  CreateSubscriberRequest,
+  ExternalCreateBlockSubscriberRequest as CreateBlockSentinelRequest,
+  ExternalCreateFortaSubscriberRequest as CreateFortaSentinelRequest,
   ExternalCreateSubscriberRequest as CreateSentinelRequest,
   NotificationReference,
+  PartialCreateBlockSubscriberRequest,
+  PartialCreateFortaSubscriberRequest,
 } from '../models/subscriber';
 import { DeletedSentinelResponse, CreateSentinelResponse, ListSentinelResponse } from '../models/response';
 import {
@@ -49,7 +53,7 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
-    const currentSentinel = (await this.get(sentinelId)) as CreateBlockSubscriberRequest;
+    const currentSentinel = await this.get(sentinelId);
     const newSentinel = await this.constructSentinelRequest(sentinel);
     return this.apiCall(async (api) => {
       return await api.put(`/subscribers/${sentinelId}`, {
@@ -66,8 +70,8 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async pause(sentinelId: string): Promise<CreateSentinelRequest> {
+    const sentinel = await this.get(`/subscribers/${sentinelId}`);
     return this.apiCall(async (api) => {
-      const sentinel = (await api.get(`/subscribers/${sentinelId}`)) as CreateSentinelRequest;
       return await api.put(`/subscribers/${sentinelId}`, {
         ...sentinel,
         paused: true,
@@ -76,8 +80,8 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async unpause(sentinelId: string): Promise<CreateSentinelRequest> {
+    const sentinel = await this.get(`/subscribers/${sentinelId}`);
     return this.apiCall(async (api) => {
-      const sentinel = (await api.get(`/subscribers/${sentinelId}`)) as CreateSentinelRequest;
       return await api.put(`/subscribers/${sentinelId}`, {
         ...sentinel,
         paused: false,
@@ -110,7 +114,21 @@ export class SentinelClient extends BaseApiClient {
     return (await this.listBlockwatchers()).filter((blockwatcher) => blockwatcher.network === network);
   }
 
-  private async constructSentinelRequest(sentinel: CreateSentinelRequest): Promise<CreateBlockSubscriberRequest> {
+  private constructFortaSentinel(sentinel: CreateFortaSentinelRequest): PartialCreateFortaSubscriberRequest {
+    return {
+      fortaRule: {
+        addresses: sentinel.addresses,
+        agentIDs: sentinel.agentIDs,
+        conditions: sentinel.fortaConditions,
+        autotaskCondition: sentinel.autotaskCondition ? { autotaskId: sentinel.autotaskCondition } : undefined,
+      },
+      type: 'FORTA',
+    };
+  }
+
+  private async constructBlockSentinel(
+    sentinel: CreateBlockSentinelRequest,
+  ): Promise<PartialCreateBlockSubscriberRequest> {
     const blockWatchers = await this.getBlockwatcherIdByNetwork(sentinel.network);
     let blockWatcherId =
       blockWatchers.length > 0 ? _.sortBy(blockWatchers, ['confirmLevel']).reverse()[0].blockWatcherId : undefined;
@@ -122,15 +140,6 @@ export class SentinelClient extends BaseApiClient {
     if (!blockWatcherId) {
       throw new Error(`Provided network and confirmLevel do not match a block watcher.`);
     }
-
-    const notifications: NotificationReference[] = [];
-    const notificationChannels = await this.listNotificationChannels();
-
-    notificationChannels.map((channel) => {
-      if (sentinel.notificationChannels.includes(channel.notificationId)) {
-        notifications.push(channel);
-      }
-    });
 
     const newConditions: ConditionSet[] = [];
 
@@ -164,14 +173,6 @@ export class SentinelClient extends BaseApiClient {
 
     return {
       blockWatcherId,
-      name: sentinel.name,
-      alertThreshold: sentinel.alertThreshold,
-      notifyConfig: {
-        notifications,
-        autotaskId: sentinel.autotaskTrigger ?? undefined,
-        timeoutMs: sentinel.alertTimeoutMs ?? 0,
-      },
-      paused: sentinel.paused ? sentinel.paused : false,
       addressRules: [
         {
           conditions: getConditionSets(conditions.txExpression, conditions.events, conditions.functions),
@@ -182,6 +183,43 @@ export class SentinelClient extends BaseApiClient {
       ],
       network: sentinel.network as Network,
       type: 'BLOCK',
+    };
+  }
+
+  private async getNotifications(sentinelChannels: string[]): Promise<NotificationReference[]> {
+    const notifications: NotificationReference[] = [];
+    const notificationChannels = await this.listNotificationChannels();
+
+    notificationChannels.map((channel) => {
+      if (sentinelChannels.includes(channel.notificationId)) {
+        notifications.push(channel);
+      }
+    });
+
+    return notifications;
+  }
+
+  private async constructSentinelRequest(sentinel: CreateSentinelRequest): Promise<CreateSubscriberRequest> {
+    let partialResponse: PartialCreateBlockSubscriberRequest | PartialCreateFortaSubscriberRequest;
+
+    if (sentinel.type === 'BLOCK') {
+      partialResponse = await this.constructBlockSentinel(sentinel);
+    } else if (sentinel.type === 'FORTA') {
+      partialResponse = this.constructFortaSentinel(sentinel);
+    } else {
+      throw new Error(`Invalid sentinel type. Type must be FORTA or BLOCK`);
+    }
+
+    return {
+      ...partialResponse,
+      name: sentinel.name,
+      alertThreshold: sentinel.alertThreshold,
+      notifyConfig: {
+        notifications: await this.getNotifications(sentinel.notificationChannels),
+        autotaskId: sentinel.autotaskTrigger ?? undefined,
+        timeoutMs: sentinel.alertTimeoutMs ?? 0,
+      },
+      paused: sentinel.paused ? sentinel.paused : false,
     };
   }
 }

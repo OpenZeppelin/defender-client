@@ -1,19 +1,40 @@
-export interface ExternalCreateSubscriberRequest {
-  network: string;
-  confirmLevel?: number;
+export type ExternalCreateSubscriberRequest =
+  | ExternalCreateBlockSubscriberRequest
+  | ExternalCreateFortaSubscriberRequest;
+
+export interface ExternalBaseCreateSubscriberRequest {
   name: string;
+  paused?: boolean;
+  alertThreshold?: Threshold;
+  notifyConfig?: Notifications;
+  autotaskCondition?: string;
+  autotaskTrigger?: string;
+  alertTimeoutMs?: number;
+  notificationChannels: string[];
+  type: 'FORTA' | 'BLOCK';
+}
+export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
+  network: string;
+  confirmLevel?: number; // blockWatcherId
   address: string;
   abi?: string;
-  paused?: boolean;
   eventConditions?: EventCondition[];
   functionConditions?: FunctionCondition[];
   txCondition?: string;
-  autotaskCondition?: string;
-  autotaskTrigger?: string;
-  alertThreshold?: Threshold;
-  alertTimeoutMs?: number;
-  notificationChannels: string[];
+  type: 'BLOCK';
 }
+
+export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
+  network?: string;
+  fortaLastProcessedTime?: string;
+  addresses?: Address[];
+  agentIDs?: string[];
+  fortaConditions: FortaConditionSet;
+  type: 'FORTA';
+}
+
+export type CreateSubscriberRequest = CreateBlockSubscriberRequest | CreateFortaSubscriberRequest;
+
 // Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
 
 import { Network } from './blockwatcher';
@@ -31,18 +52,26 @@ export interface BaseCreateSubscriberResponse extends BaseCreateSubscriberReques
   createdAt?: string;
 }
 
-export interface CreateFortaSubscriberRequest extends BaseCreateSubscriberRequest {
+export interface PartialCreateFortaSubscriberRequest {
   fortaRule: FortaRule;
-  type: 'FORTA';
   network?: Network;
+  type: 'FORTA';
 }
 
-export interface CreateBlockSubscriberRequest extends BaseCreateSubscriberRequest {
+export interface PartialCreateBlockSubscriberRequest {
   addressRules: AddressRule[];
   blockWatcherId: string;
   network: Network;
   type: 'BLOCK';
 }
+
+export interface CreateBlockSubscriberRequest
+  extends BaseCreateSubscriberRequest,
+    PartialCreateBlockSubscriberRequest {}
+
+export interface CreateFortaSubscriberRequest
+  extends BaseCreateSubscriberRequest,
+    PartialCreateFortaSubscriberRequest {}
 
 export interface CreateFortaSubscriberResponse extends BaseCreateSubscriberResponse, CreateFortaSubscriberRequest {
   fortaLastProcessedTime?: string;
@@ -141,6 +170,7 @@ export interface NotificationReference {
 // Copied from ui/src/components/sentinel/types.ts
 
 import { EventFragment, FunctionFragment } from '@ethersproject/abi';
+import { type } from 'os';
 
 export type Description = EventFragment | FunctionFragment;
 export type Condition = EventCondition | FunctionCondition | undefined;
