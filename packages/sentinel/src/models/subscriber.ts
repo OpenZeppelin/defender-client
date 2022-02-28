@@ -170,7 +170,6 @@ export interface NotificationReference {
 // Copied from ui/src/components/sentinel/types.ts
 
 import { EventFragment, FunctionFragment } from '@ethersproject/abi';
-import { type } from 'os';
 
 export type Description = EventFragment | FunctionFragment;
 export type Condition = EventCondition | FunctionCondition | undefined;
