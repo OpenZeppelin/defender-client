@@ -24,38 +24,6 @@ async function main() {
         })
     }
 
-    // populate the request parameters for a Forta Sentinel
-
-    const fortaRequestParameters = {
-        type: 'FORTA', // BLOCK or FORTA
-        name: 'MyNewFortaSentinel',
-        // optional
-        addresses: ['0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2'],
-        // optional
-        agentIDs: [],
-        fortaConditions: {
-            // optional
-            alertIDs: [],
-            minimumScannerCount: 0,
-            // optional
-            severity: 2, // (unknown=0, info=1, low=2, medium=3, high=4, critical=5)
-        },
-        // optional
-        paused: false,
-        // optional
-        autotaskCondition: '3dcfee82-f5bd-43e3-8480-0676e5c28964',
-        // optional
-        autotaskTrigger: undefined,
-        // optional
-        alertThreshold: {
-            amount: 2,
-            windowSeconds: 3600,
-        },
-        // optional
-        alertTimeoutMs: 0,
-        notificationChannels: [notification.notificationId],
-    }
-
     // populate the request parameters for a Block Sentinel
 
     const blockRequestParameters = {
@@ -89,8 +57,41 @@ async function main() {
         notificationChannels: [notification.notificationId],
     }
 
+    // populate the request parameters for a Forta Sentinel
+
+    const fortaRequestParameters = {
+        type: 'FORTA', // BLOCK or FORTA
+        name: 'MyNewFortaSentinel',
+        // optional
+        addresses: ['0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2'],
+        // optional
+        agentIDs: ['0x8fe07f1a4d33b30be2387293f052c273660c829e9a6965cf7e8d485bcb871083'],
+        fortaConditions: {
+            // optional
+            alertIDs: undefined, // string[]
+            minimumScannerCount: 0,
+            // optional
+            severity: 2, // (unknown=0, info=1, low=2, medium=3, high=4, critical=5)
+        },
+        // optional
+        paused: false,
+        // optional
+        autotaskCondition: '3dcfee82-f5bd-43e3-8480-0676e5c28964',
+        // optional
+        autotaskTrigger: undefined,
+        // optional
+        alertThreshold: {
+            amount: 2,
+            windowSeconds: 3600,
+        },
+        // optional
+        alertTimeoutMs: 0,
+        notificationChannels: [notification.notificationId],
+    }
+
+
     // call create with the request parameters
-    const sentinelResponse = await client.create(fortaRequestParameters);
+    const sentinelResponse = await client.create(blockRequestParameters); // or fortaRequestParameters
 
     console.log(sentinelResponse);
 }
