@@ -172,7 +172,7 @@ const requestParameters = {
   fortaConditions: {
     // optional
     alertIDs: undefined, // string[]
-    minimumScannerCount: 0,
+    minimumScannerCount: 1, // default is 1
     // optional
     severity: 2, // (unknown=0, info=1, low=2, medium=3, high=4, critical=5)
   },
