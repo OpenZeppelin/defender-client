@@ -20,7 +20,7 @@ Start by creating a new relayer in Defender for a network of your choice, and wr
 
 ```js
 import { Relayer } from 'defender-relay-client';
-const relayer = new Relayer({apiKey: API_KEY, apiSecret: API_SECRET});
+const relayer = new Relayer({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
 And use the relayer instance to send a transaction:
@@ -31,7 +31,7 @@ const tx = await relayer.sendTransaction({
   value: '0x16345785d8a0000',
   data: '0x5af3107a',
   speed: 'fast',
-  gasLimit: 100000
+  gasLimit: 100000,
 });
 ```
 
@@ -75,7 +75,7 @@ const since = await relayer.list({
   since: new Date(Date.now() - 60 * 1000),
   status: 'pending', // can be 'pending', 'mined', or 'failed'
   limit: 5,
-})
+});
 ```
 
 Defender will update the transaction `status` every minute, marking it as `confirmed` after 12 confirmations. The transaction information will be stored for 30 days.
@@ -97,7 +97,7 @@ const tx = await relayer.replaceTransactionByNonce(42, {
   value: '0x00',
   data: '0x',
   speed: 'fastest',
-  gasLimit: 21000
+  gasLimit: 21000,
 });
 ```
 
@@ -108,7 +108,7 @@ You can also replace by nonce using the `ethers.js` and `web3.js` adapters liste
 You can sign any hex string (`0x123213`) using a `sign` method of the relayer. Pay attention, that the message has to be a **hex string**.
 
 ```js
-  const signResponse = await relayer.sign({ message: msg });
+const signResponse = await relayer.sign({ message: msg });
 ```
 
 ### Return data
@@ -117,10 +117,10 @@ Once your data is signed, the following response will be returned:
 
 ```js
 export interface SignedMessagePayload {
-    sig: Hex;
-    r: Hex;
-    s: Hex;
-    v: number;
+  sig: Hex;
+  r: Hex;
+  s: Hex;
+  v: number;
 }
 ```
 
@@ -151,7 +151,7 @@ You can then use it to send any transactions, such as executing a contract funct
 
 ```js
 const erc20 = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, signer);
-const tx = await erc20.functions.transfer(beneficiary, 1e18.toString());
+const tx = await erc20.functions.transfer(beneficiary, (1e18).toString());
 const mined = await tx.wait();
 ```
 
@@ -161,13 +161,20 @@ The `signMessage` method is supported as well, allowing to sign an arbitrary dat
 const signed = await signer.signMessage('Funds are safu!');
 ```
 
+The `_signTypedData` method is also supported to sign [EIP721](https://eips.ethereum.org/EIPS/eip-712) messages
+
+```js
+const signedEIP712Message = await signer._signTypedData(domain, types, value);
+```
+
 ### Limitations
 
 The current implementation of the `DefenderRelaySigner` for ethers.js has the following limitations:
+
 - Due to validations set up in `ethers.js`, it is not possible to specify the transaction `speed` for an individual transaction when sending it. It must be set during the signer construction, and will be used for all transactions sent through it.
 - A `wait` on the transaction to be mined will only wait for the current transaction hash (see [Querying](#Querying)). If Defender Relayer replaces the transaction with a different one, this operation will time out. This is ok for fast transactions, since Defender only reprices after a few minutes. But if you expect the transaction to take a long time to be mined, then ethers' `wait` may not work. Future versions will also include an ethers provider aware of this.
 
-## Web3.js 
+## Web3.js
 
 You can also use the `defender-relay-client` with [web3.js](https://web3js.readthedocs.io/) via a `DefenderRelayProvider` which routes all JSON RPC calls through Defender, and uses a Relayer for signing and broadcasting transactions.
 
@@ -205,7 +212,7 @@ Note that these web3.js providers currently have the same limitations as the eth
 ```js
 const { Relayer } = require('defender-relay-client');
 
-exports.handler =  async function(event) {
+exports.handler = async function (event) {
   const relayer = new Relayer(event);
 
   const txRes = await relayer.sendTransaction({
@@ -217,5 +224,5 @@ exports.handler =  async function(event) {
 
   console.log(txRes);
   return txRes.hash;
-}
+};
 ```

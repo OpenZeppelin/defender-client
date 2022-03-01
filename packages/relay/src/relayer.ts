@@ -20,6 +20,11 @@ export interface SignMessagePayload {
   message: Hex;
 }
 
+export interface SignTypedDataPayload {
+  domainSeparator: Hex;
+  hashStructMessage: Hex;
+}
+
 export interface SignedMessagePayload {
   sig: Hex;
   r: Hex;
@@ -112,6 +117,7 @@ export interface IRelayer {
   query(id: string): Promise<RelayerTransaction>;
   list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]>;
   sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
+  signTypedData(payload: SignTypedDataPayload): Promise<SignedMessagePayload>;
   call(method: string, params: string[]): Promise<JsonRpcResponse>;
 }
 
@@ -142,6 +148,10 @@ export class Relayer implements IRelayer {
 
   public sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
     return this.relayer.sign(payload);
+  }
+
+  public signTypedData(payload: SignTypedDataPayload): Promise<SignedMessagePayload> {
+    return this.relayer.signTypedData(payload);
   }
 
   public sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction> {

@@ -1,9 +1,10 @@
 import { toUtf8Bytes } from '@ethersproject/strings';
 import { Provider, TransactionRequest, TransactionResponse } from '@ethersproject/abstract-provider';
-import { Signer } from '@ethersproject/abstract-signer';
+import { Signer, TypedDataDomain, TypedDataField, TypedDataSigner } from '@ethersproject/abstract-signer';
 import { Bytes, hexlify, joinSignature } from '@ethersproject/bytes';
-import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
+import { _TypedDataEncoder } from '@ethersproject/hash';
 import { Deferrable, resolveProperties, shallowCopy } from '@ethersproject/properties';
 import { Relayer, Speed, RelayerParams, isRelayer } from '../relayer';
 import { Transaction } from '@ethersproject/transactions';
@@ -29,7 +30,7 @@ export type DefenderRelaySignerOptions = Partial<
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
 
-export class DefenderRelaySigner extends Signer {
+export class DefenderRelaySigner extends Signer implements TypedDataSigner {
   private readonly relayer: Relayer;
   private address?: string;
 
@@ -169,5 +170,30 @@ export class DefenderRelaySigner extends Signer {
     });
 
     return tx;
+  }
+
+  /**
+   * Signs the typed data value with types data structure for domain using the EIP-712 specification.
+   * https://eips.ethereum.org/EIPS/eip-712
+   *
+   * @param domain EIP712Domain containing namne, version, chainId, verifyingContract and salt. All optional
+   * @param types set of all types encompassed by struct
+   * @param value typed data to sign matching provided types
+   * @returns typed data signature
+   */
+  async _signTypedData(
+    domain: TypedDataDomain,
+    types: Record<string, Array<TypedDataField>>,
+    value: Record<string, any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): Promise<string> {
+    const domainSeparator = _TypedDataEncoder.hashDomain(domain);
+    const hashStructMessage = _TypedDataEncoder.from(types).hash(value);
+
+    const sig = await this.relayer.signTypedData({
+      domainSeparator: hexlify(domainSeparator),
+      hashStructMessage: hexlify(hashStructMessage),
+    });
+
+    return joinSignature(sig);
   }
 }

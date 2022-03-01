@@ -121,6 +121,17 @@ describe('ApiRelayer', () => {
     });
   });
 
+  describe('signTypedData', () => {
+    test('signs typed data', async () => {
+      await relayer.signTypedData({ domainSeparator: '0xdead', hashStructMessage: '0xdead' });
+      expect(relayer.api.post).toBeCalledWith('/sign-typed-data', {
+        domainSeparator: '0xdead',
+        hashStructMessage: '0xdead',
+      });
+      expect(initSpy).toBeCalled();
+    });
+  });
+
   describe('call', () => {
     test('calls json-rpc endpoint', async () => {
       await relayer.call('eth_call', ['0xa', '0xb']);
