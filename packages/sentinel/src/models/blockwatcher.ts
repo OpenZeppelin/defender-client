@@ -25,7 +25,9 @@ export type Network =
   | 'celo'
   | 'alfajores'
   | 'harmony-s0'
-  | 'harmony-test-s0';
+  | 'harmony-test-s0'
+  | 'cronos'
+  | 'cronostest';
 
 export interface BlockWatcherOptions {
   processBlockAttempts?: number;
