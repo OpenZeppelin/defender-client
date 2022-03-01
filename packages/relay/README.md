@@ -105,10 +105,19 @@ You can also replace by nonce using the `ethers.js` and `web3.js` adapters liste
 
 ## Signing
 
-You can sign any hex string (`0x123213`) using a `sign` method of the relayer. Pay attention, that the message has to be a **hex string**.
+You can sign any hex string (`0x123213`) according to the [EIP-191 Signed Data Standard](https://eips.ethereum.org/EIPS/eip-191) (prefixed by `\x19Ethereum Signed Message:\n`) using a `sign` method of the relayer. Pay attention, that the message has to be a **hex string**.
 
 ```js
 const signResponse = await relayer.sign({ message: msg });
+```
+
+Also, you can sign typed data according to the [EIP-712 Specification](https://eips.ethereum.org/EIPS/eip-712) using a `signTypedData` method of the relayer by providing both the `domainSeparator` and the `hashStruct(message)` as parameters. Heads up that both are hashes so they should be 32-bytes long.
+
+```js
+const signTypedDataResponse = await relayer.signTypedData({
+  domainSeparator,
+  hashStructMessage
+});
 ```
 
 ### Return data
