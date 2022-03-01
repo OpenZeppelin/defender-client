@@ -176,7 +176,7 @@ export class DefenderRelaySigner extends Signer implements TypedDataSigner {
    * Signs the typed data value with types data structure for domain using the EIP-712 specification.
    * https://eips.ethereum.org/EIPS/eip-712
    *
-   * @param domain EIP712Domain containing namne, version, chainId, verifyingContract and salt. All optional
+   * @param domain EIP712Domain containing name, version, chainId, verifyingContract and salt. All optional
    * @param types set of all types encompassed by struct
    * @param value typed data to sign matching provided types
    * @returns typed data signature
