@@ -12,6 +12,7 @@ import {
 } from '../relayer';
 
 import { BaseAutotaskClient } from 'defender-base-client/lib/autotask';
+import { SignTypedDataPayload } from '..';
 
 export type SendTxRequest = {
   action: 'send-tx';
@@ -90,6 +91,13 @@ export class AutotaskRelayer extends BaseAutotaskClient implements IRelayer {
   public async sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {
     return this.execute({
       action: 'sign' as const,
+      payload: payload,
+    });
+  }
+
+  public async signTypedData(payload: SignTypedDataPayload): Promise<SignedMessagePayload> {
+    return this.execute({
+      action: 'signTypedData' as const,
       payload: payload,
     });
   }

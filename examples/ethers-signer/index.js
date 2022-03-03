@@ -5,6 +5,7 @@ const { ethers } = require('ethers');
 const ERC20Abi = require('./erc20.json');
 const ERC20Bytecode = require('./bytecode.json')[0].data.bytecode.object;
 const ERC20Address = '0x6Ea25933e24320B38fED3a654a92948BECd28915';
+const { domain, types, value } = require('./typedData.json');
 
 async function main() {
   const creds = { apiKey: process.env.API_KEY, apiSecret: process.env.API_SECRET };
@@ -28,7 +29,7 @@ async function main() {
   const tx = await erc20.approve(beneficiary, (1e17).toString(), { gasPrice: 1e8 });
   console.log(`Transaction sent:`, tx);
 
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   console.log(`Replacing tx with higher gas price...`);
   const replaceTx = await erc20.approve(beneficiary, (1e17).toString(), { nonce: tx.nonce, gasPrice: 1e10 });
   console.log(`Transaction replaced:`, replaceTx);
@@ -44,6 +45,12 @@ async function main() {
 
   const sigAddress = ethers.utils.verifyMessage('Funds are safu!', sig);
   console.log(`Signature address is ${sigAddress} matching relayer address ${mined.from}`);
+
+  const typedSig = await signer._signTypedData(domain, types, value);
+  console.log(`Typed data signature is ${typedSig}`);
+
+  const typedSigAddress = ethers.utils.verifyTypedData(domain, types, value, typedSig);
+  console.log(`Typed data signature address is ${typedSigAddress} matching relayer address ${mined.from}`);
 }
 
 if (require.main === module) {
