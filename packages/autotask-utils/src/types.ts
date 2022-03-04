@@ -241,25 +241,24 @@ export type BlockAlert = TFortaAlert & {
 interface TFortaAlert {
   addresses?: string[];
   severity: string;
-  alert_id: string;
-  scanner_count: number;
+  alertId: string;
+  scanNodeCount: number;
   name: string;
   description: string;
   hash: string;
   protocol: string;
-  type: string;
+  findingType: string;
   source: Source;
   alertType?: 'TX' | 'BLOCK';
 }
 
 interface Source {
-  tx_hash?: string;
+  transactionHash?: string;
   agent: {
     id: string;
-    name: string;
   };
   block: {
-    chain_id: number;
+    chainId: number;
     hash: string;
   };
 }
