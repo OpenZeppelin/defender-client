@@ -105,6 +105,7 @@ export interface BlockTriggerEvent {
   blockHash: string;
   transaction: EthReceipt;
   matchReasons: SentinelConditionSummary[];
+  matchedAddresses: string[];
   sentinel: BlockSubscriberSummary;
   metadata?: { [k: string]: unknown };
 }
@@ -127,7 +128,7 @@ export interface BlockSubscriberSummary {
   id: string;
   name: string;
   network: string;
-  address: string;
+  addresses: string[];
   confirmBlocks: number;
   abi: Record<string, unknown> | undefined;
   chainId: number;

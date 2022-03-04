@@ -167,7 +167,7 @@ export class SentinelClient extends BaseApiClient {
       {
         conditions: newConditions,
         abi: sentinel.abi,
-        address: sentinel.address,
+        addresses: sentinel.addresses,
       },
     ]);
 
@@ -177,7 +177,7 @@ export class SentinelClient extends BaseApiClient {
         {
           conditions: getConditionSets(conditions.txExpression, conditions.events, conditions.functions),
           autotaskCondition: sentinel.autotaskCondition ? { autotaskId: sentinel.autotaskCondition } : undefined,
-          address: sentinel.address,
+          addresses: sentinel.addresses,
           abi: sentinel.abi,
         },
       ],

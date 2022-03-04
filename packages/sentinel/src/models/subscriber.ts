@@ -4,6 +4,8 @@ export type ExternalCreateSubscriberRequest =
 
 export interface ExternalBaseCreateSubscriberRequest {
   name: string;
+  addresses?: string[];
+  abi?: string;
   paused?: boolean;
   alertThreshold?: Threshold;
   notifyConfig?: Notifications;
@@ -16,7 +18,7 @@ export interface ExternalBaseCreateSubscriberRequest {
 export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
   network: string;
   confirmLevel?: number; // blockWatcherId
-  address: string;
+  addresses: string[];
   abi?: string;
   eventConditions?: EventCondition[];
   functionConditions?: FunctionCondition[];
@@ -100,7 +102,7 @@ export type Address = string;
 export interface AddressRule {
   conditions: ConditionSet[];
   autotaskCondition?: AutotaskCondition;
-  address: Address;
+  addresses: Address[];
   abi?: string;
 }
 export interface ConditionSet {
