@@ -4,6 +4,7 @@ export type ExternalCreateSubscriberRequest =
 
 export interface ExternalBaseCreateSubscriberRequest {
   name: string;
+  addresses?: string[];
   abi?: string;
   paused?: boolean;
   alertThreshold?: Threshold;
