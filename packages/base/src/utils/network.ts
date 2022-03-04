@@ -27,7 +27,9 @@ export type Network =
   | 'celo'
   | 'alfajores'
   | 'harmony-s0'
-  | 'harmony-test-s0';
+  | 'harmony-test-s0'
+  | 'aurora'
+  | 'auroratest';
 
 export const Networks: Network[] = [
   'mainnet',
@@ -57,6 +59,8 @@ export const Networks: Network[] = [
   'alfajores',
   'harmony-s0',
   'harmony-test-s0',
+  'aurora',
+  'auroratest',
 ];
 
 export function isValidNetwork(text: string): text is Network {
@@ -99,4 +103,6 @@ const chainIds: { [key in Network]: number } = {
   alfajores: 44787,
   'harmony-s0': 1666600000,
   'harmony-test-s0': 1666700000,
+  aurora: 1313161554,
+  auroratest: 1313161555,
 };

@@ -8,6 +8,7 @@ import {
   RelayerTransaction,
   RelayerTransactionPayload,
   SignedMessagePayload,
+  SignTypedDataPayload,
   SignMessagePayload,
 } from '../relayer';
 
@@ -57,6 +58,12 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
   ): Promise<RelayerTransaction> {
     return this.apiCall(async (api) => {
       return (await api.put(`/txs/${nonce}`, payload)) as RelayerTransaction;
+    });
+  }
+
+  public async signTypedData(payload: SignTypedDataPayload): Promise<SignedMessagePayload> {
+    return this.apiCall(async (api) => {
+      return (await api.post('/sign-typed-data', payload)) as SignedMessagePayload;
     });
   }
 
