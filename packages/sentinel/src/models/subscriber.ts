@@ -1,19 +1,42 @@
-export interface ExternalCreateSubscriberRequest {
-  network: string;
-  confirmLevel?: number;
+export type ExternalCreateSubscriberRequest =
+  | ExternalCreateBlockSubscriberRequest
+  | ExternalCreateFortaSubscriberRequest;
+
+export interface ExternalBaseCreateSubscriberRequest {
   name: string;
   addresses: string[];
   abi?: string;
   paused?: boolean;
+  alertThreshold?: Threshold;
+  notifyConfig?: Notifications;
+  autotaskCondition?: string;
+  autotaskTrigger?: string;
+  alertTimeoutMs?: number;
+  notificationChannels: string[];
+  type: 'FORTA' | 'BLOCK';
+}
+export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
+  network: string;
+  confirmLevel?: number; // blockWatcherId
+  address: string;
+  abi?: string;
   eventConditions?: EventCondition[];
   functionConditions?: FunctionCondition[];
   txCondition?: string;
-  autotaskCondition?: string;
-  autotaskTrigger?: string;
-  alertThreshold?: Threshold;
-  alertTimeoutMs?: number;
-  notificationChannels: string[];
+  type: 'BLOCK';
 }
+
+export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
+  network?: string;
+  fortaLastProcessedTime?: string;
+  addresses?: Address[];
+  agentIDs?: string[];
+  fortaConditions: FortaConditionSet;
+  type: 'FORTA';
+}
+
+export type CreateSubscriberRequest = CreateBlockSubscriberRequest | CreateFortaSubscriberRequest;
+
 // Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
 
 import { Network } from './blockwatcher';
@@ -31,18 +54,26 @@ export interface BaseCreateSubscriberResponse extends BaseCreateSubscriberReques
   createdAt?: string;
 }
 
-export interface CreateFortaSubscriberRequest extends BaseCreateSubscriberRequest {
+export interface PartialCreateFortaSubscriberRequest {
   fortaRule: FortaRule;
-  type: 'FORTA';
   network?: Network;
+  type: 'FORTA';
 }
 
-export interface CreateBlockSubscriberRequest extends BaseCreateSubscriberRequest {
+export interface PartialCreateBlockSubscriberRequest {
   addressRules: AddressRule[];
   blockWatcherId: string;
   network: Network;
   type: 'BLOCK';
 }
+
+export interface CreateBlockSubscriberRequest
+  extends BaseCreateSubscriberRequest,
+    PartialCreateBlockSubscriberRequest {}
+
+export interface CreateFortaSubscriberRequest
+  extends BaseCreateSubscriberRequest,
+    PartialCreateFortaSubscriberRequest {}
 
 export interface CreateFortaSubscriberResponse extends BaseCreateSubscriberResponse, CreateFortaSubscriberRequest {
   fortaLastProcessedTime?: string;
@@ -65,35 +96,6 @@ export interface FortaConditionSet {
 export enum SubscriberType {
   BLOCK = 'BLOCK',
   FORTA = 'FORTA',
-}
-
-export const FortaAlertSeverity: { [key: string]: number } = {
-  UNKNOWN: 0,
-  INFO: 1,
-  LOW: 2,
-  MEDIUM: 3,
-  HIGH: 4,
-  CRITICAL: 5,
-};
-
-export interface FortaAlert {
-  addresses: string[];
-  severity: string;
-  alert_id: string;
-  scanner_count: number;
-  name: string;
-  description: string;
-  hash: string;
-  network: string;
-  protocol: string;
-  type: string;
-  source: {
-    tx_hash: string;
-    agent: {
-      id: string;
-      name: string;
-    };
-  };
 }
 
 export type Address = string;
@@ -130,6 +132,7 @@ export interface Threshold {
 export interface Notifications {
   notifications: NotificationReference[];
   autotaskId?: string;
+  messageBody?: string;
   timeoutMs: number;
 }
 export interface NotificationReference {

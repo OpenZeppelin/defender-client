@@ -113,6 +113,17 @@ describe('AutotaskRelayer', () => {
     });
   });
 
+  describe('signTypedData', () => {
+    test('passes correct arguments to the API', async () => {
+      await relayer.signTypedData({ domainSeparator: 'test', hashStructMessage: 'test' });
+      expect(relayer.lambda.invoke).toBeCalledWith({
+        FunctionName: 'arn',
+        InvocationType: 'RequestResponse',
+        Payload: '{"action":"signTypedData","payload":{"domainSeparator":"test","hashStructMessage":"test"}}',
+      });
+    });
+  });
+
   describe('query', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.query('42');

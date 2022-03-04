@@ -5,7 +5,10 @@ import { Contract } from '@ethersproject/contracts';
 import { mock } from 'jest-mock-extended';
 import { omit, pick } from 'lodash';
 import { Relayer, RelayerTransaction } from '../relayer';
+import { joinSignature, hexlify } from '@ethersproject/bytes';
+import { randomBytes } from '@ethersproject/random';
 import { DefenderRelaySigner } from './signer';
+import { _TypedDataEncoder } from '@ethersproject/hash';
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
 
@@ -170,5 +173,61 @@ describe('ethers/signer', () => {
       gasPrice: undefined,
       validUntil: undefined,
     });
+  });
+
+  it('signs typed data', async () => {
+    const domain = {
+      name: 'Ether Mail',
+      version: '1',
+      chainId: 1,
+      verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+    };
+
+    const types = {
+      Person: [
+        { name: 'name', type: 'string' },
+        { name: 'wallet', type: 'address' },
+      ],
+      Mail: [
+        { name: 'from', type: 'Person' },
+        { name: 'to', type: 'Person' },
+        { name: 'contents', type: 'string' },
+      ],
+    };
+
+    const value = {
+      from: {
+        name: 'Cow',
+        wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+      },
+      to: {
+        name: 'Bob',
+        wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+      },
+      contents: 'Hello, Bob!',
+    };
+
+    const TypedDataEncoder = mock<_TypedDataEncoder>();
+    const hashDomainSpy = jest.spyOn(_TypedDataEncoder, 'hashDomain').mockReturnValue(hexlify(randomBytes(32)));
+    const fromSpy = jest.spyOn(_TypedDataEncoder, 'from').mockReturnValue(TypedDataEncoder);
+    const hashSpy = jest.spyOn(TypedDataEncoder, 'hash').mockReturnValue(hexlify(randomBytes(32)));
+
+    const signatureResponse = {
+      r: '0xd1556332df97e3bd911068651cfad6f975a30381f4ff3a55df7ab3512c78b9ec',
+      s: '0x66b51cbb10cd1b2a09aaff137d9f6d4255bf73cb7702b666ebd5af502ffa4410',
+      v: 28,
+      sig: '0xdead',
+    };
+
+    relayer.signTypedData.mockResolvedValue(signatureResponse);
+
+    const signer = new DefenderRelaySigner(relayer, provider, { speed: 'safeLow' });
+
+    const signature = await signer._signTypedData(domain, types, value);
+
+    expect(hashDomainSpy).toHaveBeenCalledWith(domain);
+    expect(fromSpy).toHaveBeenCalledWith(types);
+    expect(hashSpy).toHaveBeenCalledWith(value);
+    expect(signature).toEqual(joinSignature(signatureResponse));
   });
 });

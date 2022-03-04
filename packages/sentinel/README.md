@@ -101,13 +101,16 @@ This returns a `NotificationResponse[]` object.
 
 ### Create a Sentinel
 
-To create a new sentinel, you need to provide the network, name, pause-state, conditions, alert threshold and notification configuration. This request is exported as type `CreateSentinelRequest`.
+There are two types of sentinels, `BLOCK` and `FORTA`. For more information on when to use which type, have a look at the documentation [https://docs.openzeppelin.com/defender/sentinel#when-to-use](here).
 
-An example is provided below. This sentinel will be named `MyNewSentinel` and will be monitoring the `renounceOwnership` function on the `0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2` contract on the Rinkeby network.
+To create a new sentinel, you need to provide the type, network, name, pause-state, conditions, alert threshold and notification configuration. This request is exported as type `CreateSentinelRequest`.
+
+An example for a `BLOCK` sentinel is provided below. This sentinel will be named `MyNewSentinel` and will be monitoring the `renounceOwnership` function on the `0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2` contract on the Rinkeby network.
 The alert threshold is set to 2 times within 1 hour, and the user will be notified via email.
 
 ```js
 const requestParameters = {
+  type: 'BLOCK',
   network: 'rinkeby',
   // optional
   confirmLevel: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
@@ -137,12 +140,6 @@ const requestParameters = {
 };
 ```
 
-Once you have these parameters all setup, you can create a sentinel by calling the `create` function on the client. This will return a `CreateSentinelResponse` object.
-
-```js
-await client.create(requestParameters);
-```
-
 If you wish to trigger the sentinel based on additional events, you could add another `EventCondition` or `FunctionCondition` object, for example:
 
 ```js
@@ -160,6 +157,46 @@ Possible variables: `value`, `gasPrice`, `gasLimit`, `gasUsed`, `to`, `from`, `n
 
 ```js
 txCondition: 'gasPrice > 0',
+```
+
+You can also construct a request for a `FORTA` sentinel as follows:
+
+```js
+const requestParameters = {
+  type: 'FORTA',
+  name: 'MyNewFortaSentinel',
+  // optional
+  addresses: ['0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2'],
+  // optional
+  agentIDs: ['0x8fe07f1a4d33b30be2387293f052c273660c829e9a6965cf7e8d485bcb871083'],
+  fortaConditions: {
+    // optional
+    alertIDs: undefined, // string[]
+    minimumScannerCount: 1, // default is 1
+    // optional
+    severity: 2, // (unknown=0, info=1, low=2, medium=3, high=4, critical=5)
+  },
+  // optional
+  paused: false,
+  // optional
+  autotaskCondition: '3dcfee82-f5bd-43e3-8480-0676e5c28964',
+  // optional
+  autotaskTrigger: undefined,
+  // optional
+  alertThreshold: {
+    amount: 2,
+    windowSeconds: 3600,
+  },
+  // optional
+  alertTimeoutMs: 0,
+  notificationChannels: [notification.notificationId],
+};
+```
+
+Once you have these parameters all setup, you can create a sentinel by calling the `create` function on the client. This will return a `CreateSentinelResponse` object.
+
+```js
+await client.create(requestParameters);
 ```
 
 Additionally, the sentinel could invoke an autotask to further evaluate. Documentation around this can be found here: https://docs.openzeppelin.com/defender/sentinel#autotask_conditions.
