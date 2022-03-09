@@ -52,4 +52,7 @@ DEFENDER_ADMIN_POOL_CLIENT_ID=1ogvjnp52dd8p8mk2a7cdnj04e
 DEFENDER_AUTOTASK_API_URL=https://9j6aedbm6j.execute-api.us-east-1.amazonaws.com/stg/
 DEFENDER_AUTOTASK_POOL_ID=us-east-1_pvjTSNl94
 DEFENDER_AUTOTASK_POOL_CLIENT_ID=1ogvjnp52dd8p8mk2a7cdnj04e
+DEFENDER_SENTINEL_API_URL=https://9j6aedbm6j.execute-api.us-east-1.amazonaws.com/stg/
+DEFENDER_SENTINEL_POOL_ID=us-east-1_pvjTSNl94
+DEFENDER_SENTINEL_POOL_CLIENT_ID=1ogvjnp52dd8p8mk2a7cdnj04e
 ```
