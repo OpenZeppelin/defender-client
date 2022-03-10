@@ -170,7 +170,7 @@ The `signMessage` method is supported as well, allowing to sign an arbitrary dat
 const signed = await signer.signMessage('Funds are safu!');
 ```
 
-The `_signTypedData` method is also supported to sign [EIP721](https://eips.ethereum.org/EIPS/eip-712) messages
+The `_signTypedData` method is also supported to sign [EIP712](https://eips.ethereum.org/EIPS/eip-712) messages
 
 ```js
 const signedEIP712Message = await signer._signTypedData(domain, types, value);
