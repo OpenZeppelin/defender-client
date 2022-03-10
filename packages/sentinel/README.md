@@ -218,10 +218,10 @@ await client.get('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1');
 
 ### Update a Sentinel
 
-To update a sentinel, you can call the `update` function on the client. This will require the sentinel ID and a `CreateSentinelRequest` object as parameters:
+To update a sentinel, you can call the `update` function on the client. This will require the sentinel ID and a `UpdateSentinelRequest` object as parameters:
 
 ```js
-await client.update('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1', requestParameters);
+await client.update('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1', { name: 'My Updated Name', paused: true });
 ```
 
 ### Delete a Sentinel
