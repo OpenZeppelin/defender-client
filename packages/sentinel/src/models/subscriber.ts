@@ -2,6 +2,9 @@ export type ExternalCreateSubscriberRequest =
   | ExternalCreateBlockSubscriberRequest
   | ExternalCreateFortaSubscriberRequest;
 
+export type ExternalUpdateSubscriberRequest =
+  | ExternalUpdateBlockSubscriberRequest
+  | ExternalUpdateFortaSubscriberRequest;
 export interface ExternalBaseCreateSubscriberRequest {
   name: string;
   addresses?: string[];
@@ -33,6 +36,20 @@ export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreate
   agentIDs?: string[];
   fortaConditions: FortaConditionSet;
   type: 'FORTA';
+}
+export interface ExternalUpdateBlockSubscriberRequest
+  extends Omit<ExternalCreateBlockSubscriberRequest, 'network' | 'addresses' | 'name' | 'notificationChannels'> {
+  network?: string;
+  addresses?: string[];
+  name?: string;
+  notificationChannels?: string[];
+}
+
+export interface ExternalUpdateFortaSubscriberRequest
+  extends Omit<ExternalCreateFortaSubscriberRequest, 'fortaConditions' | 'name' | 'notificationChannels'> {
+  fortaConditions?: FortaConditionSet;
+  name?: string;
+  notificationChannels?: string[];
 }
 
 export type CreateSubscriberRequest = CreateBlockSubscriberRequest | CreateFortaSubscriberRequest;

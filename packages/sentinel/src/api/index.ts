@@ -5,6 +5,7 @@ import {
   ExternalCreateBlockSubscriberRequest as CreateBlockSentinelRequest,
   ExternalCreateFortaSubscriberRequest as CreateFortaSentinelRequest,
   ExternalCreateSubscriberRequest as CreateSentinelRequest,
+  ExternalUpdateSubscriberRequest as UpdateSentinelRequest,
   NotificationReference,
   PartialCreateBlockSubscriberRequest,
   PartialCreateFortaSubscriberRequest,
@@ -52,13 +53,12 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async update(sentinelId: string, sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
+  public async update(sentinelId: string, sentinel: UpdateSentinelRequest): Promise<CreateSentinelResponse> {
     const currentSentinel = await this.get(sentinelId);
-    const newSentinel = await this.constructSentinelRequest(sentinel);
     return this.apiCall(async (api) => {
       return await api.put(`/subscribers/${sentinelId}`, {
         ...currentSentinel,
-        ...newSentinel,
+        ...sentinel,
       });
     });
   }
