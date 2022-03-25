@@ -216,8 +216,8 @@ export class SentinelClient extends BaseApiClient {
       alertThreshold: sentinel.alertThreshold,
       notifyConfig: {
         notifications: await this.getNotifications(sentinel.notificationChannels),
-        autotaskId: sentinel.autotaskTrigger ?? undefined,
-        timeoutMs: sentinel.alertTimeoutMs ?? 0,
+        autotaskId: sentinel.autotaskTrigger ? sentinel.autotaskTrigger : undefined,
+        timeoutMs: sentinel.alertTimeoutMs ? sentinel.alertTimeoutMs : 0,
       },
       paused: sentinel.paused ? sentinel.paused : false,
     };
