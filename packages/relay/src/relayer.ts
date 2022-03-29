@@ -4,7 +4,7 @@ export type Address = string;
 export type BigUInt = string | number;
 export type Hex = string;
 export type Speed = 'safeLow' | 'average' | 'fast' | 'fastest';
-export type Status = 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed';
+export type Status = 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed' | 'failed';
 
 export type RelayerTransactionPayload = {
   to?: Address;
