@@ -1,5 +1,5 @@
 import { ApiRelayer } from './api';
-
+import { Network } from 'defender-base-client';
 export type Address = string;
 export type BigUInt = string | number;
 export type Hex = string;
@@ -36,10 +36,37 @@ export interface RelayerModel {
   relayerId: string;
   name: string;
   address: string;
-  network: string;
+  network: Network;
   paused: boolean;
   createdAt: string;
   pendingTxCost: string;
+  minBalance: BigUInt;
+  policies: UpdateRelayerPoliciesRequest;
+}
+
+export interface RelayerListResponse {
+  items: Relayer[];
+  txsQuotaUsage: number;
+}
+
+export interface CreateRelayerRequest {
+  name: string;
+  useAddressFromRelayerId?: string;
+  network: Network;
+  minBalance: BigUInt;
+  policies?: UpdateRelayerPoliciesRequest;
+}
+
+export interface UpdateRelayerPoliciesRequest {
+  gasPriceCap?: BigUInt;
+  whitelistReceivers?: Address[];
+  EIP1559Pricing?: boolean;
+}
+
+export interface UpdateRelayerRequest {
+  name?: string;
+  policies?: UpdateRelayerPoliciesRequest;
+  minBalance?: BigUInt;
 }
 
 // from openzeppelin/defender/models/src/types/tx.res.ts
