@@ -60,7 +60,6 @@ export interface CreateRelayerRequest {
 export interface UpdateRelayerPoliciesRequest {
   gasPriceCap?: BigUInt;
   whitelistReceivers?: Address[];
-  EIP1559Pricing?: boolean;
 }
 
 export interface UpdateRelayerRequest {
