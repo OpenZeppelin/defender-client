@@ -1,6 +1,5 @@
 import { RelayClient } from '../api';
-import axios, { AxiosInstance } from 'axios';
-import {  } from '../../../base/src/index'
+import { AxiosInstance } from 'axios';
 import { RelayerModel, UpdateRelayerPoliciesRequest, UpdateRelayerRequest } from '../relayer';
 
 jest.mock('axios');
