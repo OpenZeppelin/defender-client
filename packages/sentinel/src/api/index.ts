@@ -55,11 +55,11 @@ export class SentinelClient extends BaseApiClient {
 
   public async update(sentinelId: string, sentinel: UpdateSentinelRequest): Promise<CreateSentinelResponse> {
     const currentSentinel = await this.get(sentinelId);
+    const updatedSentinel = await this.constructSentinelRequest(
+      _.merge(currentSentinel, sentinel) as CreateSentinelRequest,
+    );
     return this.apiCall(async (api) => {
-      return await api.put(`/subscribers/${sentinelId}`, {
-        ...currentSentinel,
-        ...sentinel,
-      });
+      return await api.put(`/subscribers/${sentinelId}`, updatedSentinel);
     });
   }
 
