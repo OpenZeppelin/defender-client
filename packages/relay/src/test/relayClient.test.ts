@@ -1,6 +1,6 @@
 import { RelayClient } from '../api';
 import { AxiosInstance } from 'axios';
-import { RelayerModel, UpdateRelayerPoliciesRequest, UpdateRelayerRequest } from '../relayer';
+import { RelayerGetResponse, UpdateRelayerPoliciesRequest, UpdateRelayerRequest } from '../relayer';
 import { merge } from 'lodash';
 
 jest.mock('axios');
@@ -13,7 +13,7 @@ type TestRelayClient = Omit<RelayClient, 'api'> & {
 describe('RelayClient', () => {
   let relayer: TestRelayClient;
   const relayerId = '1';
-  const mockRelayerResponse: RelayerModel = {
+  const mockRelayerResponse: RelayerGetResponse = {
     network: 'rinkeby',
     address: '0x0',
     relayerId: relayerId,

@@ -32,7 +32,7 @@ export interface SignedMessagePayload {
   v: number;
 }
 
-export interface RelayerModel {
+export interface RelayerGetResponse {
   relayerId: string;
   name: string;
   address: string;
@@ -43,6 +43,11 @@ export interface RelayerModel {
   minBalance: BigUInt;
   policies: UpdateRelayerPoliciesRequest;
 }
+
+// updating reference interface name RelayerGetResponse to match conventions
+// maintaining RelayerModel interface name below to prevent breaking TS implementations
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface RelayerModel extends RelayerGetResponse {}
 
 export interface RelayerListResponse {
   items: Relayer[];
@@ -136,7 +141,7 @@ export type ListTransactionsRequest = {
 };
 
 export interface IRelayer {
-  getRelayer(): Promise<RelayerModel>;
+  getRelayer(): Promise<RelayerGetResponse>;
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   replaceTransactionById(id: string, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   replaceTransactionByNonce(nonce: number, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
@@ -168,7 +173,7 @@ export class Relayer implements IRelayer {
     }
   }
 
-  public getRelayer(): Promise<RelayerModel> {
+  public getRelayer(): Promise<RelayerGetResponse> {
     return this.relayer.getRelayer();
   }
 

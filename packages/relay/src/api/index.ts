@@ -4,7 +4,7 @@ import {
   IRelayer,
   JsonRpcResponse,
   ListTransactionsRequest,
-  RelayerModel,
+  RelayerGetResponse,
   RelayerTransaction,
   RelayerTransactionPayload,
   SignedMessagePayload,
@@ -31,7 +31,7 @@ export class RelayClient extends BaseApiClient {
     return process.env.DEFENDER_RELAY_API_URL || 'https://defender-api.openzeppelin.com/';
   }
 
-  public async get(relayerId: string): Promise<RelayerModel> {
+  public async get(relayerId: string): Promise<RelayerGetResponse> {
     return this.apiCall(async (api) => {
       return await api.get(`/relayers/${relayerId}`);
     });
@@ -43,13 +43,13 @@ export class RelayClient extends BaseApiClient {
     });
   }
 
-  public async create(relayer: CreateRelayerRequest): Promise<RelayerModel> {
+  public async create(relayer: CreateRelayerRequest): Promise<RelayerGetResponse> {
     return this.apiCall(async (api) => {
       return await api.post('/relayers', relayer);
     });
   }
 
-  public async update(relayerId: string, relayerUpdateParams: UpdateRelayerRequest): Promise<RelayerModel> {
+  public async update(relayerId: string, relayerUpdateParams: UpdateRelayerRequest): Promise<RelayerGetResponse> {
     const currentRelayer = await this.get(relayerId);
 
     if (relayerUpdateParams.policies) {
@@ -72,7 +72,7 @@ export class RelayClient extends BaseApiClient {
   private async updatePolicies(
     relayerId: string,
     relayerPolicies: UpdateRelayerPoliciesRequest,
-  ): Promise<RelayerModel> {
+  ): Promise<RelayerGetResponse> {
     return this.apiCall(async (api) => {
       return await api.put(`/relayers/${relayerId}`, relayerPolicies);
     });
@@ -99,9 +99,9 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
     return RelayerApiUrl();
   }
 
-  public async getRelayer(): Promise<RelayerModel> {
+  public async getRelayer(): Promise<RelayerGetResponse> {
     return this.apiCall(async (api) => {
-      return (await api.get('/relayer')) as RelayerModel;
+      return (await api.get('/relayer')) as RelayerGetResponse;
     });
   }
 
