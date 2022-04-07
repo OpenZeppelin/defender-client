@@ -50,16 +50,16 @@ export class RelayClient extends BaseApiClient {
   }
 
   public async update(relayerId: string, relayerUpdateParams: UpdateRelayerRequest): Promise<RelayerModel> {
+    const currentRelayer = await this.get(relayerId);
+
     if (relayerUpdateParams.policies) {
-      const updatedRelayer = await this.updatePolicies(
-        relayerId,
-        relayerUpdateParams.policies as UpdateRelayerPoliciesRequest,
-      );
+      const updatedRelayer = await this.updatePolicies(relayerId, {
+        ...currentRelayer.policies,
+        ...relayerUpdateParams.policies,
+      });
       // if policies are the only update, return
       if (Object.keys(relayerUpdateParams).length === 1) return updatedRelayer;
     }
-
-    const currentRelayer = await this.get(relayerId);
 
     return this.apiCall(async (api) => {
       return await api.put(`/relayers`, {

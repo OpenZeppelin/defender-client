@@ -1,6 +1,7 @@
 import { RelayClient } from '../api';
 import { AxiosInstance } from 'axios';
 import { RelayerModel, UpdateRelayerPoliciesRequest, UpdateRelayerRequest } from '../relayer';
+import { merge } from 'lodash';
 
 jest.mock('axios');
 
@@ -20,13 +21,20 @@ describe('RelayClient', () => {
     name: 'foo',
     paused: false,
     pendingTxCost: '0',
-    minBalance: '100000000000000000',
+    minBalance: (1e17).toString(),
     policies: {},
   };
 
-  const policiesUpdate: UpdateRelayerRequest = {
-    policies: { gasPriceCap: '100000000000000000' },
+  const mockRelayerResponseWithPolicies = merge(mockRelayerResponse, { policies: { gasPriceCap: (1e3).toString() } });
+
+  const policiesUpdate1: UpdateRelayerRequest = {
+    policies: { gasPriceCap: (1e17).toString() },
   };
+
+  const policiesUpdate2: UpdateRelayerRequest = {
+    policies: { whitelistReceivers: ['0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'] },
+  };
+
   const nonPoliciesUpdate: UpdateRelayerRequest = {
     name: 'bar',
   };
@@ -40,9 +48,9 @@ describe('RelayClient', () => {
 
   describe('update', () => {
     test.each([
-      [1, policiesUpdate],
+      [1, policiesUpdate1],
       [1, nonPoliciesUpdate],
-      [2, { ...policiesUpdate, ...nonPoliciesUpdate }],
+      [2, { ...policiesUpdate1, ...nonPoliciesUpdate }],
     ])(
       'calls put %s times on update with params %s',
       async (expectedPutCalls: number, updateParams: UpdateRelayerRequest) => {
@@ -52,7 +60,7 @@ describe('RelayClient', () => {
     );
 
     test.each([
-      [policiesUpdate, `/relayers/${relayerId}`, policiesUpdate.policies],
+      [policiesUpdate1, `/relayers/${relayerId}`, policiesUpdate1.policies],
       [nonPoliciesUpdate, '/relayers', { ...mockRelayerResponse, ...nonPoliciesUpdate }],
     ])(
       'calls put with expected data for input %s on update with params %s',
@@ -63,6 +71,24 @@ describe('RelayClient', () => {
       ) => {
         await relayer.update(relayerId, inputUpdateParams);
         expect(relayer.api.put).toHaveBeenCalledWith(endpoint, expectedPutBody);
+      },
+    );
+
+    test.each([
+      [policiesUpdate1, policiesUpdate1.policies as UpdateRelayerPoliciesRequest],
+      [
+        policiesUpdate2,
+        { ...mockRelayerResponseWithPolicies.policies, ...policiesUpdate2.policies } as UpdateRelayerPoliciesRequest,
+      ],
+    ])(
+      'calls put with expected policy update given base policy %s',
+      async (inputPoliciesUpdate: UpdateRelayerRequest, expectedPutBody: UpdateRelayerPoliciesRequest) => {
+        relayer.api.get = jest.fn().mockResolvedValue(mockRelayerResponseWithPolicies);
+        await relayer.update(relayerId, inputPoliciesUpdate);
+        expect(relayer.api.put).toHaveBeenCalledWith(
+          `/relayers/${mockRelayerResponseWithPolicies.relayerId}`,
+          expectedPutBody,
+        );
       },
     );
   });
