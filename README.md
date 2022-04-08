@@ -43,7 +43,7 @@ The `examples` repo has sample code for both clients. Note that most examples re
 
 ```
 # Example config 
-# relayer actions
+# relay signer
 DEFENDER_RELAY_SIGNER_API_URL=
 DEFENDER_RELAY_SIGNER_POOL_ID=
 DEFENDER_RELAY_SIGNER_POOL_CLIENT_ID=
