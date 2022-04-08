@@ -16,7 +16,8 @@ import {
   UpdateRelayerRequest,
 } from '../relayer';
 
-export const RelayerApiUrl = () => process.env.DEFENDER_RELAY_SIGNER_API_URL || 'https://api.defender.openzeppelin.com/';
+export const RelaySignerApiUrl = () =>
+  process.env.DEFENDER_RELAY_SIGNER_API_URL || 'https://api.defender.openzeppelin.com/';
 
 export class RelayClient extends BaseApiClient {
   protected getPoolId(): string {
@@ -96,7 +97,7 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
   }
 
   protected getApiUrl(): string {
-    return RelayerApiUrl();
+    return RelaySignerApiUrl();
   }
 
   public async getRelayer(): Promise<RelayerGetResponse> {
