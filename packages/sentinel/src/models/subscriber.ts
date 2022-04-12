@@ -19,7 +19,7 @@ export interface ExternalBaseCreateSubscriberRequest {
   type: 'FORTA' | 'BLOCK';
 }
 export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
-  network: string;
+  network: Network;
   confirmLevel?: number; // blockWatcherId
   addresses: string[];
   abi?: string;

@@ -58,13 +58,11 @@ export class SentinelClient extends BaseApiClient {
   public async update(sentinelId: string, sentinel: UpdateSentinelRequest): Promise<CreateSentinelResponse> {
     const currentSentinel = await this.get(sentinelId);
 
-    const updatedSentinel = await this.constructSentinelRequest({
-      ...this.toCreateSentinelRequest(currentSentinel),
-      ...(sentinel as CreateFortaSentinelRequest),
-    });
-
     return this.apiCall(async (api) => {
-      return await api.put(`/subscribers/${sentinelId}`, updatedSentinel);
+      return await api.put(
+        `/subscribers/${sentinelId}`,
+        await this.mergeApiSentinelWithUpdateSentinel(currentSentinel, sentinel),
+      );
     });
   }
 
@@ -75,22 +73,22 @@ export class SentinelClient extends BaseApiClient {
   }
 
   public async pause(sentinelId: string): Promise<CreateSentinelRequest> {
-    const sentinel = await this.get(`/subscribers/${sentinelId}`);
+    const sentinel = await this.get(sentinelId);
     return this.apiCall(async (api) => {
-      return await api.put(`/subscribers/${sentinelId}`, {
-        ...sentinel,
-        paused: true,
-      });
+      return await api.put(
+        `/subscribers/${sentinelId}`,
+        await this.mergeApiSentinelWithUpdateSentinel(sentinel, { type: sentinel.type, paused: true }),
+      );
     });
   }
 
   public async unpause(sentinelId: string): Promise<CreateSentinelRequest> {
-    const sentinel = await this.get(`/subscribers/${sentinelId}`);
+    const sentinel = await this.get(sentinelId);
     return this.apiCall(async (api) => {
-      return await api.put(`/subscribers/${sentinelId}`, {
-        ...sentinel,
-        paused: false,
-      });
+      return await api.put(
+        `/subscribers/${sentinelId}`,
+        await this.mergeApiSentinelWithUpdateSentinel(sentinel, { type: sentinel.type, paused: false }),
+      );
     });
   }
 
@@ -282,5 +280,15 @@ export class SentinelClient extends BaseApiClient {
     if (sentinel.type === 'FORTA') return this.toCreateFortaSentinelRequest(sentinel);
 
     throw new Error(`Invalid sentinel type. Type must be FORTA or BLOCK`);
+  }
+
+  private mergeApiSentinelWithUpdateSentinel(
+    apiSentinel: CreateSentinelResponse,
+    sentinel: UpdateSentinelRequest,
+  ): Promise<CreateSubscriberRequest> {
+    return this.constructSentinelRequest({
+      ...this.toCreateSentinelRequest(apiSentinel),
+      ...(sentinel as CreateSentinelRequest),
+    });
   }
 }
