@@ -19,7 +19,7 @@ export interface ExternalBaseCreateSubscriberRequest {
   type: 'FORTA' | 'BLOCK';
 }
 export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
-  network: string;
+  network: Network;
   confirmLevel?: number; // blockWatcherId
   addresses: string[];
   abi?: string;
@@ -30,7 +30,7 @@ export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreate
 }
 
 export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
-  network?: string;
+  network?: Network;
   fortaLastProcessedTime?: string;
   addresses?: Address[];
   agentIDs?: string[];
@@ -39,7 +39,7 @@ export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreate
 }
 export interface ExternalUpdateBlockSubscriberRequest
   extends Omit<ExternalCreateBlockSubscriberRequest, 'network' | 'addresses' | 'name' | 'notificationChannels'> {
-  network?: string;
+  network?: Network;
   addresses?: string[];
   name?: string;
   notificationChannels?: string[];
