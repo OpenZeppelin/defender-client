@@ -389,32 +389,4 @@ describe('SentinelClient', () => {
       expect(results).toEqual([]);
     });
   });
-
-  // describe('sign', () => {
-  //   it('signs a hex string', async () => {
-  //     await sentinel.sign({ message: '0xdead' });
-  //     expect(sentinel.api.post).toBeCalledWith('/sign', { message: '0xdead' });
-  //     expect(initSpy).toBeCalled();
-  //   });
-  // });
-
-  // describe('signTypedData', () => {
-  //   it('signs typed data', async () => {
-  //     await sentinel.signTypedData({ domainSeparator: '0xdead', hashStructMessage: '0xdead' });
-  //     expect(sentinel.api.post).toBeCalledWith('/sign-typed-data', {
-  //       domainSeparator: '0xdead',
-  //       hashStructMessage: '0xdead',
-  //     });
-  //     expect(initSpy).toBeCalled();
-  //   });
-  // });
-
-  // describe('call', () => {
-  //   it('calls json-rpc endpoint', async () => {
-  //     await sentinel.call('eth_call', ['0xa', '0xb']);
-  //     const payload = { jsonrpc: '2.0', id: 1, method: 'eth_call', params: ['0xa', '0xb'] };
-  //     expect(sentinel.api.post).toBeCalledWith('/sentinel/jsonrpc', payload);
-  //     expect(initSpy).toBeCalled();
-  //   });
-  // });
 });
