@@ -57,6 +57,8 @@ describe('ethers/signer', () => {
       name: 'My relayer',
       paused: false,
       pendingTxCost: '0',
+      minBalance: '100000000000000000',
+      policies: {},
     });
 
     provider._wrapTransaction.mockImplementation((arg) => ({

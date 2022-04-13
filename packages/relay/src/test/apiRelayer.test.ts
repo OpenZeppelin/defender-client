@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { ApiRelayer } from '.';
+import { ApiRelayer } from '../api';
 
 jest.mock('defender-base-client');
 jest.mock('aws-sdk');

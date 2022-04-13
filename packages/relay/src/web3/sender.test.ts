@@ -57,6 +57,8 @@ describe('web3/sender', () => {
       name: 'My relayer',
       paused: false,
       pendingTxCost: '0',
+      minBalance: '100000000000000000',
+      policies: {},
     });
 
     provider.sendAsync.mockImplementation((payload, callback) => {
