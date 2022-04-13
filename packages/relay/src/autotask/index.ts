@@ -4,7 +4,7 @@ import {
   JsonRpcRequest,
   JsonRpcResponse,
   ListTransactionsRequest,
-  RelayerGetResponse,
+  RelayerModel,
   RelayerTransaction,
   RelayerTransactionPayload,
   SignedMessagePayload,
@@ -68,7 +68,7 @@ export class AutotaskRelayer extends BaseAutotaskClient implements IRelayer {
     return this.execute({ action: 'replace-tx', payload });
   }
 
-  public async getRelayer(): Promise<RelayerGetResponse> {
+  public async getRelayer(): Promise<RelayerModel> {
     return this.execute({
       action: 'get-self' as const,
     });

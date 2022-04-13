@@ -1,4 +1,3 @@
-export { RelayClient } from './api';
 export * from './relayer';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
