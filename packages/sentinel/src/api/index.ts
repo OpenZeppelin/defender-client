@@ -286,9 +286,13 @@ export class SentinelClient extends BaseApiClient {
     apiSentinel: CreateSentinelResponse,
     sentinel: UpdateSentinelRequest,
   ): Promise<CreateSubscriberRequest> {
-    return this.constructSentinelRequest({
-      ...this.toCreateSentinelRequest(apiSentinel),
-      ...(sentinel as CreateSentinelRequest),
-    });
+    const newSentinel: CreateSentinelRequest = this.toCreateSentinelRequest(apiSentinel);
+
+    const updatedProperties = Object.keys(sentinel) as Array<keyof typeof sentinel>;
+    for (const prop of updatedProperties) {
+      (newSentinel[prop] as any) = sentinel[prop];
+    }
+
+    return this.constructSentinelRequest(newSentinel);
   }
 }
