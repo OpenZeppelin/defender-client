@@ -77,6 +77,12 @@ export class AutotaskClient extends BaseApiClient {
     return this.updateCode(autotaskId, encodedZippedCode);
   }
 
+  public async runAutotask(autotaskId: string): Promise<void> {
+    return this.apiCall(async (api) => {
+      return await api.post(`/autotasks/${autotaskId}/runs/manual`);
+    });
+  }
+
   private async updateCode(autotaskId: string, encodedZippedCode: string): Promise<void> {
     return this.apiCall(async (api) => {
       return await api.put(`/autotasks/${autotaskId}/code`, { encodedZippedCode });
