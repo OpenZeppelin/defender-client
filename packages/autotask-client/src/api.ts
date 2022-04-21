@@ -83,6 +83,12 @@ export class AutotaskClient extends BaseApiClient {
     });
   }
 
+  public async getAutotaskRun(autotaskRunId: string): Promise<void> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/autotasks/runs/${autotaskRunId}`);
+    });
+  }
+
   public async runAutotask(autotaskId: string, data: { [key: string]: any }): Promise<void> {
     return this.apiCall(async (api) => {
       return await api.post(`/autotasks/${autotaskId}/runs/manual`, data);
