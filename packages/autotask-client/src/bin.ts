@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { AxiosError } from 'axios';
 import 'dotenv/config';
+import { createWriteStream, WriteStream } from 'fs';
 import { argv } from 'process';
 import { VERSION } from '.';
 import { AutotaskRunListItemResponse } from './models/autotask-run.res';
@@ -73,15 +74,17 @@ async function tailRuns() {
   const autotaskId = argv[3];
   const logSavePath = argv[4];
   let logSaveDest: string | undefined;
+  let stream: WriteStream | undefined;
   if (logSavePath) {
     validatePath(logSavePath);
     logSaveDest = `${logSavePath}/${autotaskId}-runs.log`;
+    stream = createWriteStream(logSaveDest, { flags: 'a' });
   }
 
   try {
     validateId(autotaskId);
     const client = initClient();
-    output(`\nPolling latest runs of autotask '${autotaskId}'...\n`, logSaveDest);
+    output(`\nPolling latest runs of autotask '${autotaskId}'...\n`, stream);
     // Poll autotask runs every 2 seconds and if there are new runs, get run details and print them out.
     let lastRun: AutotaskRunListItemResponse | undefined;
     while (true) {
@@ -91,16 +94,16 @@ async function tailRuns() {
         lastRun = newRuns.items[0]; // cache new last run to avoid duplicates.
 
         if (lastRun.status !== 'success') {
-          output(`\nLatest run '${lastRun.autotaskRunId}' ${lastRun.status}...`, logSaveDest);
+          output(`\nLatest run '${lastRun.autotaskRunId}' ${lastRun.status}...`, stream);
           lastRun = undefined; // clean up so we can check it again next time.
         } else {
-          output(`\nLatest run '${lastRun.autotaskRunId}' ${lastRun.status}...`, logSaveDest);
+          output(`\nLatest run '${lastRun.autotaskRunId}' ${lastRun.status}...`, stream);
           const runDetails = await client.getAutotaskRun(lastRun.autotaskRunId);
           // Have to make this check to satisfy Typescript.
           if (runDetails.status === 'success') {
-            output(`\n${runDetails.decodedLogs}`, logSaveDest);
-            output(`\n------------------------------------------------------------`, logSaveDest);
-            output(`\nPolling latest runs of autotask '${autotaskId}'...\n`, logSaveDest);
+            output(`\n${runDetails.decodedLogs}`, stream);
+            output(`\n------------------------------------------------------------`, stream);
+            output(`\nPolling latest runs of autotask '${autotaskId}'...\n`, stream);
           }
         }
       }
@@ -109,7 +112,7 @@ async function tailRuns() {
     }
   } catch (error) {
     const err = error as Error | AxiosError;
-    output(`Error on listening to Autotask runs: ${err.message}`, logSaveDest);
+    output(`Error on listening to Autotask runs: ${err.message}`, stream);
     process.exit(1);
   }
 }

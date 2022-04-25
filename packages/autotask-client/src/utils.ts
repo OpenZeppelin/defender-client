@@ -1,4 +1,4 @@
-import { createWriteStream, existsSync } from 'fs';
+import { existsSync, WriteStream } from 'fs';
 import { AutotaskClient } from './api';
 
 /**
@@ -15,15 +15,14 @@ export function initClient(): AutotaskClient {
 /**
  * Very raw utility function to pass the string to the console or a file. Or both.
  * @param str message to be printed/saved
- * @param saveDest path with a filename to save the message to
+ * @param stream WriteStream to be used for saving
  * @param print toggle console printing off/on (default: true)
  */
-export function output(str: string, saveDest?: string, print = true): void {
+export function output(str: string, stream?: WriteStream, print = true): void {
   if (print) {
     console.log(str);
   }
-  if (saveDest) {
-    const stream = createWriteStream(saveDest, { flags: 'a' });
+  if (stream) {
     stream.write(JSON.parse(JSON.stringify(str)));
   }
 }
