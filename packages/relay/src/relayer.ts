@@ -73,6 +73,18 @@ export interface UpdateRelayerRequest {
   minBalance?: BigUInt;
 }
 
+export interface RelayerApiKey {
+  keyId: string;
+  relayerId: string;
+  secretKey?: string;
+  apiKey: string;
+  createdAt: string;
+}
+
+export interface DeleteRelayerApiKeyResponse {
+  message: string;
+}
+
 // from openzeppelin/defender/models/src/types/tx.res.ts
 export type RelayerTransaction = {
   transactionId: string;

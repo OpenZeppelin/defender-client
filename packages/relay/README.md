@@ -89,7 +89,7 @@ await relayClient.update('58b3d255-e357-4b0d-aa16-e86f745e63b9', { name: 'Test 2
 Delete 
 
 ```js
-await relayClient.deleteKey('58b3d255-e357-4b0d-aa16-e86f745e63b9', );
+await relayClient.deleteKey('58b3d255-e357-4b0d-aa16-e86f745e63b9', 'j3bru93-k32l-3p1s-pp56-u43f675e92p1');
 ```
 
 _Note: second argument to `deleteKey` is the `keyId` (contains hyphens), not the `apiKey`. This can be fetched via the `listKeys` method above and is also available in the response on key creation._
