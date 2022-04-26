@@ -155,7 +155,7 @@ async function main() {
       await executeRun();
       break;
     default:
-      throw new Error(`unhandled command '${argv[2]}'. Fix your paramGuard.`);
+      throw new Error(`unhandled command '${argv[2]}'. Make sure your 'mandatoryParamGuard' handles this command.`);
   }
 }
 
