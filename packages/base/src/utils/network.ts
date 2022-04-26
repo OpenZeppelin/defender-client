@@ -20,8 +20,8 @@ export type Network =
   | 'mumbai'
   | 'avalanche'
   | 'fuji'
-  | 'optimistic'
-  | 'optimistic-kovan'
+  | 'optimism'
+  | 'optimism-kovan'
   | 'arbitrum'
   | 'arbitrum-rinkeby'
   | 'celo'
@@ -51,8 +51,8 @@ export const Networks: Network[] = [
   'mumbai',
   'avalanche',
   'fuji',
-  'optimistic',
-  'optimistic-kovan',
+  'optimism',
+  'optimism-kovan',
   'arbitrum',
   'arbitrum-rinkeby',
   'celo',
@@ -95,8 +95,8 @@ const chainIds: { [key in Network]: number } = {
   mumbai: 80001,
   avalanche: 0xa86a,
   fuji: 0xa869,
-  optimistic: 10,
-  'optimistic-kovan': 69,
+  optimism: 10,
+  'optimism-kovan': 69,
   arbitrum: 42161,
   'arbitrum-rinkeby': 421611,
   celo: 42220,
