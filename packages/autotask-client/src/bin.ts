@@ -9,7 +9,10 @@ import { initClient, output, validateId, validatePath } from './utils';
 
 type Command = 'update-code' | 'tail-runs' | 'execute-run';
 
-function printUsage() {
+function printUsage(dueToError = true) {
+  if (dueToError) {
+    console.error(`\ndefender-autotask-client: Command not found or wrong parameters provided!\n`);
+  }
   console.error(`Defender Autotask Client (version ${VERSION})\n`);
   console.error('Usage: defender-autotask update-code $AUTOTASK_ID $PATH');
   console.error('\nExample:\n  defender-autotask update-code 19ef0257-bba4-4723-a18f-67d96726213e ./lib/autotask\n');
