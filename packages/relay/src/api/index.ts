@@ -14,6 +14,8 @@ import {
   RelayerListResponse,
   UpdateRelayerPoliciesRequest,
   UpdateRelayerRequest,
+  RelayerApiKey,
+  DeleteRelayerApiKeyResponse,
 } from '../relayer';
 
 export const RelaySignerApiUrl = () =>
@@ -76,6 +78,24 @@ export class RelayClient extends BaseApiClient {
   ): Promise<RelayerGetResponse> {
     return this.apiCall(async (api) => {
       return await api.put(`/relayers/${relayerId}`, relayerPolicies);
+    });
+  }
+
+  public async createKey(relayerId: string): Promise<RelayerApiKey> {
+    return this.apiCall(async (api) => {
+      return await api.post(`/relayers/${relayerId}/keys`);
+    });
+  }
+
+  public async listKeys(relayerId: string): Promise<RelayerApiKey[]> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/relayers/${relayerId}/keys`);
+    });
+  }
+
+  public async deleteKey(relayerId: string, keyId: string): Promise<DeleteRelayerApiKeyResponse> {
+    return this.apiCall(async (api) => {
+      return await api.delete(`/relayers/${relayerId}/keys/${keyId}`);
     });
   }
 }
