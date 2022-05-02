@@ -36,8 +36,8 @@ await client.createProposal({
   type: 'custom', // Use 'custom' for custom admin actions
   functionInterface: { name: 'setFee', inputs: [{ type: 'uint256', name: 'fee' }] }, // Function ABI
   functionInputs: ['10'], // Arguments to the function
-  via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', // Multisig address
-  viaType: 'Gnosis Safe', // Either Gnosis Safe or Gnosis Multisig
+  via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', // Address to execute proposal
+  viaType: 'Gnosis Safe', // 'Gnosis Safe', 'Gnosis Multisig', or 'EOA'
 });
 ```
 
