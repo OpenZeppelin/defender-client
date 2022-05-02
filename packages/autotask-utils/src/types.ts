@@ -250,6 +250,9 @@ interface TFortaAlert {
   protocol: string;
   findingType: string;
   source: Source;
+  metadata: {
+    [k: string]: unknown;
+  };
   alertType?: 'TX' | 'BLOCK';
 }
 
