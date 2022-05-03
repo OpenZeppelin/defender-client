@@ -1,6 +1,11 @@
 import { BaseApiClient } from 'defender-base-client';
 import { CreateAutotaskRequest, UpdateAutotaskRequest } from './models/autotask';
-import { AutotaskRunBase, AutotaskRunListResponse, AutotaskRunResponse } from './models/autotask-run.res';
+import {
+  AutotaskRunBase,
+  AutotaskRunErrorData,
+  AutotaskRunListResponse,
+  AutotaskRunResponse,
+} from './models/autotask-run.res';
 import { AutotaskDeleteResponse, AutotaskListResponse, AutotaskResponse } from './models/response';
 import { zipFolder, zipSources } from './zip';
 

@@ -13,21 +13,6 @@ export function initClient(): AutotaskClient {
 }
 
 /**
- * Very raw utility function to pass the string to the console or a file. Or both.
- * @param str message to be printed/saved
- * @param stream WriteStream to be used for saving
- * @param print toggle console printing off/on (default: true)
- */
-export function output(str: string, stream?: WriteStream, print = true): void {
-  if (print) {
-    console.log(str);
-  }
-  if (stream) {
-    stream.write(JSON.parse(JSON.stringify(str)));
-  }
-}
-
-/**
  * Regex Validator for Autotask and Autotask run IDs.
  */
 export function validateId(id: string): void {
