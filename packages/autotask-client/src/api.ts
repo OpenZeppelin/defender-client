@@ -1,6 +1,12 @@
 import { BaseApiClient } from 'defender-base-client';
 import { CreateAutotaskRequest, UpdateAutotaskRequest } from './models/autotask';
-import { AutotaskListResponse, AutotaskResponse, AutotaskDeleteResponse } from './models/response';
+import {
+  AutotaskRunBase,
+  AutotaskRunErrorData,
+  AutotaskRunListResponse,
+  AutotaskRunResponse,
+} from './models/autotask-run.res';
+import { AutotaskDeleteResponse, AutotaskListResponse, AutotaskResponse } from './models/response';
 import { zipFolder, zipSources } from './zip';
 
 type SourceFiles = {
@@ -75,6 +81,24 @@ export class AutotaskClient extends BaseApiClient {
   public async updateCodeFromFolder(autotaskId: string, path: string): Promise<void> {
     const encodedZippedCode = await this.getEncodedZippedCodeFromFolder(path);
     return this.updateCode(autotaskId, encodedZippedCode);
+  }
+
+  public async listAutotaskRuns(autotaskId: string, next?: string): Promise<AutotaskRunListResponse> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/autotasks/${autotaskId}/runs`, { params: { next } });
+    });
+  }
+
+  public async getAutotaskRun(autotaskRunId: string): Promise<AutotaskRunResponse> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/autotasks/runs/${autotaskRunId}`);
+    });
+  }
+
+  public async runAutotask(autotaskId: string, data: { [key: string]: any }): Promise<AutotaskRunBase> {
+    return this.apiCall(async (api) => {
+      return await api.post(`/autotasks/${autotaskId}/runs/manual`, data);
+    });
   }
 
   private async updateCode(autotaskId: string, encodedZippedCode: string): Promise<void> {
