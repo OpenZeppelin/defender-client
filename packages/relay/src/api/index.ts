@@ -31,7 +31,7 @@ export class RelayClient extends BaseApiClient {
   }
 
   protected getApiUrl(): string {
-    return process.env.DEFENDER_RELAY_API_URL || 'https://defender-api.openzeppelin.com/';
+    return process.env.DEFENDER_RELAY_API_URL || 'https://defender-api.openzeppelin.com/relayer/';
   }
 
   public async get(relayerId: string): Promise<RelayerGetResponse> {
