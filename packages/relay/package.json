@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^4.3.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "defender-base-client": "1.21.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
