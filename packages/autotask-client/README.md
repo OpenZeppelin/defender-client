@@ -40,6 +40,8 @@ Set the environment variables `API_KEY` and `API_SECRET` to the Team API key/sec
 
 ```bash
 $ defender-autotask update-code $AUTOTASK_ID $PATH_TO_CODE
+$ defender-autotask execute-run $AUTOTASK_ID
+$ defender-autotask tail-runs $AUTOTASK_ID
 ```
 
 Note that the `defender-autotask` CLI will automatically load environment variables from a local `.env` file if found.
@@ -149,6 +151,26 @@ You can also provide the set of files and their content, and the client will gen
 await client.updateCodeFromSources(autotaskId, {
   'index.js': 'exports.handler = function() { return 42; }',
 });
+```
+
+**Autotask Runs**
+
+To execute an autotask run, execute the command below substituting the `autotaskId`:
+
+```js
+await client.runAutotask(autotaskId);
+```
+
+You can list all runs for an autotask with the following command:
+
+```js
+await client.listAutotaskRuns(autotaskId);
+```
+
+And get detailed logs for a single run using the `autotaskRunId` (returned in the `listAutotaskRuns` response directly above):
+
+```js
+await client.getAutotaskRun(autotaskRunId);
 ```
 
 ## FAQ
