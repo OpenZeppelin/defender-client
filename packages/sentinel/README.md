@@ -99,7 +99,7 @@ const { notificationId, type } = notificationChannels[0];
 
 This returns a `NotificationResponse[]` object.
 
-Lastly, you can also delete a notification channel. The notification object passed as a parameter should have atleast the `type` and `notificationId` properties assigned.
+You can also delete a notification channel. The notification object passed as a parameter should have atleast the `type` and `notificationId` properties assigned.
 
 ```js
 const notificationToDelete = { type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' };
