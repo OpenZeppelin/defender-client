@@ -368,6 +368,24 @@ describe('SentinelClient', () => {
     });
   });
 
+  describe('deleteNotificationChannel', () => {
+    it('passes correct arguments to the API', async () => {
+      const type = 'slack';
+      const notification: NotificationResponse = {
+        name: 'some test',
+        config: {
+          url: 'test.slack.com',
+        },
+        paused: false,
+        notificationId: '1',
+        type: 'slack',
+      };
+      await sentinel.deleteNotificationChannel(notification);
+      expect(sentinel.api.delete).toBeCalledWith(`/notifications/${notification.type}/${notification.notificationId}`);
+      expect(initSpy).toBeCalled();
+    });
+  });
+
   describe('listBlockwatchers', () => {
     it('calls API correctly', async () => {
       listBlockwatchersSpy.mockRestore();

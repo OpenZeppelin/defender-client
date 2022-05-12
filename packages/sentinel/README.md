@@ -99,6 +99,20 @@ const { notificationId, type } = notificationChannels[0];
 
 This returns a `NotificationResponse[]` object.
 
+Lastly, you can also delete a notification channel. The notification object passed as a parameter should have atleast the `type` and `notificationId` properties assigned.
+
+```js
+const notificationToDelete = { type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' };
+await client.deleteNotificationChannel(notificationToDelete);
+```
+
+Alternatively, you could list all the notifications, and filter from the response accordingly.
+
+```js
+const notificationChannels = await client.listNotificationChannels();
+await client.deleteNotificationChannel(notificationChannels[0]);
+```
+
 ### Create a Sentinel
 
 There are two types of sentinels, `BLOCK` and `FORTA`. For more information on when to use which type, have a look at the documentation [https://docs.openzeppelin.com/defender/sentinel#when-to-use](here).
