@@ -17,6 +17,7 @@ import {
   NotificationSummary as NotificationResponse,
   NotificationType,
   SaveNotificationRequest as NotificationRequest,
+  DeleteNotificationRequest,
 } from '../models/notification';
 import { BlockWatcher, Network } from '../models/blockwatcher';
 
@@ -107,7 +108,7 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async deleteNotificationChannel(notification: NotificationResponse): Promise<string> {
+  public async deleteNotificationChannel(notification: DeleteNotificationRequest): Promise<string> {
     return this.apiCall(async (api) => {
       return await api.delete(`/notifications/${notification.type}/${notification.notificationId}`);
     });

@@ -90,6 +90,8 @@ const notification = await client.createNotificationChannel('datadog', {
 });
 ```
 
+### List notifications
+
 You can also list existing notification channels:
 
 ```js
@@ -99,7 +101,9 @@ const { notificationId, type } = notificationChannels[0];
 
 This returns a `NotificationResponse[]` object.
 
-You can also delete a notification channel. The notification object passed as a parameter should have at least the `type` and `notificationId` properties assigned.
+### Delete a notification
+
+You can also delete a notification channel. The notification object (`DeleteNotificationRequest`) passed as a parameter should have at least the `type` and `notificationId` properties assigned.
 
 ```js
 const notificationToDelete = { type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' };

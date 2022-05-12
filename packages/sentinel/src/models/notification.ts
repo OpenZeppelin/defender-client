@@ -59,6 +59,11 @@ export interface SaveNotificationDatadogRequest {
   config: DatadogConfig;
   paused: boolean;
 }
+export interface DeleteNotificationRequest {
+  notificationId: string;
+  type: string;
+}
+
 export interface DatadogConfig {
   apiKey: string;
   metricPrefix: string;
