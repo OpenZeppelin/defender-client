@@ -109,7 +109,6 @@ export class SentinelClient extends BaseApiClient {
 
   public async deleteNotificationChannel(notification: NotificationResponse): Promise<string> {
     return this.apiCall(async (api) => {
-      console.log(api);
       return await api.delete(`/notifications/${notification.type}/${notification.notificationId}`);
     });
   }
