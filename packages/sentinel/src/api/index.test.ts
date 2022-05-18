@@ -381,7 +381,7 @@ describe('SentinelClient', () => {
         type: 'slack',
       };
       await sentinel.deleteNotificationChannel(notification);
-      expect(sentinel.api.delete).toBeCalledWith(`/notifications/${notification.type}/${notification.notificationId}`);
+      expect(sentinel.api.delete).toBeCalledWith(`/notifications/${notification.notificationId}`);
       expect(initSpy).toBeCalled();
     });
   });

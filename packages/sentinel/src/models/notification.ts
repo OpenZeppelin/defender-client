@@ -61,7 +61,6 @@ export interface SaveNotificationDatadogRequest {
 }
 export interface DeleteNotificationRequest {
   notificationId: string;
-  type: string;
 }
 
 export interface DatadogConfig {

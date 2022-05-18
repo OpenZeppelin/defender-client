@@ -103,10 +103,10 @@ This returns a `NotificationResponse[]` object.
 
 ### Delete a notification
 
-You can also delete a notification channel. The notification object (`DeleteNotificationRequest`) passed as a parameter should have at least the `type` and `notificationId` properties assigned.
+You can also delete a notification channel. The notification object (`DeleteNotificationRequest`) passed as a parameter should have at least the `notificationId` properties assigned.
 
 ```js
-const notificationToDelete = { type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' };
+const notificationToDelete = { notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' };
 await client.deleteNotificationChannel(notificationToDelete);
 ```
 
