@@ -380,7 +380,25 @@ describe('SentinelClient', () => {
         notificationId: '1',
         type: 'slack',
       };
-      await sentinel.deleteNotificationChannel(notification);
+      await sentinel.deleteNotificationChannel(notification.notificationId);
+      expect(sentinel.api.delete).toBeCalledWith(`/notifications/${notification.notificationId}`);
+      expect(initSpy).toBeCalled();
+    });
+  });
+
+  describe('getNotificationChannel', () => {
+    it('passes correct arguments to the API', async () => {
+      const type = 'slack';
+      const notification: NotificationResponse = {
+        name: 'some test',
+        config: {
+          url: 'test.slack.com',
+        },
+        paused: false,
+        notificationId: '1',
+        type: 'slack',
+      };
+      await sentinel.getNotificationChannel(notification.notificationId);
       expect(sentinel.api.delete).toBeCalledWith(`/notifications/${notification.notificationId}`);
       expect(initSpy).toBeCalled();
     });

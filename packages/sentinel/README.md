@@ -101,13 +101,38 @@ const { notificationId, type } = notificationChannels[0];
 
 This returns a `NotificationResponse[]` object.
 
-### Delete a notification
+### Get a notification
 
-You can also delete a notification channel. The notification object (`DeleteNotificationRequest`) passed as a parameter should have at least the `notificationId` properties assigned.
+You can also retrieve a single notification channel. The function takes as parameters the `type` and `notificationId`.
 
 ```js
-const notificationToDelete = { notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' };
-await client.deleteNotificationChannel(notificationToDelete);
+await client.getNotificationChannel('email', 'e595ce88-f525-4d5d-b4b9-8e859310b6fb');
+```
+
+This returns a `NotificationResponse` object.
+
+### Update a notification
+
+You can also update a single notification channel. The function takes as parameters the `type`, `notificationId` and a `NotificationRequest`.
+
+```js
+await client.updateNotificationChannel('email', 'e595ce88-f525-4d5d-b4b9-8e859310b6fb', {
+  name: 'MyUpdatedEmailNotification',
+  config: {
+    emails: ['johndoe@example.com'],
+  },
+  paused: false,
+});
+```
+
+This returns a `NotificationResponse` object.
+
+### Delete a notification
+
+You can also delete a notification channel. The function takes as parametera the `type` and `notificationId`.
+
+```js
+await client.deleteNotificationChannel('email', 'e595ce88-f525-4d5d-b4b9-8e859310b6fb');
 ```
 
 Alternatively, you could list all the notifications, and filter from the response accordingly.
