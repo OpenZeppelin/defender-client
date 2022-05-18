@@ -129,17 +129,10 @@ This returns a `NotificationResponse` object.
 
 ### Delete a notification
 
-You can also delete a notification channel. The function takes as parametera the `type` and `notificationId`.
+You can also delete a notification channel. The function takes as parameters the `type` and `notificationId`.
 
 ```js
 await client.deleteNotificationChannel('email', 'e595ce88-f525-4d5d-b4b9-8e859310b6fb');
-```
-
-Alternatively, you could list all the notifications, and filter from the response accordingly.
-
-```js
-const notificationChannels = await client.listNotificationChannels();
-await client.deleteNotificationChannel(notificationChannels[0]);
 ```
 
 ### Create a Sentinel
