@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios';
 import { SentinelClient } from '.';
 import { NotificationResponse } from '..';
 import { BlockWatcher } from '../models/blockwatcher';
-import { SaveNotificationRequest } from '../models/notification';
+import { SaveNotificationRequest, SaveNotificationSlackRequest } from '../models/notification';
 import { CreateSentinelResponse } from '../models/response';
 import { ExternalCreateBlockSubscriberRequest, ExternalCreateFortaSubscriberRequest } from '../models/subscriber';
 
@@ -380,8 +380,8 @@ describe('SentinelClient', () => {
         notificationId: '1',
         type: 'slack',
       };
-      await sentinel.deleteNotificationChannel(notification.notificationId);
-      expect(sentinel.api.delete).toBeCalledWith(`/notifications/${notification.notificationId}`);
+      await sentinel.deleteNotificationChannel(type, notification.notificationId);
+      expect(sentinel.api.delete).toBeCalledWith(`/notifications/${type}/${notification.notificationId}`);
       expect(initSpy).toBeCalled();
     });
   });
@@ -398,8 +398,26 @@ describe('SentinelClient', () => {
         notificationId: '1',
         type: 'slack',
       };
-      await sentinel.getNotificationChannel(notification.notificationId);
-      expect(sentinel.api.delete).toBeCalledWith(`/notifications/${notification.notificationId}`);
+      await sentinel.getNotificationChannel(type, notification.notificationId);
+      expect(sentinel.api.get).toBeCalledWith(`/notifications/${type}/${notification.notificationId}`);
+      expect(initSpy).toBeCalled();
+    });
+  });
+
+  describe('updateNotificationChannel', () => {
+    it('passes correct arguments to the API', async () => {
+      const type = 'slack';
+      const id = '1';
+
+      const notification: SaveNotificationSlackRequest = {
+        name: 'some test',
+        config: {
+          url: 'test.slack.com',
+        },
+        paused: false,
+      };
+      await sentinel.updateNotificationChannel(type, id, notification);
+      expect(sentinel.api.put).toBeCalledWith(`/notifications/${type}/${id}`, notification);
       expect(initSpy).toBeCalled();
     });
   });
