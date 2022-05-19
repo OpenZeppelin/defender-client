@@ -30,7 +30,7 @@ export abstract class BaseApiClient {
       return await fn(this.api!);
     } catch (error) {
       // this means ID token has expired so we'll recreate session and try again
-      if (error.response.status === 401 && error.response.statusText === 'Unauthorized') {
+      if (error.response.status === 401) {
         await this.init();
         return await fn(this.api!);
       }
