@@ -18,7 +18,7 @@ import {
   NotificationType,
   SaveNotificationRequest as NotificationRequest,
 } from '../models/notification';
-import { BlockWatcher, Network } from '../models/blockwatcher';
+import { BlockWatcher, SentinelNetwork } from '../models/blockwatcher';
 
 import _ from 'lodash';
 import getConditionSets, { getSentinelConditions } from '../utils';
@@ -184,7 +184,7 @@ export class SentinelClient extends BaseApiClient {
           abi: sentinel.abi,
         },
       ],
-      network: sentinel.network as Network,
+      network: sentinel.network as SentinelNetwork,
       type: 'BLOCK',
     };
   }
