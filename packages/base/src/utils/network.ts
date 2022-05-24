@@ -29,7 +29,9 @@ export type Network =
   | 'harmony-s0'
   | 'harmony-test-s0'
   | 'aurora'
-  | 'auroratest';
+  | 'auroratest'
+  | 'x-dfk-avax-chain'
+  | 'x-dfk-avax-chain-test';
 
 export const Networks: Network[] = [
   'mainnet',
@@ -61,6 +63,8 @@ export const Networks: Network[] = [
   'harmony-test-s0',
   'aurora',
   'auroratest',
+  'x-dfk-avax-chain',
+  'x-dfk-avax-chain-test',
 ];
 
 export function isValidNetwork(text: string): text is Network {
@@ -105,4 +109,6 @@ const chainIds: { [key in Network]: number } = {
   'harmony-test-s0': 1666700000,
   aurora: 1313161554,
   auroratest: 1313161555,
+  'x-dfk-avax-chain': 53935,
+  'x-dfk-avax-chain-test': 335,
 };
