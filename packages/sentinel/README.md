@@ -106,7 +106,7 @@ This returns a `NotificationResponse[]` object.
 You can also retrieve a single notification channel. The function takes as parameter the `GetNotificationRequest` object, which must include the `type` and `notificationId` properties.
 
 ```js
-await client.getNotificationChannel({'email', 'e595ce88-f525-4d5d-b4b9-8e859310b6fb'});
+await client.getNotificationChannel({ type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' });
 ```
 
 This returns a `NotificationResponse` object.
