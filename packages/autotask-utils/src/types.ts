@@ -258,7 +258,11 @@ interface TFortaAlert {
 
 interface Source {
   transactionHash?: string;
+  // deprecated, keeping for backwards compatibility
   agent: {
+    id: string;
+  };
+  bot: {
     id: string;
   };
   block: {
