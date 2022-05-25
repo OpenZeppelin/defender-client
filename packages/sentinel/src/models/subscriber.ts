@@ -33,6 +33,9 @@ export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreate
   network?: Network;
   fortaLastProcessedTime?: string;
   addresses?: Address[];
+  // Forta have changed the terminology for 'Agent' to 'Detection Bot'
+  // We will continue to refer to them as 'Agent' for now.
+  // agentIDs should be a list of Bot IDs
   agentIDs?: string[];
   fortaConditions: FortaConditionSet;
   type: 'FORTA';
@@ -100,6 +103,9 @@ export interface CreateBlockSubscriberResponse extends BaseCreateSubscriberRespo
 
 export interface FortaRule {
   addresses?: Address[];
+  // Forta have changed the terminology for 'Agent' to 'Detection Bot'
+  // We will continue to refer to them as 'Agent' for now.
+  // agentIDs should be a list of Bot IDs
   agentIDs?: string[];
   conditions: FortaConditionSet;
   autotaskCondition?: AutotaskCondition;

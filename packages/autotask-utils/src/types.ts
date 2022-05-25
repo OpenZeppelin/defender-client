@@ -138,6 +138,9 @@ export interface FortaSubscriberSummary {
   id: string;
   name: string;
   addresses: string[];
+  // Forta have changed the terminology for 'Agent' to 'Detection Bot'
+  // We will continue to refer to them as 'Agent' for now.
+  // agents should be a list of Bot IDs
   agents: string[];
   network?: string;
   chainId?: number;
