@@ -2,7 +2,14 @@ import { AxiosInstance } from 'axios';
 import { SentinelClient } from '.';
 import { NotificationResponse } from '..';
 import { BlockWatcher } from '../models/blockwatcher';
-import { SaveNotificationRequest } from '../models/notification';
+import {
+  CreateNotificationRequest,
+  DeleteNotificationRequest,
+  GetNotificationRequest,
+  SaveNotificationRequest,
+  SaveNotificationSlackRequest,
+  UpdateNotificationRequest,
+} from '../models/notification';
 import { CreateSentinelResponse } from '../models/response';
 import { ExternalCreateBlockSubscriberRequest, ExternalCreateFortaSubscriberRequest } from '../models/subscriber';
 
@@ -346,14 +353,15 @@ describe('SentinelClient', () => {
   describe('createNotificationChannel', () => {
     it('passes correct arguments to the API', async () => {
       const type = 'slack';
-      const notification: SaveNotificationRequest = {
+      const notification: CreateNotificationRequest = {
+        type,
         name: 'some test',
         config: {
           url: 'test.slack.com',
         },
         paused: false,
       };
-      await sentinel.createNotificationChannel(type, notification);
+      await sentinel.createNotificationChannel(notification);
       expect(sentinel.api.post).toBeCalledWith(`/notifications/${type}`, notification);
       expect(initSpy).toBeCalled();
     });
@@ -364,6 +372,54 @@ describe('SentinelClient', () => {
       listNotificationChannelsSpy.mockRestore();
       await sentinel.listNotificationChannels();
       expect(sentinel.api.get).toBeCalledWith('/notifications');
+      expect(initSpy).toBeCalled();
+    });
+  });
+
+  describe('deleteNotificationChannel', () => {
+    it('passes correct arguments to the API', async () => {
+      const type = 'slack';
+      const notificationId = '1';
+      const notification: DeleteNotificationRequest = {
+        type,
+        notificationId,
+      };
+      await sentinel.deleteNotificationChannel(notification);
+      expect(sentinel.api.delete).toBeCalledWith(`/notifications/${type}/${notification.notificationId}`);
+      expect(initSpy).toBeCalled();
+    });
+  });
+
+  describe('getNotificationChannel', () => {
+    it('passes correct arguments to the API', async () => {
+      const type = 'slack';
+      const notificationId = '1';
+      const notification: GetNotificationRequest = {
+        type,
+        notificationId,
+      };
+      await sentinel.getNotificationChannel(notification);
+      expect(sentinel.api.get).toBeCalledWith(`/notifications/${type}/${notification.notificationId}`);
+      expect(initSpy).toBeCalled();
+    });
+  });
+
+  describe('updateNotificationChannel', () => {
+    it('passes correct arguments to the API', async () => {
+      const type = 'slack';
+      const notificationId = '1';
+
+      const notification: UpdateNotificationRequest = {
+        type,
+        notificationId,
+        name: 'some test',
+        config: {
+          url: 'test.slack.com',
+        },
+        paused: false,
+      };
+      await sentinel.updateNotificationChannel(notification);
+      expect(sentinel.api.put).toBeCalledWith(`/notifications/${type}/${notificationId}`, notification);
       expect(initSpy).toBeCalled();
     });
   });

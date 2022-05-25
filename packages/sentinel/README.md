@@ -90,6 +90,8 @@ const notification = await client.createNotificationChannel('datadog', {
 });
 ```
 
+### List notifications
+
 You can also list existing notification channels:
 
 ```js
@@ -98,6 +100,42 @@ const { notificationId, type } = notificationChannels[0];
 ```
 
 This returns a `NotificationResponse[]` object.
+
+### Get a notification
+
+You can also retrieve a single notification channel. The function takes as parameter the `GetNotificationRequest` object, which must include the `type` and `notificationId` properties.
+
+```js
+await client.getNotificationChannel({ type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' });
+```
+
+This returns a `NotificationResponse` object.
+
+### Update a notification
+
+You can also update a single notification channel. The function takes as parameter the `UpdateNotificationRequest` object which must include the `type`, `notificationId` and `NotificationRequest` properties.
+
+```js
+await client.updateNotificationChannel({
+  type: 'email',
+  notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb',
+  name: 'MyUpdatedEmailNotification',
+  config: {
+    emails: ['johndoe@example.com'],
+  },
+  paused: false,
+});
+```
+
+This returns a `NotificationResponse` object.
+
+### Delete a notification
+
+You can also delete a notification channel. The function takes as a parameters the `DeleteNotificationRequest` object which must include the `type` and `notificationId` properties.
+
+```js
+await client.deleteNotificationChannel({ type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' });
+```
 
 ### Create a Sentinel
 
