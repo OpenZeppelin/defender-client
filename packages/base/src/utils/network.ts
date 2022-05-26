@@ -1,6 +1,8 @@
 import { findKey } from 'lodash';
 
-export type Network =
+type PrivateNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
+
+type PublicNetwork =
   | 'mainnet'
   | 'rinkeby'
   | 'ropsten'
@@ -29,9 +31,9 @@ export type Network =
   | 'harmony-s0'
   | 'harmony-test-s0'
   | 'aurora'
-  | 'auroratest'
-  | 'x-dfk-avax-chain'
-  | 'x-dfk-avax-chain-test';
+  | 'auroratest';
+
+export type Network = PublicNetwork | PrivateNetwork;
 
 export const Networks: Network[] = [
   'mainnet',
