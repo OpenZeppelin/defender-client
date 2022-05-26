@@ -206,6 +206,9 @@ const requestParameters = {
   // optional
   addresses: ['0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2'],
   // optional
+  // NOTE: Forta have changed the terminology for 'Agent' to 'Detection Bot'.
+  // We will continue to refer to them as 'Agents' for now.
+  // agentIDs should be a list of your Bot IDs
   agentIDs: ['0x8fe07f1a4d33b30be2387293f052c273660c829e9a6965cf7e8d485bcb871083'],
   fortaConditions: {
     // optional
