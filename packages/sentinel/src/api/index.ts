@@ -14,9 +14,11 @@ import {
 } from '../models/subscriber';
 import { DeletedSentinelResponse, CreateSentinelResponse, ListSentinelResponse } from '../models/response';
 import {
+  CreateNotificationRequest,
+  DeleteNotificationRequest,
+  GetNotificationRequest,
   NotificationSummary as NotificationResponse,
-  NotificationType,
-  SaveNotificationRequest as NotificationRequest,
+  UpdateNotificationRequest,
 } from '../models/notification';
 import { BlockWatcher } from '../models/blockwatcher';
 
@@ -92,18 +94,33 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async createNotificationChannel(
-    type: NotificationType,
-    notification: NotificationRequest,
-  ): Promise<NotificationResponse> {
+  public async createNotificationChannel(notification: CreateNotificationRequest): Promise<NotificationResponse> {
     return this.apiCall(async (api) => {
-      return await api.post(`/notifications/${type}`, notification);
+      return await api.post(`/notifications/${notification.type}`, notification);
     });
   }
 
   public async listNotificationChannels(): Promise<NotificationResponse[]> {
     return this.apiCall(async (api) => {
       return await api.get(`/notifications`);
+    });
+  }
+
+  public async deleteNotificationChannel(notification: DeleteNotificationRequest): Promise<string> {
+    return this.apiCall(async (api) => {
+      return await api.delete(`/notifications/${notification.type}/${notification.notificationId}`);
+    });
+  }
+
+  public async getNotificationChannel(notification: GetNotificationRequest): Promise<NotificationResponse> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/notifications/${notification.type}/${notification.notificationId}`);
+    });
+  }
+
+  public async updateNotificationChannel(notification: UpdateNotificationRequest): Promise<NotificationResponse> {
+    return this.apiCall(async (api) => {
+      return await api.put(`/notifications/${notification.type}/${notification.notificationId}`, notification);
     });
   }
 

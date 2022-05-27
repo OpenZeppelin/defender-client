@@ -29,7 +29,9 @@ type PublicNetwork =
   | 'harmony-s0'
   | 'harmony-test-s0'
   | 'aurora'
-  | 'auroratest';
+  | 'auroratest'
+  | 'hedera'
+  | 'hederatest';
 
 type CustomNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
 
@@ -65,6 +67,8 @@ export const Networks: Network[] = [
   'harmony-test-s0',
   'aurora',
   'auroratest',
+  'hedera',
+  'hederatest',
   'x-dfk-avax-chain',
   'x-dfk-avax-chain-test',
 ];
@@ -111,6 +115,8 @@ const chainIds: { [key in Network]: number } = {
   'harmony-test-s0': 1666700000,
   aurora: 1313161554,
   auroratest: 1313161555,
+  hedera: 295,
+  hederatest: 296,
   'x-dfk-avax-chain': 53935,
   'x-dfk-avax-chain-test': 335,
 };

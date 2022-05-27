@@ -63,3 +63,13 @@ export interface DatadogConfig {
   apiKey: string;
   metricPrefix: string;
 }
+
+export interface NotificationRequest {
+  type: NotificationType;
+  notificationId: string;
+}
+
+export type DeleteNotificationRequest = NotificationRequest;
+export type UpdateNotificationRequest = NotificationRequest & SaveNotificationRequest;
+export type GetNotificationRequest = NotificationRequest;
+export type CreateNotificationRequest = Omit<NotificationRequest, 'notificationId'> & SaveNotificationRequest;
