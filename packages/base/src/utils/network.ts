@@ -31,9 +31,9 @@ type PublicNetwork =
   | 'aurora'
   | 'auroratest';
 
-type PrivateNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
+type CustomNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
 
-export type Network = PublicNetwork | PrivateNetwork;
+export type Network = PublicNetwork | CustomNetwork;
 
 export const Networks: Network[] = [
   'mainnet',
