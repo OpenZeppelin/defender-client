@@ -19,7 +19,7 @@ export interface ExternalBaseCreateSubscriberRequest {
   type: 'FORTA' | 'BLOCK';
 }
 export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
-  network: SentinelNetwork;
+  network: Network;
   confirmLevel?: number; // blockWatcherId
   addresses: string[];
   abi?: string;
@@ -30,7 +30,7 @@ export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreate
 }
 
 export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
-  network?: SentinelNetwork;
+  network?: Network;
   fortaLastProcessedTime?: string;
   addresses?: Address[];
   agentIDs?: string[];
@@ -39,7 +39,7 @@ export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreate
 }
 export interface ExternalUpdateBlockSubscriberRequest
   extends Omit<ExternalCreateBlockSubscriberRequest, 'network' | 'addresses' | 'name' | 'notificationChannels'> {
-  network?: SentinelNetwork;
+  network?: Network;
   addresses?: string[];
   name?: string;
   notificationChannels?: string[];
@@ -56,7 +56,7 @@ export type CreateSubscriberRequest = CreateBlockSubscriberRequest | CreateForta
 
 // Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
 
-import { SentinelNetwork } from './blockwatcher';
+import { Network } from 'defender-base-client';
 import { NotificationType } from './notification';
 
 export interface BaseCreateSubscriberRequest {
@@ -73,14 +73,14 @@ export interface BaseCreateSubscriberResponse extends BaseCreateSubscriberReques
 
 export interface PartialCreateFortaSubscriberRequest {
   fortaRule: FortaRule;
-  network?: SentinelNetwork;
+  network?: Network;
   type: 'FORTA';
 }
 
 export interface PartialCreateBlockSubscriberRequest {
   addressRules: AddressRule[];
   blockWatcherId: string;
-  network: SentinelNetwork;
+  network: Network;
   type: 'BLOCK';
 }
 
