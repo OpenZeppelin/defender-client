@@ -1,7 +1,5 @@
 import { findKey } from 'lodash';
 
-type PrivateNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
-
 type PublicNetwork =
   | 'mainnet'
   | 'rinkeby'
@@ -32,6 +30,8 @@ type PublicNetwork =
   | 'harmony-test-s0'
   | 'aurora'
   | 'auroratest';
+
+type PrivateNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
 
 export type Network = PublicNetwork | PrivateNetwork;
 

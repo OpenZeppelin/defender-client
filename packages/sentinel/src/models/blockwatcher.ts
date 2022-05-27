@@ -1,7 +1,4 @@
 import { Network } from 'defender-base-client';
-
-export type SentinelNetwork = Network;
-
 export interface BlockWatcherOptions {
   processBlockAttempts?: number;
   processBlockAttemptTimeoutMs?: number;

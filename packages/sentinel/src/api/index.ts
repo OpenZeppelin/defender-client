@@ -1,4 +1,4 @@
-import { BaseApiClient } from 'defender-base-client';
+import { BaseApiClient, Network } from 'defender-base-client';
 import {
   ConditionSet,
   CreateSubscriberRequest,
@@ -18,7 +18,7 @@ import {
   NotificationType,
   SaveNotificationRequest as NotificationRequest,
 } from '../models/notification';
-import { BlockWatcher, SentinelNetwork } from '../models/blockwatcher';
+import { BlockWatcher } from '../models/blockwatcher';
 
 import _ from 'lodash';
 import getConditionSets, { getSentinelConditions } from '../utils';
@@ -184,7 +184,7 @@ export class SentinelClient extends BaseApiClient {
           abi: sentinel.abi,
         },
       ],
-      network: sentinel.network as SentinelNetwork,
+      network: sentinel.network as Network,
       type: 'BLOCK',
     };
   }
