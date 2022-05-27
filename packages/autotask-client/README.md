@@ -182,3 +182,7 @@ You can retrieve it from the _Edit Code_ page of your Autotask, or directly from
 ```
 https://defender.openzeppelin.com/#/autotask/19ef0257-bba4-4723-a18f-67d96726213e
 ```
+
+**Can I use this package in browser?**
+
+This package is not designed to be used in browser environment. Using this package requires sensitive API KEYS that should not be exposed publicly.
