@@ -304,6 +304,6 @@ Failed requests might return the following example response object:
 ```
 ## FAQ
 
-**Can I use this package in browser?**
+**Can I use this package in a browser?**
 
-This package is not designed to be used in browser environment. Using this package requires sensitive API KEYS that should not be exposed publicly.
+This package is not designed to be used in a browser environment. Using this package requires sensitive API KEYS that should not be exposed publicly.
