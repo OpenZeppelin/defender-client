@@ -1,6 +1,6 @@
 import { findKey } from 'lodash';
 
-export type Network =
+type PublicNetwork =
   | 'mainnet'
   | 'rinkeby'
   | 'ropsten'
@@ -32,6 +32,10 @@ export type Network =
   | 'auroratest'
   | 'hedera'
   | 'hederatest';
+
+type CustomNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
+
+export type Network = PublicNetwork | CustomNetwork;
 
 export const Networks: Network[] = [
   'mainnet',
@@ -65,6 +69,8 @@ export const Networks: Network[] = [
   'auroratest',
   'hedera',
   'hederatest',
+  'x-dfk-avax-chain',
+  'x-dfk-avax-chain-test',
 ];
 
 export function isValidNetwork(text: string): text is Network {
@@ -111,4 +117,6 @@ const chainIds: { [key in Network]: number } = {
   auroratest: 1313161555,
   hedera: 295,
   hederatest: 296,
+  'x-dfk-avax-chain': 53935,
+  'x-dfk-avax-chain-test': 335,
 };
