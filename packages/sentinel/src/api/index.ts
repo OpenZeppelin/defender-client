@@ -238,6 +238,7 @@ export class SentinelClient extends BaseApiClient {
         notifications: await this.getNotifications(sentinel.notificationChannels),
         autotaskId: sentinel.autotaskTrigger ? sentinel.autotaskTrigger : undefined,
         timeoutMs: sentinel.alertTimeoutMs ? sentinel.alertTimeoutMs : 0,
+        messageBody: sentinel.alertMessageBody ? sentinel.alertMessageBody : undefined,
       },
       paused: sentinel.paused ? sentinel.paused : false,
     };
@@ -266,7 +267,8 @@ export class SentinelClient extends BaseApiClient {
       notifyConfig: sentinel.notifyConfig,
       autotaskCondition: rule.autotaskCondition?.autotaskId,
       autotaskTrigger: sentinel.notifyConfig?.autotaskId,
-      alertTimeoutMs: sentinel.alertThreshold?.windowSeconds,
+      alertTimeoutMs: sentinel.notifyConfig?.timeoutMs,
+      alertMessageBody: sentinel.notifyConfig?.messageBody,
       notificationChannels: sentinel.notifyConfig?.notifications?.map(({ notificationId }) => notificationId) ?? [],
       network: sentinel.network,
       confirmLevel: parseInt(_.last(sentinel.blockWatcherId.split('-')) as string), // We're sure there is always a last number if the convention is followd
@@ -282,7 +284,8 @@ export class SentinelClient extends BaseApiClient {
       notifyConfig: sentinel.notifyConfig,
       autotaskCondition: sentinel.fortaRule.autotaskCondition?.autotaskId,
       autotaskTrigger: sentinel.notifyConfig?.autotaskId,
-      alertTimeoutMs: sentinel.alertThreshold?.windowSeconds,
+      alertTimeoutMs: sentinel.notifyConfig?.timeoutMs,
+      alertMessageBody: sentinel.notifyConfig?.messageBody,
       notificationChannels: sentinel.notifyConfig?.notifications?.map(({ notificationId }) => notificationId) ?? [],
       network: sentinel.network,
       fortaLastProcessedTime: sentinel.fortaLastProcessedTime,
