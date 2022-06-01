@@ -44,7 +44,9 @@ $ defender-autotask execute-run $AUTOTASK_ID
 $ defender-autotask tail-runs $AUTOTASK_ID
 ```
 
-Note that the `defender-autotask` CLI will automatically load environment variables from a local `.env` file if found.
+Beware that the `defender-autotask` CLI will automatically load environment variables from a local `.env` file if found.
+
+**Note**: In order to get the CLI to work, it should've been installed globally, otherwise, you can prefix with `npx` if you're using it directly on bash. This is not necessary when running from your `package.json` defined scripts.
 
 ### Script usage
 
