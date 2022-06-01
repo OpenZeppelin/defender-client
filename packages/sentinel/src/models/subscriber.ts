@@ -11,7 +11,6 @@ export interface ExternalBaseCreateSubscriberRequest {
   abi?: string;
   paused?: boolean;
   alertThreshold?: Threshold;
-  notifyConfig?: Notifications;
   autotaskCondition?: string;
   autotaskTrigger?: string;
   alertTimeoutMs?: number;
