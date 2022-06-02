@@ -50,7 +50,7 @@ export interface RelayerGetResponse {
 export interface RelayerModel extends RelayerGetResponse {}
 
 export interface RelayerListResponse {
-  items: Relayer[];
+  items: RelayerGetResponse[];
   txsQuotaUsage: number;
 }
 
