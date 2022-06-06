@@ -77,7 +77,7 @@ describe('ethers/signer', () => {
       }
 
       return {
-        ...omit(txArg, 'gasPrice', 'maxFeePerGas', 'maxPriorityFeePerGas'),
+        ...omit({ ...tx, ...arg }, 'gasPrice', 'maxFeePerGas', 'maxPriorityFeePerGas'),
         ...gasParams,
         confirmations: 0,
         wait: () => {
