@@ -64,6 +64,7 @@ describe('ethers/signer', () => {
     provider._wrapTransaction.mockImplementation((arg) => ({
       ...tx,
       ...arg,
+      gasPrice: BigNumber.from(tx.gasPrice || arg.gasPrice),
       confirmations: 0,
       wait: () => {
         throw new Error();
