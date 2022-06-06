@@ -18,10 +18,10 @@ describe('AutotaskRelayer', () => {
   let relayer: TestAutotaskRelayer;
 
   beforeEach(async function () {
-    relayer = new AutotaskRelayer({
+    relayer = (new AutotaskRelayer({
       credentials: JSON.stringify(credentials),
       relayerARN: 'arn',
-    }) as unknown as TestAutotaskRelayer;
+    }) as unknown) as TestAutotaskRelayer;
   });
 
   describe('constructor', () => {

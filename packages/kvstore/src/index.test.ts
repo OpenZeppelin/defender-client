@@ -46,8 +46,8 @@ describe('KeyValueStoreClient', () => {
     });
 
     test('validates type', async () => {
-      await expect(() => client.put(42 as unknown as string, 'myvalue')).rejects.toThrowError(/string/i);
-      await expect(() => client.put('mykey', 42 as unknown as string)).rejects.toThrowError(/string/i);
+      await expect(() => client.put((42 as unknown) as string, 'myvalue')).rejects.toThrowError(/string/i);
+      await expect(() => client.put('mykey', (42 as unknown) as string)).rejects.toThrowError(/string/i);
     });
   });
 });

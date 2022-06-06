@@ -21,7 +21,7 @@ describe('ApiRelayer', () => {
   };
 
   beforeEach(async function () {
-    relayer = new ApiRelayer({ apiKey: 'key', apiSecret: 'secret' }) as unknown as TestApiRelayer;
+    relayer = (new ApiRelayer({ apiKey: 'key', apiSecret: 'secret' }) as unknown) as TestApiRelayer;
     initSpy = jest.spyOn(relayer, 'init');
   });
 

@@ -15,10 +15,10 @@ describe('KeyValueStoreAutotaskClient', () => {
   let client: TestClient;
 
   beforeEach(async function () {
-    client = new KeyValueStoreAutotaskClient({
+    client = (new KeyValueStoreAutotaskClient({
       credentials: JSON.stringify(credentials),
       kvstoreARN: 'arn',
-    }) as unknown as TestClient;
+    }) as unknown) as TestClient;
   });
 
   describe('get', () => {
