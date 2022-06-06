@@ -6,15 +6,32 @@ export type Hex = string;
 export type Speed = 'safeLow' | 'average' | 'fast' | 'fastest';
 export type Status = 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed' | 'failed';
 
-export type RelayerTransactionPayload = {
+export interface SendBaseTransactionRequest {
   to?: Address;
   value?: BigUInt;
   data?: Hex;
-  speed?: Speed;
-  gasPrice?: BigUInt;
   gasLimit: BigUInt;
   validUntil?: string;
-};
+}
+
+export interface SendSpeedTransactionRequest extends SendBaseTransactionRequest {
+  speed: Speed;
+}
+
+export interface SendLegacyTransactionRequest extends SendBaseTransactionRequest {
+  gasPrice: BigUInt;
+}
+
+export interface SendEIP1559TransactionRequest extends SendBaseTransactionRequest {
+  maxFeePerGas: BigUInt;
+  maxPriorityFeePerGas: BigUInt;
+}
+
+export type RelayerTransactionPayload =
+  | SendBaseTransactionRequest
+  | SendSpeedTransactionRequest
+  | SendLegacyTransactionRequest
+  | SendEIP1559TransactionRequest;
 
 export interface SignMessagePayload {
   message: Hex;
@@ -65,6 +82,7 @@ export interface CreateRelayerRequest {
 export interface UpdateRelayerPoliciesRequest {
   gasPriceCap?: BigUInt;
   whitelistReceivers?: Address[];
+  EIP1559Pricing?: boolean;
 }
 
 export interface UpdateRelayerRequest {
@@ -86,7 +104,7 @@ export interface DeleteRelayerApiKeyResponse {
 }
 
 // from openzeppelin/defender/models/src/types/tx.res.ts
-export type RelayerTransaction = {
+interface RelayerTransactionBase {
   transactionId: string;
   hash: string;
   to: Address;
@@ -94,13 +112,23 @@ export type RelayerTransaction = {
   value?: string;
   data?: string;
   speed: Speed;
-  gasPrice: number;
   gasLimit: number;
   nonce: number;
   status: Status;
   chainId: number;
   validUntil: string;
-};
+}
+
+interface RelayerLegacyTransaction extends RelayerTransactionBase {
+  gasPrice: number;
+}
+
+interface RelayerEIP1559Transaction extends RelayerTransactionBase {
+  maxPriorityFeePerGas: number;
+  maxFeePerGas: number;
+}
+
+export type RelayerTransaction = RelayerLegacyTransaction | RelayerEIP1559Transaction;
 
 export type RelayerParams = ApiRelayerParams | AutotaskRelayerParams;
 export type ApiRelayerParams = { apiKey: string; apiSecret: string };
@@ -136,13 +164,31 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
   return !!apiCredentials.apiKey && !!apiCredentials.apiSecret;
 }
 
+// If a tx-like object is representing a legacy transaction (type 0)
+export function isLegacyTx<TransactionLikeType>(
+  tx: TransactionLikeType,
+): tx is TransactionLikeType & { gasPrice: unknown } {
+  return 'gasPrice' in tx;
+}
+
+// If a tx-like object is representing a EIP1559 transaction (type 2)
+export function isEIP1559Tx<TransactionLikeType>(
+  tx: TransactionLikeType,
+): tx is TransactionLikeType & { maxPriorityFeePerGas: unknown; maxFeePerGas: unknown } {
+  return 'maxPriorityFeePerGas' in tx && 'maxFeePerGas' in tx;
+}
+
 function validatePayload(payload: RelayerTransactionPayload) {
-  if (payload.speed && payload.gasPrice) {
-    throw new Error("Both tx's speed and gas price are set. Only set one of them.");
+  if (isEIP1559Tx(payload) && payload.maxFeePerGas < payload.maxPriorityFeePerGas) {
+    throw new Error('maxFeePerGas should be greater or equal to maxPriorityFeePerGas');
   }
   if (payload.validUntil && new Date(payload.validUntil).getTime() < new Date().getTime()) {
     throw new Error('The validUntil time cannot be in the past');
   }
+  if (!payload.to && !payload.data) {
+    throw new Error('Both txs `to` and `data` fields are missing. At least one of them has to be set.');
+  }
+  return payload;
 }
 
 // Copied from defender/models/src/types/tx-list.req.d.ts

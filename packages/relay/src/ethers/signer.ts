@@ -6,8 +6,9 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import { _TypedDataEncoder } from '@ethersproject/hash';
 import { Deferrable, resolveProperties, shallowCopy } from '@ethersproject/properties';
-import { Relayer, Speed, RelayerParams, isRelayer } from '../relayer';
+import { Relayer, Speed, RelayerParams, isRelayer, isEIP1559Tx } from '../relayer';
 import { Transaction } from '@ethersproject/transactions';
+import { omit } from 'lodash';
 
 const logger = new Logger(`defender-relay-client`);
 
@@ -17,15 +18,22 @@ const allowedTransactionKeys: Array<string> = [
   'from',
   'gasLimit',
   'gasPrice',
+  'maxFeePerGas',
+  'maxPriorityFeePerGas',
   'nonce',
   'to',
   'value',
   'speed',
 ];
 
+type GasOptions = Pick<TransactionRequest, 'gasPrice' | 'maxFeePerGas' | 'maxPriorityFeePerGas'>;
+
 export type DefenderTransactionRequest = TransactionRequest & Partial<{ speed: Speed; validUntil: Date | string }>;
 export type DefenderRelaySignerOptions = Partial<
-  Pick<TransactionRequest, 'gasPrice'> & { speed: Speed; validForSeconds: number }
+  GasOptions & {
+    speed: Speed;
+    validForSeconds: number;
+  }
 >;
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
@@ -41,8 +49,31 @@ export class DefenderRelaySigner extends Signer implements TypedDataSigner {
   ) {
     super();
     this.relayer = isRelayer(relayerCredentials) ? relayerCredentials : new Relayer(relayerCredentials);
-    if (options && options.speed && options.gasPrice) {
-      throw new Error(`Cannot set both speed and fixed gasPrice`);
+    if (options) {
+      const getUnnecesaryExtraFields = (invalidFields: (keyof GasOptions)[]) =>
+        invalidFields.map((field: keyof GasOptions) => options[field]).filter(Boolean);
+
+      if (options.speed) {
+        const unnecesaryExtraFields = getUnnecesaryExtraFields(['maxFeePerGas', 'maxPriorityFeePerGas', 'gasPrice']);
+
+        if (unnecesaryExtraFields.length > 0)
+          throw new Error(`Inconsistent options: speed + (${unnecesaryExtraFields}) not allowed`);
+      } else if (options.gasPrice) {
+        const unnecesaryExtraFields = getUnnecesaryExtraFields([
+          'maxFeePerGas',
+          'maxPriorityFeePerGas',
+          // speed already checked
+        ]);
+
+        if (unnecesaryExtraFields.length > 0)
+          throw new Error(`Inconsistent options: gasPrice + (${unnecesaryExtraFields}) not allowed`);
+      } else if (options.maxFeePerGas && options.maxPriorityFeePerGas) {
+        if (options.maxFeePerGas < options.maxPriorityFeePerGas)
+          throw new Error('Inconsistent options: maxFeePerGas should be greater or equal to maxPriorityFeePerGas');
+      } else if (options.maxFeePerGas)
+        throw new Error('Inconsistent options: maxFeePerGas without maxPriorityFeePerGas specified');
+      else if (options.maxPriorityFeePerGas)
+        throw new Error('Inconsistent options: maxPriorityFeePerGas without maxFeePerGas specified');
     }
   }
 
@@ -70,7 +101,7 @@ export class DefenderRelaySigner extends Signer implements TypedDataSigner {
     return joinSignature(sig);
   }
 
-  // Signs a transaxction and returns the fully serialized, signed transaction.
+  // Signs a transaction and returns the fully serialized, signed transaction.
   // The EXACT transaction MUST be signed, and NO additional properties to be added.
   // - This MAY throw if signing transactions is not supports, but if
   //   it does, sentTransaction MUST be overridden.
@@ -95,6 +126,8 @@ export class DefenderRelaySigner extends Signer implements TypedDataSigner {
       data: tx.data ? hexlify(tx.data) : undefined,
       speed: tx.speed,
       gasPrice: tx.gasPrice ? hexlify(tx.gasPrice) : undefined,
+      maxFeePerGas: tx.maxFeePerGas ? hexlify(tx.maxFeePerGas) : undefined,
+      maxPriorityFeePerGas: tx.maxPriorityFeePerGas ? hexlify(tx.maxPriorityFeePerGas) : undefined,
       value: tx.value ? hexlify(tx.value) : undefined,
       validUntil: tx.validUntil ? new Date(tx.validUntil).toISOString() : undefined,
     };
@@ -103,15 +136,27 @@ export class DefenderRelaySigner extends Signer implements TypedDataSigner {
       ? await this.relayer.replaceTransactionByNonce(nonce, payload)
       : await this.relayer.sendTransaction(payload);
 
+    let gasParams;
+
+    if (isEIP1559Tx(relayedTransaction)) {
+      gasParams = {
+        maxFeePerGas: BigNumber.from(relayedTransaction.maxFeePerGas),
+        maxPriorityFeePerGas: BigNumber.from(relayedTransaction.maxPriorityFeePerGas),
+      };
+    } else {
+      gasParams = {
+        gasPrice: BigNumber.from(relayedTransaction.gasPrice),
+      };
+    }
+
     return (this.provider as ProviderWithWrapTransaction)._wrapTransaction(
       {
-        ...relayedTransaction,
+        ...omit(relayedTransaction, 'gasPrice', 'maxPriorityFeePerGas', 'maxFeePerGas'),
+        ...gasParams,
         gasLimit: BigNumber.from(relayedTransaction.gasLimit),
-        gasPrice: BigNumber.from(relayedTransaction.gasPrice),
         value: BigNumber.from(relayedTransaction.value ?? 0),
         data: relayedTransaction.data ?? '',
       },
-
       relayedTransaction.hash,
     );
   }
@@ -137,9 +182,12 @@ export class DefenderRelaySigner extends Signer implements TypedDataSigner {
       });
     }
 
-    if (!tx.speed && !tx.gasPrice) {
+    if (!tx.speed && !tx.gasPrice && !tx.maxFeePerGas && !tx.maxPriorityFeePerGas) {
       if (this.options.gasPrice) {
         tx.gasPrice = this.options.gasPrice;
+      } else if (this.options.maxFeePerGas && this.options.maxPriorityFeePerGas) {
+        tx.maxFeePerGas = this.options.maxFeePerGas;
+        tx.maxPriorityFeePerGas = this.options.maxPriorityFeePerGas;
       } else if (this.options.speed) {
         tx.speed = this.options.speed;
       }

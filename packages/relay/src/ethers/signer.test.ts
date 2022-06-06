@@ -4,7 +4,7 @@ import { Transaction } from '@ethersproject/transactions';
 import { Contract } from '@ethersproject/contracts';
 import { mock } from 'jest-mock-extended';
 import { omit, pick } from 'lodash';
-import { Relayer, RelayerTransaction } from '../relayer';
+import { Relayer, RelayerTransaction, isEIP1559Tx, isLegacyTx } from '../relayer';
 import { joinSignature, hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@ethersproject/random';
 import { DefenderRelaySigner } from './signer';
@@ -21,7 +21,8 @@ describe('ethers/signer', () => {
     chainId: 4,
     from,
     gasLimit: 60000,
-    gasPrice: 1e9,
+    maxFeePerGas: 10e9,
+    maxPriorityFeePerGas: 1e9,
     hash: '0xdfd0144b0ed02b10ee1ca5a6ead42709d1ce495ecb6d28d9c8dfcb0146bd94ed',
     nonce: 30,
     speed: 'safeLow',
@@ -61,25 +62,53 @@ describe('ethers/signer', () => {
       policies: {},
     });
 
-    provider._wrapTransaction.mockImplementation((arg) => ({
-      ...tx,
-      ...arg,
-      confirmations: 0,
-      wait: () => {
-        throw new Error();
-      },
-    }));
+    provider._wrapTransaction.mockImplementation((arg) => {
+      let gasParams;
+
+      if (isEIP1559Tx(arg)) {
+        gasParams = {
+          maxFeePerGas: BigNumber.from(arg.maxFeePerGas),
+          maxPriorityFeePerGas: BigNumber.from(arg.maxPriorityFeePerGas),
+        };
+      } else {
+        gasParams = {
+          gasPrice: BigNumber.from(arg.gasPrice),
+        };
+      }
+
+      return {
+        ...omit(tx, 'gasPrice', 'maxFeePerGas', 'maxPriorityFeePerGas'),
+        ...omit(arg, 'gasPrice', 'maxFeePerGas', 'maxPriorityFeePerGas'),
+        ...gasParams,
+        confirmations: 0,
+        wait: () => {
+          throw new Error();
+        },
+      };
+    });
 
     provider.resolveName.mockImplementation((arg) => Promise.resolve(arg));
   });
 
-  const expectSentTx = (actual: TransactionResponse) => {
+  const expectSentTx = (actual: TransactionResponse, expected: Partial<RelayerTransaction>) => {
+    let gasParams;
+
+    if (isEIP1559Tx(expected)) {
+      gasParams = {
+        maxFeePerGas: BigNumber.from(expected.maxFeePerGas),
+        maxPriorityFeePerGas: BigNumber.from(expected.maxPriorityFeePerGas),
+      };
+    } else if (isLegacyTx(expected)) {
+      gasParams = {
+        gasPrice: BigNumber.from(expected.gasPrice),
+      };
+    }
     expect(actual).toEqual(
       expect.objectContaining({
-        ...tx,
-        value: BigNumber.from(tx.value),
-        gasPrice: BigNumber.from(tx.gasPrice),
-        gasLimit: BigNumber.from(tx.gasLimit),
+        ...expected,
+        ...gasParams,
+        value: BigNumber.from(expected.value),
+        gasLimit: BigNumber.from(expected.gasLimit),
       }),
     );
   };
@@ -91,29 +120,52 @@ describe('ethers/signer', () => {
     const request = pick(tx, 'to', 'data', 'value', 'gasLimit');
     const sent = await signer.sendTransaction(request);
 
-    expectSentTx(sent);
+    expectSentTx(sent, tx);
     expect(relayer.sendTransaction).toHaveBeenCalledWith({
       ...request,
       gasLimit: '0xea60',
       speed: tx.speed,
       gasPrice: undefined,
+      maxFeePerGas: undefined,
+      maxPriorityFeePerGas: undefined,
       validUntil: undefined,
     });
   });
 
-  it('sends a tx with fixed gas price', async () => {
-    relayer.sendTransaction.mockResolvedValue(tx);
+  it('sends a tx with fixed gasPrice', async () => {
+    relayer.sendTransaction.mockResolvedValue({ ...omit(tx, 'maxFeePerGas', 'maxPriorityFeePerGas'), gasPrice: 1e9 });
 
     const signer = new DefenderRelaySigner(relayer, provider, { speed: 'safeLow' });
-    const request = pick(tx, 'to', 'data', 'value', 'gasLimit', 'gasPrice');
+    const request = { ...pick(tx, 'to', 'data', 'value', 'gasLimit'), gasPrice: 1e9 };
     const sent = await signer.sendTransaction(request);
 
-    expectSentTx(sent);
+    expectSentTx(sent, request);
     expect(relayer.sendTransaction).toHaveBeenCalledWith({
       ...request,
       gasLimit: '0xea60',
       speed: undefined,
       gasPrice: '0x3b9aca00',
+      maxFeePerGas: undefined,
+      maxPriorityFeePerGas: undefined,
+      validUntil: undefined,
+    });
+  });
+
+  it('sends a tx with fixed maxFeePerGas and maxPriorityFeePerGas', async () => {
+    relayer.sendTransaction.mockResolvedValue(tx);
+
+    const signer = new DefenderRelaySigner(relayer, provider, { speed: 'safeLow' });
+    const request = pick(tx, 'to', 'data', 'value', 'gasLimit', 'maxFeePerGas', 'maxPriorityFeePerGas');
+    const sent = await signer.sendTransaction(request);
+
+    expectSentTx(sent, request);
+    expect(relayer.sendTransaction).toHaveBeenCalledWith({
+      ...request,
+      gasLimit: '0xea60',
+      speed: undefined,
+      gasPrice: undefined,
+      maxFeePerGas: '0x02540be400',
+      maxPriorityFeePerGas: '0x3b9aca00',
       validUntil: undefined,
     });
   });
@@ -125,7 +177,7 @@ describe('ethers/signer', () => {
     const request = pick(tx, 'to', 'data', 'value', 'gasLimit', 'nonce');
     const sent = await signer.sendTransaction(request);
 
-    expectSentTx(sent);
+    expectSentTx(sent, request);
     expect(relayer.replaceTransactionByNonce).toHaveBeenCalledWith(30, {
       ...omit(request, 'nonce'),
       gasLimit: '0xea60',
@@ -144,7 +196,7 @@ describe('ethers/signer', () => {
     const contract = new Contract(tx.to, transferAbi, signer);
     const sent = await contract.transfer(from, '0x02');
 
-    expectSentTx(sent);
+    expectSentTx(sent, tx);
     expect(relayer.sendTransaction).toHaveBeenCalledWith({
       data: contract.interface.encodeFunctionData('transfer', [from, '0x02']),
       gasLimit: '0xea60',
@@ -165,7 +217,7 @@ describe('ethers/signer', () => {
     const contract = new Contract(tx.to, transferAbi, signer);
     const sent = await contract.transfer(from, '0x02', { nonce: tx.nonce });
 
-    expectSentTx(sent);
+    expectSentTx(sent, tx);
     expect(relayer.replaceTransactionByNonce).toHaveBeenCalledWith(30, {
       data: contract.interface.encodeFunctionData('transfer', [from, '0x02']),
       gasLimit: '0xea60',

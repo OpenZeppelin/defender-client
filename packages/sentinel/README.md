@@ -189,9 +189,8 @@ eventConditions: [
   }
 ]
 ```
-
 You could also apply a transaction condition by modifying the `txCondition` property:
-Possible variables: `value`, `gasPrice`, `gasLimit`, `gasUsed`, `to`, `from`, `nonce`, `status` ('success', 'failed' or 'any'), `input`, or `transactionIndex`.
+Possible variables: `value`, `gasPrice`, `maxFeePerGas`, `maxPriorityFeePerGas`, `gasLimit`, `gasUsed`, `to`, `from`, `nonce`, `status` ('success', 'failed' or 'any'), `input`, or `transactionIndex`.
 
 ```js
 txCondition: 'gasPrice > 0',
