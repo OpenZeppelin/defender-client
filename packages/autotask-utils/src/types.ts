@@ -153,6 +153,7 @@ interface SentinelBaseConditionSummary {
 interface SentinelBaseAbiConditionSummary extends SentinelBaseConditionSummary {
   signature: string;
   args: any[];
+  address: string;
   params: { [key: string]: any };
 }
 
