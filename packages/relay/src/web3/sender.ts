@@ -59,7 +59,7 @@ export class DefenderRelaySenderProvider {
     const id = typeof payload.id === 'string' ? parseInt(payload.id) : payload.id ?? this.id++;
     const handleWith = (fn: (params: any[]) => Promise<any>) =>
       callbackify((payload: JsonRpcPayload) =>
-        fn.call(this, payload.params).then((result) => ({
+        fn.call(this, payload.params ?? []).then((result) => ({
           jsonrpc: '2.0',
           id,
           result,

@@ -40,7 +40,7 @@ describe('RelayClient', () => {
   };
 
   beforeEach(async function () {
-    relayer = (new RelayClient({ apiKey: 'key', apiSecret: 'secret' }) as unknown) as TestRelayClient;
+    relayer = new RelayClient({ apiKey: 'key', apiSecret: 'secret' }) as unknown as TestRelayClient;
     await relayer.init();
     relayer.api.put = jest.fn();
     relayer.api.get = jest.fn().mockResolvedValue(mockRelayerResponse);

@@ -78,6 +78,8 @@ describe('web3/sender', () => {
           return result(null);
         case 'eth_subscribe':
           return result('0x9cef478923ff08bf67fde6c64013158d');
+        case 'eth_getBlockByNumber':
+          return result('0x6b11e5');
         default:
           console.log(payload);
       }

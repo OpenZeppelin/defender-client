@@ -6,8 +6,6 @@ import {
   CreateNotificationRequest,
   DeleteNotificationRequest,
   GetNotificationRequest,
-  SaveNotificationRequest,
-  SaveNotificationSlackRequest,
   UpdateNotificationRequest,
 } from '../models/notification';
 import { CreateSentinelResponse } from '../models/response';
@@ -69,7 +67,7 @@ describe('SentinelClient', () => {
   };
 
   beforeEach(() => {
-    sentinel = (new SentinelClient({ apiKey: 'key', apiSecret: 'secret' }) as unknown) as TestSentinelClient;
+    sentinel = new SentinelClient({ apiKey: 'key', apiSecret: 'secret' }) as unknown as TestSentinelClient;
     initSpy = jest.spyOn(sentinel, 'init');
     listBlockwatchersSpy = jest.spyOn(sentinel, 'listBlockwatchers').mockImplementation(async () => [
       {
