@@ -125,7 +125,7 @@ The `sendTransaction` call returns once the transaction has been _signed_ by the
 
 #### Speed
 
-Instead of the usual `gasPrice` or `maxFeePerGas`/`maxPriorityFeePerGas`, the Relayer may also accept a `speed` parameter that can be one of `safeLow`, `average`, `fast`, or `fastest`. The relayer will determine the gas pricing and (update it regulary if it fails to get mined) based on values reported from different oracles such as [EthGasStation](https://ethgasstation.info/), [EtherChain](https://etherchain.org/tools/gasPriceOracle), [GasNow](https://www.gasnow.org/), [BlockNative](https://docs.blocknative.com/gas-platform), and [Etherscan](https://etherscan.io/gastracker) along with the `eth_getBlockByNumber` to get the current `BASE_FEE` for EIP1559 transactions. Testnet gas prices are obtained from a call to `eth_gasPrice` or `eth_feeHistory` to the network.
+Instead of the usual `gasPrice` or `maxFeePerGas`/`maxPriorityFeePerGas`, the Relayer may also accept a `speed` parameter that can be one of `safeLow`, `average`, `fast`, or `fastest`. The relayer will determine the gas pricing (and update it regulary if it fails to get mined) based on values reported from different oracles such as [EthGasStation](https://ethgasstation.info/), [EtherChain](https://etherchain.org/tools/gasPriceOracle), [GasNow](https://www.gasnow.org/), [BlockNative](https://docs.blocknative.com/gas-platform), and [Etherscan](https://etherscan.io/gastracker) along with the `eth_getBlockByNumber` to get the current `BASE_FEE` for EIP1559 transactions. Testnet gas prices are obtained from a call to `eth_gasPrice` or `eth_feeHistory` to the network.
 
 #### Return data
 
