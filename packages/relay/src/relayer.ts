@@ -167,14 +167,14 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
 // If a tx-like object is representing a legacy transaction (type 0)
 export function isLegacyTx<TransactionLikeType>(
   tx: TransactionLikeType,
-): tx is TransactionLikeType & { gasPrice: unknown } {
+): tx is TransactionLikeType & { gasPrice: NonNullable<unknown> } {
   return 'gasPrice' in tx;
 }
 
 // If a tx-like object is representing a EIP1559 transaction (type 2)
 export function isEIP1559Tx<TransactionLikeType>(
   tx: TransactionLikeType,
-): tx is TransactionLikeType & { maxPriorityFeePerGas: unknown; maxFeePerGas: unknown } {
+): tx is TransactionLikeType & { maxPriorityFeePerGas: NonNullable<unknown>; maxFeePerGas: NonNullable<unknown> } {
   return 'maxPriorityFeePerGas' in tx && 'maxFeePerGas' in tx;
 }
 
