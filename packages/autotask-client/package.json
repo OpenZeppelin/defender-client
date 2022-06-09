@@ -1,6 +1,6 @@
 {
   "name": "defender-autotask-client",
-  "version": "1.18.0",
+  "version": "1.23.0",
   "description": "Client library for managing Defender Autotasks",
   "bin": {
     "defender-autotask": "./lib/bin.js"
@@ -24,13 +24,13 @@
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2",
-    "defender-base-client": "^1.18.0",
+    "axios": "^0.21.2",
+    "defender-base-client": "^1.23.0",
     "dotenv": "^10.0.0",
     "glob": "^7.1.6",
     "jszip": "^3.5.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },
-  "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e"
+  "gitHead": "843bca6778bfa0e828affc3636d849acc27f24ce"
 }

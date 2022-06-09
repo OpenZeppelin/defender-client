@@ -1,6 +1,6 @@
 {
   "name": "defender-kvstore-client",
-  "version": "1.18.0",
+  "version": "1.23.0",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -21,8 +21,8 @@
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2",
-    "defender-base-client": "^1.18.0",
+    "axios": "^0.21.2",
+    "defender-base-client": "^1.23.0",
     "fs-extra": "^10.0.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"

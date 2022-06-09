@@ -1,34 +1,4 @@
-export type Network =
-  | 'mainnet'
-  | 'rinkeby'
-  | 'ropsten'
-  | 'kovan'
-  | 'goerli'
-  | 'xdai'
-  | 'sokol'
-  | 'fuse'
-  | 'bsc'
-  | 'bsctest'
-  | 'fantom'
-  | 'fantomtest'
-  | 'moonbase'
-  | 'moonriver'
-  | 'moonbeam'
-  | 'matic'
-  | 'mumbai'
-  | 'avalanche'
-  | 'fuji'
-  | 'optimistic'
-  | 'optimistic-kovan'
-  | 'arbitrum'
-  | 'arbitrum-rinkeby'
-  | 'celo'
-  | 'alfajores'
-  | 'harmony-s0'
-  | 'harmony-test-s0'
-  | 'aurora'
-  | 'auroratest';
-
+import { Network } from 'defender-base-client';
 export interface BlockWatcherOptions {
   processBlockAttempts?: number;
   processBlockAttemptTimeoutMs?: number;

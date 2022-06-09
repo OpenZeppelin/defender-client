@@ -11,10 +11,10 @@ export interface ExternalBaseCreateSubscriberRequest {
   abi?: string;
   paused?: boolean;
   alertThreshold?: Threshold;
-  notifyConfig?: Notifications;
   autotaskCondition?: string;
   autotaskTrigger?: string;
   alertTimeoutMs?: number;
+  alertMessageBody?: string;
   notificationChannels: string[];
   type: 'FORTA' | 'BLOCK';
 }
@@ -33,6 +33,9 @@ export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreate
   network?: Network;
   fortaLastProcessedTime?: string;
   addresses?: Address[];
+  // Forta have changed the terminology for 'Agent' to 'Detection Bot'
+  // We will continue to refer to them as 'Agent' for now.
+  // agentIDs should be a list of Bot IDs
   agentIDs?: string[];
   fortaConditions: FortaConditionSet;
   type: 'FORTA';
@@ -56,7 +59,7 @@ export type CreateSubscriberRequest = CreateBlockSubscriberRequest | CreateForta
 
 // Copied from openzeppelin/defender/models/src/types/subscribers.req.d.ts
 
-import { Network } from './blockwatcher';
+import { Network } from 'defender-base-client';
 import { NotificationType } from './notification';
 
 export interface BaseCreateSubscriberRequest {
@@ -100,6 +103,9 @@ export interface CreateBlockSubscriberResponse extends BaseCreateSubscriberRespo
 
 export interface FortaRule {
   addresses?: Address[];
+  // Forta have changed the terminology for 'Agent' to 'Detection Bot'
+  // We will continue to refer to them as 'Agent' for now.
+  // agentIDs should be a list of Bot IDs
   agentIDs?: string[];
   conditions: FortaConditionSet;
   autotaskCondition?: AutotaskCondition;

@@ -40,9 +40,13 @@ Set the environment variables `API_KEY` and `API_SECRET` to the Team API key/sec
 
 ```bash
 $ defender-autotask update-code $AUTOTASK_ID $PATH_TO_CODE
+$ defender-autotask execute-run $AUTOTASK_ID
+$ defender-autotask tail-runs $AUTOTASK_ID
 ```
 
-Note that the `defender-autotask` CLI will automatically load environment variables from a local `.env` file if found.
+Beware that the `defender-autotask` CLI will automatically load environment variables from a local `.env` file if found.
+
+**Note**: In order to get the CLI to work, it should've been installed globally, otherwise, you can prefix with `npx` if you're using it directly on bash. This is not necessary when running from your `package.json` defined scripts.
 
 ### Script usage
 
@@ -151,6 +155,26 @@ await client.updateCodeFromSources(autotaskId, {
 });
 ```
 
+**Autotask Runs**
+
+To execute an autotask run, execute the command below substituting the `autotaskId`:
+
+```js
+await client.runAutotask(autotaskId);
+```
+
+You can list all runs for an autotask with the following command:
+
+```js
+await client.listAutotaskRuns(autotaskId);
+```
+
+And get detailed logs for a single run using the `autotaskRunId` (returned in the `listAutotaskRuns` response directly above):
+
+```js
+await client.getAutotaskRun(autotaskRunId);
+```
+
 ## FAQ
 
 **How do I find the ID of my Autotask?**
@@ -160,3 +184,7 @@ You can retrieve it from the _Edit Code_ page of your Autotask, or directly from
 ```
 https://defender.openzeppelin.com/#/autotask/19ef0257-bba4-4723-a18f-67d96726213e
 ```
+
+**Can I use this package in a browser?**
+
+This package is not designed to be used in a browser environment. Using this package requires sensitive API KEYS that should not be exposed publicly.

@@ -50,7 +50,7 @@ export interface RelayerGetResponse {
 export interface RelayerModel extends RelayerGetResponse {}
 
 export interface RelayerListResponse {
-  items: Relayer[];
+  items: RelayerGetResponse[];
   txsQuotaUsage: number;
 }
 
@@ -71,6 +71,18 @@ export interface UpdateRelayerRequest {
   name?: string;
   policies?: UpdateRelayerPoliciesRequest;
   minBalance?: BigUInt;
+}
+
+export interface RelayerApiKey {
+  keyId: string;
+  relayerId: string;
+  secretKey?: string;
+  apiKey: string;
+  createdAt: string;
+}
+
+export interface DeleteRelayerApiKeyResponse {
+  message: string;
 }
 
 // from openzeppelin/defender/models/src/types/tx.res.ts

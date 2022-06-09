@@ -1,4 +1,4 @@
-import { BaseApiClient } from 'defender-base-client';
+import { BaseApiClient, Network } from 'defender-base-client';
 import {
   ConditionSet,
   CreateSubscriberRequest,
@@ -14,11 +14,13 @@ import {
 } from '../models/subscriber';
 import { DeletedSentinelResponse, CreateSentinelResponse, ListSentinelResponse } from '../models/response';
 import {
+  CreateNotificationRequest,
+  DeleteNotificationRequest,
+  GetNotificationRequest,
   NotificationSummary as NotificationResponse,
-  NotificationType,
-  SaveNotificationRequest as NotificationRequest,
+  UpdateNotificationRequest,
 } from '../models/notification';
-import { BlockWatcher, Network } from '../models/blockwatcher';
+import { BlockWatcher } from '../models/blockwatcher';
 
 import _ from 'lodash';
 import getConditionSets, { getSentinelConditions } from '../utils';
@@ -92,18 +94,33 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async createNotificationChannel(
-    type: NotificationType,
-    notification: NotificationRequest,
-  ): Promise<NotificationResponse> {
+  public async createNotificationChannel(notification: CreateNotificationRequest): Promise<NotificationResponse> {
     return this.apiCall(async (api) => {
-      return await api.post(`/notifications/${type}`, notification);
+      return await api.post(`/notifications/${notification.type}`, notification);
     });
   }
 
   public async listNotificationChannels(): Promise<NotificationResponse[]> {
     return this.apiCall(async (api) => {
       return await api.get(`/notifications`);
+    });
+  }
+
+  public async deleteNotificationChannel(notification: DeleteNotificationRequest): Promise<string> {
+    return this.apiCall(async (api) => {
+      return await api.delete(`/notifications/${notification.type}/${notification.notificationId}`);
+    });
+  }
+
+  public async getNotificationChannel(notification: GetNotificationRequest): Promise<NotificationResponse> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/notifications/${notification.type}/${notification.notificationId}`);
+    });
+  }
+
+  public async updateNotificationChannel(notification: UpdateNotificationRequest): Promise<NotificationResponse> {
+    return this.apiCall(async (api) => {
+      return await api.put(`/notifications/${notification.type}/${notification.notificationId}`, notification);
     });
   }
 
@@ -221,6 +238,7 @@ export class SentinelClient extends BaseApiClient {
         notifications: await this.getNotifications(sentinel.notificationChannels),
         autotaskId: sentinel.autotaskTrigger ? sentinel.autotaskTrigger : undefined,
         timeoutMs: sentinel.alertTimeoutMs ? sentinel.alertTimeoutMs : 0,
+        messageBody: sentinel.alertMessageBody ? sentinel.alertMessageBody : undefined,
       },
       paused: sentinel.paused ? sentinel.paused : false,
     };
@@ -246,10 +264,10 @@ export class SentinelClient extends BaseApiClient {
       name: sentinel.name,
       paused: sentinel.paused,
       alertThreshold: sentinel.alertThreshold,
-      notifyConfig: sentinel.notifyConfig,
       autotaskCondition: rule.autotaskCondition?.autotaskId,
       autotaskTrigger: sentinel.notifyConfig?.autotaskId,
-      alertTimeoutMs: sentinel.alertThreshold?.windowSeconds,
+      alertTimeoutMs: sentinel.notifyConfig?.timeoutMs,
+      alertMessageBody: sentinel.notifyConfig?.messageBody,
       notificationChannels: sentinel.notifyConfig?.notifications?.map(({ notificationId }) => notificationId) ?? [],
       network: sentinel.network,
       confirmLevel: parseInt(_.last(sentinel.blockWatcherId.split('-')) as string), // We're sure there is always a last number if the convention is followd
@@ -262,10 +280,10 @@ export class SentinelClient extends BaseApiClient {
       name: sentinel.name,
       paused: sentinel.paused,
       alertThreshold: sentinel.alertThreshold,
-      notifyConfig: sentinel.notifyConfig,
       autotaskCondition: sentinel.fortaRule.autotaskCondition?.autotaskId,
       autotaskTrigger: sentinel.notifyConfig?.autotaskId,
-      alertTimeoutMs: sentinel.alertThreshold?.windowSeconds,
+      alertTimeoutMs: sentinel.notifyConfig?.timeoutMs,
+      alertMessageBody: sentinel.notifyConfig?.messageBody,
       notificationChannels: sentinel.notifyConfig?.notifications?.map(({ notificationId }) => notificationId) ?? [],
       network: sentinel.network,
       fortaLastProcessedTime: sentinel.fortaLastProcessedTime,

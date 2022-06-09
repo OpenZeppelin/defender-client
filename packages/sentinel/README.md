@@ -90,6 +90,8 @@ const notification = await client.createNotificationChannel('datadog', {
 });
 ```
 
+### List notifications
+
 You can also list existing notification channels:
 
 ```js
@@ -98,6 +100,42 @@ const { notificationId, type } = notificationChannels[0];
 ```
 
 This returns a `NotificationResponse[]` object.
+
+### Get a notification
+
+You can also retrieve a single notification channel. The function takes as parameter the `GetNotificationRequest` object, which must include the `type` and `notificationId` properties.
+
+```js
+await client.getNotificationChannel({ type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' });
+```
+
+This returns a `NotificationResponse` object.
+
+### Update a notification
+
+You can also update a single notification channel. The function takes as parameter the `UpdateNotificationRequest` object which must include the `type`, `notificationId` and `NotificationRequest` properties.
+
+```js
+await client.updateNotificationChannel({
+  type: 'email',
+  notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb',
+  name: 'MyUpdatedEmailNotification',
+  config: {
+    emails: ['johndoe@example.com'],
+  },
+  paused: false,
+});
+```
+
+This returns a `NotificationResponse` object.
+
+### Delete a notification
+
+You can also delete a notification channel. The function takes as a parameters the `DeleteNotificationRequest` object which must include the `type` and `notificationId` properties.
+
+```js
+await client.deleteNotificationChannel({ type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' });
+```
 
 ### Create a Sentinel
 
@@ -168,6 +206,9 @@ const requestParameters = {
   // optional
   addresses: ['0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2'],
   // optional
+  // NOTE: Forta have changed the terminology for 'Agent' to 'Detection Bot'.
+  // We will continue to refer to them as 'Agents' for now.
+  // agentIDs should be a list of your Bot IDs
   agentIDs: ['0x8fe07f1a4d33b30be2387293f052c273660c829e9a6965cf7e8d485bcb871083'],
   fortaConditions: {
     // optional
@@ -261,3 +302,8 @@ Failed requests might return the following example response object:
   }
 }
 ```
+## FAQ
+
+**Can I use this package in a browser?**
+
+This package is not designed to be used in a browser environment. Using this package requires sensitive API KEYS that should not be exposed publicly.

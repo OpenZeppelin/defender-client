@@ -1,8 +1,16 @@
-# Defender Relay Client
+# Defender Relay Client & Signer
 
-Defender Relay lets you spin up private relayers to send transactions to any public Ethereum network. Each relayer has its own secure private key, and a set of API keys. You can send transactions via your relayers by POSTing to the Defender HTTP API, or using this library.
+There are 2 modules included in this package:
 
-This library also includes an [ethers.js](https://docs.ethers.io/v5/) signer and a [web3.js](https://web3js.readthedocs.io/) provider, that uses the Relay to sign and broadcast its transactions.
+1. Defender Relay Client
+
+* Execute create, read, and update operations across all relayers within an account (and associated relayer keys)
+* Authenticates with bearer token generated using Team API Key/Secret (available when Team API Key is created)
+
+2. Defender Relay Signer
+
+* Execute send, sign, and other operations using a specific relayer
+* Authenticates with bearer token generated using Relayer API Key/Secret (available when relayer is created)
 
 ## Install
 
@@ -14,9 +22,89 @@ npm install defender-relay-client
 yarn add defender-relay-client
 ```
 
-## Usage
+## Relay Client
 
-Start by creating a new relayer in Defender for a network of your choice, and write down the API key and secret. Then use them to create a new `Relayer` instance in your code:
+Defender Relay Client enables creating, reading, and updating relayers and their associated API keys.
+
+### Usage
+
+To get started, instantiate `RelayClient`:
+
+```js
+import { RelayClient } from 'defender-relay-client';
+const relayClient = new RelayClient({ apiKey: API_KEY, apiSecret: API_SECRET });
+```
+
+#### Create
+
+Create a new relayer:
+
+```js
+const requestParameters = {
+  name: 'MyNewRelayer',
+  network: 'rinkeby',
+  minBalance: BigInt(1e17).toString(),
+  policies: {
+    whitelistReceivers: ['0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'],
+  },
+};
+
+await relayClient.create(requestParameters);
+```
+
+Create its associated API key:
+
+```js
+await relayClient.createKey('58b3d255-e357-4b0d-aa16-e86f745e63b9');
+```
+
+#### Read
+
+Fetch data for a single relayer:
+
+```js
+await relayClient.get('58b3d255-e357-4b0d-aa16-e86f745e63b9');
+```
+
+All relayers in your account:
+
+```js
+await relayClient.list();
+```
+
+All API keys associated with an individual relayer:
+
+```js
+await relayClient.listKeys('58b3d255-e357-4b0d-aa16-e86f745e63b9');
+```
+
+#### Update
+
+```js
+await relayClient.update('58b3d255-e357-4b0d-aa16-e86f745e63b9', { name: 'Test 2' });
+```
+
+#### Delete 
+
+Delete 
+
+```js
+await relayClient.deleteKey('58b3d255-e357-4b0d-aa16-e86f745e63b9', 'j3bru93-k32l-3p1s-pp56-u43f675e92p1');
+```
+
+_Note: second argument to `deleteKey` is the `keyId` (contains hyphens), not the `apiKey`. This can be fetched via the `listKeys` method above and is also available in the response on key creation._
+
+Deletion of a relayer (not just a key) is only available via the Defender console.
+
+## Relay Signer
+
+Defender Relay Signer lets you send transactions to any supported network using private relayers. Each relayer has its own secure private key, and a set of API keys. You can send transactions via your relayers by POSTing to the Defender HTTP API, or using this library.
+
+This library also includes an [ethers.js](https://docs.ethers.io/v5/) signer and a [web3.js](https://web3js.readthedocs.io/) provider, that uses the Relay to sign and broadcast its transactions.
+
+### Usage
+
+Start by creating a new relayer using either the Defender console or API for a network of your choice. Write down the API key and secret. Then use them to create a new `Relayer` instance in your code:
 
 ```js
 import { Relayer } from 'defender-relay-client';
@@ -37,11 +125,11 @@ const tx = await relayer.sendTransaction({
 
 The `sendTransaction` call returns once the transaction has been _signed_ by the relayer. To monitor the transaction status, see [Querying](#Querying) below.
 
-### Speed
+#### Speed
 
 Instead of accepting a fixed `gasPrice`, the relayer accepts a `speed` parameter that can be one of `safeLow`, `average`, `fast`, or `fastest`. The relayer will determine the gas price based on these values from [ethgasstation](https://ethgasstation.info/), and update it regularly by resubmitting your transaction if it fails to get mined.
 
-### Return data
+#### Return data
 
 The returned transaction object `tx` will have the following shape:
 
@@ -60,7 +148,7 @@ status: 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed';
 speed: 'safeLow' | 'average' | 'fast' | 'fastest';
 ```
 
-## Querying transactions
+### Querying transactions
 
 The `relayer` object also has a `query` function that returns a transaction object as described above. This method receives the `transactionId`, **not** the transaction `hash`:
 
@@ -80,13 +168,13 @@ const since = await relayer.list({
 
 Defender will update the transaction `status` every minute, marking it as `confirmed` after 12 confirmations. The transaction information will be stored for 30 days.
 
-### Why querying?
+#### Why querying?
 
 The `query` function is important to monitor the transaction status, since Defender may choose to _resubmit the transaction with a different gas price_, effectively changing its hash. This means that, if you monitor your transaction only via `getTransactionReceipt(tx.hash)` calls to a node, you may not get the latest info if it was replaced.
 
 Defender may replace a transaction by increasing its gas price if it has not been mined for a period of time, and the gas price costs have increased since the transaction was originally submitted. Also, in a case where a transaction consistently fails to be mined, Defender may replace it by a _no-op_ (a transaction with no value or data) in order to advance the sender account nonce.
 
-### Replacing transactions
+#### Replacing transactions
 
 You can use the relayer methods `replaceTransactionById` or `replaceTransactionByNonce` to replace a transaction given its nonce or transactionId (not hash) if it has not been mined yet. You can use this to increase the speed of a transaction, or replace your tx by an empty value transfer (with a gas limit of 21000) to cancel a transaction that is no longer valid.
 
@@ -103,7 +191,7 @@ const tx = await relayer.replaceTransactionByNonce(42, {
 
 You can also replace by nonce using the `ethers.js` and `web3.js` adapters listed below.
 
-## Signing
+### Signing
 
 You can sign any hex string (`0x123213`) according to the [EIP-191 Signed Data Standard](https://eips.ethereum.org/EIPS/eip-191) (prefixed by `\x19Ethereum Signed Message:\n`) using a `sign` method of the relayer. Pay attention, that the message has to be a **hex string**.
 
@@ -120,7 +208,7 @@ const signTypedDataResponse = await relayer.signTypedData({
 });
 ```
 
-### Return data
+#### Return data
 
 Once your data is signed, the following response will be returned:
 
@@ -133,7 +221,7 @@ export interface SignedMessagePayload {
 }
 ```
 
-## Network calls
+### Network calls
 
 You can also use Defender for making arbitrary JSON RPC calls to the network via the `call` method. All JSON RPC methods are supported, except for event filters and websocket subscriptions.
 
@@ -141,7 +229,7 @@ You can also use Defender for making arbitrary JSON RPC calls to the network via
 const balance = await relayer.call('eth_getBalance', ['0x6b175474e89094c44da98b954eedeac495271d0f', 'latest']);
 ```
 
-## Ethers.js
+### Ethers.js
 
 You can use the `defender-relay-client` with [ethers.js v5](https://github.com/ethers-io/ethers.js/) directly. The package exports a `DefenderRelaySigner` [signer](https://docs.ethers.io/v5/api/signer/) that is used to send transactions, and a `DefenderRelayProvider` [provider](https://docs.ethers.io/v5/api/providers/) that is used to make calls to the network through Defender.
 
@@ -176,14 +264,14 @@ The `_signTypedData` method is also supported to sign [EIP712](https://eips.ethe
 const signedEIP712Message = await signer._signTypedData(domain, types, value);
 ```
 
-### Limitations
+#### Limitations
 
 The current implementation of the `DefenderRelaySigner` for ethers.js has the following limitations:
 
 - Due to validations set up in `ethers.js`, it is not possible to specify the transaction `speed` for an individual transaction when sending it. It must be set during the signer construction, and will be used for all transactions sent through it.
 - A `wait` on the transaction to be mined will only wait for the current transaction hash (see [Querying](#Querying)). If Defender Relayer replaces the transaction with a different one, this operation will time out. This is ok for fast transactions, since Defender only reprices after a few minutes. But if you expect the transaction to take a long time to be mined, then ethers' `wait` may not work. Future versions will also include an ethers provider aware of this.
 
-## Web3.js
+### Web3.js
 
 You can also use the `defender-relay-client` with [web3.js](https://web3js.readthedocs.io/) via a `DefenderRelayProvider` which routes all JSON RPC calls through Defender, and uses a Relayer for signing and broadcasting transactions.
 
@@ -214,7 +302,7 @@ The package also includes two composable lower-level providers, the `DefenderRel
 
 Note that these web3.js providers currently have the same limitations as the ethers.js one described above.
 
-## Using in Autotasks
+### Using in Autotasks
 
 [Defender Autotasks](https://docs.openzeppelin.com/defender/autotasks) natively support integration with Defender Relay, allowing to send transactions without providing API keys. In your autotask's code, just `require('defender-relay-client')` and construct a new relayer instance using the `credentials` object injected by the autotask. This will give you a relayer object already configured.
 
@@ -235,3 +323,9 @@ exports.handler = async function (event) {
   return txRes.hash;
 };
 ```
+
+## FAQ
+
+**Can I use this package in a browser?**
+
+This package is not designed to be used in a browser environment. Using this package requires sensitive API KEYS that should not be exposed publicly.

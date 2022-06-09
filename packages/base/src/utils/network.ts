@@ -1,6 +1,6 @@
 import { findKey } from 'lodash';
 
-export type Network =
+type PublicNetwork =
   | 'mainnet'
   | 'rinkeby'
   | 'ropsten'
@@ -20,8 +20,8 @@ export type Network =
   | 'mumbai'
   | 'avalanche'
   | 'fuji'
-  | 'optimistic'
-  | 'optimistic-kovan'
+  | 'optimism'
+  | 'optimism-kovan'
   | 'arbitrum'
   | 'arbitrum-rinkeby'
   | 'celo'
@@ -29,7 +29,13 @@ export type Network =
   | 'harmony-s0'
   | 'harmony-test-s0'
   | 'aurora'
-  | 'auroratest';
+  | 'auroratest'
+  | 'hedera'
+  | 'hederatest';
+
+type CustomNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
+
+export type Network = PublicNetwork | CustomNetwork;
 
 export const Networks: Network[] = [
   'mainnet',
@@ -51,8 +57,8 @@ export const Networks: Network[] = [
   'mumbai',
   'avalanche',
   'fuji',
-  'optimistic',
-  'optimistic-kovan',
+  'optimism',
+  'optimism-kovan',
   'arbitrum',
   'arbitrum-rinkeby',
   'celo',
@@ -61,6 +67,10 @@ export const Networks: Network[] = [
   'harmony-test-s0',
   'aurora',
   'auroratest',
+  'hedera',
+  'hederatest',
+  'x-dfk-avax-chain',
+  'x-dfk-avax-chain-test',
 ];
 
 export function isValidNetwork(text: string): text is Network {
@@ -95,8 +105,8 @@ const chainIds: { [key in Network]: number } = {
   mumbai: 80001,
   avalanche: 0xa86a,
   fuji: 0xa869,
-  optimistic: 10,
-  'optimistic-kovan': 69,
+  optimism: 10,
+  'optimism-kovan': 69,
   arbitrum: 42161,
   'arbitrum-rinkeby': 421611,
   celo: 42220,
@@ -105,4 +115,8 @@ const chainIds: { [key in Network]: number } = {
   'harmony-test-s0': 1666700000,
   aurora: 1313161554,
   auroratest: 1313161555,
+  hedera: 295,
+  hederatest: 296,
+  'x-dfk-avax-chain': 53935,
+  'x-dfk-avax-chain-test': 335,
 };
