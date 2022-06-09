@@ -57,6 +57,13 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
+  public async listProposals(): Promise<ProposalResponseWithUrl[]> {
+    return this.apiCall(async (api) => {
+      const response = (await api.get('/proposals')) as ProposalResponse[];
+      return response.map((proposal) => ({ ...proposal, url: getProposalUrl(proposal) }));
+    });
+  }
+
   public async proposeUpgrade(
     params: UpgradeParams,
     contract: CreateProposalRequest['contract'],
