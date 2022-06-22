@@ -4,4 +4,5 @@ export interface ExternalApiProposalResponse extends ExternalApiCreateProposalRe
   contractId: string;
   proposalId: string;
   createdAt: string;
+  isActive: boolean;
 }
