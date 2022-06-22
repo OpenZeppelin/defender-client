@@ -100,6 +100,8 @@ export class AdminClient extends BaseApiClient {
       type: 'pause',
       via: params.via,
       viaType: params.viaType,
+      functionInputs: [],
+      functionInterface: { name: action, inputs: [] },
       metadata: {
         action,
       },
