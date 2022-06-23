@@ -146,6 +146,10 @@ export class SentinelClient extends BaseApiClient {
     };
   }
 
+  private normaliseABI(abi: any): string | undefined {
+    return abi ? (typeof abi === 'string' ? abi : JSON.stringify(abi)) : undefined;
+  }
+
   private async constructBlockSentinel(
     sentinel: CreateBlockSentinelRequest,
   ): Promise<PartialCreateBlockSubscriberRequest> {
@@ -186,7 +190,7 @@ export class SentinelClient extends BaseApiClient {
     const conditions = getSentinelConditions([
       {
         conditions: newConditions,
-        abi: sentinel.abi,
+        abi: this.normaliseABI(sentinel.abi),
         addresses: sentinel.addresses,
       },
     ]);
@@ -198,7 +202,7 @@ export class SentinelClient extends BaseApiClient {
           conditions: getConditionSets(conditions.txExpression, conditions.events, conditions.functions),
           autotaskCondition: sentinel.autotaskCondition ? { autotaskId: sentinel.autotaskCondition } : undefined,
           addresses: sentinel.addresses,
-          abi: sentinel.abi,
+          abi: this.normaliseABI(sentinel.abi),
         },
       ],
       network: sentinel.network as Network,
@@ -257,7 +261,7 @@ export class SentinelClient extends BaseApiClient {
     return {
       type: 'BLOCK',
       addresses: rule.addresses, // There's only one addressRules at the moment, may cause problems if we add multiple address rules
-      abi: rule.abi,
+      abi: this.normaliseABI(rule.abi),
       eventConditions: _.flatten(rule.conditions.map((condition) => condition.eventConditions)),
       functionConditions: _.flatten(rule.conditions.map((condition) => condition.functionConditions)),
       txCondition,
