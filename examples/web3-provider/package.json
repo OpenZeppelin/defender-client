@@ -1,6 +1,6 @@
 {
   "name": "example-web3-provider",
-  "version": "1.11.1",
+  "version": "1.25.0",
   "private": true,
   "main": "index.js",
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
