@@ -18,7 +18,8 @@ describe('web3/sender', () => {
     chainId: 4,
     from,
     gasLimit: 60000,
-    gasPrice: 1e9,
+    maxFeePerGas: 10e9,
+    maxPriorityFeePerGas: 1e9,
     hash: '0xdfd0144b0ed02b10ee1ca5a6ead42709d1ce495ecb6d28d9c8dfcb0146bd94ed',
     nonce: 30,
     speed: 'safeLow',
@@ -89,15 +90,6 @@ describe('web3/sender', () => {
     web3 = new Web3(sender);
   });
 
-  // const expectSentTx = (actual: TransactionResponse) => {
-  //   expect(actual).toEqual(expect.objectContaining({
-  //     ...tx,
-  //     value: BigNumber.from(tx.value),
-  //     gasPrice: BigNumber.from(tx.gasPrice),
-  //     gasLimit: BigNumber.from(tx.gasLimit),
-  //   }));
-  // }
-
   it('sends a tx with speed', async () => {
     relayer.sendTransaction.mockResolvedValue(tx);
 
@@ -111,15 +103,17 @@ describe('web3/sender', () => {
       gasLimit: '0xea60',
       speed: tx.speed,
       gasPrice: undefined,
+      maxFeePerGas: undefined,
+      maxPriorityFeePerGas: undefined,
       validUntil: undefined,
     });
   });
 
-  it('sends a tx with fixed gas price', async () => {
-    relayer.sendTransaction.mockResolvedValue(tx);
+  it('sends a tx with fixed gasPrice', async () => {
+    relayer.sendTransaction.mockResolvedValue({ ...tx, gasPrice: 1e9 });
 
     sender.options.speed = undefined;
-    const request = pick(tx, 'from', 'to', 'data', 'value', 'gasLimit', 'gasPrice');
+    const request = { ...pick(tx, 'from', 'to', 'data', 'value', 'gasLimit'), gasPrice: 1e9 };
     const sent = await new Promise((resolve) => web3.eth.sendTransaction(request).on('transactionHash', resolve));
 
     expect(sent).toEqual(tx.hash);
@@ -128,6 +122,26 @@ describe('web3/sender', () => {
       gasLimit: '0xea60',
       speed: undefined,
       gasPrice: '0x3b9aca00',
+      maxFeePerGas: undefined,
+      maxPriorityFeePerGas: undefined,
+    });
+  });
+
+  it('sends a tx with fixed maxFeePerGas and maxPriorityFeePerGas', async () => {
+    relayer.sendTransaction.mockResolvedValue(tx);
+
+    sender.options.speed = undefined;
+    const request = pick(tx, 'from', 'to', 'data', 'value', 'gasLimit', 'maxFeePerGas', 'maxPriorityFeePerGas');
+    const sent = await new Promise((resolve) => web3.eth.sendTransaction(request).on('transactionHash', resolve));
+
+    expect(sent).toEqual(tx.hash);
+    expect(relayer.sendTransaction).toHaveBeenCalledWith({
+      ...request,
+      gasLimit: '0xea60',
+      speed: undefined,
+      gasPrice: undefined,
+      maxFeePerGas: '0x2540be400',
+      maxPriorityFeePerGas: '0x3b9aca00',
     });
   });
 

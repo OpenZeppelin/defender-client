@@ -4,13 +4,13 @@ There are 2 modules included in this package:
 
 1. Defender Relay Client
 
-* Execute create, read, and update operations across all relayers within an account (and associated relayer keys)
-* Authenticates with bearer token generated using Team API Key/Secret (available when Team API Key is created)
+- Execute create, read, and update operations across all relayers within an account (and associated relayer keys)
+- Authenticates with bearer token generated using Team API Key/Secret (available when Team API Key is created)
 
 2. Defender Relay Signer
 
-* Execute send, sign, and other operations using a specific relayer
-* Authenticates with bearer token generated using Relayer API Key/Secret (available when relayer is created)
+- Execute send, sign, and other operations using a specific relayer
+- Authenticates with bearer token generated using Relayer API Key/Secret (available when relayer is created)
 
 ## Install
 
@@ -84,9 +84,7 @@ await relayClient.listKeys('58b3d255-e357-4b0d-aa16-e86f745e63b9');
 await relayClient.update('58b3d255-e357-4b0d-aa16-e86f745e63b9', { name: 'Test 2' });
 ```
 
-#### Delete 
-
-Delete 
+#### Delete
 
 ```js
 await relayClient.deleteKey('58b3d255-e357-4b0d-aa16-e86f745e63b9', 'j3bru93-k32l-3p1s-pp56-u43f675e92p1');
@@ -127,25 +125,42 @@ The `sendTransaction` call returns once the transaction has been _signed_ by the
 
 #### Speed
 
-Instead of accepting a fixed `gasPrice`, the relayer accepts a `speed` parameter that can be one of `safeLow`, `average`, `fast`, or `fastest`. The relayer will determine the gas price based on these values from [ethgasstation](https://ethgasstation.info/), and update it regularly by resubmitting your transaction if it fails to get mined.
+Instead of the usual `gasPrice` or `maxFeePerGas`/`maxPriorityFeePerGas`, the Relayer may also accept a `speed` parameter that can be one of `safeLow`, `average`, `fast`, or `fastest`. These values are mapped to actual gas prices when the transaction is sent or resubmitted and vary depending on the state of the network.
+
+If `speed` is provided, the transaction would be priced according to the `EIP1559Pricing` relayer policy.
+
+NOTE: Mainnet gas prices and priority fees are calculated based on the values reported by [EthGasStation](https://ethgasstation.info/), [EtherChain](https://etherchain.org/tools/gasPriceOracle), [GasNow](https://www.gasnow.org/), [BlockNative](https://docs.blocknative.com/gas-platform), and [Etherscan](https://etherscan.io/gastracker). In Polygon and its testnet, the [gas station](https://gasstation-mainnet.matic.network/v2) is used. In other networks, gas prices are obtained from a call to `eth_gasPrice` or `eth_feeHistory` to the network.
 
 #### Return data
 
 The returned transaction object `tx` will have the following shape:
 
 ```ts
-transactionId: string; // Defender transaction identifier
-hash: string; // Ethereum transaction hash
-to: string;
-from: string;
-value: string;
-data: string;
-gasPrice: number;
-gasLimit: number;
-nonce: number;
-chainId: number;
-status: 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed';
-speed: 'safeLow' | 'average' | 'fast' | 'fastest';
+interface RelayerTransactionBase {
+  transactionId: string; // Defender transaction identifier
+  hash: string; // Ethereum transaction hash
+  to: string;
+  from: string;
+  value?: string;
+  data?: string;
+  speed: 'safeLow' | 'average' | 'fast' | 'fastest';
+  gasLimit: number;
+  nonce: number;
+  status: 'pending' | 'sent' | 'submitted' | 'inmempool' | 'mined' | 'confirmed' | 'failed';
+  chainId: number;
+  validUntil: string;
+}
+
+interface RelayerLegacyTransaction extends RelayerTransactionBase {
+  gasPrice: number;
+}
+
+interface RelayerEIP1559Transaction extends RelayerTransactionBase {
+  maxPriorityFeePerGas: number;
+  maxFeePerGas: number;
+}
+
+type RelayerTransaction = RelayerLegacyTransaction | RelayerEIP1559Transaction;
 ```
 
 ### Querying transactions
@@ -204,7 +219,7 @@ Also, you can sign typed data according to the [EIP-712 Specification](https://e
 ```js
 const signTypedDataResponse = await relayer.signTypedData({
   domainSeparator,
-  hashStructMessage
+  hashStructMessage,
 });
 ```
 

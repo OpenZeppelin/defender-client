@@ -25,14 +25,18 @@ describe('RelayClient', () => {
     policies: {},
   };
 
-  const mockRelayerResponseWithPolicies = merge(mockRelayerResponse, { policies: { gasPriceCap: (1e3).toString() } });
+  const mockRelayerResponseWithPolicies = merge(mockRelayerResponse, { policies: { gasPriceCap: 1e3 } });
 
   const policiesUpdate1: UpdateRelayerRequest = {
-    policies: { gasPriceCap: (1e17).toString() },
+    policies: { gasPriceCap: 1e17 },
   };
 
   const policiesUpdate2: UpdateRelayerRequest = {
     policies: { whitelistReceivers: ['0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'] },
+  };
+
+  const policiesUpdate3: UpdateRelayerRequest = {
+    policies: { EIP1559Pricing: true },
   };
 
   const nonPoliciesUpdate: UpdateRelayerRequest = {
@@ -79,6 +83,10 @@ describe('RelayClient', () => {
       [
         policiesUpdate2,
         { ...mockRelayerResponseWithPolicies.policies, ...policiesUpdate2.policies } as UpdateRelayerPoliciesRequest,
+      ],
+      [
+        policiesUpdate3,
+        { ...mockRelayerResponseWithPolicies.policies, ...policiesUpdate3.policies } as UpdateRelayerPoliciesRequest,
       ],
     ])(
       'calls put with expected policy update given base policy %s',

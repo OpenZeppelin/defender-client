@@ -9,6 +9,8 @@ type Web3Callback = (error: Error | null, result?: JsonRpcResponse) => void;
 // See packages/web3-core-helpers/src/formatters.js#_txInputFormatter
 type Web3TxPayload = {
   gasPrice: string | undefined;
+  maxFeePerGas: string | undefined;
+  maxPriorityFeePerGas: string | undefined;
   gas: string | undefined;
   value: string | undefined;
   data: string | undefined;
@@ -17,7 +19,13 @@ type Web3TxPayload = {
   nonce: string | undefined;
 };
 
-export type DefenderRelaySenderOptions = Partial<{ gasPrice: BigUInt; speed: Speed; validForSeconds: number }>;
+export type DefenderRelaySenderOptions = Partial<{
+  gasPrice: BigUInt;
+  maxFeePerGas: BigUInt;
+  maxPriorityFeePerGas: BigUInt;
+  speed: Speed;
+  validForSeconds: number;
+}>;
 
 export class DefenderRelaySenderProvider {
   protected relayer: Relayer;
@@ -33,6 +41,23 @@ export class DefenderRelaySenderProvider {
   ) {
     this._delegateToProvider(base);
     this.relayer = isRelayer(relayerCredentials) ? relayerCredentials : new Relayer(relayerCredentials);
+    if (options) {
+      const getUnnecesaryExtraFields = (invalidFields: (keyof DefenderRelaySenderOptions)[]) =>
+        invalidFields.map((field: keyof DefenderRelaySenderOptions) => options[field]).filter(Boolean);
+
+      if (options.gasPrice) {
+        const unnecesaryExtraFields = getUnnecesaryExtraFields(['maxFeePerGas', 'maxPriorityFeePerGas']);
+
+        if (unnecesaryExtraFields.length > 0)
+          throw new Error(`Inconsistent options: gasPrice + (${unnecesaryExtraFields}) not allowed`);
+      } else if (options.maxFeePerGas && options.maxPriorityFeePerGas) {
+        if (options.maxFeePerGas < options.maxPriorityFeePerGas)
+          throw new Error('Inconsistent options: maxFeePerGas should be greater or equal to maxPriorityFeePerGas');
+      } else if (options.maxFeePerGas)
+        throw new Error('Inconsistent options: maxFeePerGas without maxPriorityFeePerGas specified');
+      else if (options.maxPriorityFeePerGas)
+        throw new Error('Inconsistent options: maxPriorityFeePerGas without maxFeePerGas specified');
+    }
   }
 
   public get connected(): boolean | undefined {
@@ -109,7 +134,9 @@ export class DefenderRelaySenderProvider {
         return response?.result?.toString();
       }));
 
-    const txWithSpeed = this.options.speed ? { ...omit(tx, 'gasPrice'), speed: this.options.speed } : tx;
+    const txWithSpeed = this.options.speed
+      ? { ...omit(tx, 'gasPrice', 'maxFeePerGas', 'maxPriorityFeePerGas'), speed: this.options.speed }
+      : tx;
     const payload = { ...this.options, ...txWithSpeed, gasLimit };
 
     const sent = tx.nonce

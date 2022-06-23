@@ -21,12 +21,14 @@
   "author": "Igor Yalovoy <igor@openzeppelin.com>",
   "license": "MIT",
   "devDependencies": {
-    "@ethersproject/abstract-provider": "^5.0.2",
-    "@ethersproject/abstract-signer": "^5.0.2",
-    "@ethersproject/providers": "^5.0.5",
+    "@ethersproject/abstract-provider": "^5.6.1",
+    "@ethersproject/abstract-signer": "^5.6.2",
+    "@ethersproject/hash": "^5.6.1",
+    "@ethersproject/providers": "^5.6.8",
+    "@ethersproject/transactions": "^5.6.2",
     "jest-mock-extended": "^1.0.15",
-    "web3-core": "^1.3.4",
-    "web3-core-helpers": "^1.3.4"
+    "web3-core": "^1.7.3",
+    "web3-core-helpers": "^1.7.3"
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^4.3.3",
@@ -36,11 +38,13 @@
     "node-fetch": "^2.6.0"
   },
   "peerDependencies": {
-    "@ethersproject/abstract-provider": "^5.0.2",
-    "@ethersproject/abstract-signer": "^5.0.2",
-    "@ethersproject/providers": "^5.0.5",
-    "web3-core": "^1.3.4",
-    "web3-core-helpers": "^1.3.4"
+    "@ethersproject/abstract-provider": "^5.6.1",
+    "@ethersproject/abstract-signer": "^5.6.2",
+    "@ethersproject/hash": "^5.6.1",
+    "@ethersproject/providers": "^5.6.8",
+    "@ethersproject/transactions": "^5.6.2",
+    "web3-core": "^1.7.3",
+    "web3-core-helpers": "^1.7.3"
   },
   "gitHead": "843bca6778bfa0e828affc3636d849acc27f24ce"
 }
