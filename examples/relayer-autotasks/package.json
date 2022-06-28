@@ -1,11 +1,11 @@
 {
   "name": "example-relayer-autotasks",
-  "version": "1.11.1",
+  "version": "1.25.0",
   "main": "index.js",
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "defender-relay-client": "1.11.1",
+    "defender-relay-client": "^1.25.0",
     "dotenv": "^8.2.0"
   }
 }

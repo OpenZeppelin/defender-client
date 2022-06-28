@@ -6,7 +6,7 @@
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "defender-relay-client": "1.11.1",
+    "defender-relay-client": "^1.25.0",
     "dotenv": "^8.2.0",
     "web3": "^1.7.3"
   }
