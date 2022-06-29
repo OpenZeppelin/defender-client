@@ -168,7 +168,10 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
 export function isLegacyTx<TransactionLikeType>(
   tx: TransactionLikeType,
 ): tx is TransactionLikeType & { gasPrice: NonNullable<unknown> } {
-  return 'gasPrice' in tx;
+  // Consider that an EIP1559 tx may have `gasPrice` after
+  // https://github.com/OpenZeppelin/defender/pull/2838
+  // that's why the !isEIP1559Tx check
+  return 'gasPrice' in tx && !isEIP1559Tx(tx);
 }
 
 // If a tx-like object is representing a EIP1559 transaction (type 2)
@@ -179,7 +182,7 @@ export function isEIP1559Tx<TransactionLikeType>(
 }
 
 function validatePayload(payload: RelayerTransactionPayload) {
-  if (isEIP1559Tx(payload) && payload.maxFeePerGas < payload.maxPriorityFeePerGas) {
+  if (isEIP1559Tx(payload) && BigInt(payload.maxFeePerGas) < BigInt(payload.maxPriorityFeePerGas)) {
     throw new Error('maxFeePerGas should be greater or equal to maxPriorityFeePerGas');
   }
   if (payload.validUntil && new Date(payload.validUntil).getTime() < new Date().getTime()) {
