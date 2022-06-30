@@ -1,11 +1,11 @@
 {
   "name": "example-keeper-network",
-  "version": "1.25.0",
+  "version": "1.26.0",
   "main": "index.js",
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "defender-relay-client": "^1.25.0",
+    "defender-relay-client": "1.26.0",
     "dotenv": "^8.2.0",
     "ethers": "^5.0.19"
   }

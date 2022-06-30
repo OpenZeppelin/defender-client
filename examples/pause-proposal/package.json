@@ -1,6 +1,6 @@
 {
   "name": "example-pause-proposal",
-  "version": "1.25.0",
+  "version": "1.26.0",
   "private": true,
   "main": "index.js",
   "author": "Martín Verzilli <mverzilli@openzeppelin.com>",
