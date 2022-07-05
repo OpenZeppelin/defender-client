@@ -124,9 +124,6 @@ describe('ethers/signer', () => {
       ...request,
       gasLimit: '0xea60',
       speed: tx.speed,
-      gasPrice: undefined,
-      maxFeePerGas: undefined,
-      maxPriorityFeePerGas: undefined,
       validUntil: undefined,
     });
   });
@@ -144,8 +141,6 @@ describe('ethers/signer', () => {
       gasLimit: '0xea60',
       speed: undefined,
       gasPrice: '0x3b9aca00',
-      maxFeePerGas: undefined,
-      maxPriorityFeePerGas: undefined,
       validUntil: undefined,
     });
   });
@@ -162,7 +157,6 @@ describe('ethers/signer', () => {
       ...request,
       gasLimit: '0xea60',
       speed: undefined,
-      gasPrice: undefined,
       maxFeePerGas: '0x02540be400',
       maxPriorityFeePerGas: '0x3b9aca00',
       validUntil: undefined,
