@@ -6,7 +6,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import { _TypedDataEncoder } from '@ethersproject/hash';
 import { Deferrable, resolveProperties, shallowCopy } from '@ethersproject/properties';
-import { Relayer, Speed, RelayerParams, isRelayer, isEIP1559Tx } from '../relayer';
+import { Relayer, Speed, RelayerParams, isRelayer, isEIP1559Tx, isLegacyTx } from '../relayer';
 import { Transaction } from '@ethersproject/transactions';
 import { omit } from 'lodash';
 
@@ -120,16 +120,27 @@ export class DefenderRelaySigner extends Signer implements TypedDataSigner {
     if (!tx.gasLimit) throw new Error('DefenderRelaySigner#sendTransacton: relayer gas estimation not yet supported');
     const nonce = tx.nonce === undefined ? undefined : BigNumber.from(tx.nonce).toNumber();
 
+    let payloadGasParams;
+
+    if (isLegacyTx(tx) && tx.gasPrice !== undefined) {
+      payloadGasParams = {
+        gasPrice: hexlify(tx.gasPrice),
+      };
+    } else if (isEIP1559Tx(tx) && tx.maxFeePerGas !== undefined && tx.maxPriorityFeePerGas !== undefined) {
+      payloadGasParams = {
+        maxFeePerGas: hexlify(tx.maxFeePerGas),
+        maxPriorityFeePerGas: hexlify(tx.maxPriorityFeePerGas),
+      };
+    }
+
     const payload = {
       to: tx.to,
       gasLimit: hexlify(tx.gasLimit),
       data: tx.data ? hexlify(tx.data) : undefined,
       speed: tx.speed,
-      gasPrice: tx.gasPrice ? hexlify(tx.gasPrice) : undefined,
-      maxFeePerGas: tx.maxFeePerGas ? hexlify(tx.maxFeePerGas) : undefined,
-      maxPriorityFeePerGas: tx.maxPriorityFeePerGas ? hexlify(tx.maxPriorityFeePerGas) : undefined,
       value: tx.value ? hexlify(tx.value) : undefined,
       validUntil: tx.validUntil ? new Date(tx.validUntil).toISOString() : undefined,
+      ...payloadGasParams,
     };
 
     const relayedTransaction = nonce
