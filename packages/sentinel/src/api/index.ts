@@ -46,7 +46,6 @@ export class SentinelClient extends BaseApiClient {
 
   public async create(sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
     const newSentinel = await this.constructSentinelRequest(sentinel);
-    console.log('newSentinel', newSentinel);
     return this.apiCall(async (api) => {
       return await api.post(`/subscribers`, newSentinel);
     });
