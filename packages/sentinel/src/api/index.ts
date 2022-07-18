@@ -46,6 +46,7 @@ export class SentinelClient extends BaseApiClient {
 
   public async create(sentinel: CreateSentinelRequest): Promise<CreateSentinelResponse> {
     const newSentinel = await this.constructSentinelRequest(sentinel);
+    console.log('newSentinel', newSentinel);
     return this.apiCall(async (api) => {
       return await api.post(`/subscribers`, newSentinel);
     });
@@ -142,6 +143,7 @@ export class SentinelClient extends BaseApiClient {
         conditions: sentinel.fortaConditions,
         autotaskCondition: sentinel.autotaskCondition ? { autotaskId: sentinel.autotaskCondition } : undefined,
       },
+      privateFortaNodeId: sentinel.privateFortaNodeId,
       type: 'FORTA',
     };
   }
@@ -294,6 +296,7 @@ export class SentinelClient extends BaseApiClient {
       addresses: sentinel.fortaRule.addresses,
       agentIDs: sentinel.fortaRule.agentIDs,
       fortaConditions: sentinel.fortaRule.conditions,
+      privateFortaNodeId: sentinel.privateFortaNodeId,
     };
   }
 

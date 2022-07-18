@@ -30,6 +30,7 @@ export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreate
 }
 
 export interface ExternalCreateFortaSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
+  privateFortaNodeId?: string;
   network?: Network;
   fortaLastProcessedTime?: string;
   addresses?: Address[];
@@ -75,6 +76,7 @@ export interface BaseCreateSubscriberResponse extends BaseCreateSubscriberReques
 }
 
 export interface PartialCreateFortaSubscriberRequest {
+  privateFortaNodeId?: string;
   fortaRule: FortaRule;
   network?: Network;
   type: 'FORTA';
