@@ -1,3 +1,4 @@
+// import axios from 'axios';
 import axios from 'axios';
 import { createApi } from './api';
 
@@ -8,7 +9,7 @@ const key = 'key';
 const token = 'token';
 
 describe('createApi', () => {
-  test('passes correct arguments to axois', () => {
+  test('passes correct arguments to axios', () => {
     createApi(key, token, apiUrl);
     expect(axios.create).toBeCalledWith({
       baseURL: apiUrl,
