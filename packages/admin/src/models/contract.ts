@@ -7,5 +7,4 @@ export interface Contract {
   address: Address;
   name: string;
   abi?: string;
-  natSpec?: string;
 }
