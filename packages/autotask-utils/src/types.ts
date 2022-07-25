@@ -244,6 +244,7 @@ export type BlockAlert = TFortaAlert & {
 
 interface TFortaAlert {
   addresses?: string[];
+  createdAt: string;
   severity: string;
   alertId: string;
   scanNodeCount: number;
