@@ -126,7 +126,7 @@ const contract = {
 await client.proposeUpgrade({ newImplementation }, contract);
 ```
 
-Alternatively, you can add any contract explicitly by using the `addContract` method, and setting network, address, name, and ABI. The same method can be used to update the contract's name or ABI.
+Alternatively, you can add any contract explicitly by using the `addContract` method, and setting network, address, name, natspec and ABI. The same method can be used to update the contract's name or ABI.
 
 ```js
 await client.addContract({
@@ -134,6 +134,7 @@ await client.addContract({
   address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E',
   name: 'My contract',
   abi: '[...]',
+  natSpec: '{devdoc:{...}, userdoc: {...}}'
 });
 ```
 
