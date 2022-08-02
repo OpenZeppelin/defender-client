@@ -1,6 +1,6 @@
 {
   "name": "example-action-proposal",
-  "version": "1.26.0",
+  "version": "1.26.2",
   "private": true,
   "main": "index.js",
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "defender-admin-client": "^1.25.0",
+    "defender-admin-client": "1.26.2",
     "dotenv": "^8.2.0"
   }
 }
