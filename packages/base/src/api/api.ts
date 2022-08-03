@@ -1,6 +1,11 @@
-import axios, { AxiosInstance } from 'axios';
-import { pick } from 'lodash';
+import axios, { AxiosError, AxiosInstance } from 'axios';
+import { pick } from 'lodash/fp';
+import { DefenderApiResponseError } from './api-error';
 import { authenticate, PoolData, UserPass } from './auth';
+
+export function rejectWithDefenderApiError(axiosError: AxiosError): Promise<never> {
+  return Promise.reject(new DefenderApiResponseError(axiosError));
+}
 
 export function createApi(key: string, token: string, apiUrl: string): AxiosInstance {
   const instance = axios.create({
@@ -12,15 +17,7 @@ export function createApi(key: string, token: string, apiUrl: string): AxiosInst
     },
   });
 
-  instance.interceptors.response.use(
-    (response) => response.data,
-    (error) =>
-      Promise.reject({
-        response: pick(error.response, 'status', 'statusText', 'data'),
-        message: error.message,
-        request: pick(error.request, 'path', 'method'),
-      }),
-  );
+  instance.interceptors.response.use(pick(['data']), rejectWithDefenderApiError);
 
   return instance;
 }
