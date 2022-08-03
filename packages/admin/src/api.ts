@@ -12,6 +12,7 @@ type UpgradeParams = {
   via?: Address;
   viaType?: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
   newImplementation: string;
+  newImplementationAbi: string;
 };
 
 type PauseParams = {
@@ -73,6 +74,7 @@ export class AdminClient extends BaseApiClient {
       type: 'upgrade',
       metadata: {
         newImplementationAddress: params.newImplementation,
+        newImplementationAbi: params.newImplementationAbi,
         proxyAdminAddress: params.proxyAdmin,
       },
       title: params.title ?? `Upgrade to ${params.newImplementation.slice(0, 10)}`,
