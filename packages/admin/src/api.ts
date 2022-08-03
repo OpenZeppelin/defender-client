@@ -12,7 +12,7 @@ type UpgradeParams = {
   via?: Address;
   viaType?: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
   newImplementation: string;
-  newImplementationAbi: string;
+  newImplementationAbi?: string;
 };
 
 type PauseParams = {
