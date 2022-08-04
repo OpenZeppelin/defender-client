@@ -142,6 +142,7 @@ export class SentinelClient extends BaseApiClient {
         conditions: sentinel.fortaConditions,
         autotaskCondition: sentinel.autotaskCondition ? { autotaskId: sentinel.autotaskCondition } : undefined,
       },
+      privateFortaNodeId: sentinel.privateFortaNodeId,
       type: 'FORTA',
     };
   }
@@ -294,6 +295,7 @@ export class SentinelClient extends BaseApiClient {
       addresses: sentinel.fortaRule.addresses,
       agentIDs: sentinel.fortaRule.agentIDs,
       fortaConditions: sentinel.fortaRule.conditions,
+      privateFortaNodeId: sentinel.privateFortaNodeId,
     };
   }
 

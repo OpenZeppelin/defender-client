@@ -44,6 +44,7 @@ describe('SentinelClient', () => {
     paused: false,
     fortaConditions: { minimumScannerCount: 1 },
   };
+
   const oldBlockSentinel: CreateSentinelResponse = {
     type: 'BLOCK',
     subscriberId: 'old-subscriber-id',
@@ -182,6 +183,32 @@ describe('SentinelClient', () => {
       };
 
       await sentinel.create(createFortaPayload);
+      expect(sentinel.api.post).toBeCalledWith('/subscribers', expectedApiRequest);
+      expect(initSpy).toBeCalled();
+    });
+    it('passes correct Private FORTA type arguments to the API', async () => {
+      const { name, paused, type, addresses, fortaConditions } = createFortaPayload;
+
+      const expectedApiRequest = {
+        paused,
+        type,
+        name,
+        privateFortaNodeId: '0x123',
+        alertThreshold: undefined,
+        notifyConfig: {
+          autotaskId: undefined,
+          notifications: [],
+          timeoutMs: 0,
+        },
+        fortaRule: {
+          addresses: addresses,
+          agentIDs: undefined,
+          autotaskCondition: undefined,
+          conditions: fortaConditions,
+        },
+      };
+
+      await sentinel.create({ ...createFortaPayload, privateFortaNodeId: '0x123' });
       expect(sentinel.api.post).toBeCalledWith('/subscribers', expectedApiRequest);
       expect(initSpy).toBeCalled();
     });
