@@ -22,8 +22,10 @@ type PublicNetwork =
   | 'fuji'
   | 'optimism'
   | 'optimism-kovan'
+  | 'optimism-goerli'
   | 'arbitrum'
   | 'arbitrum-rinkeby'
+  | 'arbitrum-goerli'
   | 'celo'
   | 'alfajores'
   | 'harmony-s0'
@@ -59,8 +61,10 @@ export const Networks: Network[] = [
   'fuji',
   'optimism',
   'optimism-kovan',
+  'optimism-goerli',
   'arbitrum',
   'arbitrum-rinkeby',
+  'arbitrum-goerli',
   'celo',
   'alfajores',
   'harmony-s0',
@@ -107,8 +111,10 @@ const chainIds: { [key in Network]: number } = {
   fuji: 0xa869,
   optimism: 10,
   'optimism-kovan': 69,
+  'optimism-goerli': 420,
   arbitrum: 42161,
   'arbitrum-rinkeby': 421611,
+  'arbitrum-goerli': 421613,
   celo: 42220,
   alfajores: 44787,
   'harmony-s0': 1666600000,
