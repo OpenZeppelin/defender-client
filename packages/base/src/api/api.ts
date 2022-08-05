@@ -17,7 +17,7 @@ export function createApi(key: string, token: string, apiUrl: string): AxiosInst
     },
   });
 
-  instance.interceptors.response.use(pick(['data']), rejectWithDefenderApiError);
+  instance.interceptors.response.use((response) => response.data, rejectWithDefenderApiError);
 
   return instance;
 }
