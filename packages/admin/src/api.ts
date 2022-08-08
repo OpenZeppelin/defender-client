@@ -1,6 +1,6 @@
 import { BaseApiClient } from 'defender-base-client';
 import { capitalize } from 'lodash';
-import { Address, ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
+import { Hex, Address, ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
 import { Contract } from './models/contract';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
 import { getProposalUrl } from './utils';
@@ -10,7 +10,7 @@ type UpgradeParams = {
   description?: string;
   proxyAdmin?: string;
   via?: Address;
-  viaType?: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
+  viaType?: CreateProposalRequest['viaType'];
   newImplementation: string;
   newImplementationAbi?: string;
 };
@@ -19,7 +19,14 @@ type PauseParams = {
   title?: string;
   description?: string;
   via: Address;
-  viaType: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
+  viaType: CreateProposalRequest['viaType'];
+};
+
+type AccessControlParams = {
+  title?: string;
+  description?: string;
+  via: Address;
+  viaType: CreateProposalRequest['viaType'];
 };
 
 export interface ProposalResponseWithUrl extends ProposalResponse {
@@ -99,6 +106,24 @@ export class AdminClient extends BaseApiClient {
     return this.proposePauseabilityAction(params, contract, 'unpause');
   }
 
+  public async proposeGrantRole(
+    params: AccessControlParams,
+    contract: CreateProposalRequest['contract'],
+    role: Hex,
+    account: Address,
+  ): Promise<ProposalResponseWithUrl> {
+    return this.proposeAccessControlAction(params, contract, 'grantRole', role, account);
+  }
+
+  public async proposeRevokeRole(
+    params: AccessControlParams,
+    contract: CreateProposalRequest['contract'],
+    role: Hex,
+    account: Address,
+  ): Promise<ProposalResponseWithUrl> {
+    return this.proposeAccessControlAction(params, contract, 'revokeRole', role, account);
+  }
+
   private async proposePauseabilityAction(
     params: PauseParams,
     contract: CreateProposalRequest['contract'],
@@ -116,6 +141,43 @@ export class AdminClient extends BaseApiClient {
       },
       title: params.title ?? `${capitalize(action)} contract`,
       description: params.description ?? `${capitalize(action)} contract`,
+    };
+    return this.createProposal(request);
+  }
+
+  private async proposeAccessControlAction(
+    params: AccessControlParams,
+    contract: CreateProposalRequest['contract'],
+    action: 'grantRole' | 'revokeRole',
+    role: Hex,
+    account: Address,
+  ): Promise<ProposalResponseWithUrl> {
+    const request: CreateProposalRequest = {
+      contract,
+      type: 'access-control',
+      via: params.via,
+      viaType: params.viaType,
+      functionInputs: [role, account],
+      functionInterface: {
+        name: action,
+        inputs: [
+          {
+            name: 'role',
+            type: 'bytes32',
+          },
+          {
+            name: 'account',
+            type: 'address',
+          },
+        ],
+      },
+      metadata: {
+        action,
+        role,
+        account,
+      },
+      title: params.title ?? `${capitalize(action)} to ${account}`,
+      description: params.description ?? `${capitalize(action)} to ${account}`,
     };
     return this.createProposal(request);
   }
