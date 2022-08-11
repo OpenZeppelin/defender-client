@@ -1,3 +1,4 @@
+export type SentinelConfirmation = number | 'safe' | 'finalized';
 export type ExternalCreateSubscriberRequest =
   | ExternalCreateBlockSubscriberRequest
   | ExternalCreateFortaSubscriberRequest;
@@ -20,7 +21,7 @@ export interface ExternalBaseCreateSubscriberRequest {
 }
 export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
   network: Network;
-  confirmLevel?: number; // blockWatcherId
+  confirmLevel?: SentinelConfirmation; // blockWatcherId
   addresses: string[];
   abi?: string;
   eventConditions?: EventCondition[];
