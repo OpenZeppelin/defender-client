@@ -20,5 +20,8 @@
   ],
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
-  "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e"
+  "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e",
+  "dependencies": {
+    "defender-sentinel-client": "1.27.1"
+  }
 }
