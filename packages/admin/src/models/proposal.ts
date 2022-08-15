@@ -2,7 +2,8 @@ import { Network } from 'defender-base-client';
 
 // Copied from openzeppelin/defender/models/src/types/proposal-api.req.d.ts
 export type Address = string;
-export type ProposalType = 'upgrade' | 'custom' | 'pause';
+export type Hex = string;
+export type ProposalType = 'upgrade' | 'custom' | 'pause' | 'access-control';
 export type ProposalFunctionInputs = (string | boolean | (string | boolean)[])[];
 
 export interface ExternalApiCreateProposalRequest {
@@ -25,8 +26,10 @@ export interface ProposalMetadata {
   newImplementationAddress?: Address;
   newImplementationAbi?: string;
   proxyAdminAddress?: Address;
-  action?: 'pause' | 'unpause';
+  action?: 'pause' | 'unpause' | 'grantRole' | 'revokeRole';
   operationType?: 'call' | 'delegateCall';
+  account?: Address;
+  role?: Hex;
 }
 export interface ProposalTargetFunction {
   name?: string;
