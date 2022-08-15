@@ -1,6 +1,6 @@
 {
   "name": "example-pause-proposal",
-  "version": "1.27.1",
+  "version": "1.28.0",
   "private": true,
   "main": "index.js",
   "author": "Martín Verzilli <mverzilli@openzeppelin.com>",
@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "defender-admin-client": "1.27.1",
+    "defender-admin-client": "^1.28.0",
     "dotenv": "^8.2.0"
   }
 }
