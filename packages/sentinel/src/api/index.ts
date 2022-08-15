@@ -172,7 +172,7 @@ export class SentinelClient extends BaseApiClient {
       sentinel.eventConditions.map((condition) => {
         newConditions.push({
           eventConditions: [condition],
-          txConditions: sentinel.txCondition ? [{ status: 'any', expression: sentinel.txCondition }] : [],
+          txConditions: [],
           functionConditions: [],
         });
       });
@@ -182,9 +182,17 @@ export class SentinelClient extends BaseApiClient {
       sentinel.functionConditions.map((condition) => {
         newConditions.push({
           eventConditions: [],
-          txConditions: sentinel.txCondition ? [{ status: 'any', expression: sentinel.txCondition }] : [],
+          txConditions: [],
           functionConditions: [condition],
         });
+      });
+    }
+
+    if (sentinel.txCondition) {
+      newConditions.push({
+        eventConditions: [],
+        txConditions: [{ status: 'any', expression: sentinel.txCondition }],
+        functionConditions: [],
       });
     }
 

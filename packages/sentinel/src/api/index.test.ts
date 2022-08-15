@@ -27,6 +27,45 @@ describe('SentinelClient', () => {
   let initSpy: jest.SpyInstance<Promise<void>, []>;
   let listBlockwatchersSpy: jest.SpyInstance<Promise<BlockWatcher[]>>;
   let listNotificationChannelsSpy: jest.SpyInstance<Promise<NotificationResponse[]>>;
+  const ABI = `[{
+    "anonymous": false,
+    "inputs": [{
+      "indexed": true,
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "address",
+      "name": "spender",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    }],
+    "name": "Approval",
+    "type": "event"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "spender",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    }],
+    "name": "approve",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }]`;
   const createBlockPayload: ExternalCreateBlockSubscriberRequest = {
     type: 'BLOCK',
     name: 'Test BLOCK sentinel',
@@ -35,6 +74,20 @@ describe('SentinelClient', () => {
     network: 'rinkeby',
     confirmLevel: 1,
     paused: false,
+    abi: ABI,
+    txCondition: 'value == 1',
+    eventConditions: [
+      {
+        eventSignature: 'Approval(address,address,uint256)',
+        expression: '',
+      },
+    ],
+    functionConditions: [
+      {
+        expression: '',
+        functionSignature: 'approve(address,uint256)',
+      },
+    ],
   };
   const createFortaPayload: ExternalCreateFortaSubscriberRequest = {
     type: 'FORTA',
@@ -132,7 +185,8 @@ describe('SentinelClient', () => {
 
   describe('create', () => {
     it('passes correct BLOCK type arguments to the API', async () => {
-      const { name, network, paused, type, addresses } = createBlockPayload;
+      const { name, network, paused, type, addresses, abi, txCondition, eventConditions, functionConditions } =
+        createBlockPayload;
 
       const expectedApiRequest = {
         paused,
@@ -141,10 +195,17 @@ describe('SentinelClient', () => {
         network,
         addressRules: [
           {
-            abi: undefined,
+            abi,
             addresses: addresses,
             autotaskCondition: undefined,
-            conditions: [],
+            conditions: [
+              {
+                eventConditions,
+                txConditions: [{ expression: txCondition, status: 'any' }],
+                functionConditions: [],
+              },
+              { eventConditions: [], txConditions: [{ expression: txCondition, status: 'any' }], functionConditions },
+            ],
           },
         ],
         alertThreshold: undefined,
@@ -226,7 +287,8 @@ describe('SentinelClient', () => {
     it('passes correct BLOCK type arguments to the API', async () => {
       jest.spyOn(sentinel, 'get').mockImplementation(async () => oldBlockSentinel);
 
-      const { name, network, paused, type, addresses } = createBlockPayload;
+      const { name, network, paused, type, addresses, abi, txCondition, eventConditions, functionConditions } =
+        createBlockPayload;
 
       const expectedApiRequest = {
         paused,
@@ -235,10 +297,17 @@ describe('SentinelClient', () => {
         network,
         addressRules: [
           {
-            abi: '[{ method: "type" }]',
+            abi,
             addresses: addresses,
             autotaskCondition: undefined,
-            conditions: [],
+            conditions: [
+              {
+                eventConditions,
+                txConditions: [{ expression: txCondition, status: 'any' }],
+                functionConditions: [],
+              },
+              { eventConditions: [], txConditions: [{ expression: txCondition, status: 'any' }], functionConditions },
+            ],
           },
         ],
         alertThreshold: undefined,
