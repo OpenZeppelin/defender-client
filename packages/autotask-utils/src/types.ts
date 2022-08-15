@@ -1,3 +1,5 @@
+import { SentinelConfirmation } from 'defender-sentinel-client/src/models/subscriber';
+
 /**
  * Event information injected by Defender when invoking an Autotask
  */
@@ -129,7 +131,7 @@ export interface BlockSubscriberSummary {
   name: string;
   network: string;
   addresses: string[];
-  confirmBlocks: number;
+  confirmBlocks: SentinelConfirmation;
   abi: Record<string, unknown> | undefined;
   chainId: number;
 }

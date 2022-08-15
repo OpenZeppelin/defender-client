@@ -1,4 +1,5 @@
 import { Network } from 'defender-base-client';
+import { SentinelConfirmation } from 'defender-sentinel-client/src/models/subscriber';
 export interface BlockWatcherOptions {
   processBlockAttempts?: number;
   processBlockAttemptTimeoutMs?: number;
@@ -12,7 +13,7 @@ export interface BlockWatcher {
   blockWatcherId: string;
   network: Network;
   lastBlockNumber?: string;
-  confirmLevel: number; // number of blocks in past to watch, 0 is latest
+  confirmLevel: SentinelConfirmation; // number of blocks in past to watch, 0 is latest (can be 'safe' or 'finalized' on PoS clients)
   lastUpdatedAt?: string;
   blockIntervalMs: number;
   paused?: boolean;

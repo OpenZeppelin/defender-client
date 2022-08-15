@@ -155,8 +155,14 @@ export class SentinelClient extends BaseApiClient {
     sentinel: CreateBlockSentinelRequest,
   ): Promise<PartialCreateBlockSubscriberRequest> {
     const blockWatchers = await this.getBlockwatcherIdByNetwork(sentinel.network);
+
     let blockWatcherId =
-      blockWatchers.length > 0 ? _.sortBy(blockWatchers, ['confirmLevel']).reverse()[0].blockWatcherId : undefined;
+      blockWatchers.length > 0
+        ? _.sortBy(
+            blockWatchers.filter(({ confirmLevel }) => _.isNumber(confirmLevel)), // Only consider numberish confirmLevels
+            ['confirmLevel'],
+          ).reverse()[0].blockWatcherId
+        : undefined;
 
     if (sentinel.confirmLevel) {
       blockWatcherId = blockWatchers.find((watcher) => watcher.confirmLevel === sentinel.confirmLevel)?.blockWatcherId;
