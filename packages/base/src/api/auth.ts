@@ -5,6 +5,7 @@
 global.crypto = require('crypto');
 
 import { AuthenticationDetails, CognitoUserPool, CognitoUser } from 'amazon-cognito-identity-js';
+import retry from 'async-retry';
 
 // https://github.com/node-fetch/node-fetch/issues/450#issuecomment-387045223
 // in order to support:
@@ -22,6 +23,14 @@ export async function authenticate(authenticationData: UserPass, poolData: PoolD
   const userData = { Username: authenticationData.Username, Pool: userPool };
   const cognitoUser = new CognitoUser(userData);
 
+  try {
+    return await retry(() => doAuthenticate(cognitoUser, authenticationDetails), { retries: 3 });
+  } catch (err) {
+    throw new Error(`Failed to get a token for the API key ${authenticationData.Username}: ${err.message || err}`);
+  }
+}
+
+function doAuthenticate(cognitoUser: CognitoUser, authenticationDetails: AuthenticationDetails): Promise<string> {
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: function (session) {
@@ -29,7 +38,6 @@ export async function authenticate(authenticationData: UserPass, poolData: PoolD
         resolve(token);
       },
       onFailure: function (err) {
-        console.error(`Failed to get a token for the API key ${authenticationData.Username}`, err);
         reject(err);
       },
     });
