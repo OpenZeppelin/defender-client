@@ -1,6 +1,6 @@
 {
   "name": "example-update-sentinel",
-  "version": "1.28.0",
+  "version": "1.28.1",
   "private": true,
   "main": "index.js",
   "author": "Nami Shah <nami@openzeppelin.com>",
@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "defender-sentinel-client": "^1.28.0",
+    "defender-sentinel-client": "1.28.1",
     "dotenv": "^8.2.0"
   }
 }
