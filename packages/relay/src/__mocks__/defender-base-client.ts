@@ -1,9 +1,13 @@
 import { AxiosInstance } from 'axios';
 
 abstract class MockBaseApiClient extends jest.requireActual('defender-base-client').BaseApiClient {
-  private api: AxiosInstance | undefined;
-  protected async init(): Promise<void> {
-    this.api = module.exports.createAuthenticatedApi();
+  // TODO: Relayer tests are too tightly coupled with the base client implementation
+  private api: Promise<AxiosInstance> | undefined;
+  protected async init(): Promise<AxiosInstance> {
+    if (!this.api) {
+      this.api = module.exports.createAuthenticatedApi();
+    }
+    return this.api!;
   }
 }
 
