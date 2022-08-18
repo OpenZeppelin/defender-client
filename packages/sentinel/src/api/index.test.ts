@@ -15,6 +15,7 @@ jest.mock('defender-base-client');
 jest.mock('aws-sdk');
 jest.mock('axios');
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createAuthenticatedApi } = require('defender-base-client');
 
 type TestSentinelClient = Omit<SentinelClient, 'api'> & {
