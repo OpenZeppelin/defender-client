@@ -5,6 +5,9 @@ jest.mock('defender-base-client');
 jest.mock('aws-sdk');
 jest.mock('axios');
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { createAuthenticatedApi } = require('defender-base-client');
+
 type TestApiRelayer = Omit<ApiRelayer, 'api'> & {
   api: AxiosInstance;
   apiKey: string;
@@ -14,7 +17,6 @@ type TestApiRelayer = Omit<ApiRelayer, 'api'> & {
 
 describe('ApiRelayer', () => {
   let relayer: TestApiRelayer;
-  let initSpy: jest.SpyInstance<Promise<void>, []>;
   const payload = {
     to: '0x0',
     gasLimit: 21000,
@@ -22,7 +24,6 @@ describe('ApiRelayer', () => {
 
   beforeEach(async function () {
     relayer = new ApiRelayer({ apiKey: 'key', apiSecret: 'secret' }) as unknown as TestApiRelayer;
-    initSpy = jest.spyOn(relayer, 'init');
   });
 
   describe('constructor', () => {
@@ -36,7 +37,7 @@ describe('ApiRelayer', () => {
       await relayer.sendTransaction(payload);
       await relayer.sendTransaction(payload);
 
-      expect(initSpy).toBeCalledTimes(1);
+      expect(createAuthenticatedApi).toBeCalledTimes(1);
     });
 
     test('throw an init exception at the correct context', async () => {
@@ -59,7 +60,7 @@ describe('ApiRelayer', () => {
       });
       await relayer.sendTransaction(payload);
       expect(relayer.api.post).toBeCalledWith('/txs', payload);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
 
     test('at sign', async () => {
@@ -68,7 +69,7 @@ describe('ApiRelayer', () => {
       });
       await relayer.sign({ message: '0xdead' });
       expect(relayer.api.post).toBeCalledWith('/sign', { message: '0xdead' });
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
 
     test('at query', async () => {
@@ -77,7 +78,7 @@ describe('ApiRelayer', () => {
       });
       await relayer.query('42');
       expect(relayer.api.get).toBeCalledWith('txs/42');
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -85,7 +86,7 @@ describe('ApiRelayer', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.sendTransaction(payload);
       expect(relayer.api.post).toBeCalledWith('/txs', payload);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -93,7 +94,7 @@ describe('ApiRelayer', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.getRelayer();
       expect(relayer.api.get).toBeCalledWith('/relayer');
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -101,7 +102,7 @@ describe('ApiRelayer', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.query('42');
       expect(relayer.api.get).toBeCalledWith('txs/42');
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -109,7 +110,7 @@ describe('ApiRelayer', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.list({ limit: 10 });
       expect(relayer.api.get).toBeCalledWith('txs', { params: { limit: 10 } });
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -117,7 +118,7 @@ describe('ApiRelayer', () => {
     test('signs a hex string', async () => {
       await relayer.sign({ message: '0xdead' });
       expect(relayer.api.post).toBeCalledWith('/sign', { message: '0xdead' });
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -128,7 +129,7 @@ describe('ApiRelayer', () => {
         domainSeparator: '0xdead',
         hashStructMessage: '0xdead',
       });
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -137,7 +138,7 @@ describe('ApiRelayer', () => {
       await relayer.call('eth_call', ['0xa', '0xb']);
       const payload = { jsonrpc: '2.0', id: 1, method: 'eth_call', params: ['0xa', '0xb'] };
       expect(relayer.api.post).toBeCalledWith('/relayer/jsonrpc', payload);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 });
