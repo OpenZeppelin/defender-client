@@ -1,4 +1,4 @@
-import { SentinelConfirmation } from 'defender-sentinel-client/src/models/subscriber';
+export type SentinelConfirmation = number | 'safe' | 'finalized';
 
 /**
  * Event information injected by Defender when invoking an Autotask
