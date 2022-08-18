@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import { pick } from 'lodash/fp';
 import { DefenderApiResponseError } from './api-error';
 import { authenticate, PoolData, UserPass } from './auth';
 
@@ -18,7 +17,6 @@ export function createApi(key: string, token: string, apiUrl: string): AxiosInst
   });
 
   instance.interceptors.response.use(({ data }) => data, rejectWithDefenderApiError);
-
   return instance;
 }
 
