@@ -4,6 +4,7 @@ import { Hex, Address, ExternalApiCreateProposalRequest as CreateProposalRequest
 import { Contract } from './models/contract';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
 import { getProposalUrl } from './utils';
+import { Verification, VerificationRequest } from './models/verification';
 
 type UpgradeParams = {
   title?: string;
@@ -122,6 +123,12 @@ export class AdminClient extends BaseApiClient {
     account: Address,
   ): Promise<ProposalResponseWithUrl> {
     return this.proposeAccessControlAction(params, contract, 'revokeRole', role, account);
+  }
+
+  public async verify(params: VerificationRequest): Promise<Verification> {
+    return this.apiCall(async (api) => {
+      return (await api.post('/verifications', params)) as Verification;
+    });
   }
 
   private async proposePauseabilityAction(
