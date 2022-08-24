@@ -131,6 +131,16 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
+  public async get(params: Pick<VerificationRequest, 'contractAddress' | 'contractNetwork'>): Promise<Verification | undefined> {    
+    return this.apiCall(async (api) => {
+      try {
+        return (await api.get(`/verifications/${params.contractNetwork}/${params.contractAddress}`)) as Verification;
+      } catch {
+        return undefined;
+      }
+    });
+  }
+
   private async proposePauseabilityAction(
     params: PauseParams,
     contract: CreateProposalRequest['contract'],
