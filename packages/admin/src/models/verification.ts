@@ -1,3 +1,4 @@
+// Network module comes originally from models package
 import { Network } from 'defender-base-client';
 
 export type Address = string;
