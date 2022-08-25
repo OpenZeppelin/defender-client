@@ -1,4 +1,4 @@
-// Network module comes originally from models package
+// These types are vendored from the models package
 import { Network } from 'defender-base-client';
 
 export type Address = string;
@@ -23,4 +23,5 @@ export type Verification = VerificationRequest & {
   lastVerifiedAt: string;
   matchType: 'NO_MATCH' | 'PARTIAL' | 'EXACT';
   providedBy: string;
+  providedByType: 'USER_EMAIL' | 'API_KEY'
 }
