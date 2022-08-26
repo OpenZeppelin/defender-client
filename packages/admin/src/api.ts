@@ -1,5 +1,5 @@
 import { BaseApiClient } from 'defender-base-client';
-import { capitalize } from 'lodash';
+import { capitalize, isEmpty } from 'lodash';
 import { Hex, Address, ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
 import { Contract } from './models/contract';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
@@ -126,6 +126,11 @@ export class AdminClient extends BaseApiClient {
   }
 
   public async verifyDeployment(params: VerificationRequest): Promise<Verification> {
+    if (isEmpty(params.artifactUri) && (isEmpty(params.artifactPayload) || isEmpty(params.referenceUri)))
+      throw new Error(
+        `Missing artifact in verification request. Either artifactPayload and referenceUri, or artifactUri must be included in the request.`,
+      );
+
     return this.apiCall(async (api) => {
       return (await api.post('/verifications', params)) as Verification;
     });

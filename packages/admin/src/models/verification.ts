@@ -4,16 +4,19 @@ import { Network } from 'defender-base-client';
 export type Address = string;
 
 export interface VerificationRequest {
-  artifactUri: string;
+  artifactPayload?: string;
+  artifactUri?: string;
+  referenceUri?: string;
   solidityFilePath: string;
   contractName: string;
   contractAddress: Address;
   contractNetwork: Network;
 }
 
-export type Verification = VerificationRequest & {
+export type Verification = {
   verificationId: string;
-  artifactUri: string;
+  artifactUri?: string;
+  referenceUri?: string;
   solidityFilePath: string;
   contractName: string;
   contractAddress: Address;
