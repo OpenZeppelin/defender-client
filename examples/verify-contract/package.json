@@ -9,7 +9,7 @@
   "author": "Martin Verzilli <mverzilli@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "defender-admin-client": "1.29.0",
+    "defender-admin-client": "1.28.1",
     "dotenv": "^8.2.0"
   }
 }
