@@ -39,7 +39,7 @@ async function main() {
   // Or you can get Defender to verify your compilation output matches
   // the deployed bytecode by calling `verify` with the payload inline
   console.log(`Verifying deployment with inline artifact`);
-  let verification = await client.verifyDeployment({
+  verification = await client.verifyDeployment({
     artifactPayload: JSON.stringify(require('./compilation-artifact.json')),
     referenceUri: 'https://github.com/OpenZeppelin/defender-client/blob/master/examples/verify-contract/compilation-artifact.json',
     solidityFilePath: 'contracts/Vault.sol',
