@@ -23,5 +23,5 @@ export type Verification = VerificationRequest & {
   lastVerifiedAt: string;
   matchType: 'NO_MATCH' | 'PARTIAL' | 'EXACT';
   providedBy: string;
-  providedByType: 'USER_EMAIL' | 'API_KEY'
-}
+  providedByType: 'USER_EMAIL' | 'API_KEY';
+};

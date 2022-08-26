@@ -125,13 +125,15 @@ export class AdminClient extends BaseApiClient {
     return this.proposeAccessControlAction(params, contract, 'revokeRole', role, account);
   }
 
-  public async verify(params: VerificationRequest): Promise<Verification> {
+  public async verifyDeployment(params: VerificationRequest): Promise<Verification> {
     return this.apiCall(async (api) => {
       return (await api.post('/verifications', params)) as Verification;
     });
   }
 
-  public async get(params: Pick<VerificationRequest, 'contractAddress' | 'contractNetwork'>): Promise<Verification | undefined> {    
+  public async getDeploymentVerification(
+    params: Pick<VerificationRequest, 'contractAddress' | 'contractNetwork'>,
+  ): Promise<Verification | undefined> {
     return this.apiCall(async (api) => {
       try {
         return (await api.get(`/verifications/${params.contractNetwork}/${params.contractAddress}`)) as Verification;

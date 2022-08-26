@@ -25,7 +25,7 @@ async function main() {
 
   // You can get Defender to verify your compilation output matches
   // the deployed bytecode by calling `verify`
-  let verification = await client.verify({
+  let verification = await client.verifyDeployment({
     artifactUri: 'https://raw.githubusercontent.com/OpenZeppelin/defender-client/fa441208febac7f46fe7bb03c787659089315f78/examples/verify-contract/compilation-artifact.json',
     solidityFilePath: 'contracts/Vault.sol',
     contractName: 'VaultV2',
@@ -38,7 +38,7 @@ async function main() {
   // Or, if you just want to query the current verification
   // state of your contract, you can call `get` providing
   // the address and network
-  verification = await client.get({
+  verification = await client.getDeploymentVerification({
     contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
     contractNetwork: 'rinkeby',
   });
