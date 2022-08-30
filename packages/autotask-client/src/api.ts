@@ -1,9 +1,10 @@
+import { createHash } from 'crypto';
 import { BaseApiClient } from 'defender-base-client';
 import {
   CreateAutotaskRequest,
+  UpdateAutotaskRequest,
   GetSecretsResponse,
   SaveSecretsRequest,
-  UpdateAutotaskRequest,
 } from './models/autotask';
 import { AutotaskRunBase, AutotaskRunListResponse, AutotaskRunResponse } from './models/autotask-run.res';
 import { AutotaskDeleteResponse, AutotaskListResponse, AutotaskResponse } from './models/response';
@@ -13,6 +14,7 @@ type SourceFiles = {
   'index.js': string;
   [name: string]: string;
 };
+
 export class AutotaskClient extends BaseApiClient {
   protected getPoolId(): string {
     return process.env.DEFENDER_AUTOTASK_POOL_ID || 'us-west-2_94f3puJWv';
@@ -99,6 +101,11 @@ export class AutotaskClient extends BaseApiClient {
     return this.apiCall(async (api) => {
       return await api.post(`/autotasks/${autotaskId}/runs/manual`, data);
     });
+  }
+
+  public getCodeDigest(encodedZippedCode: string): string {
+    const binary = Buffer.from(encodedZippedCode, 'base64');
+    return createHash('SHA256').update(binary).end().digest('base64');
   }
 
   private async updateCode(autotaskId: string, encodedZippedCode: string): Promise<void> {

@@ -22,7 +22,9 @@ export async function zipFolder(folderPath: string): Promise<string> {
   const zip = new JSZip();
   for (const path of files) {
     const content = await promisify(readFile)(join(folderPath, path));
-    zip.file(path, content);
+    // We hardcode the date so we generate the same zip every time given the same contents
+    // This allows us to use the codedigest to decide whether or not to reupload code
+    zip.file(path, content, { date: new Date(2020, 1, 1, 0, 0, 0, 0) });
   }
 
   const zippedCode = await zip.generateAsync({ type: 'nodebuffer' });
