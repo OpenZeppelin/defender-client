@@ -116,7 +116,7 @@ export class AutotaskClient extends BaseApiClient {
 
   public async createSecrets(data: SaveSecretsRequest): Promise<GetSecretsResponse> {
     return this.apiCall(async (api) => {
-      return await api.post(`/secrets`, data);
-    }, process.env.DEFENDER_SECRETS_API_URL || 'https://defender-api.openzeppelin.com/secrets/');
+      return await api.post(`/autotasks/secrets`, data);
+    });
   }
 }
