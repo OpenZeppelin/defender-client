@@ -32,3 +32,15 @@ export interface Autotask extends Pick<CreateAutotaskRequest, 'name' | 'relayerI
   trigger: ScheduleTrigger | WebhookTrigger;
   createdAt?: string;
 }
+
+export interface SaveSecretsRequest {
+  deletes: string[];
+  secrets: SecretsMap;
+}
+export interface SecretsMap {
+  [k: string]: string;
+}
+
+export interface GetSecretsResponse {
+  secretNames?: string[];
+}

@@ -1,11 +1,11 @@
 import { BaseApiClient } from 'defender-base-client';
-import { CreateAutotaskRequest, UpdateAutotaskRequest } from './models/autotask';
 import {
-  AutotaskRunBase,
-  AutotaskRunErrorData,
-  AutotaskRunListResponse,
-  AutotaskRunResponse,
-} from './models/autotask-run.res';
+  CreateAutotaskRequest,
+  GetSecretsResponse,
+  SaveSecretsRequest,
+  UpdateAutotaskRequest,
+} from './models/autotask';
+import { AutotaskRunBase, AutotaskRunListResponse, AutotaskRunResponse } from './models/autotask-run.res';
 import { AutotaskDeleteResponse, AutotaskListResponse, AutotaskResponse } from './models/response';
 import { zipFolder, zipSources } from './zip';
 
@@ -105,5 +105,11 @@ export class AutotaskClient extends BaseApiClient {
     return this.apiCall(async (api) => {
       return await api.put(`/autotasks/${autotaskId}/code`, { encodedZippedCode });
     });
+  }
+
+  public async createSecrets(data: SaveSecretsRequest): Promise<GetSecretsResponse> {
+    return this.apiCall(async (api) => {
+      return await api.post(`/secrets`, data);
+    }, process.env.DEFENDER_SECRETS_API_URL || 'https://defender-api.openzeppelin.com/secrets/');
   }
 }

@@ -18,24 +18,24 @@ export abstract class BaseApiClient {
     this.apiSecret = params.apiSecret;
   }
 
-  protected async init(): Promise<AxiosInstance> {
+  protected async init(overrideApiUrl?: string): Promise<AxiosInstance> {
     if (!this.api) {
       const userPass = { Username: this.apiKey, Password: this.apiSecret };
       const poolData = { UserPoolId: this.getPoolId(), ClientId: this.getPoolClientId() };
-      this.api = createAuthenticatedApi(userPass, poolData, this.getApiUrl());
+      this.api = createAuthenticatedApi(userPass, poolData, overrideApiUrl ?? this.getApiUrl());
     }
     return this.api;
   }
 
-  protected async apiCall<T>(fn: (api: AxiosInstance) => Promise<T>): Promise<T> {
-    const api = await this.init();
+  protected async apiCall<T>(fn: (api: AxiosInstance) => Promise<T>, overrideApiUrl?: string): Promise<T> {
+    const api = await this.init(overrideApiUrl);
     try {
       return await fn(api);
     } catch (error) {
       // this means ID token has expired so we'll recreate session and try again
       if (error.response && error.response.status === 401 && error.response.statusText === 'Unauthorized') {
         this.api = undefined;
-        const api = await this.init();
+        const api = await this.init(overrideApiUrl);
         return await fn(api);
       }
       throw error;
