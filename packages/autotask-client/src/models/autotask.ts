@@ -31,4 +31,5 @@ export interface Autotask extends Pick<CreateAutotaskRequest, 'name' | 'relayerI
   encodedZippedCode?: string;
   trigger: ScheduleTrigger | WebhookTrigger;
   createdAt?: string;
+  codeDigest?: string;
 }
