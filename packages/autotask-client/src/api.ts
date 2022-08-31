@@ -1,6 +1,11 @@
 import { createHash } from 'crypto';
 import { BaseApiClient } from 'defender-base-client';
-import { CreateAutotaskRequest, UpdateAutotaskRequest } from './models/autotask';
+import {
+  CreateAutotaskRequest,
+  UpdateAutotaskRequest,
+  GetSecretsResponse,
+  SaveSecretsRequest,
+} from './models/autotask';
 import { AutotaskRunBase, AutotaskRunListResponse, AutotaskRunResponse } from './models/autotask-run.res';
 import { AutotaskDeleteResponse, AutotaskListResponse, AutotaskResponse } from './models/response';
 import { zipFolder, zipSources } from './zip';
@@ -106,6 +111,12 @@ export class AutotaskClient extends BaseApiClient {
   private async updateCode(autotaskId: string, encodedZippedCode: string): Promise<void> {
     return this.apiCall(async (api) => {
       return await api.put(`/autotasks/${autotaskId}/code`, { encodedZippedCode });
+    });
+  }
+
+  public async createSecrets(data: SaveSecretsRequest): Promise<GetSecretsResponse> {
+    return this.apiCall(async (api) => {
+      return await api.post(`/secrets`, data);
     });
   }
 }

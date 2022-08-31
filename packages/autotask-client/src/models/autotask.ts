@@ -33,3 +33,15 @@ export interface Autotask extends Pick<CreateAutotaskRequest, 'name' | 'relayerI
   createdAt?: string;
   codeDigest?: string;
 }
+
+export interface SaveSecretsRequest {
+  deletes: string[];
+  secrets: SecretsMap;
+}
+export interface SecretsMap {
+  [k: string]: string;
+}
+
+export interface GetSecretsResponse {
+  secretNames?: string[];
+}

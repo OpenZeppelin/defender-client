@@ -1,0 +1,15 @@
+{
+  "name": "example-create-secret",
+  "version": "1.28.1",
+  "private": true,
+  "main": "index.js",
+  "author": "Nami Shah <nami@openzeppelin.com>",
+  "license": "MIT",
+  "scripts": {
+    "run": "node index.js"
+  },
+  "dependencies": {
+    "defender-autotask-client": "1.28.1",
+    "dotenv": "^8.2.0"
+  }
+}
