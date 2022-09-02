@@ -81,9 +81,9 @@ export class RelayClient extends BaseApiClient {
     });
   }
 
-  public async createKey(relayerId: string): Promise<RelayerApiKey> {
+  public async createKey(relayerId: string, stackResourceId?: string): Promise<RelayerApiKey> {
     return this.apiCall(async (api) => {
-      return await api.post(`/relayers/${relayerId}/keys`);
+      return await api.post(`/relayers/${relayerId}/keys`, { stackResourceId });
     });
   }
 

@@ -59,6 +59,7 @@ export interface RelayerGetResponse {
   pendingTxCost: string;
   minBalance: BigUInt;
   policies: UpdateRelayerPoliciesRequest;
+  stackResourceId?: string;
 }
 
 // updating reference interface name RelayerGetResponse to match conventions
@@ -77,6 +78,7 @@ export interface CreateRelayerRequest {
   network: Network;
   minBalance: BigUInt;
   policies?: UpdateRelayerPoliciesRequest;
+  stackResourceId?: string;
 }
 
 export interface UpdateRelayerPoliciesRequest {
@@ -97,6 +99,7 @@ export interface RelayerApiKey {
   secretKey?: string;
   apiKey: string;
   createdAt: string;
+  stackResourceId?: string;
 }
 
 export interface DeleteRelayerApiKeyResponse {
