@@ -120,10 +120,7 @@ export class SentinelClient extends BaseApiClient {
 
   public async updateNotificationChannel(notification: UpdateNotificationRequest): Promise<NotificationResponse> {
     return this.apiCall(async (api) => {
-      return await api.put(
-        `/notifications/${notification.type}/${notification.notificationId}`,
-        _.omit(notification, 'notificationId'),
-      );
+      return await api.put(`/notifications/${notification.type}/${notification.notificationId}`, notification);
     });
   }
 
