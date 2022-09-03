@@ -119,4 +119,10 @@ export class AutotaskClient extends BaseApiClient {
       return await api.post(`/secrets`, data);
     });
   }
+
+  public async listSecrets(): Promise<GetSecretsResponse> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/secrets`);
+    });
+  }
 }
