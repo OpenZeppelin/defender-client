@@ -53,6 +53,12 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
+  public async deleteContract(contractId: string): Promise<string> {
+    return this.apiCall(async (api) => {
+      return (await api.delete(`/contracts/${contractId}`)) as string;
+    });
+  }
+
   public async listContracts(): Promise<Omit<Contract, 'abi'>[]> {
     return this.apiCall(async (api) => {
       return (await api.get('/contracts')) as Omit<Contract, 'abi'>[];
