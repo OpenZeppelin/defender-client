@@ -1,6 +1,6 @@
 {
   "name": "defender-autotask-utils",
-  "version": "1.28.1",
+  "version": "1.30.0",
   "description": "Utils library for writing Defender Autotasks",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
