@@ -8,6 +8,7 @@ export interface CreateAutotaskRequest {
     cron?: string;
   };
   paused: boolean;
+  stackResourceId?: string;
 }
 
 export interface UpdateAutotaskRequest extends Omit<CreateAutotaskRequest, 'encodedZippedCode'> {
@@ -26,7 +27,7 @@ export interface WebhookTrigger {
   token: string;
 }
 
-export interface Autotask extends Pick<CreateAutotaskRequest, 'name' | 'relayerId' | 'paused'> {
+export interface Autotask extends Pick<CreateAutotaskRequest, 'name' | 'relayerId' | 'paused' | 'stackResourceId'> {
   autotaskId: string;
   encodedZippedCode?: string;
   trigger: ScheduleTrigger | WebhookTrigger;
