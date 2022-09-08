@@ -73,7 +73,13 @@ async function updateCode() {
  */
 async function tailRuns() {
   const autotaskId = argv[3];
-  await tailLogsFor(initClient(), autotaskId);
+  try {
+    await tailLogsFor(initClient(), autotaskId);
+  } catch (e) {
+    const err = e as Error | AxiosError;
+    console.error(`Error on listening to Autotask runs: ${err.message}`);
+    process.exit(1);
+  }
 }
 
 /**

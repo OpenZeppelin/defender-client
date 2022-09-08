@@ -72,9 +72,7 @@ export async function tailLogsFor(client: AutotaskClient, autotaskId: string) {
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
-  } catch (error) {
-    const err = error as Error | AxiosError;
-    console.error(`Error on listening to Autotask runs: ${err.message}`);
-    process.exit(1);
+  } catch (e) {
+    throw e;
   }
 }
