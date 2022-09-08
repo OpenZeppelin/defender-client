@@ -3,13 +3,7 @@ import { AxiosError } from 'axios';
 import 'dotenv/config';
 import { argv } from 'process';
 import { VERSION } from '.';
-import {
-  AutotaskRunErrorData,
-  AutotaskRunListItemResponse,
-  AutotaskRunStatus,
-  AutotaskRunSuccessData,
-} from './models/autotask-run.res';
-import { initClient, validateId, validatePath } from './utils';
+import { initClient, tailLogsFor, validateId, validatePath } from './utils';
 
 type Command = 'update-code' | 'tail-runs' | 'execute-run';
 
@@ -79,39 +73,10 @@ async function updateCode() {
  */
 async function tailRuns() {
   const autotaskId = argv[3];
-
   try {
-    validateId(autotaskId);
-    const client = initClient();
-    console.warn(`\nPolling latest runs of autotask '${autotaskId}'...\n`);
-    // Poll autotask runs every 2 seconds and if there are new runs, get run details and print them out.
-    let lastRun: AutotaskRunListItemResponse | undefined;
-    while (true) {
-      const newRuns = await client.listAutotaskRuns(autotaskId);
-      // If cached last run id has changed
-      if (newRuns.items[0]?.autotaskRunId !== lastRun?.autotaskRunId) {
-        lastRun = newRuns.items[0]; // cache new last run to avoid duplicates.
-        const status = lastRun.status as AutotaskRunStatus;
-        if (status === 'pending') {
-          lastRun = undefined; // clean up so we can check it again on the next poll.
-        } else if (status === 'error') {
-          const runDetails = (await client.getAutotaskRun(lastRun.autotaskRunId)) as AutotaskRunErrorData;
-          console.log(`\nError: ${runDetails.message}`);
-          runDetails.decodedLogs ? console.log(`\n${runDetails.decodedLogs}`) : console.log(`No logs available.`);
-        } else if (status === 'success') {
-          const runDetails = (await client.getAutotaskRun(lastRun.autotaskRunId)) as AutotaskRunSuccessData;
-          console.log(`\n${runDetails.decodedLogs}`);
-        } else if (status === 'throttled') {
-          console.warn(
-            `\nThis autotask run was canceled since the hourly run capacity for your account has been exceeded. Contact us at defender-support@openzeppelin.com for additional capacity.`,
-          );
-        }
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    }
-  } catch (error) {
-    const err = error as Error | AxiosError;
+    await tailLogsFor(initClient(), autotaskId);
+  } catch (e) {
+    const err = e as Error | AxiosError;
     console.error(`Error on listening to Autotask runs: ${err.message}`);
     process.exit(1);
   }
