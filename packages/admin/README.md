@@ -110,7 +110,16 @@ You can list all proposals:
 const proposals = await client.listProposals();
 ```
 
-You can filter your active proposals by `isActive` property present on each proposal in the list response.
+You can filter your active proposals by `isActive` property present on each proposal in the list response. By default, only unarchived proposals are returned, but you can override this by adding an `includeArchived: true` option in the call.
+
+### Archiving proposals
+
+You can archive or unarchive a proposal given its contract and proposal ids:
+
+```js
+await client.archiveProposal(contractId, proposalId);
+await client.unarchiveProposal(contractId, proposalId);
+```
 
 ## Adding Contracts
 

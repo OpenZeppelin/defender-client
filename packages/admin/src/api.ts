@@ -72,10 +72,28 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
-  public async listProposals(): Promise<ProposalResponseWithUrl[]> {
+  public async listProposals(opts: { includeArchived?: boolean } = {}): Promise<ProposalResponseWithUrl[]> {
     return this.apiCall(async (api) => {
-      const response = (await api.get('/proposals')) as ProposalResponse[];
+      const response = (await api.get('/proposals', { params: opts })) as ProposalResponse[];
       return response.map((proposal) => ({ ...proposal, url: getProposalUrl(proposal) }));
+    });
+  }
+
+  public async archiveProposal(contractId: string, proposalId: string): Promise<ProposalResponseWithUrl> {
+    return this.apiCall(async (api) => {
+      const response = (await api.put(`/contracts/${contractId}/proposals/${proposalId}/archived`, {
+        archived: true,
+      })) as ProposalResponse;
+      return { ...response, url: getProposalUrl(response) };
+    });
+  }
+
+  public async unarchiveProposal(contractId: string, proposalId: string): Promise<ProposalResponseWithUrl> {
+    return this.apiCall(async (api) => {
+      const response = (await api.put(`/contracts/${contractId}/proposals/${proposalId}/archived`, {
+        archived: false,
+      })) as ProposalResponse;
+      return { ...response, url: getProposalUrl(response) };
     });
   }
 
