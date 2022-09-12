@@ -34,7 +34,7 @@ yarn run lerna publish v1.3.0-rc.4 --preid rc --dist-tag next --pre-dist-tag nex
 And to publish the final release:
 
 ```
-yarn run lerna publish --exact
+yarn run lerna publish --exact --force-publish
 ```
 
 ## Examples
