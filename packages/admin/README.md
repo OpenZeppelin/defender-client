@@ -57,12 +57,13 @@ Note that this can potentially brick your multisig, if the contract you delegate
 
 ### Upgrade proposals
 
-To create an `upgrade` action proposal, just provide the proxy contract network and address, along with the new implementation address, and Defender will automatically resolve the rest:
+To create an `upgrade` action proposal, provide the proxy contract network and address, along with the new implementation address, and Defender will automatically resolve the rest (note that if no newImplementationAbi is provided the previous implementation ABI will be assumed for the proposal):
 
 ```js
 const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
+const newImplementationAbi = '[...]'
 const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
-await client.proposeUpgrade({ newImplementation }, contract);
+await client.proposeUpgrade({ newImplementation, newImplementationAbi }, contract);
 ```
 
 If your proxies do not implement the [EIP1967 admin slot](https://eips.ethereum.org/EIPS/eip-1967#admin-address), you will need to provide either the [`ProxyAdmin` contract](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/proxy/transparent/ProxyAdmin.sol) or the Account with rights to execute the upgrade, as shown below.
@@ -72,8 +73,9 @@ If your proxies do not implement the [EIP1967 admin slot](https://eips.ethereum.
 ```js
 const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const proxyAdmin = '0x2fC100f1BeA4ACCD5dA5e5ed725D763c90e8ca96';
+const newImplementationAbi = '[...]'
 const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
-await client.proposeUpgrade({ newImplementation, proxyAdmin }, contract);
+await client.proposeUpgrade({ newImplementation, newImplementationAbi, proxyAdmin }, contract);
 ```
 
 #### Explicit owner account
@@ -83,7 +85,8 @@ const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const via = '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1';
 const viaType = 'Gnosis Safe'; // or 'Gnosis Multisig', or 'EOA'
 const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
-await client.proposeUpgrade({ newImplementation, via, viaType }, contract);
+const newImplementationAbi = '[...]'
+await client.proposeUpgrade({ newImplementation, newImplementationAbi, via, viaType }, contract);
 ```
 
 ### Pause proposals
