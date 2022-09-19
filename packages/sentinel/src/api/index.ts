@@ -143,6 +143,7 @@ export class SentinelClient extends BaseApiClient {
         autotaskCondition: sentinel.autotaskCondition ? { autotaskId: sentinel.autotaskCondition } : undefined,
       },
       privateFortaNodeId: sentinel.privateFortaNodeId,
+      network: sentinel.network,
       type: 'FORTA',
     };
   }

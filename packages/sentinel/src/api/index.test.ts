@@ -94,6 +94,7 @@ describe('SentinelClient', () => {
   const createFortaPayload: ExternalCreateFortaSubscriberRequest = {
     type: 'FORTA',
     name: 'Test FORTA sentinel',
+    network: 'goerli',
     addresses: ['0xdead'],
     notificationChannels: [],
     paused: false,
@@ -225,12 +226,13 @@ describe('SentinelClient', () => {
     });
 
     it('passes correct FORTA type arguments to the API', async () => {
-      const { name, paused, type, addresses, fortaConditions } = createFortaPayload;
+      const { name, paused, type, addresses, fortaConditions, network } = createFortaPayload;
 
       const expectedApiRequest = {
         paused,
         type,
         name,
+        network,
         alertThreshold: undefined,
         notifyConfig: {
           autotaskId: undefined,
@@ -250,12 +252,13 @@ describe('SentinelClient', () => {
       expect(createAuthenticatedApi).toBeCalled();
     });
     it('passes correct Private FORTA type arguments to the API', async () => {
-      const { name, paused, type, addresses, fortaConditions } = createFortaPayload;
+      const { name, paused, type, addresses, fortaConditions, network } = createFortaPayload;
 
       const expectedApiRequest = {
         paused,
         type,
         name,
+        network,
         privateFortaNodeId: '0x123',
         alertThreshold: undefined,
         notifyConfig: {
@@ -343,12 +346,13 @@ describe('SentinelClient', () => {
       };
       jest.spyOn(sentinel, 'get').mockImplementation(async () => oldSentinel);
 
-      const { name, paused, type, addresses, fortaConditions } = createFortaPayload;
+      const { name, paused, type, addresses, fortaConditions, network } = createFortaPayload;
 
       const expectedApiRequest = {
         paused,
         type,
         name,
+        network,
         alertThreshold: undefined,
         notifyConfig: {
           autotaskId: undefined,
