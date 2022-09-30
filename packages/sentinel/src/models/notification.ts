@@ -9,55 +9,49 @@ export type SaveNotificationRequest =
 
 export type NotificationType = 'slack' | 'email' | 'discord' | 'telegram' | 'datadog';
 
-export interface SaveNotificationSlackRequest {
+export type BaseNotificationRequest = {
   name: string;
-  config: SlackConfig;
   paused: boolean;
+  stackResourceId?: string;
+};
+
+export interface SaveNotificationSlackRequest extends BaseNotificationRequest {
+  config: SlackConfig;
 }
 export interface SlackConfig {
   url: string;
 }
 
-export interface SaveNotificationTelegramBotRequest {
-  name: string;
+export interface SaveNotificationTelegramBotRequest extends BaseNotificationRequest {
   config: TelegramBotConfig;
-  paused: boolean;
 }
 export interface TelegramBotConfig {
   botToken: string;
   chatId: string;
 }
 
-export interface SaveNotificationEmailRequest {
-  name: string;
+export interface SaveNotificationEmailRequest extends BaseNotificationRequest {
   config: EmailConfig;
-  paused: boolean;
 }
 export interface EmailConfig {
   emails: string[];
 }
 
-export interface SaveNotificationDiscordRequest {
-  name: string;
+export interface SaveNotificationDiscordRequest extends BaseNotificationRequest {
   config: DiscordConfig;
-  paused: boolean;
 }
 export interface DiscordConfig {
   url: string;
 }
 
-export interface NotificationSummary {
+export interface NotificationSummary extends BaseNotificationRequest {
   notificationId: string;
-  name: string;
   type: NotificationType;
-  paused: boolean;
   [k: string]: unknown;
 }
 
-export interface SaveNotificationDatadogRequest {
-  name: string;
+export interface SaveNotificationDatadogRequest extends BaseNotificationRequest {
   config: DatadogConfig;
-  paused: boolean;
 }
 export interface DatadogConfig {
   apiKey: string;
@@ -71,5 +65,5 @@ export interface NotificationRequest {
 
 export type DeleteNotificationRequest = NotificationRequest;
 export type UpdateNotificationRequest = NotificationRequest & SaveNotificationRequest;
-export type GetNotificationRequest = NotificationRequest;
+export type GetNotificationRequest = NotificationRequest & Omit<BaseNotificationRequest, 'name' | 'paused'>;
 export type CreateNotificationRequest = Omit<NotificationRequest, 'notificationId'> & SaveNotificationRequest;

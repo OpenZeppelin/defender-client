@@ -1,3 +1,4 @@
+export type SentinelConfirmation = number | 'safe' | 'finalized';
 export type ExternalCreateSubscriberRequest =
   | ExternalCreateBlockSubscriberRequest
   | ExternalCreateFortaSubscriberRequest;
@@ -17,10 +18,11 @@ export interface ExternalBaseCreateSubscriberRequest {
   alertMessageBody?: string;
   notificationChannels: string[];
   type: 'FORTA' | 'BLOCK';
+  stackResourceId?: string;
 }
 export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
   network: Network;
-  confirmLevel?: number; // blockWatcherId
+  confirmLevel?: SentinelConfirmation; // blockWatcherId
   addresses: string[];
   abi?: string;
   eventConditions?: EventCondition[];
@@ -68,6 +70,7 @@ export interface BaseCreateSubscriberRequest {
   paused: boolean;
   alertThreshold?: Threshold;
   notifyConfig?: Notifications;
+  stackResourceId?: string;
 }
 
 export interface BaseCreateSubscriberResponse extends BaseCreateSubscriberRequest {

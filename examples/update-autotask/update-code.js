@@ -8,15 +8,24 @@ async function main() {
   if (!autotaskId) throw new Error(`AutotaskId missing`);
   const { TEAM_API_KEY: apiKey, TEAM_API_SECRET: apiSecret } = process.env;
   if (!apiKey || !apiSecret) throw new Error(`Team API Key missing`);
-  console.log(apiKey)
-  console.log(apiSecret)
 
   // Setup client
   const client = new AutotaskClient({ apiKey, apiSecret });
 
-  // Update code
-  await client.updateCodeFromFolder(autotaskId, './code');
-  console.log(`Autotask code updated!`);
+  // Get new code digest
+  const code = await client.getEncodedZippedCodeFromFolder('./code');
+  const newDigest = client.getCodeDigest(code);
+
+  // Get existing one
+  const { codeDigest } = await client.get(autotaskId);
+
+  // Update code only if changed
+  if (newDigest === codeDigest) {
+    console.log(`Code digest matches (skipping upload)`);
+  } else {
+    await client.updateCodeFromFolder(autotaskId, './code');
+    console.log(`Autotask code updated`);
+  }
 }
 
 if (require.main === module) {

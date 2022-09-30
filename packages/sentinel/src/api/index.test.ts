@@ -15,6 +15,9 @@ jest.mock('defender-base-client');
 jest.mock('aws-sdk');
 jest.mock('axios');
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { createAuthenticatedApi } = require('defender-base-client');
+
 type TestSentinelClient = Omit<SentinelClient, 'api'> & {
   api: AxiosInstance;
   apiKey: string;
@@ -24,9 +27,47 @@ type TestSentinelClient = Omit<SentinelClient, 'api'> & {
 
 describe('SentinelClient', () => {
   let sentinel: TestSentinelClient;
-  let initSpy: jest.SpyInstance<Promise<void>, []>;
   let listBlockwatchersSpy: jest.SpyInstance<Promise<BlockWatcher[]>>;
   let listNotificationChannelsSpy: jest.SpyInstance<Promise<NotificationResponse[]>>;
+  const ABI = `[{
+    "anonymous": false,
+    "inputs": [{
+      "indexed": true,
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    }, {
+      "indexed": true,
+      "internalType": "address",
+      "name": "spender",
+      "type": "address"
+    }, {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    }],
+    "name": "Approval",
+    "type": "event"
+  }, {
+    "inputs": [{
+      "internalType": "address",
+      "name": "spender",
+      "type": "address"
+    }, {
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    }],
+    "name": "approve",
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }]`;
   const createBlockPayload: ExternalCreateBlockSubscriberRequest = {
     type: 'BLOCK',
     name: 'Test BLOCK sentinel',
@@ -35,10 +76,25 @@ describe('SentinelClient', () => {
     network: 'rinkeby',
     confirmLevel: 1,
     paused: false,
+    abi: ABI,
+    txCondition: 'value == 1',
+    eventConditions: [
+      {
+        eventSignature: 'Approval(address,address,uint256)',
+        expression: '',
+      },
+    ],
+    functionConditions: [
+      {
+        expression: '',
+        functionSignature: 'approve(address,uint256)',
+      },
+    ],
   };
   const createFortaPayload: ExternalCreateFortaSubscriberRequest = {
     type: 'FORTA',
     name: 'Test FORTA sentinel',
+    network: 'goerli',
     addresses: ['0xdead'],
     notificationChannels: [],
     paused: false,
@@ -69,7 +125,7 @@ describe('SentinelClient', () => {
 
   beforeEach(() => {
     sentinel = new SentinelClient({ apiKey: 'key', apiSecret: 'secret' }) as unknown as TestSentinelClient;
-    initSpy = jest.spyOn(sentinel, 'init');
+    createAuthenticatedApi.mockClear();
     listBlockwatchersSpy = jest.spyOn(sentinel, 'listBlockwatchers').mockImplementation(async () => [
       {
         blockWatcherId: 'i-am-the-watcher',
@@ -93,7 +149,7 @@ describe('SentinelClient', () => {
       await sentinel.list();
       await sentinel.list();
 
-      expect(initSpy).toBeCalledTimes(1);
+      expect(createAuthenticatedApi).toBeCalledTimes(1);
     });
 
     it('throws an init exception at the correct context', async () => {
@@ -118,7 +174,7 @@ describe('SentinelClient', () => {
 
       await sentinel.list();
       expect(sentinel.api.get).toBeCalledWith('/subscribers');
-      expect(initSpy).toBeCalledTimes(2); // First time and renewal
+      expect(createAuthenticatedApi).toBeCalledTimes(2); // First time and renewal
     });
   });
 
@@ -126,13 +182,14 @@ describe('SentinelClient', () => {
     it('calls API correctly', async () => {
       await sentinel.list();
       expect(sentinel.api.get).toBeCalledWith('/subscribers');
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
   describe('create', () => {
     it('passes correct BLOCK type arguments to the API', async () => {
-      const { name, network, paused, type, addresses } = createBlockPayload;
+      const { name, network, paused, type, addresses, abi, txCondition, eventConditions, functionConditions } =
+        createBlockPayload;
 
       const expectedApiRequest = {
         paused,
@@ -141,10 +198,17 @@ describe('SentinelClient', () => {
         network,
         addressRules: [
           {
-            abi: undefined,
+            abi,
             addresses: addresses,
             autotaskCondition: undefined,
-            conditions: [],
+            conditions: [
+              {
+                eventConditions,
+                txConditions: [{ expression: txCondition, status: 'any' }],
+                functionConditions: [],
+              },
+              { eventConditions: [], txConditions: [{ expression: txCondition, status: 'any' }], functionConditions },
+            ],
           },
         ],
         alertThreshold: undefined,
@@ -158,16 +222,17 @@ describe('SentinelClient', () => {
 
       await sentinel.create(createBlockPayload);
       expect(sentinel.api.post).toBeCalledWith('/subscribers', expectedApiRequest);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
 
     it('passes correct FORTA type arguments to the API', async () => {
-      const { name, paused, type, addresses, fortaConditions } = createFortaPayload;
+      const { name, paused, type, addresses, fortaConditions, network } = createFortaPayload;
 
       const expectedApiRequest = {
         paused,
         type,
         name,
+        network,
         alertThreshold: undefined,
         notifyConfig: {
           autotaskId: undefined,
@@ -184,15 +249,16 @@ describe('SentinelClient', () => {
 
       await sentinel.create(createFortaPayload);
       expect(sentinel.api.post).toBeCalledWith('/subscribers', expectedApiRequest);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
     it('passes correct Private FORTA type arguments to the API', async () => {
-      const { name, paused, type, addresses, fortaConditions } = createFortaPayload;
+      const { name, paused, type, addresses, fortaConditions, network } = createFortaPayload;
 
       const expectedApiRequest = {
         paused,
         type,
         name,
+        network,
         privateFortaNodeId: '0x123',
         alertThreshold: undefined,
         notifyConfig: {
@@ -210,7 +276,7 @@ describe('SentinelClient', () => {
 
       await sentinel.create({ ...createFortaPayload, privateFortaNodeId: '0x123' });
       expect(sentinel.api.post).toBeCalledWith('/subscribers', expectedApiRequest);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -218,7 +284,7 @@ describe('SentinelClient', () => {
     it('passes correct arguments to the API', async () => {
       await sentinel.get('i-am-the-watcher');
       expect(sentinel.api.get).toBeCalledWith('/subscribers/i-am-the-watcher');
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -226,7 +292,8 @@ describe('SentinelClient', () => {
     it('passes correct BLOCK type arguments to the API', async () => {
       jest.spyOn(sentinel, 'get').mockImplementation(async () => oldBlockSentinel);
 
-      const { name, network, paused, type, addresses } = createBlockPayload;
+      const { name, network, paused, type, addresses, abi, txCondition, eventConditions, functionConditions } =
+        createBlockPayload;
 
       const expectedApiRequest = {
         paused,
@@ -235,10 +302,17 @@ describe('SentinelClient', () => {
         network,
         addressRules: [
           {
-            abi: '[{ method: "type" }]',
+            abi,
             addresses: addresses,
             autotaskCondition: undefined,
-            conditions: [],
+            conditions: [
+              {
+                eventConditions,
+                txConditions: [{ expression: txCondition, status: 'any' }],
+                functionConditions: [],
+              },
+              { eventConditions: [], txConditions: [{ expression: txCondition, status: 'any' }], functionConditions },
+            ],
           },
         ],
         alertThreshold: undefined,
@@ -253,7 +327,7 @@ describe('SentinelClient', () => {
       const sentinelId = 'i-am-the-BLOCK-watcher';
       await sentinel.update(sentinelId, createBlockPayload);
       expect(sentinel.api.put).toBeCalledWith(`/subscribers/${sentinelId}`, expectedApiRequest);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
 
     it('passes correct FORTA type arguments to the API', async () => {
@@ -272,12 +346,13 @@ describe('SentinelClient', () => {
       };
       jest.spyOn(sentinel, 'get').mockImplementation(async () => oldSentinel);
 
-      const { name, paused, type, addresses, fortaConditions } = createFortaPayload;
+      const { name, paused, type, addresses, fortaConditions, network } = createFortaPayload;
 
       const expectedApiRequest = {
         paused,
         type,
         name,
+        network,
         alertThreshold: undefined,
         notifyConfig: {
           autotaskId: undefined,
@@ -295,7 +370,7 @@ describe('SentinelClient', () => {
       const sentinelId = 'i-am-the-FORTA-watcher';
       await sentinel.update(sentinelId, createFortaPayload);
       expect(sentinel.api.put).toBeCalledWith(`/subscribers/${sentinelId}`, expectedApiRequest);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
 
     it('does not override with nulls or undefined when only passing one argument', async () => {
@@ -331,7 +406,7 @@ describe('SentinelClient', () => {
         name,
       });
       expect(sentinel.api.put).toBeCalledWith(`/subscribers/${sentinelId}`, expectedApiRequest);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -347,7 +422,7 @@ describe('SentinelClient', () => {
           paused: true,
         }),
       );
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -363,7 +438,7 @@ describe('SentinelClient', () => {
           paused: false,
         }),
       );
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -371,7 +446,7 @@ describe('SentinelClient', () => {
     it('passes correct arguments to the API', async () => {
       await sentinel.delete('i-am-the-watcher');
       expect(sentinel.api.delete).toBeCalledWith('/subscribers/i-am-the-watcher');
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -388,7 +463,7 @@ describe('SentinelClient', () => {
       };
       await sentinel.createNotificationChannel(notification);
       expect(sentinel.api.post).toBeCalledWith(`/notifications/${type}`, notification);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -397,7 +472,7 @@ describe('SentinelClient', () => {
       listNotificationChannelsSpy.mockRestore();
       await sentinel.listNotificationChannels();
       expect(sentinel.api.get).toBeCalledWith('/notifications');
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -411,7 +486,7 @@ describe('SentinelClient', () => {
       };
       await sentinel.deleteNotificationChannel(notification);
       expect(sentinel.api.delete).toBeCalledWith(`/notifications/${type}/${notification.notificationId}`);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -425,7 +500,7 @@ describe('SentinelClient', () => {
       };
       await sentinel.getNotificationChannel(notification);
       expect(sentinel.api.get).toBeCalledWith(`/notifications/${type}/${notification.notificationId}`);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -445,7 +520,7 @@ describe('SentinelClient', () => {
       };
       await sentinel.updateNotificationChannel(notification);
       expect(sentinel.api.put).toBeCalledWith(`/notifications/${type}/${notificationId}`, notification);
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 
@@ -454,7 +529,7 @@ describe('SentinelClient', () => {
       listBlockwatchersSpy.mockRestore();
       await sentinel.listBlockwatchers();
       expect(sentinel.api.get).toBeCalledWith('/blockwatchers');
-      expect(initSpy).toBeCalled();
+      expect(createAuthenticatedApi).toBeCalled();
     });
   });
 

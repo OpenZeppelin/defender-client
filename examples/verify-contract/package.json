@@ -1,13 +1,14 @@
 {
-  "name": "example-upgrade-proposal",
+  "name": "example-verify-contract",
   "version": "1.31.1",
+  "description": "",
   "private": true,
   "main": "index.js",
-  "author": "Santiago Palladino <santiago@openzeppelin.com>",
-  "license": "MIT",
   "scripts": {
     "start": "node index.js"
   },
+  "author": "Martin Verzilli <mverzilli@openzeppelin.com>",
+  "license": "MIT",
   "dependencies": {
     "defender-admin-client": "1.31.1",
     "dotenv": "^8.2.0"

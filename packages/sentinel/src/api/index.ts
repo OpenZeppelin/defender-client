@@ -143,6 +143,7 @@ export class SentinelClient extends BaseApiClient {
         autotaskCondition: sentinel.autotaskCondition ? { autotaskId: sentinel.autotaskCondition } : undefined,
       },
       privateFortaNodeId: sentinel.privateFortaNodeId,
+      network: sentinel.network,
       type: 'FORTA',
     };
   }
@@ -155,8 +156,14 @@ export class SentinelClient extends BaseApiClient {
     sentinel: CreateBlockSentinelRequest,
   ): Promise<PartialCreateBlockSubscriberRequest> {
     const blockWatchers = await this.getBlockwatcherIdByNetwork(sentinel.network);
+
     let blockWatcherId =
-      blockWatchers.length > 0 ? _.sortBy(blockWatchers, ['confirmLevel']).reverse()[0].blockWatcherId : undefined;
+      blockWatchers.length > 0
+        ? _.sortBy(
+            blockWatchers.filter(({ confirmLevel }) => _.isNumber(confirmLevel)), // Only consider numberish confirmLevels
+            ['confirmLevel'],
+          ).reverse()[0].blockWatcherId
+        : undefined;
 
     if (sentinel.confirmLevel) {
       blockWatcherId = blockWatchers.find((watcher) => watcher.confirmLevel === sentinel.confirmLevel)?.blockWatcherId;
@@ -172,7 +179,7 @@ export class SentinelClient extends BaseApiClient {
       sentinel.eventConditions.map((condition) => {
         newConditions.push({
           eventConditions: [condition],
-          txConditions: sentinel.txCondition ? [{ status: 'any', expression: sentinel.txCondition }] : [],
+          txConditions: [],
           functionConditions: [],
         });
       });
@@ -182,9 +189,17 @@ export class SentinelClient extends BaseApiClient {
       sentinel.functionConditions.map((condition) => {
         newConditions.push({
           eventConditions: [],
-          txConditions: sentinel.txCondition ? [{ status: 'any', expression: sentinel.txCondition }] : [],
+          txConditions: [],
           functionConditions: [condition],
         });
+      });
+    }
+
+    if (sentinel.txCondition) {
+      newConditions.push({
+        eventConditions: [],
+        txConditions: [{ status: 'any', expression: sentinel.txCondition }],
+        functionConditions: [],
       });
     }
 
@@ -246,6 +261,7 @@ export class SentinelClient extends BaseApiClient {
         messageBody: sentinel.alertMessageBody ? sentinel.alertMessageBody : undefined,
       },
       paused: sentinel.paused ? sentinel.paused : false,
+      stackResourceId: sentinel.stackResourceId,
     };
   }
 

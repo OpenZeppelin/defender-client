@@ -1,15 +1,15 @@
 {
-  "name": "example-update-relayer",
+  "name": "example-create-secret",
   "version": "1.31.1",
   "private": true,
   "main": "index.js",
-  "author": "Dan McKeon <dan@openzeppelin.com>",
+  "author": "Nami Shah <nami@openzeppelin.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "run": "node index.js"
   },
   "dependencies": {
-    "defender-relay-client": "1.31.1",
+    "defender-autotask-client": "1.31.1",
     "dotenv": "^8.2.0"
   }
 }

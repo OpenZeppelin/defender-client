@@ -1,16 +1,17 @@
 import { BaseApiClient } from 'defender-base-client';
-import { capitalize } from 'lodash';
-import { Address, ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
+import { capitalize, isEmpty } from 'lodash';
+import { Hex, Address, ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
 import { Contract } from './models/contract';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
 import { getProposalUrl } from './utils';
+import { Verification, VerificationRequest } from './models/verification';
 
 type UpgradeParams = {
   title?: string;
   description?: string;
   proxyAdmin?: string;
   via?: Address;
-  viaType?: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
+  viaType?: CreateProposalRequest['viaType'];
   newImplementation: string;
   newImplementationAbi?: string;
 };
@@ -19,7 +20,14 @@ type PauseParams = {
   title?: string;
   description?: string;
   via: Address;
-  viaType: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
+  viaType: CreateProposalRequest['viaType'];
+};
+
+type AccessControlParams = {
+  title?: string;
+  description?: string;
+  via: Address;
+  viaType: CreateProposalRequest['viaType'];
 };
 
 export interface ProposalResponseWithUrl extends ProposalResponse {
@@ -45,6 +53,12 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
+  public async deleteContract(contractId: string): Promise<string> {
+    return this.apiCall(async (api) => {
+      return (await api.delete(`/contracts/${contractId}`)) as string;
+    });
+  }
+
   public async listContracts(): Promise<Omit<Contract, 'abi'>[]> {
     return this.apiCall(async (api) => {
       return (await api.get('/contracts')) as Omit<Contract, 'abi'>[];
@@ -58,10 +72,28 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
-  public async listProposals(): Promise<ProposalResponseWithUrl[]> {
+  public async listProposals(opts: { includeArchived?: boolean } = {}): Promise<ProposalResponseWithUrl[]> {
     return this.apiCall(async (api) => {
-      const response = (await api.get('/proposals')) as ProposalResponse[];
+      const response = (await api.get('/proposals', { params: opts })) as ProposalResponse[];
       return response.map((proposal) => ({ ...proposal, url: getProposalUrl(proposal) }));
+    });
+  }
+
+  public async archiveProposal(contractId: string, proposalId: string): Promise<ProposalResponseWithUrl> {
+    return this.apiCall(async (api) => {
+      const response = (await api.put(`/contracts/${contractId}/proposals/${proposalId}/archived`, {
+        archived: true,
+      })) as ProposalResponse;
+      return { ...response, url: getProposalUrl(response) };
+    });
+  }
+
+  public async unarchiveProposal(contractId: string, proposalId: string): Promise<ProposalResponseWithUrl> {
+    return this.apiCall(async (api) => {
+      const response = (await api.put(`/contracts/${contractId}/proposals/${proposalId}/archived`, {
+        archived: false,
+      })) as ProposalResponse;
+      return { ...response, url: getProposalUrl(response) };
     });
   }
 
@@ -99,6 +131,47 @@ export class AdminClient extends BaseApiClient {
     return this.proposePauseabilityAction(params, contract, 'unpause');
   }
 
+  public async proposeGrantRole(
+    params: AccessControlParams,
+    contract: CreateProposalRequest['contract'],
+    role: Hex,
+    account: Address,
+  ): Promise<ProposalResponseWithUrl> {
+    return this.proposeAccessControlAction(params, contract, 'grantRole', role, account);
+  }
+
+  public async proposeRevokeRole(
+    params: AccessControlParams,
+    contract: CreateProposalRequest['contract'],
+    role: Hex,
+    account: Address,
+  ): Promise<ProposalResponseWithUrl> {
+    return this.proposeAccessControlAction(params, contract, 'revokeRole', role, account);
+  }
+
+  public async verifyDeployment(params: VerificationRequest): Promise<Verification> {
+    if (isEmpty(params.artifactUri) && (isEmpty(params.artifactPayload) || isEmpty(params.referenceUri)))
+      throw new Error(
+        `Missing artifact in verification request. Either artifactPayload and referenceUri, or artifactUri must be included in the request.`,
+      );
+
+    return this.apiCall(async (api) => {
+      return (await api.post('/verifications', params)) as Verification;
+    });
+  }
+
+  public async getDeploymentVerification(
+    params: Pick<VerificationRequest, 'contractAddress' | 'contractNetwork'>,
+  ): Promise<Verification | undefined> {
+    return this.apiCall(async (api) => {
+      try {
+        return (await api.get(`/verifications/${params.contractNetwork}/${params.contractAddress}`)) as Verification;
+      } catch {
+        return undefined;
+      }
+    });
+  }
+
   private async proposePauseabilityAction(
     params: PauseParams,
     contract: CreateProposalRequest['contract'],
@@ -116,6 +189,43 @@ export class AdminClient extends BaseApiClient {
       },
       title: params.title ?? `${capitalize(action)} contract`,
       description: params.description ?? `${capitalize(action)} contract`,
+    };
+    return this.createProposal(request);
+  }
+
+  private async proposeAccessControlAction(
+    params: AccessControlParams,
+    contract: CreateProposalRequest['contract'],
+    action: 'grantRole' | 'revokeRole',
+    role: Hex,
+    account: Address,
+  ): Promise<ProposalResponseWithUrl> {
+    const request: CreateProposalRequest = {
+      contract,
+      type: 'access-control',
+      via: params.via,
+      viaType: params.viaType,
+      functionInputs: [role, account],
+      functionInterface: {
+        name: action,
+        inputs: [
+          {
+            name: 'role',
+            type: 'bytes32',
+          },
+          {
+            name: 'account',
+            type: 'address',
+          },
+        ],
+      },
+      metadata: {
+        action,
+        role,
+        account,
+      },
+      title: params.title ?? `${capitalize(action)} to ${account}`,
+      description: params.description ?? `${capitalize(action)} to ${account}`,
     };
     return this.createProposal(request);
   }

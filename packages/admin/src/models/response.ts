@@ -6,4 +6,5 @@ export interface ExternalApiProposalResponse extends ExternalApiCreateProposalRe
   proposalId: string;
   createdAt: string;
   isActive: boolean;
+  isArchived: boolean;
 }
