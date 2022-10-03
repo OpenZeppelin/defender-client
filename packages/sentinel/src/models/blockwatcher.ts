@@ -1,5 +1,5 @@
 import { Network } from 'defender-base-client';
-import { SentinelConfirmation } from 'defender-sentinel-client/src/models/subscriber';
+import { SentinelConfirmation } from './subscriber';
 export interface BlockWatcherOptions {
   processBlockAttempts?: number;
   processBlockAttemptTimeoutMs?: number;
