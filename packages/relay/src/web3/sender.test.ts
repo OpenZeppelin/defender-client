@@ -2,7 +2,8 @@ import { mock } from 'jest-mock-extended';
 import { pick } from 'lodash';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
-import { Relayer, RelayerTransaction } from '../relayer';
+import { Relayer } from '../relayer';
+import { RelayerTransaction } from '../relayer/types';
 import { DefenderRelayQueryProvider } from './query';
 import { DefenderRelaySenderOptions, DefenderRelaySenderProvider } from './sender';
 

@@ -14,19 +14,34 @@ import retry from 'async-retry';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 global.fetch = require('node-fetch').default;
 
-export type UserPass = { Username: string; Password: string };
+export type JWT = string;
+
+export type UserCredentials = { apiKey: string; apiSecret: string };
+export type InternallyManagedCredentials = { jwt: JWT };
+
+export type ClientCredentials = UserCredentials | InternallyManagedCredentials;
+
 export type PoolData = { UserPoolId: string; ClientId: string };
 
-export async function authenticate(authenticationData: UserPass, poolData: PoolData): Promise<string> {
-  const authenticationDetails = new AuthenticationDetails(authenticationData);
+export function clientIsAuthenticatedInternally(
+  credentials: ClientCredentials,
+): credentials is InternallyManagedCredentials {
+  return credentials.hasOwnProperty('jwt');
+}
+
+export async function getAuthenticationToken(authenticationData: UserCredentials, poolData: PoolData): Promise<string> {
+  const cognitoIdentity = { Username: authenticationData.apiKey, Password: authenticationData.apiSecret };
+  const authenticationDetails = new AuthenticationDetails(cognitoIdentity);
   const userPool = new CognitoUserPool(poolData);
-  const userData = { Username: authenticationData.Username, Pool: userPool };
+  const userData = { Username: cognitoIdentity.Username, Pool: userPool };
   const cognitoUser = new CognitoUser(userData);
 
   try {
     return await retry(() => doAuthenticate(cognitoUser, authenticationDetails), { retries: 3 });
-  } catch (err) {
-    throw new Error(`Failed to get a token for the API key ${authenticationData.Username}: ${err.message || err}`);
+  } catch (error) {
+    throw new Error(
+      `Failed to get a token for the API key ${cognitoIdentity.Username}: ${(error as Error).message || error}`,
+    );
   }
 }
 
@@ -37,8 +52,8 @@ function doAuthenticate(cognitoUser: CognitoUser, authenticationDetails: Authent
         const token = session.getAccessToken().getJwtToken();
         resolve(token);
       },
-      onFailure: function (err) {
-        reject(err);
+      onFailure: function (error) {
+        reject(error);
       },
     });
   });

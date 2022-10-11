@@ -2,7 +2,8 @@ import { omit } from 'lodash';
 import { callbackify, promisify } from 'util';
 import { AbstractProvider } from 'web3-core';
 import { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers';
-import { BigUInt, isRelayer, Relayer, RelayerParams, Speed } from '../relayer';
+import { isRelayer, Relayer, RelayerParams } from '../relayer';
+import { BigUInt, Speed } from '../relayer/types';
 
 type Web3Callback = (error: Error | null, result?: JsonRpcResponse) => void;
 

@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { ApiRelayer } from '../api';
+import { Relayer } from '../relayer';
 
 jest.mock('defender-base-client');
 jest.mock('aws-sdk');
@@ -8,7 +8,7 @@ jest.mock('axios');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createAuthenticatedApi } = require('defender-base-client');
 
-type TestApiRelayer = Omit<ApiRelayer, 'api'> & {
+type TestApiRelayer = Omit<Relayer, 'api'> & {
   api: AxiosInstance;
   apiKey: string;
   apiSecret: string;
@@ -23,7 +23,7 @@ describe('ApiRelayer', () => {
   };
 
   beforeEach(async function () {
-    relayer = new ApiRelayer({ apiKey: 'key', apiSecret: 'secret' }) as unknown as TestApiRelayer;
+    relayer = new Relayer({ apiKey: 'key', apiSecret: 'secret' }) as unknown as TestApiRelayer;
   });
 
   describe('constructor', () => {

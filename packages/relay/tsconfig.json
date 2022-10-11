@@ -4,8 +4,14 @@
     "declaration": true,
     "outDir": "./lib",
     "skipLibCheck": true,
-    "sourceMap": false
+    "sourceMap": false,
+    "incremental": false
   },
-  "include": ["./src"],
-  "exclude": ["**/*.test.ts", "**/__mocks__/*"]
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/__mocks__/*"
+  ]
 }

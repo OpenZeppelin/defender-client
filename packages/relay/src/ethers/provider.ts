@@ -1,9 +1,9 @@
 import { JsonRpcSigner, Network, StaticJsonRpcProvider } from '@ethersproject/providers';
-import { Relayer, RelayerParams } from '../relayer';
 import { DefenderRelaySigner } from './signer';
 import { defineReadOnly, getStatic } from '@ethersproject/properties';
 import { Networkish } from '@ethersproject/networks';
 import { BigNumber } from '@ethersproject/bignumber';
+import { Relayer, RelayerParams } from '../relayer';
 import { RelaySignerApiUrl } from '../api';
 
 export class DefenderRelayProvider extends StaticJsonRpcProvider {

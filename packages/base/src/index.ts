@@ -1,5 +1,5 @@
 export { createApi, createAuthenticatedApi } from './api/api';
-export { authenticate } from './api/auth';
+export { getAuthenticationToken } from './api/auth';
 export { BaseApiClient } from './api/client';
 export * from './utils/network';
 

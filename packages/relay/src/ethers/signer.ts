@@ -6,9 +6,11 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import { _TypedDataEncoder } from '@ethersproject/hash';
 import { Deferrable, resolveProperties, shallowCopy } from '@ethersproject/properties';
-import { Relayer, Speed, RelayerParams, isRelayer, isEIP1559Tx, isLegacyTx } from '../relayer';
+import { Relayer, RelayerParams, isRelayer } from '../relayer';
 import { Transaction } from '@ethersproject/transactions';
 import { omit } from 'lodash';
+import { Speed } from '../relayer/types';
+import { isLegacyTx, isEIP1559Tx } from '../relayer/validations';
 
 const logger = new Logger(`defender-relay-client`);
 

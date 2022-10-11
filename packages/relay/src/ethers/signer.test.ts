@@ -4,11 +4,13 @@ import { Transaction } from '@ethersproject/transactions';
 import { Contract } from '@ethersproject/contracts';
 import { mock } from 'jest-mock-extended';
 import { omit, pick } from 'lodash';
-import { Relayer, RelayerTransaction, isEIP1559Tx, isLegacyTx } from '../relayer';
+import { Relayer } from '../relayer';
 import { joinSignature, hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@ethersproject/random';
 import { DefenderRelaySigner } from './signer';
 import { _TypedDataEncoder } from '@ethersproject/hash';
+import { RelayerTransaction } from '../relayer/types';
+import { isEIP1559Tx, isLegacyTx } from '../relayer/validations';
 
 type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
 

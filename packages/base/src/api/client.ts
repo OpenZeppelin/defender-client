@@ -1,42 +1,65 @@
-import { AxiosInstance } from 'axios';
+import { AxiosError, AxiosInstance } from 'axios';
 import { createAuthenticatedApi } from './api';
+import { ClientCredentials, clientIsAuthenticatedInternally } from './auth';
+
+function sessionTokenHasExpired(httpError: AxiosError) {
+  return httpError.response?.status === 401 && httpError.response?.statusText === 'Unauthorized';
+}
 
 export abstract class BaseApiClient {
   private api: Promise<AxiosInstance> | undefined;
-  private apiKey: string;
-  private apiSecret: string;
+  private credentials: ClientCredentials;
+  private isAuthenticatedInternally: boolean;
 
   protected abstract getPoolId(): string;
   protected abstract getPoolClientId(): string;
   protected abstract getApiUrl(): string;
 
-  public constructor(params: { apiKey: string; apiSecret: string }) {
-    if (!params.apiKey) throw new Error(`API key is required`);
-    if (!params.apiSecret) throw new Error(`API secret is required`);
+  public constructor(credentials: ClientCredentials) {
+    if (clientIsAuthenticatedInternally(credentials)) {
+      this.credentials = { ...credentials };
+      this.isAuthenticatedInternally = true;
+    } else {
+      if (!credentials.apiKey) throw new Error(`API key is required`);
+      if (!credentials.apiSecret) throw new Error(`API secret is required`);
 
-    this.apiKey = params.apiKey;
-    this.apiSecret = params.apiSecret;
+      this.credentials = { ...credentials };
+      this.isAuthenticatedInternally = false;
+    }
   }
 
   protected async init(): Promise<AxiosInstance> {
     if (!this.api) {
-      const userPass = { Username: this.apiKey, Password: this.apiSecret };
-      const poolData = { UserPoolId: this.getPoolId(), ClientId: this.getPoolClientId() };
-      this.api = createAuthenticatedApi(userPass, poolData, this.getApiUrl());
+      this.api = createAuthenticatedApi({
+        credentials: this.credentials,
+        poolData: { UserPoolId: this.getPoolId(), ClientId: this.getPoolClientId() },
+        apiUrl: this.getApiUrl(),
+      });
     }
     return this.api;
   }
 
-  protected async apiCall<T>(fn: (api: AxiosInstance) => Promise<T>): Promise<T> {
+  private async recreateSession() {
+    this.api = undefined;
+    return await this.init();
+  }
+
+  private async retryWithApiNewSession<T>(apiCallFunction: (api: AxiosInstance) => Promise<T>) {
+    const newApiSession = await this.recreateSession();
+    return await apiCallFunction(newApiSession);
+  }
+
+  protected async apiCall<T>(apiCallFunction: (api: AxiosInstance) => Promise<T>): Promise<T> {
     const api = await this.init();
     try {
-      return await fn(api);
+      return await apiCallFunction(api);
     } catch (error) {
-      // this means ID token has expired so we'll recreate session and try again
-      if (error.response && error.response.status === 401 && error.response.statusText === 'Unauthorized') {
-        this.api = undefined;
-        const api = await this.init();
-        return await fn(api);
+      if (sessionTokenHasExpired(error as AxiosError)) {
+        if (this.isAuthenticatedInternally) {
+          throw new Error('Client expired');
+        } else {
+          return await this.retryWithApiNewSession(apiCallFunction);
+        }
       }
       throw error;
     }

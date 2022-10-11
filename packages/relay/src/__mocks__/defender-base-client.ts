@@ -12,7 +12,7 @@ abstract class MockBaseApiClient extends jest.requireActual('defender-base-clien
 }
 
 module.exports = {
-  authenticate: jest.fn(),
+  getAuthenticationToken: jest.fn(),
   createAuthenticatedApi: jest.fn(() => ({
     post: jest.fn(),
     get: jest.fn(),
