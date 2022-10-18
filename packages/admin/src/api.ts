@@ -79,6 +79,13 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
+  public async getProposal(contractId: string, proposalId: string): Promise<ProposalResponseWithUrl> {
+    return this.apiCall(async (api) => {
+      const response = (await api.get(`/contracts/${contractId}/proposals/${proposalId}`)) as ProposalResponse;
+      return { ...response, url: getProposalUrl(response) };
+    });
+  }
+
   public async archiveProposal(contractId: string, proposalId: string): Promise<ProposalResponseWithUrl> {
     return this.apiCall(async (api) => {
       const response = (await api.put(`/contracts/${contractId}/proposals/${proposalId}/archived`, {
