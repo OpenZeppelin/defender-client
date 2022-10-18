@@ -61,7 +61,7 @@ To create an `upgrade` action proposal, provide the proxy contract network and a
 
 ```js
 const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
-const newImplementationAbi = '[...]'
+const newImplementationAbi = '[...]';
 const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
 await client.proposeUpgrade({ newImplementation, newImplementationAbi }, contract);
 ```
@@ -73,7 +73,7 @@ If your proxies do not implement the [EIP1967 admin slot](https://eips.ethereum.
 ```js
 const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const proxyAdmin = '0x2fC100f1BeA4ACCD5dA5e5ed725D763c90e8ca96';
-const newImplementationAbi = '[...]'
+const newImplementationAbi = '[...]';
 const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
 await client.proposeUpgrade({ newImplementation, newImplementationAbi, proxyAdmin }, contract);
 ```
@@ -85,7 +85,7 @@ const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const via = '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1';
 const viaType = 'Gnosis Safe'; // or 'Gnosis Multisig', or 'EOA'
 const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
-const newImplementationAbi = '[...]'
+const newImplementationAbi = '[...]';
 await client.proposeUpgrade({ newImplementation, newImplementationAbi, via, viaType }, contract);
 ```
 
@@ -114,6 +114,14 @@ const proposals = await client.listProposals();
 ```
 
 You can filter your active proposals by `isActive` property present on each proposal in the list response. By default, only unarchived proposals are returned, but you can override this by adding an `includeArchived: true` option in the call.
+
+### Retrieve a proposal
+
+You can retrieve a proposal given its contract and proposal ids:
+
+```js
+await client.getProposal(contractId, proposalId);
+```
 
 ### Archiving proposals
 
@@ -146,7 +154,7 @@ await client.addContract({
   address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E',
   name: 'My contract',
   abi: '[...]',
-  natSpec: '{devdoc:{...}, userdoc: {...}}'
+  natSpec: '{devdoc:{...}, userdoc: {...}}',
 });
 ```
 
