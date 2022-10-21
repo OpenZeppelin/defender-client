@@ -1,26 +1,27 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { DefenderApiResponseError } from './api-error';
-import { ClientCredentials, clientIsAuthenticatedInternally, getAuthenticationToken, PoolData } from './auth';
+import { ClientCredentials, clientIsAuthenticatedWithJwt, getAuthenticationToken, PoolData } from './auth';
 
 export function rejectWithDefenderApiError(axiosError: AxiosError): Promise<never> {
   return Promise.reject(new DefenderApiResponseError(axiosError));
 }
 
 export function createApi({
-  apiKeyId,
+  apiKey,
   apiUrl,
   authenticationToken,
 }: {
   apiUrl: string;
   authenticationToken: string;
-  apiKeyId?: string;
+  apiKey: string;
 }): AxiosInstance {
   const instance = axios.create({
     baseURL: apiUrl,
     headers: {
+      'X-Api-Key': apiKey,
       Authorization: `Bearer ${authenticationToken}`,
       'Content-Type': 'application/json',
-      ...(apiKeyId && { 'X-Api-Key': apiKeyId }),
+      'Defender-Origin': process.env.DEFENDER_ORIGIN,
     },
   });
 
@@ -37,16 +38,13 @@ export async function createAuthenticatedApi({
   poolData: PoolData;
   apiUrl: string;
 }): Promise<AxiosInstance> {
-  if (clientIsAuthenticatedInternally(credentials)) {
-    return createApi({
-      apiUrl,
-      authenticationToken: credentials.jwt,
-    });
-  } else {
-    return createApi({
-      apiUrl,
-      authenticationToken: await getAuthenticationToken(credentials, poolData),
-      apiKeyId: credentials.apiKey,
-    });
-  }
+  const authenticationToken = clientIsAuthenticatedWithJwt(credentials)
+    ? credentials.jwt
+    : await getAuthenticationToken(credentials, poolData);
+
+  return createApi({
+    apiUrl,
+    apiKey: credentials.apiKey,
+    authenticationToken,
+  });
 }

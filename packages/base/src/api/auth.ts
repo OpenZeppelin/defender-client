@@ -17,13 +17,13 @@ global.fetch = require('node-fetch').default;
 export type JWT = string;
 
 export type UserCredentials = { apiKey: string; apiSecret: string };
-export type InternallyManagedCredentials = { jwt: JWT };
+export type InternallyManagedCredentials = { apiKey: string; jwt: JWT };
 
 export type ClientCredentials = UserCredentials | InternallyManagedCredentials;
 
 export type PoolData = { UserPoolId: string; ClientId: string };
 
-export function clientIsAuthenticatedInternally(
+export function clientIsAuthenticatedWithJwt(
   credentials: ClientCredentials,
 ): credentials is InternallyManagedCredentials {
   return credentials.hasOwnProperty('jwt');

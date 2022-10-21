@@ -10,7 +10,7 @@ const token = 'token';
 describe('createApi', () => {
   test('passes correct arguments to axios', () => {
     createApi({
-      apiKeyId: key,
+      apiKey: key,
       apiUrl,
       authenticationToken: token,
     });

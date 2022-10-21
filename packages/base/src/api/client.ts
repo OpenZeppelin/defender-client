@@ -1,6 +1,6 @@
 import { AxiosError, AxiosInstance } from 'axios';
 import { createAuthenticatedApi } from './api';
-import { ClientCredentials, clientIsAuthenticatedInternally } from './auth';
+import { ClientCredentials, clientIsAuthenticatedWithJwt } from './auth';
 
 function sessionTokenHasExpired(httpError: AxiosError) {
   return httpError.response?.status === 401 && httpError.response?.statusText === 'Unauthorized';
@@ -9,23 +9,26 @@ function sessionTokenHasExpired(httpError: AxiosError) {
 export abstract class BaseApiClient {
   private api: Promise<AxiosInstance> | undefined;
   private credentials: ClientCredentials;
-  private isAuthenticatedInternally: boolean;
+  private isAuthenticatedWithJwt: boolean;
 
   protected abstract getPoolId(): string;
   protected abstract getPoolClientId(): string;
   protected abstract getApiUrl(): string;
 
   public constructor(credentials: ClientCredentials) {
-    if (clientIsAuthenticatedInternally(credentials)) {
-      this.credentials = { ...credentials };
-      this.isAuthenticatedInternally = true;
+    if (!credentials.apiKey) throw new Error(`API key is required`);
+
+    if (clientIsAuthenticatedWithJwt(credentials)) {
+      if (!credentials.jwt) throw new Error(`A JWT is required`);
+
+      this.isAuthenticatedWithJwt = true;
     } else {
-      if (!credentials.apiKey) throw new Error(`API key is required`);
       if (!credentials.apiSecret) throw new Error(`API secret is required`);
 
-      this.credentials = { ...credentials };
-      this.isAuthenticatedInternally = false;
+      this.isAuthenticatedWithJwt = false;
     }
+
+    this.credentials = { ...credentials };
   }
 
   protected async init(): Promise<AxiosInstance> {
@@ -55,7 +58,7 @@ export abstract class BaseApiClient {
       return await apiCallFunction(api);
     } catch (error) {
       if (sessionTokenHasExpired(error as AxiosError)) {
-        if (this.isAuthenticatedInternally) {
+        if (this.isAuthenticatedWithJwt) {
           throw new Error('Client expired');
         } else {
           return await this.retryWithApiNewSession(apiCallFunction);

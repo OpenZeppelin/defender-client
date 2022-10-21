@@ -20,8 +20,7 @@ const { createAuthenticatedApi } = require('defender-base-client');
 
 type TestSentinelClient = Omit<SentinelClient, 'api'> & {
   api: AxiosInstance;
-  apiKey: string;
-  apiSecret: string;
+  credentials: { apiKey: string; apiSecret: string };
   init: () => Promise<void>;
 };
 
@@ -140,8 +139,8 @@ describe('SentinelClient', () => {
 
   describe('constructor', () => {
     it('sets API key and secret', () => {
-      expect(sentinel.apiKey).toBe('key');
-      expect(sentinel.apiSecret).toBe('secret');
+      expect(sentinel.credentials.apiKey).toBe('key');
+      expect(sentinel.credentials.apiSecret).toBe('secret');
     });
 
     it("doesn't call init more than once", async () => {
