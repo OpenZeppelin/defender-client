@@ -10,27 +10,31 @@ const { createAuthenticatedApi } = require('defender-base-client');
 
 type TestApiRelayer = Omit<Relayer, 'api'> & {
   api: AxiosInstance;
-  isAuthenticatedWithJwt: boolean;
-  credentials: { apiKey: string; apiSecret: string; jwt?: string };
+  isAuthenticatedWithPreSignedToken: boolean;
+  credentials: { apiKey: string; apiSecret: string; signedToken?: string };
   init: () => Promise<void>;
 };
 
 describe('Relayer', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   let relayer: TestApiRelayer;
   const payload = {
     to: '0x0',
     gasLimit: 21000,
   };
 
-  describe('JWT instantiated client', () => {
+  describe('Pre signed token instantiated client', () => {
     beforeEach(async function () {
-      relayer = new Relayer({ apiKey: 'key', jwt: 'token' } as any) as unknown as TestApiRelayer;
+      relayer = new Relayer({ apiKey: 'key', signedToken: 'token' } as any) as unknown as TestApiRelayer;
     });
 
     test('sets API key and token', () => {
       expect(relayer.credentials.apiKey).toBe('key');
-      expect(relayer.credentials.jwt).toBe('token');
-      expect(relayer.isAuthenticatedWithJwt).toBe(true);
+      expect(relayer.credentials.signedToken).toBe('token');
+      expect(relayer.isAuthenticatedWithPreSignedToken).toBe(true);
     });
 
     test('passes correct arguments to the API', async () => {
@@ -49,7 +53,7 @@ describe('Relayer', () => {
       test('sets API key and secret', () => {
         expect(relayer.credentials.apiKey).toBe('key');
         expect(relayer.credentials.apiSecret).toBe('secret');
-        expect(relayer.isAuthenticatedWithJwt).toBe(false);
+        expect(relayer.isAuthenticatedWithPreSignedToken).toBe(false);
       });
 
       test("doesn't call init more than once", async () => {

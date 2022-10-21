@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { DefenderApiResponseError } from './api-error';
-import { ClientCredentials, clientIsAuthenticatedWithJwt, getAuthenticationToken, PoolData } from './auth';
+import { ClientCredentials, clientIsAuthenticatedWithPreSignedToken, getAuthenticationToken, PoolData } from './auth';
 
 export function rejectWithDefenderApiError(axiosError: AxiosError): Promise<never> {
   return Promise.reject(new DefenderApiResponseError(axiosError));
@@ -38,8 +38,8 @@ export async function createAuthenticatedApi({
   poolData: PoolData;
   apiUrl: string;
 }): Promise<AxiosInstance> {
-  const authenticationToken = clientIsAuthenticatedWithJwt(credentials)
-    ? credentials.jwt
+  const authenticationToken = clientIsAuthenticatedWithPreSignedToken(credentials)
+    ? credentials.signedToken
     : await getAuthenticationToken(credentials, poolData);
 
   return createApi({

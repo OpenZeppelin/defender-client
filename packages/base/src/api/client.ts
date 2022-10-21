@@ -1,6 +1,6 @@
 import { AxiosError, AxiosInstance } from 'axios';
 import { createAuthenticatedApi } from './api';
-import { ClientCredentials, clientIsAuthenticatedWithJwt } from './auth';
+import { ClientCredentials, clientIsAuthenticatedWithPreSignedToken } from './auth';
 
 function sessionTokenHasExpired(httpError: AxiosError) {
   return httpError.response?.status === 401 && httpError.response?.statusText === 'Unauthorized';
@@ -9,7 +9,7 @@ function sessionTokenHasExpired(httpError: AxiosError) {
 export abstract class BaseApiClient {
   private api: Promise<AxiosInstance> | undefined;
   private credentials: ClientCredentials;
-  private isAuthenticatedWithJwt: boolean;
+  private isAuthenticatedWithPreSignedToken: boolean;
 
   protected abstract getPoolId(): string;
   protected abstract getPoolClientId(): string;
@@ -18,14 +18,14 @@ export abstract class BaseApiClient {
   public constructor(credentials: ClientCredentials) {
     if (!credentials.apiKey) throw new Error(`API key is required`);
 
-    if (clientIsAuthenticatedWithJwt(credentials)) {
-      if (!credentials.jwt) throw new Error(`A JWT is required`);
+    if (clientIsAuthenticatedWithPreSignedToken(credentials)) {
+      if (!credentials.signedToken) throw new Error(`A token is required`);
 
-      this.isAuthenticatedWithJwt = true;
+      this.isAuthenticatedWithPreSignedToken = true;
     } else {
       if (!credentials.apiSecret) throw new Error(`API secret is required`);
 
-      this.isAuthenticatedWithJwt = false;
+      this.isAuthenticatedWithPreSignedToken = false;
     }
 
     this.credentials = { ...credentials };
@@ -58,7 +58,7 @@ export abstract class BaseApiClient {
       return await apiCallFunction(api);
     } catch (error) {
       if (sessionTokenHasExpired(error as AxiosError)) {
-        if (this.isAuthenticatedWithJwt) {
+        if (this.isAuthenticatedWithPreSignedToken) {
           throw new Error('Client expired');
         } else {
           return await this.retryWithApiNewSession(apiCallFunction);

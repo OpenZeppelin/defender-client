@@ -17,16 +17,16 @@ global.fetch = require('node-fetch').default;
 export type JWT = string;
 
 export type UserCredentials = { apiKey: string; apiSecret: string };
-export type InternallyManagedCredentials = { apiKey: string; jwt: JWT };
+export type PreSignedTokenCredentials = { apiKey: string; signedToken: JWT };
 
-export type ClientCredentials = UserCredentials | InternallyManagedCredentials;
+export type ClientCredentials = UserCredentials | PreSignedTokenCredentials;
 
 export type PoolData = { UserPoolId: string; ClientId: string };
 
-export function clientIsAuthenticatedWithJwt(
+export function clientIsAuthenticatedWithPreSignedToken(
   credentials: ClientCredentials,
-): credentials is InternallyManagedCredentials {
-  return credentials.hasOwnProperty('jwt');
+): credentials is PreSignedTokenCredentials {
+  return credentials.hasOwnProperty('signedToken');
 }
 
 export async function getAuthenticationToken(authenticationData: UserCredentials, poolData: PoolData): Promise<string> {
