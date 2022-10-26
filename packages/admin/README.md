@@ -105,6 +105,76 @@ await client.proposeUnpause({ via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b',
 
 Note that for `pause` and `unpause` proposals to work, your contract ABI must include corresponding `pause()` and `unpause()` functions.
 
+### Batch proposals
+
+To create a `batch` proposal, you'll need to provide the contracts to use as an array in the `contract` param, and specify a list of `steps` to execute, in which you provide the information of execution for each function you'll call.
+
+```js
+const ERC20Token = '0x24B5C627cF54582F93eDbcF6186989227400Ac75';
+const RolesContract = '0xa50d145697530e8fef3F59a9643c6E9992d0f30D';
+
+const contracts = [
+  {
+    address: ERC20Token,
+    name: 'ERC20 Token',
+    network: 'goerli',
+    abi: '[{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}]',
+  },
+  {
+    address: RolesContract,
+    network: 'goerli',
+    name: 'Roles Contract',
+    abi: '[{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"grantRole","outputs":[],"stateMutability":"nonpayable","type":"function"}]',
+  },
+];
+
+const safeAddress = '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b';
+
+const steps = [
+  {
+    contractId: `goerli-${ERC20Token}`,
+    targetFunction: {
+      name: 'mint',
+      inputs: [{ type: 'uint256', name: 'amount' }],
+    },
+    functionInputs: ['999'],
+    type: 'custom',
+  },
+  {
+    contractId: `goerli-${ERC20Token}`,
+    targetFunction: {
+      name: 'transfer',
+      inputs: [
+        { type: 'address', name: 'to' },
+        { type: 'uint256', name: 'amount' },
+      ],
+    },
+    functionInputs: [safeAddress, '999'],
+    type: 'custom',
+  },
+  {
+    contractId: `goerli-${RolesContract}`,
+    metadata: {
+      action: 'grantRole',
+      role: '0x0000000000000000000000000000000000000000000000000000000000000000',
+      account: safeAddress,
+    },
+    type: 'access-control',
+  },
+];
+
+await client.createProposal({
+  contract: contracts,
+  title: 'Batch test',
+  description: 'Mint, transfer and modify access control',
+  type: 'batch',
+  via: safeAddress,
+  viaType: 'Gnosis Safe',
+  metadata: {}, // Required field but empty
+  steps,
+});
+```
+
 ### List proposals
 
 You can list all proposals:
