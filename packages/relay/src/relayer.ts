@@ -85,6 +85,7 @@ export interface UpdateRelayerPoliciesRequest {
   gasPriceCap?: BigUInt;
   whitelistReceivers?: Address[];
   EIP1559Pricing?: boolean;
+  privateTransactions?: boolean;
 }
 
 export interface UpdateRelayerRequest {
@@ -114,12 +115,16 @@ interface RelayerTransactionBase {
   from: Address;
   value?: string;
   data?: string;
-  speed: Speed;
+  speed?: Speed;
   gasLimit: number;
   nonce: number;
   status: Status;
   chainId: number;
   validUntil: string;
+  createdAt: string;
+  sentAt?: string;
+  pricedAt?: string;
+  isPrivate?: boolean;
 }
 
 interface RelayerLegacyTransaction extends RelayerTransactionBase {

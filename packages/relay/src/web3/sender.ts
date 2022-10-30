@@ -17,6 +17,7 @@ type Web3TxPayload = {
   to: string | undefined;
   from: string | undefined;
   nonce: string | undefined;
+  isPrivate: boolean | undefined;
 };
 
 export type DefenderRelaySenderOptions = Partial<{
