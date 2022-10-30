@@ -24,6 +24,7 @@ const allowedTransactionKeys: Array<string> = [
   'to',
   'value',
   'speed',
+  'isPrivate',
 ];
 
 type GasOptions = Pick<TransactionRequest, 'gasPrice' | 'maxFeePerGas' | 'maxPriorityFeePerGas'>;
