@@ -9,6 +9,7 @@ export interface CreateAutotaskRequest {
   };
   paused: boolean;
   stackResourceId?: string;
+  dependenciesVersion?: string;
 }
 
 export interface UpdateAutotaskRequest extends Omit<CreateAutotaskRequest, 'encodedZippedCode'> {
@@ -27,7 +28,8 @@ export interface WebhookTrigger {
   token: string;
 }
 
-export interface Autotask extends Pick<CreateAutotaskRequest, 'name' | 'relayerId' | 'paused' | 'stackResourceId'> {
+export interface Autotask
+  extends Pick<CreateAutotaskRequest, 'name' | 'relayerId' | 'paused' | 'stackResourceId' | 'dependenciesVersion'> {
   autotaskId: string;
   encodedZippedCode?: string;
   trigger: ScheduleTrigger | WebhookTrigger;
