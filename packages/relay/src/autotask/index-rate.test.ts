@@ -37,18 +37,18 @@ describe('AutotaskRelayer', () => {
 
   describe('get rate limited', () => {
     test('throw Rate limit error after 300 requests', async () => {
-      const executionalLimit = 300;
+      const rateLimit = 300;
 
       await waitNextSecondStart();
 
       let hasBeenRateLimited = false;
 
       await Promise.all(
-        Array.from({ length: 301 }).map(async (ignore, index) => {
+        Array.from({ length: 302 }).map(async (ignore, index) => {
           try {
             await relayer.query('42');
           } catch (error) {
-            expect(index).toBe(executionalLimit);
+            expect(index).toBe(rateLimit + 1);
             expect(error.message).toBe('Rate limit exceeded');
             hasBeenRateLimited = true;
           }
