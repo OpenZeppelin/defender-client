@@ -3587,6 +3587,27 @@ defaults@^1.0.3:
   dependencies:
     clone "^1.0.2"
 
+defender-admin-client@1.33.0:
+  version "1.33.0"
+  resolved "https://registry.yarnpkg.com/defender-admin-client/-/defender-admin-client-1.33.0.tgz#2ebc3357898431be3272367cad7b4e253df820b3"
+  integrity sha512-q3x5Xuw01lvGQ/DMM9nm3Aa6XxTdAUQ70qA/irc7zhFjQ+HtPQTfVDnPgHYbBjG2xlOncc9YRtF9CO+TOQQwIg==
+  dependencies:
+    axios "^0.21.2"
+    defender-base-client "1.31.1"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
+defender-base-client@1.31.1:
+  version "1.31.1"
+  resolved "https://registry.yarnpkg.com/defender-base-client/-/defender-base-client-1.31.1.tgz#4f060e1911d07b1309a9424824bd2b69987a25c4"
+  integrity sha512-p1SvuCttztLBuD8wW4bowP7qeKO5xYdtpNBTaLNo8569zbaSOyjLil/FQS/5/OLkd/TN8PyNR4rmwNjoLVGr7Q==
+  dependencies:
+    amazon-cognito-identity-js "^4.3.3"
+    async-retry "^1.3.3"
+    axios "^0.21.2"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
 defer-to-connect@^1.0.1:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/defer-to-connect/-/defer-to-connect-1.1.3.tgz#331ae050c08dcf789f8c83a7b81f0ed94f4ac591"
