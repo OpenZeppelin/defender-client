@@ -24,7 +24,8 @@ export abstract class BaseAutotaskClient {
   public constructor(credentials: string, private arn: string) {
     const creds = credentials ? JSON.parse(credentials) : undefined;
 
-    this.invocationRateLimit = rateLimitModule.createCounterFor(arn, 10);
+    this.invocationRateLimit = rateLimitModule.createCounterFor(arn, 300);
+
     this.lambda = new Lambda(
       creds
         ? {
