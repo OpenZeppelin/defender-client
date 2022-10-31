@@ -15,7 +15,7 @@ const createRateLimitModule = () => {
         checkRateFor: (rateEntry: unknown) => {
           const currentSecondNumberOfRequests = rateLimitForIdentifier.get(rateEntry) || 0;
 
-          if (currentSecondNumberOfRequests > rateLimit) throw new Error('Rate limit exceeded');
+          if (currentSecondNumberOfRequests >= rateLimit) throw new Error('Rate limit exceeded');
 
           return currentSecondNumberOfRequests;
         },

@@ -3,6 +3,22 @@ import Lambda from 'aws-sdk/clients/lambda';
 
 type TestAutotaskRelayer = Omit<AutotaskRelayer, 'lambda' | 'relayerARN'> & { lambda: Lambda; arn: string };
 
+const getTime = () => Math.floor(Date.now() / 1000);
+const sleep = (millisecond: number) => new Promise((resolve) => setTimeout(resolve, millisecond));
+
+const waitNextSecondStart = async () => {
+  const startTime = getTime();
+
+  let currentTime = startTime;
+
+  while (startTime === currentTime) {
+    await sleep(10);
+    currentTime = getTime();
+  }
+
+  return true;
+};
+
 describe('AutotaskRelayer', () => {
   const credentials = {
     AccessKeyId: 'keyId',
@@ -19,22 +35,32 @@ describe('AutotaskRelayer', () => {
     }) as unknown as TestAutotaskRelayer;
   });
 
-  afterAll(() => {
-    expect(true).toBe(false);
-  });
-
   describe('get rate limited', () => {
-    test('passes correct arguments to the API', async () => {
+    test('throw Rate limit error after 300 requests', async () => {
+      const executionalLimit = 300;
+
+      await waitNextSecondStart();
+
+      let hasBeenRateLimited = false;
+
       await Promise.all(
         Array.from({ length: 301 }).map(async (ignore, index) => {
           try {
             await relayer.query('42');
           } catch (error) {
-            expect(index).toBe(301);
+            expect(index).toBe(executionalLimit);
             expect(error.message).toBe('Rate limit exceeded');
+            hasBeenRateLimited = true;
           }
         }),
       );
+
+      await sleep(1000);
+
+      const afterTheLimitQueryResult = await relayer.query('42');
+
+      expect(hasBeenRateLimited).toBe(true);
+      expect(Boolean(afterTheLimitQueryResult)).toBe(true);
     });
   });
 });
