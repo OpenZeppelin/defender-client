@@ -1,4 +1,6 @@
 import Lambda, { _Blob } from 'aws-sdk/clients/lambda';
+import { rateLimitModule, RateLimitModule } from '../utils/rate-limit';
+import { getTimestampInSeconds } from '../utils/time';
 
 // do our best to get .errorMessage, but return object by default
 function cleanError(payload?: _Blob): _Blob {
@@ -17,8 +19,12 @@ function cleanError(payload?: _Blob): _Blob {
 export abstract class BaseAutotaskClient {
   private lambda: Lambda;
 
+  private invocationRateLimit: RateLimitModule;
+
   public constructor(credentials: string, private arn: string) {
     const creds = credentials ? JSON.parse(credentials) : undefined;
+
+    this.invocationRateLimit = rateLimitModule.createCounterFor(arn, 10);
     this.lambda = new Lambda(
       creds
         ? {
@@ -34,7 +40,11 @@ export abstract class BaseAutotaskClient {
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   protected async execute<T>(request: object): Promise<T> {
-    const result = await this.lambda
+    const invocationTimeStamp = getTimestampInSeconds();
+
+    this.invocationRateLimit.checkRateFor(invocationTimeStamp);
+
+    const invocationRequest = this.lambda
       .invoke({
         FunctionName: this.arn,
         Payload: JSON.stringify(request),
@@ -42,10 +52,14 @@ export abstract class BaseAutotaskClient {
       })
       .promise();
 
-    if (result.FunctionError) {
-      throw new Error(`Error while attempting request: ${cleanError(result.Payload)}`);
+    this.invocationRateLimit.incrementRateFor(invocationTimeStamp);
+
+    const invocationRequestResult = await invocationRequest;
+
+    if (invocationRequestResult.FunctionError) {
+      throw new Error(`Error while attempting request: ${cleanError(invocationRequestResult.Payload)}`);
     }
 
-    return JSON.parse(result.Payload as string) as T;
+    return JSON.parse(invocationRequestResult.Payload as string) as T;
   }
 }
