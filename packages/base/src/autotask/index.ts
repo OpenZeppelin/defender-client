@@ -44,18 +44,15 @@ export abstract class BaseAutotaskClient {
     const invocationTimeStamp = getTimestampInSeconds();
 
     this.invocationRateLimit.checkRateFor(invocationTimeStamp);
+    this.invocationRateLimit.incrementRateFor(invocationTimeStamp);
 
-    const invocationRequest = this.lambda
+    const invocationRequestResult = await this.lambda
       .invoke({
         FunctionName: this.arn,
         Payload: JSON.stringify(request),
         InvocationType: 'RequestResponse',
       })
       .promise();
-
-    this.invocationRateLimit.incrementRateFor(invocationTimeStamp);
-
-    const invocationRequestResult = await invocationRequest;
 
     if (invocationRequestResult.FunctionError) {
       throw new Error(`Error while attempting request: ${cleanError(invocationRequestResult.Payload)}`);
