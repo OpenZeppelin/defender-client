@@ -1,6 +1,6 @@
 {
   "name": "example-update-autotask",
-  "version": "1.35.0-rc.2",
+  "version": "1.36.0-rc.1",
   "private": true,
   "main": "index.js",
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
@@ -9,7 +9,7 @@
     "update-code": "node update-code.js"
   },
   "dependencies": {
-    "defender-autotask-client": "1.35.0-rc.2",
+    "defender-autotask-client": "1.36.0-rc.1",
     "dotenv": "^8.2.0"
   }
 }
