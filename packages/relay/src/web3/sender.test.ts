@@ -29,6 +29,7 @@ describe('web3/sender', () => {
     validUntil: '2031-05-19T23:09:47.129Z',
     data: '0x01',
     value: '0x02',
+    createdAt: '2022-10-30T00:11:35.501Z',
   };
 
   const transferAbi: AbiItem[] = [

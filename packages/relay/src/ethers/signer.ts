@@ -24,11 +24,13 @@ const allowedTransactionKeys: Array<string> = [
   'to',
   'value',
   'speed',
+  'isPrivate',
 ];
 
 type GasOptions = Pick<TransactionRequest, 'gasPrice' | 'maxFeePerGas' | 'maxPriorityFeePerGas'>;
 
-export type DefenderTransactionRequest = TransactionRequest & Partial<{ speed: Speed; validUntil: Date | string }>;
+export type DefenderTransactionRequest = TransactionRequest &
+  Partial<{ speed: Speed; validUntil: Date | string; isPrivate?: boolean }>;
 export type DefenderRelaySignerOptions = Partial<
   GasOptions & {
     speed: Speed;
@@ -140,6 +142,7 @@ export class DefenderRelaySigner extends Signer implements TypedDataSigner {
       speed: tx.speed,
       value: tx.value ? hexlify(tx.value) : undefined,
       validUntil: tx.validUntil ? new Date(tx.validUntil).toISOString() : undefined,
+      isPrivate: tx.isPrivate,
       ...payloadGasParams,
     };
 
