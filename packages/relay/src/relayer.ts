@@ -12,6 +12,7 @@ export interface SendBaseTransactionRequest {
   data?: Hex;
   gasLimit: BigUInt;
   validUntil?: string;
+  isPrivate?: boolean;
 }
 
 export interface SendSpeedTransactionRequest extends SendBaseTransactionRequest {
