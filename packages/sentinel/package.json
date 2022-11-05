@@ -1,6 +1,6 @@
 {
   "name": "defender-sentinel-client",
-  "version": "1.37.0-rc.1",
+  "version": "1.37.0-rc.2",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -23,7 +23,7 @@
   "dependencies": {
     "@ethersproject/abi": "^5.6.3",
     "axios": "^0.21.2",
-    "defender-base-client": "1.37.0-rc.1",
+    "defender-base-client": "1.37.0-rc.2",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },
