@@ -62,7 +62,7 @@ export interface EventArgValues {
   name?: string;
   type?: string;
   indexed?: boolean;
-  value: string | {};
+  value: string | Record<string, unknown>;
 }
 export interface StorageState {
   address: Address;
