@@ -105,6 +105,15 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
+  public async getProposalSimulation(contractId: string, proposalId: string): Promise<SimulationResponse> {
+    return this.apiCall(async (api) => {
+      const response = (await api.get(
+        `/contracts/${contractId}/proposals/${proposalId}/simulation`,
+      )) as SimulationResponse;
+      return response;
+    });
+  }
+
   public async simulateProposal(
     contractId: string,
     proposalId: string,
