@@ -41,26 +41,40 @@ async function main() {
   // encode function data
   const data = contractInterface.encodeFunctionData(proposal.functionInterface.name, proposal.functionInputs)
 
-  // Simulate the proposal
-  const simulation = await client.simulateProposal(
-    proposal.contractId, // contractId
-    proposal.proposalId, // proposalId
-    {
-      transactionData: {
-        from: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266", // change this to impersonate the `from` address
-        type: "function-call", // or 'send-funds'
-        data,
-        to: proposal.contract.address,
-        value: proposal.metadata.sendValue
-      },
-      // default to latest finalized block, 
-      // can be up to 100 blocks ahead of current block, 
-      // does not support previous blocks
-      blockNumber: undefined
-    }
-  );
+  try {
+    // Simulate the proposal
+    const simulation = await client.simulateProposal(
+      proposal.contractId, // contractId
+      proposal.proposalId, // proposalId
+      {
+        transactionData: {
+          from: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266", // change this to impersonate the `from` address
+          type: "function-call", // or 'send-funds'
+          data,
+          to: proposal.contract.address,
+          value: "0"
+        },
+        // default to latest finalized block, 
+        // can be up to 100 blocks ahead of current block, 
+        // does not support previous blocks
+        blockNumber: undefined
+      }
+    );
 
-  console.log(simulation);
+    // Check if simulation reverted under `simulation.meta.reverted` 
+    // and the reason string `simulation.meta.returnString`
+    if (simulation.meta.reverted) {
+      console.log("Transaction reverted:", simulation.meta.returnString ?? simulation.meta.returnValue)
+    } else {
+      console.log(simulation);
+    }
+  } catch (e) {
+    if (e.response && e.response.data) {
+      console.error(e.response.data.message);
+    } else {
+      console.error(e);
+    }
+  }
 }
 
 if (require.main === module) {

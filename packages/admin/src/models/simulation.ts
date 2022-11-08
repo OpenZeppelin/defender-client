@@ -42,6 +42,7 @@ export interface SimulationMetadata {
   gasUsed: number;
   returnValue: string;
   returnString: string;
+  reverted: boolean;
 }
 export interface ContractState {
   function: string;

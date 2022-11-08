@@ -235,6 +235,8 @@ const simulation = await client.simulateProposal(
 );
 ```
 
+> Note that a simulation may fail due to a number of reasons, such as network congestion, unstable providers or hitting a quota limitation. We would advise you to track the response code to assure a successful response was returned. If a transaction was reverted with a reason string, this can be obtained from the response object under `response.meta.returnString`. A transaction revert can be tracked from `response.meta.reverted`.
+
 ### Retrieve a proposal simulation
 
 You can also retrieve existing simulations for a proposal:
