@@ -14,6 +14,7 @@ type UpgradeParams = {
   viaType?: CreateProposalRequest['viaType'];
   newImplementation: string;
   newImplementationAbi?: string;
+  relayerId?: string;
 };
 
 type PauseParams = {
@@ -21,6 +22,7 @@ type PauseParams = {
   description?: string;
   via: Address;
   viaType: CreateProposalRequest['viaType'];
+  relayerId?: string;
 };
 
 type AccessControlParams = {
@@ -28,6 +30,7 @@ type AccessControlParams = {
   description?: string;
   via: Address;
   viaType: CreateProposalRequest['viaType'];
+  relayerId?: string;
 };
 
 export interface ProposalResponseWithUrl extends ProposalResponse {
@@ -120,6 +123,7 @@ export class AdminClient extends BaseApiClient {
       description: params.description ?? `Upgrade contract implementation to ${params.newImplementation}`,
       via: params.via,
       viaType: params.viaType,
+      relayerId: params.relayerId,
     };
     return this.createProposal(request);
   }
@@ -189,6 +193,7 @@ export class AdminClient extends BaseApiClient {
       type: 'pause',
       via: params.via,
       viaType: params.viaType,
+      relayerId: params.relayerId,
       functionInputs: [],
       functionInterface: { name: action, inputs: [] },
       metadata: {
@@ -212,6 +217,7 @@ export class AdminClient extends BaseApiClient {
       type: 'access-control',
       via: params.via,
       viaType: params.viaType,
+      relayerId: params.relayerId,
       functionInputs: [role, account],
       functionInterface: {
         name: action,

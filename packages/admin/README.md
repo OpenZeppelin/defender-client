@@ -175,6 +175,24 @@ await client.createProposal({
 });
 ```
 
+### Relayer Execution Strategy
+
+To use a relayer as an execution strategy you need to provide the `relayerId` as well as setting `via` to the relayer address and `viaType: 'Relayer'`
+
+```js
+const contract = { network: 'goerli', address: '0xC73dAd1D9a356Ab2F3c6bC0049034aFe4B59DbB5' };
+
+const proposal = await client.proposePause(
+  {
+    title: 'Pause contract',
+    via: '0x6b74fa33f198a65fe374c8146387f1653d190c7a',
+    viaType: 'Relayer',
+    relayerId: 'dfa8b9a9-0f88-4d38-892a-93e1f5a8d2a7',
+  },
+  contract,
+);
+```
+
 ### List proposals
 
 You can list all proposals:
