@@ -204,7 +204,7 @@ await client.unarchiveProposal(contractId, proposalId);
 
 ### Simulate proposals
 
-You can simulate an existing proposal:
+You can simulate an existing proposal. The results of a simulation (`SimulationResponse`) will be stored and can be retrieved with the getProposalSimulation endpoint:
 
 ```js
 const proposal = await client.getProposal(contractId, proposalId);
@@ -232,6 +232,19 @@ const simulation = await client.simulateProposal(
     // does not support previous blocks
     blockNumber: undefined,
   },
+);
+```
+
+### Retrieve a proposal simulation
+
+You can also retrieve existing simulations for a proposal:
+
+```js
+const proposal = await client.getProposal(contractId, proposalId);
+
+const simulation = await client.getProposalSimulation(
+  proposal.contractId, // contractId
+  proposal.proposalId, // proposalId
 );
 ```
 
