@@ -93,6 +93,5 @@ export interface TransactionData {
   from?: Address;
   value: BigUInt;
   data: string;
-  type: 'send-funds' | 'function-call';
   [k: string]: unknown;
 }

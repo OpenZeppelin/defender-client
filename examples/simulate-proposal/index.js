@@ -49,10 +49,9 @@ async function main() {
       {
         transactionData: {
           from: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266", // change this to impersonate the `from` address
-          type: "function-call", // or 'send-funds'
           data,
           to: proposal.contract.address,
-          value: "0"
+          value: proposal.metadata.sendValue ?? "10000000000000000"
         },
         // default to latest finalized block, 
         // can be up to 100 blocks ahead of current block, 
