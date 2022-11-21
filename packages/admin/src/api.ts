@@ -1,6 +1,7 @@
 import { BaseApiClient } from 'defender-base-client';
 import { capitalize, isEmpty } from 'lodash';
 import { Hex, Address, ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
+import { SimulationRequest as SimulationTransaction, SimulationResponse } from './models/simulation';
 import { Contract } from './models/contract';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
 import { getProposalUrl } from './utils';
@@ -101,6 +102,29 @@ export class AdminClient extends BaseApiClient {
         archived: false,
       })) as ProposalResponse;
       return { ...response, url: getProposalUrl(response) };
+    });
+  }
+
+  public async getProposalSimulation(contractId: string, proposalId: string): Promise<SimulationResponse> {
+    return this.apiCall(async (api) => {
+      const response = (await api.get(
+        `/contracts/${contractId}/proposals/${proposalId}/simulation`,
+      )) as SimulationResponse;
+      return response;
+    });
+  }
+
+  public async simulateProposal(
+    contractId: string,
+    proposalId: string,
+    transaction: SimulationTransaction,
+  ): Promise<SimulationResponse> {
+    return this.apiCall(async (api) => {
+      const response = (await api.post(
+        `/contracts/${contractId}/proposals/${proposalId}/simulate`,
+        transaction,
+      )) as SimulationResponse;
+      return response;
     });
   }
 
