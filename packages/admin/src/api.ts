@@ -83,12 +83,13 @@ export class AdminClient extends BaseApiClient {
 
       // handle simulation
       let simulation: SimulationResponse | undefined = undefined;
-      const isMultiContract = (contract: PartialContract | PartialContract[]): contract is PartialContract[] =>
+      const isBatchProposal = (contract: PartialContract | PartialContract[]): contract is PartialContract[] =>
         isArray(contract);
       if (proposal.simulate) {
         const overrideData = proposal.overrideSimulationOpts?.transactionData.data;
+        // data property is overriden in backend for batch proposals
         let data = overrideData ?? 'batch_override';
-        if (!isMultiContract(proposal.contract) && !overrideData) {
+        if (!isBatchProposal(proposal.contract) && !overrideData) {
           if (!proposal.contract.abi) {
             // no ABI found, request user to pass in `data` in overrideSimulationOpts
             throw new Error(
@@ -109,8 +110,8 @@ export class AdminClient extends BaseApiClient {
         simulation = await this.simulateProposal(response.contractId, response.proposalId, {
           transactionData: {
             from: proposal.via,
-            // TO property is overriden for multi contract proposals in the backend
-            to: isMultiContract(proposal.contract) ? proposal.contract[0].address : proposal.contract.address,
+            // TO property is overriden for batch proposals in the backend
+            to: isBatchProposal(proposal.contract) ? proposal.contract[0].address : proposal.contract.address,
             data,
             value: proposal.metadata?.sendValue ?? 0,
             ...proposal.overrideSimulationOpts?.transactionData,
