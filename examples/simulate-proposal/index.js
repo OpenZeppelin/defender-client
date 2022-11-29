@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const { AdminClient } = require('defender-admin-client');
-const { utils } = require('ethers')
+const { utils } = require('ethers');
 
 const contractABI = require('./abi/demoflash.json');
 
@@ -34,10 +34,10 @@ async function main() {
     viaType: 'EOA',
   });
 
-  console.log(`Created proposal (${proposal.proposalId})`)
+  console.log(`Created proposal (${proposal.proposalId})`);
+
 
   const contractInterface = new utils.Interface(contractABI);
-
   // encode function data
   const data = contractInterface.encodeFunctionData(proposal.functionInterface.name, proposal.functionInputs)
 
@@ -60,8 +60,8 @@ async function main() {
       }
     );
 
-    // Check if simulation reverted under `simulation.meta.reverted` 
-    // and the reason string `simulation.meta.returnString`
+    // Check if simulation reverted under`simulation.meta.reverted` 
+    // and the reason string`simulation.meta.returnString`
     if (simulation.meta.reverted) {
       console.log("Transaction reverted:", simulation.meta.returnString ?? simulation.meta.returnValue)
     } else {
@@ -74,6 +74,43 @@ async function main() {
       console.error(e);
     }
   }
+
+  // Alternatively you can initiate a simulation request as part of `createProposal`
+  const proposalWithSimulation = await client.createProposal({
+    contract: {
+      address: '0xA91382E82fB676d4c935E601305E5253b3829dCD',
+      network: 'mainnet',
+      abi: JSON.stringify(contractABI), // provide this OR overrideSimulationOpts.transactionData.data
+    },
+    title: 'Flash',
+    description: 'Call the Flash() function',
+    type: 'custom',
+    metadata: {
+      sendTo: "0xA91382E82fB676d4c935E601305E5253b3829dCD",
+      sendValue: "10000000000000000",
+      sendCurrency: {
+        name: "Ethereum",
+        symbol: "ETH",
+        decimals: 18,
+        type: 'native',
+      },
+    },
+    functionInterface: { name: 'flash', inputs: [] },
+    functionInputs: [],
+    via: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+    viaType: 'EOA',
+    simulate: true, // set this to true
+    // optional
+    overrideSimulationOpts: {
+      transactionData: {
+        data: "0xd336c82d" // or instead of ABI, you can provide this
+      }
+    }
+  });
+
+  console.log(`Created proposal (${proposalWithSimulation.proposalId})`);
+  console.log(proposalWithSimulation.simulation);
+
 }
 
 if (require.main === module) {

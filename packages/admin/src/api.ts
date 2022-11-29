@@ -1,6 +1,13 @@
 import { BaseApiClient } from 'defender-base-client';
-import { capitalize, isEmpty } from 'lodash';
-import { Hex, Address, ExternalApiCreateProposalRequest as CreateProposalRequest } from './models/proposal';
+import { capitalize, isArray, isEmpty } from 'lodash';
+import { Interface } from 'ethers/lib/utils';
+
+import {
+  Hex,
+  Address,
+  ExternalApiCreateProposalRequest as CreateProposalRequest,
+  PartialContract,
+} from './models/proposal';
 import { SimulationRequest as SimulationTransaction, SimulationResponse } from './models/simulation';
 import { Contract } from './models/contract';
 import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
@@ -33,6 +40,7 @@ type AccessControlParams = {
 
 export interface ProposalResponseWithUrl extends ProposalResponse {
   url: string;
+  simulation?: SimulationResponse;
 }
 
 export class AdminClient extends BaseApiClient {
@@ -66,10 +74,51 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
-  public async createProposal(proposal: CreateProposalRequest): Promise<ProposalResponseWithUrl> {
+  // added separate from CreateProposalRequest type as the `simulate` boolean is contained within defender-client
+  public async createProposal(
+    proposal: CreateProposalRequest & { simulate?: boolean; overrideSimulationOpts?: SimulationTransaction },
+  ): Promise<ProposalResponseWithUrl> {
     return this.apiCall(async (api) => {
       const response = (await api.post('/proposals', proposal)) as ProposalResponse;
-      return { ...response, url: getProposalUrl(response) };
+
+      // handle simulation
+      let simulation: SimulationResponse | undefined = undefined;
+      const isMultiContract = (contract: PartialContract | PartialContract[]): contract is PartialContract[] =>
+        isArray(contract);
+      if (proposal.simulate) {
+        let overrideData = proposal.overrideSimulationOpts?.transactionData.data;
+        let data = overrideData ?? 'batch_override';
+        if (!isMultiContract(proposal.contract) && !overrideData) {
+          if (!proposal.contract.abi) {
+            // no ABI found, request user to pass in `data` in overrideSimulationOpts
+            throw new Error(
+              'Simulation requested without providing ABI. Please provide the contract ABI or use the `overrideSimulationOpts` to provide the data property directly.',
+            );
+          }
+          const contractInterface = new Interface(proposal.contract.abi);
+
+          // this is defensive and should never happen since createProposal schema validation will fail without this property defined.
+          if (!proposal.functionInterface) {
+            // no function selected, request user to pass in `data` in overrideSimulationOpts
+            throw new Error(
+              'Simulation requested without providing function interface. Please provide the function interface or use the `overrideSimulationOpts` to provide the data property directly.',
+            );
+          }
+          data = contractInterface.encodeFunctionData(proposal.functionInterface.name!, proposal.functionInputs);
+        }
+        simulation = await this.simulateProposal(response.contractId, response.proposalId, {
+          transactionData: {
+            from: proposal.via,
+            // TO property is overriden for multi contract proposals in the backend
+            to: isMultiContract(proposal.contract) ? proposal.contract[0].address : proposal.contract.address,
+            data,
+            value: proposal.metadata?.sendValue ?? 0,
+            ...proposal.overrideSimulationOpts?.transactionData,
+          },
+          blockNumber: proposal.overrideSimulationOpts?.blockNumber,
+        });
+      }
+      return { ...response, url: getProposalUrl(response), simulation };
     });
   }
 
