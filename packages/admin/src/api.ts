@@ -86,7 +86,7 @@ export class AdminClient extends BaseApiClient {
       const isMultiContract = (contract: PartialContract | PartialContract[]): contract is PartialContract[] =>
         isArray(contract);
       if (proposal.simulate) {
-        let overrideData = proposal.overrideSimulationOpts?.transactionData.data;
+        const overrideData = proposal.overrideSimulationOpts?.transactionData.data;
         let data = overrideData ?? 'batch_override';
         if (!isMultiContract(proposal.contract) && !overrideData) {
           if (!proposal.contract.abi) {
