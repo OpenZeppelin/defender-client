@@ -123,7 +123,7 @@ export class AdminClient extends BaseApiClient {
   ): Promise<ProposalResponseWithUrl> {
     return this.apiCall(async (api) => {
       let simulation: SimulationResponse | undefined = undefined;
-      let simulationData: string = '0x';
+      let simulationData = '0x';
       let supportedNetwork: { network: Network; contract: string } | undefined = undefined;
       const isBatchProposal = (contract: PartialContract | PartialContract[]): contract is PartialContract[] =>
         isArray(contract);
