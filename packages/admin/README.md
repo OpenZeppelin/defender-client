@@ -40,7 +40,7 @@ await client.createProposal({
 });
 ```
 
-You can also optionally set the `simulate` flag to simulate the proposal within the same request. You can override simulation parameters by setting the `overrideSimulationOpts` property, which is a `SimulationRequest` object.
+You can also optionally set the `simulate` flag as part of the `createProposal` request (as long as this is not a batch proposal) to simulate the proposal within the same request. You can override simulation parameters by setting the `overrideSimulationOpts` property, which is a `SimulationRequest` object.
 
 ```js
 const proposalWithSimulation = await client.createProposal({
