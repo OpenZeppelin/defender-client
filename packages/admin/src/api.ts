@@ -142,6 +142,7 @@ export class AdminClient extends BaseApiClient {
         const overrideData = proposal.overrideSimulationOpts?.transactionData.data;
         simulationData = overrideData ?? '0x';
 
+        // only check if we haven't overridden the simulation data property
         if (!overrideData) {
           // we do not support simulating batch proposals from the client.
           // you will need to provide the `data` property
@@ -150,7 +151,7 @@ export class AdminClient extends BaseApiClient {
               'Simulating a batch proposal is currently not supported from the API. Use the Defender UI to manually trigger a simulation, or use the `overrideSimulationOpts` to include the `data` string.',
             );
           } else {
-            // only check if we haven't overridden the simulation data property
+            // Check if ABI is provided so we can encode the function
             if (!proposal.contract.abi) {
               // no ABI found, request user to pass in `data` in overrideSimulationOpts
               throw new Error(
