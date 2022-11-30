@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "defender-admin-client": "1.33.0",
+    "defender-admin-client": "1.37.0-rc.2",
     "dotenv": "^8.2.0"
   }
 }

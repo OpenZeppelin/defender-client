@@ -109,7 +109,12 @@ async function main() {
   });
 
   console.log(`Created proposal (${proposalWithSimulation.proposalId})`);
-  console.log(proposalWithSimulation.simulation);
+
+  if (proposalWithSimulation.simulation.meta.reverted) {
+    console.log("Transaction reverted:", proposalWithSimulation.simulation.meta.returnString ?? proposalWithSimulation.simulation.meta.returnValue)
+  } else {
+    console.log(proposalWithSimulation.simulation);
+  }
 
 }
 

@@ -1,4 +1,4 @@
-import { BaseApiClient } from 'defender-base-client';
+import { BaseApiClient, Network } from 'defender-base-client';
 import { capitalize, isArray, isEmpty } from 'lodash';
 import { Interface } from 'ethers/lib/utils';
 
@@ -38,6 +38,49 @@ type AccessControlParams = {
   viaType: CreateProposalRequest['viaType'];
 };
 
+const MULTI_SEND_CALL_ONLY_1 = '0x40A2aCCbd92BCA938b02010E17A5b8929b49130D';
+const MULTI_SEND_CALL_ONLY_2 = '0xA1dabEF33b3B82c7814B6D82A79e50F4AC44102B';
+const MULTI_SEND_CALL_ONLY_3 = '0x0000000000000000000000000000000002DCbbc0';
+
+const NetworksForBatchProposalSupport: { network: Network; contract: string }[] = [
+  // _1
+  { network: 'arbitrum-rinkeby', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'arbitrum-goerli', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'arbitrum', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'auroratest', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'aurora', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'bsc', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'bsctest', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'mainnet', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'ropsten', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'rinkeby', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'goerli', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'kovan', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'fantom', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'fantomtest', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'fuse', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'matic', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'mumbai', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'moonbeam', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'moonriver', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'moonbase', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'optimism-goerli', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'xdai', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'sokol', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'x-dfk-avax-chain', contract: MULTI_SEND_CALL_ONLY_1 },
+  { network: 'x-dfk-avax-chain-test', contract: MULTI_SEND_CALL_ONLY_1 },
+  // _2
+  { network: 'optimism', contract: MULTI_SEND_CALL_ONLY_2 },
+  { network: 'optimism-kovan', contract: MULTI_SEND_CALL_ONLY_2 },
+  { network: 'avalanche', contract: MULTI_SEND_CALL_ONLY_2 },
+  { network: 'fuji', contract: MULTI_SEND_CALL_ONLY_2 },
+  { network: 'celo', contract: MULTI_SEND_CALL_ONLY_2 },
+  { network: 'alfajores', contract: MULTI_SEND_CALL_ONLY_2 },
+  { network: 'harmony-s0', contract: MULTI_SEND_CALL_ONLY_2 },
+  { network: 'harmony-test-s0', contract: MULTI_SEND_CALL_ONLY_2 },
+  // _3
+  { network: 'hederatest', contract: MULTI_SEND_CALL_ONLY_3 },
+];
 export interface ProposalResponseWithUrl extends ProposalResponse {
   url: string;
   simulation?: SimulationResponse;
@@ -79,45 +122,82 @@ export class AdminClient extends BaseApiClient {
     proposal: CreateProposalRequest & { simulate?: boolean; overrideSimulationOpts?: SimulationTransaction },
   ): Promise<ProposalResponseWithUrl> {
     return this.apiCall(async (api) => {
-      const response = (await api.post('/proposals', proposal)) as ProposalResponse;
-
-      // handle simulation
       let simulation: SimulationResponse | undefined = undefined;
+      let simulationData: string = '0x';
+      let supportedNetwork: { network: Network; contract: string } | undefined = undefined;
       const isBatchProposal = (contract: PartialContract | PartialContract[]): contract is PartialContract[] =>
         isArray(contract);
-      if (proposal.simulate) {
-        const overrideData = proposal.overrideSimulationOpts?.transactionData.data;
-        // data property is overriden in backend for batch proposals
-        let data = overrideData ?? 'batch_override';
-        if (!isBatchProposal(proposal.contract) && !overrideData) {
-          if (!proposal.contract.abi) {
-            // no ABI found, request user to pass in `data` in overrideSimulationOpts
-            throw new Error(
-              'Simulation requested without providing ABI. Please provide the contract ABI or use the `overrideSimulationOpts` to provide the data property directly.',
-            );
-          }
-          const contractInterface = new Interface(proposal.contract.abi);
 
-          // this is defensive and should never happen since createProposal schema validation will fail without this property defined.
-          if (!proposal.functionInterface) {
-            // no function selected, request user to pass in `data` in overrideSimulationOpts
+      // handle simulation checks before creating proposal
+      if (proposal.simulate) {
+        if (isBatchProposal(proposal.contract)) {
+          const proposalNetwork = proposal.contract[0].network;
+          supportedNetwork = NetworksForBatchProposalSupport.find((n) => n.network === proposalNetwork);
+          if (!supportedNetwork)
             throw new Error(
-              'Simulation requested without providing function interface. Please provide the function interface or use the `overrideSimulationOpts` to provide the data property directly.',
+              `Simulation is not supported on ${proposalNetwork}. Disable the simulate flag, or use a different network.`,
+            );
+        }
+
+        const overrideData = proposal.overrideSimulationOpts?.transactionData.data;
+        simulationData = overrideData ?? '0x';
+
+        if (!overrideData) {
+          // we do not support simulating batch proposals from the client.
+          // you will need to provide the `data` property
+          if (isBatchProposal(proposal.contract)) {
+            throw new Error(
+              'Simulating a batch proposal is currently not supported from the API. Use the Defender UI to manually trigger a simulation, or use the `overrideSimulationOpts` to include the `data` string.',
+            );
+          } else {
+            // only check if we haven't overridden the simulation data property
+            if (!proposal.contract.abi) {
+              // no ABI found, request user to pass in `data` in overrideSimulationOpts
+              throw new Error(
+                'Simulation requested without providing ABI. Please provide the contract ABI or use the `overrideSimulationOpts` to provide the data property directly.',
+              );
+            }
+            const contractInterface = new Interface(proposal.contract.abi);
+
+            // this is defensive and should never happen since createProposal schema validation will fail without this property defined.
+            if (!proposal.functionInterface) {
+              // no function selected, request user to pass in `data` in overrideSimulationOpts
+              throw new Error(
+                'Simulation requested without providing function interface. Please provide the function interface or use the `overrideSimulationOpts` to provide the data property directly.',
+              );
+            }
+            simulationData = contractInterface.encodeFunctionData(
+              proposal.functionInterface.name!,
+              proposal.functionInputs,
             );
           }
-          data = contractInterface.encodeFunctionData(proposal.functionInterface.name!, proposal.functionInputs);
         }
-        simulation = await this.simulateProposal(response.contractId, response.proposalId, {
-          transactionData: {
-            from: proposal.via,
-            // TO property is overriden for batch proposals in the backend
-            to: isBatchProposal(proposal.contract) ? proposal.contract[0].address : proposal.contract.address,
-            data,
-            value: proposal.metadata?.sendValue ?? 0,
-            ...proposal.overrideSimulationOpts?.transactionData,
-          },
-          blockNumber: proposal.overrideSimulationOpts?.blockNumber,
-        });
+      }
+
+      // create proposal
+      const response = (await api.post('/proposals', proposal)) as ProposalResponse;
+
+      // create simulation
+      if (proposal.simulate) {
+        try {
+          simulation = await this.simulateProposal(response.contractId, response.proposalId, {
+            transactionData: {
+              from: proposal.via,
+              // TO property is overridden for batch proposals in the backend
+              to: isBatchProposal(proposal.contract)
+                ? supportedNetwork!.contract // multisend contract
+                : proposal.contract.address,
+              data: simulationData,
+              value: proposal.metadata?.sendValue ?? '0',
+              operationType: isBatchProposal(proposal.contract) ? 'delegateCall' : 'call',
+              ...proposal.overrideSimulationOpts?.transactionData,
+            },
+            blockNumber: proposal.overrideSimulationOpts?.blockNumber,
+          });
+        } catch (e) {
+          // simply log so we don't block createProposal response
+          console.warn('Simulation Failed:', e);
+        }
       }
       return { ...response, url: getProposalUrl(response), simulation };
     });

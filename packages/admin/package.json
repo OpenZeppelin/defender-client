@@ -23,9 +23,9 @@
   "dependencies": {
     "axios": "^0.21.2",
     "defender-base-client": "1.37.0",
+    "ethers": "^5.7.2",
     "lodash": "^4.17.19",
-    "node-fetch": "^2.6.0",
-    "ethers": "^5.7.2"
+    "node-fetch": "^2.6.0"
   },
   "gitHead": "a7c4808dd11e708df42d110de230c264061c72c3"
 }
