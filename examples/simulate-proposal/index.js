@@ -60,8 +60,8 @@ async function main() {
       }
     );
 
-    // Check if simulation reverted under`simulation.meta.reverted` 
-    // and the reason string`simulation.meta.returnString`
+    // Check if simulation reverted under `simulation.meta.reverted` 
+    // and the reason string `simulation.meta.returnString`
     if (simulation.meta.reverted) {
       console.log("Transaction reverted:", simulation.meta.returnString ?? simulation.meta.returnValue)
     } else {
