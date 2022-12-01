@@ -141,8 +141,8 @@ interface RelayerEIP1559Transaction extends RelayerTransactionBase {
 export type RelayerTransaction = RelayerLegacyTransaction | RelayerEIP1559Transaction;
 
 export type RelayerParams = ApiRelayerParams | AutotaskRelayerParams;
-export type ApiRelayerParams = { apiKey: string; apiSecret: string; httpAgent?: https.Agent };
-export type AutotaskRelayerParams = { credentials: string; relayerARN: string; httpAgent?: https.Agent };
+export type ApiRelayerParams = { apiKey: string; apiSecret: string; httpsAgent?: https.Agent };
+export type AutotaskRelayerParams = { credentials: string; relayerARN: string; httpsAgent?: https.Agent };
 
 export type JsonRpcResponse = {
   id: number | null;
