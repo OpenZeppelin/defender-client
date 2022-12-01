@@ -1,17 +1,18 @@
 import { AxiosInstance } from 'axios';
+import https from 'https';
 import { createAuthenticatedApi } from './api';
 
 export abstract class BaseApiClient {
   private api: Promise<AxiosInstance> | undefined;
   private apiKey: string;
   private apiSecret: string;
-  private httpAgent?: AxiosInstance;
+  private httpAgent?: https.Agent;
 
   protected abstract getPoolId(): string;
   protected abstract getPoolClientId(): string;
   protected abstract getApiUrl(): string;
 
-  public constructor(params: { apiKey: string; apiSecret: string; httpAgent?: AxiosInstance }) {
+  public constructor(params: { apiKey: string; apiSecret: string; httpAgent?: https.Agent }) {
     if (!params.apiKey) throw new Error(`API key is required`);
     if (!params.apiSecret) throw new Error(`API secret is required`);
 
