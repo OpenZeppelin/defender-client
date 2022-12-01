@@ -47,7 +47,7 @@ const proposalWithSimulation = await client.createProposal({
   contract: {
     address: '0xA91382E82fB676d4c935E601305E5253b3829dCD',
     network: 'mainnet',
-    // provide this OR overrideSimulationOpts.transactionData.data
+    // provide abi OR overrideSimulationOpts.transactionData.data
     abi: JSON.stringify(contractABI),
   },
   title: 'Flash',
@@ -67,11 +67,13 @@ const proposalWithSimulation = await client.createProposal({
   functionInputs: [],
   via: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
   viaType: 'EOA',
-  simulate: true, // set this to true
+  // set simulate to true
+  simulate: true,
   // optional
   overrideSimulationOpts: {
     transactionData: {
-      data: '0xd336c82d', // or instead of ABI, you can provide this
+      // or instead of ABI, you can provide data
+      data: '0xd336c82d',
     },
   },
 });
