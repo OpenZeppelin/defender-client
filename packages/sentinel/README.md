@@ -43,6 +43,8 @@ The following notification channels are available:
 - discord
 - telegram
 - datadog
+- webhook
+- opsgenie
 
 The `createNotificationChannel` function requires the `NotificationType` and `NotificationRequest` parameters respectively, and returns a `NotificationResponse` object.
 
@@ -59,6 +61,16 @@ const notification = await client.createNotificationChannel('slack', {
   name: 'MySlackNotification',
   config: {
     url: 'https://slack.com/url/key',
+  },
+  paused: false,
+});
+
+const notification = await client.createNotificationChannel('opsgenie', {
+  name: 'MySlackNotification',
+  config: {
+    apiKey: "123-secret",
+    instanceLocation: "US",
+    "responders": [{"username": "emergency@email.io"}]
   },
   paused: false,
 });
