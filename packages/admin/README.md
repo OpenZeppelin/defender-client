@@ -40,6 +40,45 @@ await client.createProposal({
 });
 ```
 
+You can also optionally set the `simulate` flag as part of the `createProposal` request (as long as this is not a batch proposal) to simulate the proposal within the same request. You can override simulation parameters by setting the `overrideSimulationOpts` property, which is a `SimulationRequest` object.
+
+```js
+const proposalWithSimulation = await client.createProposal({
+  contract: {
+    address: '0xA91382E82fB676d4c935E601305E5253b3829dCD',
+    network: 'mainnet',
+    // provide abi OR overrideSimulationOpts.transactionData.data
+    abi: JSON.stringify(contractABI),
+  },
+  title: 'Flash',
+  description: 'Call the Flash() function',
+  type: 'custom',
+  metadata: {
+    sendTo: '0xA91382E82fB676d4c935E601305E5253b3829dCD',
+    sendValue: '10000000000000000',
+    sendCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+      type: 'native',
+    },
+  },
+  functionInterface: { name: 'flash', inputs: [] },
+  functionInputs: [],
+  via: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+  viaType: 'EOA',
+  // set simulate to true
+  simulate: true,
+  // optional
+  overrideSimulationOpts: {
+    transactionData: {
+      // or instead of ABI, you can provide data
+      data: '0xd336c82d',
+    },
+  },
+});
+```
+
 #### Issuing DELEGATECALLs
 
 When invoking a function via a Gnosis Safe, it's possible to call it via a `DELEGATECALL` instruction instead of a regular call. This has the effect of executing the code in the called contract _in the context of the multisig_, meaning any operations that affect storage will affect the multisig, and any calls to additional contracts will be executed as if the `msg.sender` were the multisig. To do this, add a `metadata` parameter with the value `{ operationType: 'delegateCall' }` to your `createProposal` call:

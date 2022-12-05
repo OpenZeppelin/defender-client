@@ -23,7 +23,7 @@ const contracts = [
   },
 ];
 
-const safeAddress = '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b';
+const safeAddress = '0xba4A8019166BB0E066dF2De99b37fbd5916eCf20';
 
 const steps = [
   {
