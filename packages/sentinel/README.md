@@ -66,7 +66,7 @@ const notification = await client.createNotificationChannel('slack', {
 });
 
 const notification = await client.createNotificationChannel('opsgenie', {
-  name: 'MySlackNotification',
+  name: 'MyOpsgenieNotification',
   config: {
     apiKey: "123-secret",
     instanceLocation: "US",
