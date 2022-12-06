@@ -1,13 +1,16 @@
 // Copied from openzeppelin/defender/models/src/types/notification-*.req.d.ts
 
+import { PagerDutyConfig } from './pager-duty';
+
 export type SaveNotificationRequest =
   | SaveNotificationSlackRequest
   | SaveNotificationEmailRequest
   | SaveNotificationDiscordRequest
   | SaveNotificationTelegramBotRequest
+  | SaveNotificationPagerDutyRequest
   | SaveNotificationDatadogRequest;
 
-export type NotificationType = 'slack' | 'email' | 'discord' | 'telegram' | 'datadog';
+export type NotificationType = 'slack' | 'email' | 'discord' | 'pager-duty' | 'telegram' | 'datadog';
 
 export type BaseNotificationRequest = {
   name: string;
@@ -17,6 +20,10 @@ export type BaseNotificationRequest = {
 
 export interface SaveNotificationSlackRequest extends BaseNotificationRequest {
   config: SlackConfig;
+}
+
+export interface SaveNotificationPagerDutyRequest extends BaseNotificationRequest {
+  config: PagerDutyConfig;
 }
 export interface SlackConfig {
   url: string;

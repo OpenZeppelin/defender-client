@@ -41,6 +41,7 @@ The following notification channels are available:
 - email
 - slack
 - discord
+- pager-duty
 - telegram
 - datadog
 
@@ -72,10 +73,20 @@ const notification = await client.createNotificationChannel('telegram', {
   paused: false,
 });
 
+const notification = await client.createNotificationChannel('pager-duty', {
+  name: 'MyPagerDutyNotification',
+  config: {
+    url: 'https://discord.com/url/key',
+  },
+  paused: false,
+});
+
 const notification = await client.createNotificationChannel('discord', {
   name: 'MyDiscordNotification',
   config: {
-    url: 'https://discord.com/url/key',
+    token: "pager-duty-integration-token",
+    eventType: "alert",
+    routingKey: "integration-routing-key",
   },
   paused: false,
 });
