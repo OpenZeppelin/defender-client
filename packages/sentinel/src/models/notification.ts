@@ -1,19 +1,26 @@
 // Copied from openzeppelin/defender/models/src/types/notification-*.req.d.ts
 
+import { OpsgenieConfig } from './opsgenie';
+
 export type SaveNotificationRequest =
   | SaveNotificationSlackRequest
   | SaveNotificationEmailRequest
   | SaveNotificationDiscordRequest
   | SaveNotificationTelegramBotRequest
-  | SaveNotificationDatadogRequest;
+  | SaveNotificationDatadogRequest
+  | SaveNotificationOpsgenieRequest;
 
-export type NotificationType = 'slack' | 'email' | 'discord' | 'telegram' | 'datadog';
+export type NotificationType = 'slack' | 'email' | 'discord' | 'telegram' | 'datadog' | 'webhook' | 'opsgenie';
 
 export type BaseNotificationRequest = {
   name: string;
   paused: boolean;
   stackResourceId?: string;
 };
+
+export interface SaveNotificationOpsgenieRequest extends BaseNotificationRequest {
+  config: OpsgenieConfig;
+}
 
 export interface SaveNotificationSlackRequest extends BaseNotificationRequest {
   config: SlackConfig;
