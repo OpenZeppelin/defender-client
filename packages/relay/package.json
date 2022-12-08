@@ -31,7 +31,7 @@
     "web3-core-helpers": "^1.7.3"
   },
   "dependencies": {
-    "amazon-cognito-identity-js": "^4.3.3",
+    "amazon-cognito-identity-js": "^6.0.1",
     "axios": "^0.21.2",
     "defender-base-client": "1.38.0-rc.1",
     "lodash": "^4.17.19",
