@@ -5,17 +5,18 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3.1.0
 
-    - name: Use node@12
-      uses: actions/setup-node@v1
-      with: { node-version: '12.x' }
+    - name: Use node@16
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
 
     - name: Node modules cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: yarn-cache
       with:
         path: |
@@ -38,22 +39,23 @@ jobs:
 
   test:
     name: Unit Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: build
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3.1.0
 
-    - name: Use node@12
-      uses: actions/setup-node@v1
-      with: { node-version: '12.x' }
+    - name: Use node@16
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
       run: echo "::set-output name=dir::$(yarn cache dir)"
 
     - name: Node modules cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: yarn-cache
       with:
         path: |
