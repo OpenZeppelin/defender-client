@@ -41,8 +41,11 @@ The following notification channels are available:
 - email
 - slack
 - discord
+- pager-duty
 - telegram
 - datadog
+- webhook
+- opsgenie
 
 The `createNotificationChannel` function requires the `NotificationType` and `NotificationRequest` parameters respectively, and returns a `NotificationResponse` object.
 
@@ -63,11 +66,31 @@ const notification = await client.createNotificationChannel('slack', {
   paused: false,
 });
 
+const notification = await client.createNotificationChannel('opsgenie', {
+  name: 'MyOpsgenieNotification',
+  config: {
+    apiKey: "123-secret",
+    instanceLocation: "US",
+    "responders": [{"username": "emergency@email.io"}]
+  },
+  paused: false,
+});
+
 const notification = await client.createNotificationChannel('telegram', {
   name: 'MyTelegramNotification',
   config: {
     botToken: 'abcd',
     chatId: '123',
+  },
+  paused: false,
+});
+
+const notification = await client.createNotificationChannel('pager-duty', {
+  name: 'MyPagerDutyNotification',
+  config: {
+    token: "pager-duty-integration-token",
+    eventType: "alert",
+    routingKey: "integration-routing-key",
   },
   paused: false,
 });

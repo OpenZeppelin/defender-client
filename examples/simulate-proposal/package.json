@@ -1,5 +1,5 @@
 {
-  "name": "example-update-sentinel",
+  "name": "example-simulate-proposal",
   "version": "1.38.0-rc.1",
   "private": true,
   "main": "index.js",
@@ -9,7 +9,8 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "defender-sentinel-client": "1.38.0-rc.1",
-    "dotenv": "^8.2.0"
+    "defender-admin-client": "1.37.0-rc.2",
+    "dotenv": "^8.2.0",
+    "ethers": "^5.7.2"
   }
 }

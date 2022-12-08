@@ -40,6 +40,45 @@ await client.createProposal({
 });
 ```
 
+You can also optionally set the `simulate` flag as part of the `createProposal` request (as long as this is not a batch proposal) to simulate the proposal within the same request. You can override simulation parameters by setting the `overrideSimulationOpts` property, which is a `SimulationRequest` object.
+
+```js
+const proposalWithSimulation = await client.createProposal({
+  contract: {
+    address: '0xA91382E82fB676d4c935E601305E5253b3829dCD',
+    network: 'mainnet',
+    // provide abi OR overrideSimulationOpts.transactionData.data
+    abi: JSON.stringify(contractABI),
+  },
+  title: 'Flash',
+  description: 'Call the Flash() function',
+  type: 'custom',
+  metadata: {
+    sendTo: '0xA91382E82fB676d4c935E601305E5253b3829dCD',
+    sendValue: '10000000000000000',
+    sendCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+      type: 'native',
+    },
+  },
+  functionInterface: { name: 'flash', inputs: [] },
+  functionInputs: [],
+  via: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+  viaType: 'EOA',
+  // set simulate to true
+  simulate: true,
+  // optional
+  overrideSimulationOpts: {
+    transactionData: {
+      // or instead of ABI, you can provide data
+      data: '0xd336c82d',
+    },
+  },
+});
+```
+
 #### Issuing DELEGATECALLs
 
 When invoking a function via a Gnosis Safe, it's possible to call it via a `DELEGATECALL` instruction instead of a regular call. This has the effect of executing the code in the called contract _in the context of the multisig_, meaning any operations that affect storage will affect the multisig, and any calls to additional contracts will be executed as if the `msg.sender` were the multisig. To do this, add a `metadata` parameter with the value `{ operationType: 'delegateCall' }` to your `createProposal` call:
@@ -200,6 +239,54 @@ You can archive or unarchive a proposal given its contract and proposal ids:
 ```js
 await client.archiveProposal(contractId, proposalId);
 await client.unarchiveProposal(contractId, proposalId);
+```
+
+### Simulate proposals
+
+You can simulate an existing proposal. The results of a simulation (`SimulationResponse`) will be stored and can be retrieved with the getProposalSimulation endpoint:
+
+```js
+const proposal = await client.getProposal(contractId, proposalId);
+
+// import the ABI and create an ethers interface
+const contractInterface = new utils.Interface(contractABI);
+
+// encode function data
+const data = contractInterface.encodeFunctionData(proposal.functionInterface.name, proposal.functionInputs);
+
+const simulation = await client.simulateProposal(
+  proposal.contractId, // contractId
+  proposal.proposalId, // proposalId
+  {
+    transactionData: {
+      // this is the default hardhat address
+      from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266', // change this to impersonate the `from` address
+      type: 'function-call', // or 'send-funds'
+      data,
+      to: proposal.contract.address,
+      value: proposal.metadata.sendValue,
+    },
+    // default to latest finalized block,
+    // can be up to 100 blocks ahead of current block,
+    // does not support previous blocks
+    blockNumber: undefined,
+  },
+);
+```
+
+> Note that a simulation may fail due to a number of reasons, such as network congestion, unstable providers or hitting a quota limitation. We would advise you to track the response code to assure a successful response was returned. If a transaction was reverted with a reason string, this can be obtained from the response object under `response.meta.returnString`. A transaction revert can be tracked from `response.meta.reverted`.
+
+### Retrieve a proposal simulation
+
+You can also retrieve existing simulations for a proposal:
+
+```js
+const proposal = await client.getProposal(contractId, proposalId);
+
+const simulation = await client.getProposalSimulation(
+  proposal.contractId, // contractId
+  proposal.proposalId, // proposalId
+);
 ```
 
 ## Adding Contracts
