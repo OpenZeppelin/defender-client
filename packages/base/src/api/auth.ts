@@ -1,9 +1,5 @@
 // Adapted from https://gist.githubusercontent.com/efimk-lu/b48fa118bd29a35fc1767fe749fa3372/raw/0662fee3eb5c65172fdf85c4bdfcb96eabce5e21/authentication-example.js
 
-// https://github.com/aws-amplify/amplify-js/issues/7098
-// fix for amazon-cognito-identity
-global.crypto = require('crypto');
-
 import { AuthenticationDetails, CognitoUserPool, CognitoUser } from 'amazon-cognito-identity-js';
 import retry from 'async-retry';
 
