@@ -2,7 +2,9 @@
 
 // https://github.com/aws-amplify/amplify-js/issues/7098
 // fix for amazon-cognito-identity
-global.crypto = require('crypto');
+if (typeof window === 'undefined') {
+    global.crypto = require('crypto');
+}
 
 import { AuthenticationDetails, CognitoUserPool, CognitoUser } from 'amazon-cognito-identity-js';
 import retry from 'async-retry';
