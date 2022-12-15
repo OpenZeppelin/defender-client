@@ -1,6 +1,6 @@
 {
   "name": "example-batch-proposal",
-  "version": "1.38.0-rc.4",
+  "version": "1.38.0-rc.5",
   "private": true,
   "main": "index.js",
   "author": "Ernesto García <mverzilli@openzeppelin.com>",
