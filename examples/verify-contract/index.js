@@ -27,11 +27,12 @@ async function main() {
   // the deployed bytecode by calling `verify` with an artifact URI
   console.log(`Verifying deployment using uploaded artifact`);
   let verification = await client.verifyDeployment({
-    artifactUri: 'https://raw.githubusercontent.com/OpenZeppelin/defender-client/fa441208febac7f46fe7bb03c787659089315f78/examples/verify-contract/compilation-artifact.json',
+    artifactUri:
+      'https://raw.githubusercontent.com/OpenZeppelin/defender-client/fa441208febac7f46fe7bb03c787659089315f78/examples/verify-contract/compilation-artifact.json',
     solidityFilePath: 'contracts/Vault.sol',
     contractName: 'VaultV2',
     contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
-    contractNetwork: 'rinkeby'
+    contractNetwork: 'goerli',
   });
 
   printVerificationToConsole(verification);
@@ -41,11 +42,12 @@ async function main() {
   console.log(`Verifying deployment with inline artifact`);
   verification = await client.verifyDeployment({
     artifactPayload: JSON.stringify(require('./compilation-artifact.json')),
-    referenceUri: 'https://github.com/OpenZeppelin/defender-client/blob/master/examples/verify-contract/compilation-artifact.json',
+    referenceUri:
+      'https://github.com/OpenZeppelin/defender-client/blob/master/examples/verify-contract/compilation-artifact.json',
     solidityFilePath: 'contracts/Vault.sol',
     contractName: 'VaultV2',
     contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
-    contractNetwork: 'rinkeby'
+    contractNetwork: 'goerli',
   });
 
   printVerificationToConsole(verification);
@@ -55,7 +57,7 @@ async function main() {
   // the address and network
   verification = await client.getDeploymentVerification({
     contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
-    contractNetwork: 'rinkeby',
+    contractNetwork: 'goerli',
   });
 
   printVerificationToConsole(verification);

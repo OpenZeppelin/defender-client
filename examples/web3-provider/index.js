@@ -7,11 +7,11 @@ const ERC20Bytecode = require('./bytecode.json')[0].data.bytecode.object;
 const Beneficiary = '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1';
 
 async function main(provider) {
-  const web3 = new Web3(provider)  
+  const web3 = new Web3(provider);
   const [from] = await web3.eth.getAccounts();
   const balance = await web3.eth.getBalance(from);
   console.log(`Relayer address is ${from} with balance ${balance}`);
-  
+
   console.log(`Deploying ERC20 contract`);
   const factory = new web3.eth.Contract(ERC20Abi, null, { data: ERC20Bytecode, from });
   const erc20 = await factory.deploy({ arguments: [100] }).send();
@@ -40,9 +40,9 @@ function defenderProvider(creds) {
 function defenderSender(creds, websockets) {
   const validUntil = new Date(Date.now() + 120 * 1000).toISOString();
   const base = websockets
-    ? new Web3.providers.WebsocketProvider(`wss://rinkeby.infura.io/ws/v3/${process.env.INFURA_PROJECT_ID}`)
-    : new Web3.providers.HttpProvider(`https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`);
-  return new DefenderRelaySenderProvider(base, creds, { speed: 'fast', validUntil });  
+    ? new Web3.providers.WebsocketProvider(`wss://goerli.infura.io/ws/v3/${process.env.INFURA_PROJECT_ID}`)
+    : new Web3.providers.HttpProvider(`https://goerli.infura.io/v3/${process.env.INFURA_PROJECT_ID}`);
+  return new DefenderRelaySenderProvider(base, creds, { speed: 'fast', validUntil });
 }
 
 if (require.main === module) {

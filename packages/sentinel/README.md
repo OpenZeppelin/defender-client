@@ -166,13 +166,13 @@ There are two types of sentinels, `BLOCK` and `FORTA`. For more information on w
 
 To create a new sentinel, you need to provide the type, network, name, pause-state, conditions, alert threshold and notification configuration. This request is exported as type `CreateSentinelRequest`.
 
-An example for a `BLOCK` sentinel is provided below. This sentinel will be named `MyNewSentinel` and will be monitoring the `renounceOwnership` function on the `0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2` contract on the Rinkeby network.
+An example for a `BLOCK` sentinel is provided below. This sentinel will be named `MyNewSentinel` and will be monitoring the `renounceOwnership` function on the `0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2` contract on the goerli network.
 The alert threshold is set to 2 times within 1 hour, and the user will be notified via email.
 
 ```js
 const requestParameters = {
   type: 'BLOCK',
-  network: 'rinkeby',
+  network: 'goerli',
   // optional
   confirmLevel: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
   name: 'MyNewSentinel',

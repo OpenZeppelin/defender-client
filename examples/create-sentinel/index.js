@@ -27,7 +27,7 @@ async function main() {
 
   const blockRequestParameters = {
     type: 'BLOCK', // BLOCK or FORTA
-    network: 'rinkeby',
+    network: 'goerli',
     // optional
     confirmLevel: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
     name: 'MyNewSentinel',
@@ -36,8 +36,11 @@ async function main() {
     // optional
     paused: false,
     eventConditions: [
-      { eventSignature: 'OwnershipTransferred(address,address)', expression: 'previousOwner=0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2' },
-      { eventSignature: 'Transfer(address,address,uint256)' }
+      {
+        eventSignature: 'OwnershipTransferred(address,address)',
+        expression: 'previousOwner=0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
+      },
+      { eventSignature: 'Transfer(address,address,uint256)' },
     ],
     functionConditions: [{ functionSignature: 'renounceOwnership()' }],
     // optional
@@ -54,7 +57,7 @@ async function main() {
     // optional
     alertTimeoutMs: 0,
     notificationChannels: [notification.notificationId],
-  }
+  };
 
   const fortaRequestParameters = {
     type: 'FORTA', // BLOCK or FORTA
@@ -84,7 +87,7 @@ async function main() {
     // optional
     alertTimeoutMs: 0,
     notificationChannels: [notification.notificationId],
-  }
+  };
 
   // call create with the request parameters
   const sentinelResponse = await client.create(blockRequestParameters); // or fortaRequestParameters

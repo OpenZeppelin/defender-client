@@ -52,7 +52,7 @@ describe('ethers/signer', () => {
     jest.resetAllMocks();
 
     relayer.getRelayer.mockResolvedValue({
-      network: 'rinkeby',
+      network: 'goerli',
       address: from,
       relayerId: '1',
       createdAt: '',
