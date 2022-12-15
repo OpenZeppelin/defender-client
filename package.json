@@ -1,7 +1,7 @@
 {
   "name": "defender-client",
   "private": true,
-  "version": "1.38.0-rc.4",
+  "version": "1.38.0-rc.5",
   "description": "Root package for the defender-client set of packages",
   "workspaces": [
     "packages/*",
