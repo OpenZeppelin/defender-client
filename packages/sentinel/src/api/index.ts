@@ -289,12 +289,16 @@ export class SentinelClient extends BaseApiClient {
       throw new Error(`Invalid sentinel type. Type must be FORTA or BLOCK`);
     }
 
+    const notificationChannels = await this.getNotifications(sentinel.notificationChannels);
+
     return {
       ...partialResponse,
       name: sentinel.name,
       alertThreshold: sentinel.alertThreshold,
       notifyConfig: {
-        notifications: await this.getNotifications(sentinel.notificationChannels),
+        notifications: notificationChannels,
+        // only allow to set category if channels is empty
+        notificationCategoryId: _.isEmpty(notificationChannels) ? sentinel.notificationCategoryId : undefined,
         autotaskId: sentinel.autotaskTrigger ? sentinel.autotaskTrigger : undefined,
         timeoutMs: sentinel.alertTimeoutMs ? sentinel.alertTimeoutMs : 0,
         messageBody: sentinel.alertMessageBody ? sentinel.alertMessageBody : undefined,
@@ -329,6 +333,7 @@ export class SentinelClient extends BaseApiClient {
       alertTimeoutMs: sentinel.notifyConfig?.timeoutMs,
       alertMessageBody: sentinel.notifyConfig?.messageBody,
       notificationChannels: sentinel.notifyConfig?.notifications?.map(({ notificationId }) => notificationId) ?? [],
+      notificationCategoryId: sentinel.notifyConfig?.notificationCategoryId,
       network: sentinel.network,
       confirmLevel: parseInt(_.last(sentinel.blockWatcherId.split('-')) as string), // We're sure there is always a last number if the convention is followd
     };
@@ -345,6 +350,7 @@ export class SentinelClient extends BaseApiClient {
       alertTimeoutMs: sentinel.notifyConfig?.timeoutMs,
       alertMessageBody: sentinel.notifyConfig?.messageBody,
       notificationChannels: sentinel.notifyConfig?.notifications?.map(({ notificationId }) => notificationId) ?? [],
+      notificationCategoryId: sentinel.notifyConfig?.notificationCategoryId,
       network: sentinel.network,
       fortaLastProcessedTime: sentinel.fortaLastProcessedTime,
       addresses: sentinel.fortaRule.addresses,
