@@ -12,12 +12,7 @@ import {
   CreateFortaSubscriberResponse,
   CreateBlockSubscriberResponse,
 } from '../models/subscriber';
-import {
-  DeletedSentinelResponse,
-  CreateSentinelResponse,
-  ListSentinelResponse,
-  NotificationCategory,
-} from '../models/response';
+import { DeletedSentinelResponse, CreateSentinelResponse, ListSentinelResponse } from '../models/response';
 import {
   CreateNotificationRequest,
   DeleteNotificationRequest,
@@ -31,7 +26,7 @@ import _ from 'lodash';
 import getConditionSets, { getSentinelConditions } from '../utils';
 import {
   CreateNotificationCategoryRequest,
-  SaveNotificationCategoryRequest,
+  NotificationCategory as NotificationCategoryResponse,
   UpdateNotificationCategoryRequest,
 } from '../models/category';
 
@@ -134,13 +129,15 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async createNotificationCategory(category: CreateNotificationCategoryRequest): Promise<NotificationCategory> {
+  public async createNotificationCategory(
+    category: CreateNotificationCategoryRequest,
+  ): Promise<NotificationCategoryResponse> {
     return this.apiCall(async (api) => {
       return await api.post(`/notifications/categories`, category);
     });
   }
 
-  public async listNotificationCategory(): Promise<NotificationCategory[]> {
+  public async listNotificationCategory(): Promise<NotificationCategoryResponse[]> {
     return this.apiCall(async (api) => {
       return await api.get(`/notifications/categories`);
     });
@@ -152,13 +149,15 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async getNotificationCategory(categoryId: string): Promise<NotificationCategory> {
+  public async getNotificationCategory(categoryId: string): Promise<NotificationCategoryResponse> {
     return this.apiCall(async (api) => {
       return await api.get(`/notifications/categories/${categoryId}`);
     });
   }
 
-  public async updateNotificationCategory(category: UpdateNotificationCategoryRequest): Promise<NotificationCategory> {
+  public async updateNotificationCategory(
+    category: UpdateNotificationCategoryRequest,
+  ): Promise<NotificationCategoryResponse> {
     return this.apiCall(async (api) => {
       return await api.put(`/notifications/categories/${category.categoryId}`, category);
     });
