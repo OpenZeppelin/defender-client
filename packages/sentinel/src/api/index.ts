@@ -12,7 +12,12 @@ import {
   CreateFortaSubscriberResponse,
   CreateBlockSubscriberResponse,
 } from '../models/subscriber';
-import { DeletedSentinelResponse, CreateSentinelResponse, ListSentinelResponse } from '../models/response';
+import {
+  DeletedSentinelResponse,
+  CreateSentinelResponse,
+  ListSentinelResponse,
+  NotificationCategory,
+} from '../models/response';
 import {
   CreateNotificationRequest,
   DeleteNotificationRequest,
@@ -24,6 +29,11 @@ import { BlockWatcher } from '../models/blockwatcher';
 
 import _ from 'lodash';
 import getConditionSets, { getSentinelConditions } from '../utils';
+import {
+  CreateNotificationCategoryRequest,
+  SaveNotificationCategoryRequest,
+  UpdateNotificationCategoryRequest,
+} from '../models/category';
 
 export class SentinelClient extends BaseApiClient {
   protected getPoolId(): string {
@@ -121,6 +131,36 @@ export class SentinelClient extends BaseApiClient {
   public async updateNotificationChannel(notification: UpdateNotificationRequest): Promise<NotificationResponse> {
     return this.apiCall(async (api) => {
       return await api.put(`/notifications/${notification.type}/${notification.notificationId}`, notification);
+    });
+  }
+
+  public async createNotificationCategory(category: CreateNotificationCategoryRequest): Promise<NotificationCategory> {
+    return this.apiCall(async (api) => {
+      return await api.post(`/notifications/categories`, category);
+    });
+  }
+
+  public async listNotificationCategory(): Promise<NotificationCategory[]> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/notifications/categories`);
+    });
+  }
+
+  public async deleteNotificationCategory(categoryId: string): Promise<string> {
+    return this.apiCall(async (api) => {
+      return await api.delete(`/notifications/categories/${categoryId}`);
+    });
+  }
+
+  public async getNotificationCategory(categoryId: string): Promise<NotificationCategory> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/notifications/categories/${categoryId}`);
+    });
+  }
+
+  public async updateNotificationCategory(category: UpdateNotificationCategoryRequest): Promise<NotificationCategory> {
+    return this.apiCall(async (api) => {
+      return await api.put(`/notifications/categories/${category.categoryId}`, category);
     });
   }
 
