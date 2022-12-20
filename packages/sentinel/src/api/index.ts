@@ -137,7 +137,7 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async listNotificationCategory(): Promise<NotificationCategoryResponse[]> {
+  public async listNotificationCategories(): Promise<NotificationCategoryResponse[]> {
     return this.apiCall(async (api) => {
       return await api.get(`/notifications/categories`);
     });
