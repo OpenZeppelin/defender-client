@@ -351,8 +351,6 @@ export class SentinelClient extends BaseApiClient {
       alertTimeoutMs: sentinel.notifyConfig?.timeoutMs,
       alertMessageBody: sentinel.notifyConfig?.messageBody,
       notificationChannels: sentinel.notifyConfig?.notifications?.map(({ notificationId }) => notificationId) ?? [],
-      // notificationCategoryId will be replaced with undefined in `constructSentinelRequest`
-      // if notification channels is not empty
       notificationCategoryId: sentinel.notifyConfig?.notificationCategoryId,
       network: sentinel.network,
       fortaLastProcessedTime: sentinel.fortaLastProcessedTime,
