@@ -17,6 +17,7 @@ export interface ExternalBaseCreateSubscriberRequest {
   alertTimeoutMs?: number;
   alertMessageBody?: string;
   notificationChannels: string[];
+  notificationCategoryId?: string;
   type: 'FORTA' | 'BLOCK';
   stackResourceId?: string;
 }
@@ -159,6 +160,7 @@ export interface Threshold {
 }
 export interface Notifications {
   notifications: NotificationReference[];
+  notificationCategoryId?: string;
   autotaskId?: string;
   messageBody?: string;
   timeoutMs: number;

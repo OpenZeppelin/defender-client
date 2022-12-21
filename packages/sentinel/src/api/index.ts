@@ -24,6 +24,11 @@ import { BlockWatcher } from '../models/blockwatcher';
 
 import _ from 'lodash';
 import getConditionSets, { getSentinelConditions } from '../utils';
+import {
+  CreateNotificationCategoryRequest,
+  NotificationCategory as NotificationCategoryResponse,
+  UpdateNotificationCategoryRequest,
+} from '../models/category';
 
 export class SentinelClient extends BaseApiClient {
   protected getPoolId(): string {
@@ -121,6 +126,40 @@ export class SentinelClient extends BaseApiClient {
   public async updateNotificationChannel(notification: UpdateNotificationRequest): Promise<NotificationResponse> {
     return this.apiCall(async (api) => {
       return await api.put(`/notifications/${notification.type}/${notification.notificationId}`, notification);
+    });
+  }
+
+  public async createNotificationCategory(
+    category: CreateNotificationCategoryRequest,
+  ): Promise<NotificationCategoryResponse> {
+    return this.apiCall(async (api) => {
+      return await api.post(`/notifications/categories`, category);
+    });
+  }
+
+  public async listNotificationCategories(): Promise<NotificationCategoryResponse[]> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/notifications/categories`);
+    });
+  }
+
+  public async deleteNotificationCategory(categoryId: string): Promise<string> {
+    return this.apiCall(async (api) => {
+      return await api.delete(`/notifications/categories/${categoryId}`);
+    });
+  }
+
+  public async getNotificationCategory(categoryId: string): Promise<NotificationCategoryResponse> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/notifications/categories/${categoryId}`);
+    });
+  }
+
+  public async updateNotificationCategory(
+    category: UpdateNotificationCategoryRequest,
+  ): Promise<NotificationCategoryResponse> {
+    return this.apiCall(async (api) => {
+      return await api.put(`/notifications/categories/${category.categoryId}`, category);
     });
   }
 
@@ -250,12 +289,15 @@ export class SentinelClient extends BaseApiClient {
       throw new Error(`Invalid sentinel type. Type must be FORTA or BLOCK`);
     }
 
+    const notificationChannels = await this.getNotifications(sentinel.notificationChannels);
+
     return {
       ...partialResponse,
       name: sentinel.name,
       alertThreshold: sentinel.alertThreshold,
       notifyConfig: {
-        notifications: await this.getNotifications(sentinel.notificationChannels),
+        notifications: notificationChannels,
+        notificationCategoryId: _.isEmpty(notificationChannels) ? sentinel.notificationCategoryId : undefined,
         autotaskId: sentinel.autotaskTrigger ? sentinel.autotaskTrigger : undefined,
         timeoutMs: sentinel.alertTimeoutMs ? sentinel.alertTimeoutMs : 0,
         messageBody: sentinel.alertMessageBody ? sentinel.alertMessageBody : undefined,
@@ -290,6 +332,7 @@ export class SentinelClient extends BaseApiClient {
       alertTimeoutMs: sentinel.notifyConfig?.timeoutMs,
       alertMessageBody: sentinel.notifyConfig?.messageBody,
       notificationChannels: sentinel.notifyConfig?.notifications?.map(({ notificationId }) => notificationId) ?? [],
+      notificationCategoryId: sentinel.notifyConfig?.notificationCategoryId,
       network: sentinel.network,
       confirmLevel: parseInt(_.last(sentinel.blockWatcherId.split('-')) as string), // We're sure there is always a last number if the convention is followd
     };
@@ -306,6 +349,7 @@ export class SentinelClient extends BaseApiClient {
       alertTimeoutMs: sentinel.notifyConfig?.timeoutMs,
       alertMessageBody: sentinel.notifyConfig?.messageBody,
       notificationChannels: sentinel.notifyConfig?.notifications?.map(({ notificationId }) => notificationId) ?? [],
+      notificationCategoryId: sentinel.notifyConfig?.notificationCategoryId,
       network: sentinel.network,
       fortaLastProcessedTime: sentinel.fortaLastProcessedTime,
       addresses: sentinel.fortaRule.addresses,
