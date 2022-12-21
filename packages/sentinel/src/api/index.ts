@@ -297,7 +297,6 @@ export class SentinelClient extends BaseApiClient {
       alertThreshold: sentinel.alertThreshold,
       notifyConfig: {
         notifications: notificationChannels,
-        // only allow to set category if channels is empty
         notificationCategoryId: _.isEmpty(notificationChannels) ? sentinel.notificationCategoryId : undefined,
         autotaskId: sentinel.autotaskTrigger ? sentinel.autotaskTrigger : undefined,
         timeoutMs: sentinel.alertTimeoutMs ? sentinel.alertTimeoutMs : 0,
