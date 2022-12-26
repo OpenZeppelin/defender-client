@@ -169,6 +169,12 @@ You can list all runs for an autotask with the following command:
 await client.listAutotaskRuns(autotaskId);
 ```
 
+List of all runs can be filtered by status:
+
+```js
+await client.listAutotaskRuns(autotaskId, 'error');
+```
+
 And get detailed logs for a single run using the `autotaskRunId` (returned in the `listAutotaskRuns` response directly above):
 
 ```js
