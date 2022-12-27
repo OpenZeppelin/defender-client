@@ -3,12 +3,15 @@ import { Autotask } from './autotask';
 export type AutotaskRunTrigger = Autotask['trigger']['type'] | 'sentinel' | 'manual' | 'manual-api';
 export type AutotaskRunStatus = AutotaskRunResponse['status'];
 
+export type AutotaskErrorType = 'TIMEOUT' | 'INSUFFICIENT_FUNDS' | 'RELAYER_CONFIGURATION' | 'INTERNAL' | 'PROGRAM';
+
 export interface AutotaskRunBase {
   autotaskRunId: string;
   autotaskId: string;
   trigger: AutotaskRunTrigger;
   status: string;
   createdAt: string;
+  errorType?: AutotaskErrorType;
 }
 
 export interface AutotaskRunPendingData {
@@ -24,6 +27,7 @@ export interface AutotaskRunErrorData {
   message: string;
   decodedLogs?: string; // External API always returns decoded logs
   requestId?: string;
+  errorType?: AutotaskErrorType;
 }
 
 export interface AutotaskRunSuccessData {
