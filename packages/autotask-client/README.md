@@ -1,6 +1,6 @@
 # Defender Autotask Client
 
-The [Defender Autotasks](https://docs.openzeppelin.com/defender/autotasks) service allows you to run small code snippets on a regular basis or via webhooks that can make calls to the Ethereum network or to external APIs. Thanks to tight integration to Defender Relayers, you can use Autotasks to automate regular actions on your contracts.
+The [Defender Autotasks](https://docs.openzeppelin.com/defender/autotasks) service allows you to run small code snippets on a regular basis, via webhooks or from Sentinels that can make calls to the Ethereum network or to external APIs. Thanks to tight integration to Defender Relayers, you can use Autotasks to automate regular actions on your contracts.
 
 This client allows you to update the code of your Autotasks programmatically, so you don't need to copy-paste code into the Defender web application. Additionally, the client allows you to easily create, list, retrieve, delete and update your Autotasks.
 
@@ -75,7 +75,7 @@ interface CreateAutotaskRequest {
   encodedZippedCode: string;
   relayerId?: string;
   trigger: {
-    type: 'schedule' | 'webhook',
+    type: 'schedule' | 'webhook' | 'sentinel',
     frequencyMinutes?: number,
     cron?: string,
   };
@@ -109,7 +109,7 @@ interface UpdateAutotaskRequest {
   encodedZippedCode?: string;
   relayerId?: string;
   trigger: {
-    type: 'schedule' | 'webhook',
+    type: 'schedule' | 'webhook' | 'sentinel',
     frequencyMinutes?: number,
     cron?: string,
   };
