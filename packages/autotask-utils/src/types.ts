@@ -1,5 +1,14 @@
 export type SentinelConfirmation = number | 'safe' | 'finalized';
 
+export interface PreviousAutotaskRunInfo {
+  trigger: 'schedule' | 'webhook' | 'sentinel' | 'manual' | 'manual-api';
+  status: 'pending' | 'throttled' | 'error' | 'success';
+  createdAt: string;
+  autotaskId: string;
+  message?: string;
+  autotaskRunId: 'string';
+}
+
 /**
  * Event information injected by Defender when invoking an Autotask
  */
@@ -28,6 +37,22 @@ export interface AutotaskEvent {
    * Contains a Webhook request, Sentinel match information, or Sentinel match request
    */
   request?: AutotaskRequestData;
+  /**
+   * autotaskId is the unique identifier of the Autotask
+   */
+  autotaskId: string;
+  /**
+   * Name assigned to the Autotask
+   */
+  autotaskName: string;
+  /**
+   * Id of the the current Autotask run
+   */
+  autotaskRunId: string;
+  /**
+   * Previous Autotask run information
+   */
+  previousRun?: PreviousAutotaskRunInfo;
 }
 
 /**
