@@ -8,7 +8,7 @@ async function main() {
 
   const createParams = {
     name: 'MyNewRelayer',
-    network: 'rinkeby',
+    network: 'goerli',
     minBalance: BigInt(1e17).toString(),
     policies: {
       whitelistReceivers: ['0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'],

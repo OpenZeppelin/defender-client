@@ -14,7 +14,7 @@ describe('RelayClient', () => {
   let relayer: TestRelayClient;
   const relayerId = '1';
   const mockRelayerResponse: RelayerGetResponse = {
-    network: 'rinkeby',
+    network: 'goerli',
     address: '0x0',
     relayerId: relayerId,
     createdAt: '',

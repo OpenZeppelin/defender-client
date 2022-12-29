@@ -2,9 +2,6 @@ import { findKey } from 'lodash';
 
 type PublicNetwork =
   | 'mainnet'
-  | 'rinkeby'
-  | 'ropsten'
-  | 'kovan'
   | 'goerli'
   | 'xdai'
   | 'sokol'
@@ -21,10 +18,8 @@ type PublicNetwork =
   | 'avalanche'
   | 'fuji'
   | 'optimism'
-  | 'optimism-kovan'
   | 'optimism-goerli'
   | 'arbitrum'
-  | 'arbitrum-rinkeby'
   | 'arbitrum-goerli'
   | 'celo'
   | 'alfajores'
@@ -42,9 +37,6 @@ export type Network = PublicNetwork | CustomNetwork;
 
 export const Networks: Network[] = [
   'mainnet',
-  'rinkeby',
-  'ropsten',
-  'kovan',
   'goerli',
   'xdai',
   'sokol',
@@ -61,10 +53,8 @@ export const Networks: Network[] = [
   'avalanche',
   'fuji',
   'optimism',
-  'optimism-kovan',
   'optimism-goerli',
   'arbitrum',
-  'arbitrum-rinkeby',
   'arbitrum-goerli',
   'celo',
   'alfajores',
@@ -93,9 +83,6 @@ export function toChainId(network: Network): number | undefined {
 
 const chainIds: { [key in Network]: number } = {
   mainnet: 1,
-  rinkeby: 4,
-  ropsten: 3,
-  kovan: 42,
   goerli: 5,
   xdai: 100,
   sokol: 77,
@@ -112,10 +99,8 @@ const chainIds: { [key in Network]: number } = {
   avalanche: 0xa86a,
   fuji: 0xa869,
   optimism: 10,
-  'optimism-kovan': 69,
   'optimism-goerli': 420,
   arbitrum: 42161,
-  'arbitrum-rinkeby': 421611,
   'arbitrum-goerli': 421613,
   celo: 42220,
   alfajores: 44787,

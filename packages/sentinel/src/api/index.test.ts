@@ -73,7 +73,7 @@ describe('SentinelClient', () => {
     name: 'Test BLOCK sentinel',
     addresses: ['0xdead'],
     notificationChannels: [],
-    network: 'rinkeby',
+    network: 'goerli',
     confirmLevel: 1,
     paused: false,
     abi: ABI,
@@ -107,7 +107,7 @@ describe('SentinelClient', () => {
     name: 'Previous sentinel',
     paused: false,
     blockWatcherId: 'i-am-the-watcher',
-    network: 'rinkeby',
+    network: 'goerli',
     addressRules: [
       {
         abi: '[{ method: "type" }]',
@@ -536,7 +536,7 @@ describe('SentinelClient', () => {
   describe('getBlockwatcherIdByNetwork', () => {
     it('finds blockwatchers for network when there are available', async () => {
       // Make sure the network provided is the network mocked above
-      const results = await sentinel.getBlockwatcherIdByNetwork('rinkeby');
+      const results = await sentinel.getBlockwatcherIdByNetwork('goerli');
       expect(results[0].blockWatcherId).toEqual('i-am-the-watcher');
     });
 

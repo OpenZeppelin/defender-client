@@ -9,7 +9,7 @@ async function main() {
   const proposal = await client.createProposal({
     contract: {
       address: '0xf62322658Cb0F51C71Da36637a6846B0967cA264',
-      network: 'rinkeby',
+      network: 'goerli',
     },
     title: 'Set to 42',
     description: 'Set value to 42',
