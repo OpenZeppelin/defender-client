@@ -29,7 +29,7 @@ To create a `custom` action proposal, you need to provide the function interface
 
 ```js
 await client.createProposal({
-  contract: { address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E', network: 'rinkeby' }, // Target contract
+  contract: { address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E', network: 'goerli' }, // Target contract
   title: 'Adjust fee to 10%', // Title of the proposal
   description: 'Adjust the contract fee collected per action to 10%', // Description of the proposal
   type: 'custom', // Use 'custom' for custom admin actions
@@ -101,7 +101,7 @@ To create an `upgrade` action proposal, provide the proxy contract network and a
 ```js
 const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const newImplementationAbi = '[...]';
-const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
+const contract = { network: 'goerli', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
 await client.proposeUpgrade({ newImplementation, newImplementationAbi }, contract);
 ```
 
@@ -113,7 +113,7 @@ If your proxies do not implement the [EIP1967 admin slot](https://eips.ethereum.
 const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const proxyAdmin = '0x2fC100f1BeA4ACCD5dA5e5ed725D763c90e8ca96';
 const newImplementationAbi = '[...]';
-const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
+const contract = { network: 'goerli', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
 await client.proposeUpgrade({ newImplementation, newImplementationAbi, proxyAdmin }, contract);
 ```
 
@@ -123,7 +123,7 @@ await client.proposeUpgrade({ newImplementation, newImplementationAbi, proxyAdmi
 const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const via = '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1';
 const viaType = 'Gnosis Safe'; // or 'Gnosis Multisig', or 'EOA'
-const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
+const contract = { network: 'goerli', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
 const newImplementationAbi = '[...]';
 await client.proposeUpgrade({ newImplementation, newImplementationAbi, via, viaType }, contract);
 ```
@@ -133,7 +133,7 @@ await client.proposeUpgrade({ newImplementation, newImplementationAbi, via, viaT
 To create `pause` and `unpause` action proposals, you need to provide the contract network and address, as well as the multisig that will be used for approving it. Defender takes care of the rest:
 
 ```js
-const contract = { network: 'rinkeby', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
+const contract = { network: 'goerli', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
 
 // Create a pause proposal
 await client.proposePause({ via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', viaType: 'Gnosis Safe' }, contract);
@@ -295,7 +295,7 @@ If you create a new proposal for a Contract that has not yet been added to Defen
 
 ```js
 const contract = {
-  network: 'rinkeby',
+  network: 'goerli',
   address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E',
   name: 'My contract', // Name of the contract if it is created along with this proposal
   abi: '[...]', // ABI to set for this contract if it is created
@@ -307,7 +307,7 @@ Alternatively, you can add any contract explicitly by using the `addContract` me
 
 ```js
 await client.addContract({
-  network: 'rinkeby',
+  network: 'goerli',
   address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E',
   name: 'My contract',
   abi: '[...]',

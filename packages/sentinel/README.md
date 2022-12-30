@@ -172,7 +172,7 @@ The alert threshold is set to 2 times within 1 hour, and the user will be notifi
 ```js
 const requestParameters = {
   type: 'BLOCK',
-  network: 'rinkeby',
+  network: 'goerli',
   // optional
   confirmLevel: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
   name: 'MyNewSentinel',

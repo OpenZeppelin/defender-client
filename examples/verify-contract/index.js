@@ -31,7 +31,7 @@ async function main() {
     solidityFilePath: 'contracts/Vault.sol',
     contractName: 'VaultV2',
     contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
-    contractNetwork: 'rinkeby'
+    contractNetwork: 'goerli'
   });
 
   printVerificationToConsole(verification);
@@ -45,7 +45,7 @@ async function main() {
     solidityFilePath: 'contracts/Vault.sol',
     contractName: 'VaultV2',
     contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
-    contractNetwork: 'rinkeby'
+    contractNetwork: 'goerli'
   });
 
   printVerificationToConsole(verification);
@@ -55,7 +55,7 @@ async function main() {
   // the address and network
   verification = await client.getDeploymentVerification({
     contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
-    contractNetwork: 'rinkeby',
+    contractNetwork: 'goerli',
   });
 
   printVerificationToConsole(verification);
