@@ -6,7 +6,12 @@ import {
   GetSecretsResponse,
   SaveSecretsRequest,
 } from './models/autotask';
-import { AutotaskRunBase, AutotaskRunListResponse, AutotaskRunResponse } from './models/autotask-run.res';
+import {
+  AutotaskRunBase,
+  AutotaskRunListResponse,
+  AutotaskRunResponse,
+  AutotaskRunStatus,
+} from './models/autotask-run.res';
 import { AutotaskDeleteResponse, AutotaskListResponse, AutotaskResponse } from './models/response';
 import { zipFolder, zipSources } from './zip';
 
@@ -85,9 +90,17 @@ export class AutotaskClient extends BaseApiClient {
     return this.updateCode(autotaskId, encodedZippedCode);
   }
 
-  public async listAutotaskRuns(autotaskId: string, next?: string): Promise<AutotaskRunListResponse> {
+  public async listAutotaskRuns(
+    autotaskId: string,
+    next?: string,
+    status?: AutotaskRunStatus | undefined,
+  ): Promise<AutotaskRunListResponse> {
+    if (next && !status && (next === 'success' || next === 'error' || next === 'pending' || next === 'throttle')) {
+      status = next as AutotaskRunStatus;
+      next = undefined;
+    }
     return this.apiCall(async (api) => {
-      return await api.get(`/autotasks/${autotaskId}/runs`, { params: { next } });
+      return api.get(`/autotasks/${autotaskId}/runs`, { params: { next, status } });
     });
   }
 
