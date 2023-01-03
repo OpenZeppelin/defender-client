@@ -2,7 +2,10 @@
 export interface SaveNotificationCategoryRequest {
   name: string;
   description?: string;
-  notificationIds: string[];
+  /**
+   * @maxItems 2
+   */
+  notificationIds: [] | [string] | [string, string];
   stackResourceId?: string;
 }
 
@@ -11,7 +14,10 @@ export interface NotificationCategory {
   categoryId: string;
   name: string;
   description?: string;
-  notificationIds?: string[];
+  /**
+   * @maxItems 2
+   */
+  notificationIds?: [] | [string] | [string, string];
   stackResourceId?: string;
 }
 

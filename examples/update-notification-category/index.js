@@ -24,13 +24,15 @@ async function main() {
         });
     }
 
+    const getExistingCategory = await client.getNotificationCategory("66a753ae-90ed-4373-a360-1c3f79610d15");
+
     const category = {
-        name: "Custom High Severity",
+        ...getExistingCategory,
         description: "Attach this category to high-risk monitors",
         notificationIds: [notification.notificationId]
     }
-    // call create with the request parameters
-    const response = await client.createNotificationCategory(category);
+    // call update with the request parameters
+    const response = await client.updateNotificationCategory(category);
     console.log(response);
 }
 

@@ -129,23 +129,9 @@ export class SentinelClient extends BaseApiClient {
     });
   }
 
-  public async createNotificationCategory(
-    category: CreateNotificationCategoryRequest,
-  ): Promise<NotificationCategoryResponse> {
-    return this.apiCall(async (api) => {
-      return await api.post(`/notifications/categories`, category);
-    });
-  }
-
   public async listNotificationCategories(): Promise<NotificationCategoryResponse[]> {
     return this.apiCall(async (api) => {
       return await api.get(`/notifications/categories`);
-    });
-  }
-
-  public async deleteNotificationCategory(categoryId: string): Promise<string> {
-    return this.apiCall(async (api) => {
-      return await api.delete(`/notifications/categories/${categoryId}`);
     });
   }
 
