@@ -24,7 +24,7 @@ async function main() {
         });
     }
 
-    const getExistingCategory = await client.getNotificationCategory("66a753ae-90ed-4373-a360-1c3f79610d15");
+    const getExistingCategory = (await client.listNotificationCategories())[0];
 
     const category = {
         ...getExistingCategory,
