@@ -1,3 +1,5 @@
+import { NotificationType } from './notification';
+
 // copied from /models/src/types/notification-category.req.d.ts
 export interface SaveNotificationCategoryRequest {
   name: string;
@@ -10,16 +12,6 @@ export interface SaveNotificationCategoryRequest {
 }
 
 // copied from /models/src/types/notification-category.res.d.ts
-export type NotificationType =
-  | 'slack'
-  | 'email'
-  | 'discord'
-  | 'telegram'
-  | 'datadog'
-  | 'webhook'
-  | 'opsgenie'
-  | 'pager-duty';
-
 export interface NotificationCategory {
   categoryId: string;
   name: string;
