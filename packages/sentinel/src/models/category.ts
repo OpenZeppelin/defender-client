@@ -5,11 +5,21 @@ export interface SaveNotificationCategoryRequest {
   /**
    * @maxItems 2
    */
-  notificationIds: [] | [string] | [string, string];
+  notificationIds: [] | [NotificationReference] | [NotificationReference, NotificationReference];
   stackResourceId?: string;
 }
 
 // copied from /models/src/types/notification-category.res.d.ts
+export type NotificationType =
+  | 'slack'
+  | 'email'
+  | 'discord'
+  | 'telegram'
+  | 'datadog'
+  | 'webhook'
+  | 'opsgenie'
+  | 'pager-duty';
+
 export interface NotificationCategory {
   categoryId: string;
   name: string;
@@ -17,8 +27,14 @@ export interface NotificationCategory {
   /**
    * @maxItems 2
    */
-  notificationIds?: [] | [string] | [string, string];
+  notificationIds?: [] | [NotificationReference] | [NotificationReference, NotificationReference];
   stackResourceId?: string;
+}
+export interface NotificationReference {
+  notificationId: string;
+  type: NotificationType;
+  sendCount?: number;
+  [k: string]: unknown;
 }
 
 export type UpdateNotificationCategoryRequest = NotificationCategory;
