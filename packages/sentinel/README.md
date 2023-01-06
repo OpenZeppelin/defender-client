@@ -160,6 +160,20 @@ You can also delete a notification channel. The function takes as a parameters t
 await client.deleteNotificationChannel({ type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' });
 ```
 
+### Notification Categories
+
+There are 3 default notification categories.
+
+- High Severity
+- Medium Severity
+- Low Severity
+
+Each notification category can be associated with up to two notification channels. For instance, the High Severity category can be linked to a Slack channel and a webhook.
+
+A notification category can then be linked to a sentinel. If a sentinel does not have any notification channels assigned and is linked to a category, the notification channels linked to that category will be notified when the sentinel is triggered.
+
+**Note:** If a sentinel has both manually linked notification channels and channels associated with its category, the manually linked channels will take precedence and the category-associated channels will not be used. The sentinel will only notify the manually linked channels.
+
 ### List notification categories
 
 You can also list existing notification categories:
