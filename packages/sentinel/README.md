@@ -69,9 +69,9 @@ const notification = await client.createNotificationChannel('slack', {
 const notification = await client.createNotificationChannel('opsgenie', {
   name: 'MyOpsgenieNotification',
   config: {
-    apiKey: "123-secret",
-    instanceLocation: "US",
-    "responders": [{"username": "emergency@email.io"}]
+    apiKey: '123-secret',
+    instanceLocation: 'US',
+    responders: [{ username: 'emergency@email.io' }],
   },
   paused: false,
 });
@@ -88,9 +88,9 @@ const notification = await client.createNotificationChannel('telegram', {
 const notification = await client.createNotificationChannel('pager-duty', {
   name: 'MyPagerDutyNotification',
   config: {
-    token: "pager-duty-integration-token",
-    eventType: "alert",
-    routingKey: "integration-routing-key",
+    token: 'pager-duty-integration-token',
+    eventType: 'alert',
+    routingKey: 'integration-routing-key',
   },
   paused: false,
 });
@@ -160,6 +160,51 @@ You can also delete a notification channel. The function takes as a parameters t
 await client.deleteNotificationChannel({ type: 'email', notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb' });
 ```
 
+### List notification categories
+
+You can also list existing notification categories:
+
+```js
+const notificationCategories = await client.listNotificationCategories();
+const { categoryId, notificationIds } = notificationCategories[0];
+```
+
+This request returns a `NotificationCategoryResponse[]` object.
+
+### Get a notification category
+
+You can also retrieve a single notification category.
+
+```js
+await client.getNotificationCategory('66a753ae-90ed-4373-a360-1c3f79610d15');
+```
+
+This request returns a `NotificationCategoryResponse` object.
+
+### Update a notification category
+
+You can also update a single notification category. The only fields that can be updated are:
+
+- description
+- notificationIds
+
+Changing the `name` field is currently not supported. Any changes to the `name` field will be ignored.
+
+```js
+const myNotification = await client.getNotificationChannel({
+  type: 'email',
+  notificationId: 'e595ce88-f525-4d5d-b4b9-8e859310b6fb',
+});
+await client.updateNotificationCategory({
+  categoryId: '66a753ae-90ed-4373-a360-1c3f79610d15',
+  name: 'High Severity',
+  description: 'Attach this category to high-risk monitors',
+  notificationIds: [myNotification],
+});
+```
+
+This request returns a `NotificationCategoryResponse` object.
+
 ### Create a Sentinel
 
 There are two types of sentinels, `BLOCK` and `FORTA`. For more information on when to use which type, have a look at the documentation [https://docs.openzeppelin.com/defender/sentinel#when-to-use](here).
@@ -198,6 +243,10 @@ const requestParameters = {
   // optional
   alertTimeoutMs: 0,
   notificationChannels: [notification.notificationId],
+  // optional
+  // notificationChannels take priority over notification categories
+  // in this instance, notificationCategoryId will be ignored, unless notificationChannels is empty
+  notificationCategoryId: '66a753ae-90ed-4373-a360-1c3f79610d15',
 };
 ```
 
@@ -212,6 +261,7 @@ eventConditions: [
   }
 ]
 ```
+
 You could also apply a transaction condition by modifying the `txCondition` property:
 Possible variables: `value`, `gasPrice`, `maxFeePerGas`, `maxPriorityFeePerGas`, `gasLimit`, `gasUsed`, `to`, `from`, `nonce`, `status` ('success', 'failed' or 'any'), `input`, or `transactionIndex`.
 
@@ -324,6 +374,7 @@ Failed requests might return the following example response object:
   }
 }
 ```
+
 ## FAQ
 
 **Can I use this package in a browser?**
