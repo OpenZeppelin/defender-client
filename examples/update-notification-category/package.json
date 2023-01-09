@@ -1,5 +1,5 @@
 {
-  "name": "example-create-notification-category",
+  "name": "example-update-notification-category",
   "version": "1.38.0-rc.2",
   "private": true,
   "main": "index.js",
