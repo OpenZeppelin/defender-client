@@ -3,7 +3,7 @@ export interface CreateAutotaskRequest {
   encodedZippedCode: string;
   relayerId?: string;
   trigger: {
-    type: 'schedule' | 'webhook';
+    type: 'schedule' | 'webhook' | 'sentinel';
     frequencyMinutes?: number;
     cron?: string;
   };
@@ -28,11 +28,15 @@ export interface WebhookTrigger {
   token: string;
 }
 
+export interface SentinelTrigger {
+  type: 'sentinel';
+}
+
 export interface Autotask
   extends Pick<CreateAutotaskRequest, 'name' | 'relayerId' | 'paused' | 'stackResourceId' | 'dependenciesVersion'> {
   autotaskId: string;
   encodedZippedCode?: string;
-  trigger: ScheduleTrigger | WebhookTrigger;
+  trigger: ScheduleTrigger | WebhookTrigger | SentinelTrigger;
   createdAt?: string;
   codeDigest?: string;
 }
