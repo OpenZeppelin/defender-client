@@ -1,21 +1,23 @@
 import { PlatformApiClient } from './platform';
 import { DeploymentConfigCreateRequest, DeploymentConfigResponse, RemoveResponse } from '../models';
 
+const PATH = '/deployment-config';
+
 export class DeploymentConfigClient extends PlatformApiClient {
   public async get(deploymentConfigId: string): Promise<DeploymentConfigResponse> {
     return this.apiCall(async (api) => {
-      return await api.get(`/deployment-config/${deploymentConfigId}`);
+      return api.get(`${PATH}/${deploymentConfigId}`);
     });
   }
   public async list(): Promise<DeploymentConfigResponse[]> {
     return this.apiCall(async (api) => {
-      return await api.get(`/deployment-config`);
+      return api.get(`${PATH}`);
     });
   }
 
   public async create(payload: DeploymentConfigCreateRequest): Promise<DeploymentConfigResponse> {
     return this.apiCall(async (api) => {
-      return await api.post(`/deployment-config`, payload);
+      return api.post(`${PATH}`, payload);
     });
   }
 
@@ -24,13 +26,13 @@ export class DeploymentConfigClient extends PlatformApiClient {
     payload: DeploymentConfigCreateRequest,
   ): Promise<DeploymentConfigResponse> {
     return this.apiCall(async (api) => {
-      return await api.put(`/deployment-config/${deploymentConfigId}`, payload);
+      return api.put(`${PATH}/${deploymentConfigId}`, payload);
     });
   }
 
   public async remove(deploymentConfigId: string): Promise<RemoveResponse> {
     return this.apiCall(async (api) => {
-      return await api.delete(`/deployment-config/${deploymentConfigId}`);
+      return api.delete(`${PATH}/${deploymentConfigId}`);
     });
   }
 }

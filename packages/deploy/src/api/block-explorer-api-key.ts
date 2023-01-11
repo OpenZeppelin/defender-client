@@ -1,21 +1,23 @@
 import { PlatformApiClient } from './platform';
 import { BlockExplorerApiKeyResponse, CreateBlockExplorerApiKeyRequest, RemoveResponse } from '../models';
 
+const PATH = '/block-explorer-api-key';
+
 export class BlockExplorerApiKeyClient extends PlatformApiClient {
   public async get(blockExplorerApiKeyId: string): Promise<BlockExplorerApiKeyResponse> {
     return this.apiCall(async (api) => {
-      return await api.get(`/block-explorer-api-key/${blockExplorerApiKeyId}`);
+      return api.get(`${PATH}/${blockExplorerApiKeyId}`);
     });
   }
   public async list(): Promise<BlockExplorerApiKeyResponse[]> {
     return this.apiCall(async (api) => {
-      return await api.get(`/block-explorer-api-key`);
+      return api.get(`${PATH}`);
     });
   }
 
   public async create(payload: CreateBlockExplorerApiKeyRequest): Promise<BlockExplorerApiKeyResponse> {
     return this.apiCall(async (api) => {
-      return await api.post(`/block-explorer-api-key`, payload);
+      return api.post(`${PATH}`, payload);
     });
   }
 
@@ -24,13 +26,13 @@ export class BlockExplorerApiKeyClient extends PlatformApiClient {
     payload: CreateBlockExplorerApiKeyRequest,
   ): Promise<BlockExplorerApiKeyResponse> {
     return this.apiCall(async (api) => {
-      return await api.put(`/block-explorer-api-key/${blockExplorerApiKeyId}`, payload);
+      return api.put(`${PATH}/${blockExplorerApiKeyId}`, payload);
     });
   }
 
   public async remove(blockExplorerApiKeyId: string): Promise<RemoveResponse> {
     return this.apiCall(async (api) => {
-      return await api.delete(`/block-explorer-api-key/${blockExplorerApiKeyId}`);
+      return api.delete(`${PATH}/${blockExplorerApiKeyId}`);
     });
   }
 }

@@ -17,6 +17,7 @@ describe('Deploy Client', () => {
     contractPath: 'contracts/ERC20.sol',
     network: 'goerli',
     artifactUri: 'url',
+    verifySourceCode: true,
   };
   beforeEach(() => {
     deployClient = new DeploymentClient({

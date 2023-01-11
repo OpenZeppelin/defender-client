@@ -20,6 +20,7 @@ export interface DeployContractRequest {
   contractName: string;
   contractPath: string;
   network: Network;
+  verifySourceCode: boolean;
   artifactPayload?: string;
   artifactUri?: string;
   value?: string;

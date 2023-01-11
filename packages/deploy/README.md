@@ -14,16 +14,25 @@ yarn add platform-deploy-client
 
 ## Usage
 
-Start by creating a new _Team API Key_ in Defender, and granting it the capability to manage sentinels. Use the newly created API key to initialize an instance of the Sentinel client.
+Start by creating a new _Team API Key_ in Defender, and granting it the capability to manage deployments. Use the newly created API key to initialize an instance of the Deployment client.
+
+You can create instances of the clients using the `PlatformClient` helper function which returns an object with the 3 clients `DeploymentClient`, `DeploymentConfigClient` and `BlockExplorerApiKeyClient`.
 
 ```js
 const { PlatformClient } = require('platform-deploy-client');
 const client = PlatformClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
+Alternatively you can instantiate whichever client you need individually
+
+```js
+const { DeploymentClient } = require('platform-deploy-client');
+const client = new DeploymentClient({ apiKey: API_KEY, apiSecret: API_SECRET });
+```
+
 ### Deployment Config
 
-In order to deploy a contract you will need to create a deployment config. The config consists of the ID belonging to the Relayer you want to use for deployments. You can only specify one deployment config per network, so if you create a config with a Relayer on the `goerli` testnet all you your deployments on `goerli` will be sent via that relayer.
+To deploy a contract, you will need to create a deployment config. The config consists of the ID belonging to the Relayer you want to use for deployments. You can only specify one deployment config per network, so if you create a config with a Relayer on the `goerli` testnet, all your deployments on `goerli` will be sent via that Relayer.
 
 ```js
 await client.DeploymentConfig.create({ relayerId: 'dfa8b9a6-0f88-4d28-892a-93e1f5a8d2a7' });
