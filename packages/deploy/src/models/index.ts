@@ -20,33 +20,49 @@ export interface DeployContractRequest {
   contractName: string;
   contractPath: string;
   network: Network;
-  verifySourceCode: boolean;
   artifactPayload?: string;
   artifactUri?: string;
   value?: string;
   salt?: string;
+  verifySourceCode: boolean;
   licenseType?: SourceCodeLicense;
-  libraries?: {
-    [k: string]: string;
-  };
-  constructorInputs?: string[];
+  libraries?: DeployRequestLibraries;
+  constructorInputs?: (string | boolean | number)[];
+}
+export interface DeployRequestLibraries {
+  [k: string]: string;
 }
 
 export interface DeploymentResponse {
   deploymentId: string;
   createdAt: string;
-  contractName?: string;
+  contractName: string;
+  contractPath: string;
   network: Network;
   relayerId: string;
   address: Address;
   status: string;
+  blockExplorerVerification: BlockExplorerVerification;
+  deployDataVerification: string;
+  bytecodeVerification: string;
+  deploymentArtifactId?: string;
   transactionId: string;
   txHash: string;
   abi: string;
   bytecode: string;
+  constructorBytecode: string;
   value: string;
   salt: string;
-  constructorInputs?: string[];
+  licenseType?: SourceCodeLicense;
+  libraries?: {
+    [k: string]: string;
+  };
+  constructorInputs?: (string | boolean | number)[];
+}
+export interface BlockExplorerVerification {
+  status: string;
+  error?: string;
+  etherscanGuid?: string;
 }
 
 export interface DeploymentConfigCreateRequest {
