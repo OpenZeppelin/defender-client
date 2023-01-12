@@ -6,7 +6,7 @@ export class PlatformApiClient extends BaseApiClient {
   }
 
   protected getPoolClientId(): string {
-    return process.env.PLATFORM_CLIENT_ID || '40e58hbc7pktmnp9i26hh5nsav';
+    return process.env.PLATFORM_POOL_CLIENT_ID || '40e58hbc7pktmnp9i26hh5nsav';
   }
 
   protected getApiUrl(): string {
