@@ -1,0 +1,15 @@
+{
+  "name": "example-deploy",
+  "version": "1.38.0-rc.2",
+  "private": true,
+  "main": "index.js",
+  "author": "Dan McKeon <dan@openzeppelin.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "platform-deploy-client": "0.1.0",
+    "dotenv": "^8.2.0"
+  }
+}
