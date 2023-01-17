@@ -67,6 +67,7 @@ export interface BlockExplorerVerification {
 
 export interface DeploymentConfigCreateRequest {
   relayerId: string;
+  stackResourceId?: string;
 }
 
 export interface DeploymentConfigResponse {
@@ -74,18 +75,21 @@ export interface DeploymentConfigResponse {
   relayerId: string;
   network: Network;
   createdAt: string;
+  stackResourceId?: string;
 }
 
 export interface CreateBlockExplorerApiKeyRequest {
   key: string;
   network: Network;
+  stackResourceId?: string;
 }
 
 export interface BlockExplorerApiKeyResponse {
   blockExplorerApiKeyId: string;
   createdAt: string;
-  key: string;
   network: Network;
+  stackResourceId?: string;
+  keyHash: string;
 }
 
 export type Address = string;
