@@ -25,7 +25,7 @@ Run `yarn lint` at the project root.
 
 ### Defender Client
 
-Use `lerna` for publishing a new version of all Defender Client packages. 
+Use `lerna` for publishing a new version of all Defender Client packages (excludes Platform Deploy Client as it is versioned separately). 
 
 The following publishes a release candidate with the npm tag `next`:
 
@@ -41,7 +41,17 @@ yarn run lerna publish --exact --force-publish
 
 ### Platform Deploy Client
 
+Change to the `packages/deploy` directory, login to npm, and publish using the native `yarn publish` command as shown below. We are not tagging versions for the time being as they conflict with previous Defender Client releases. Note this process is being introduced for the Platform Deploy Client v0 release, but will be migrated to a new Platform Client-specific repository.
 
+```
+npm login
+cd packages/deploy
+git checkout master
+git pull origin master
+yarn publish --no-git-tag-version
+# enter new version at prompt
+git push origin master
+```
 
 ## Examples
 
