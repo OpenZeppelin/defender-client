@@ -1,6 +1,6 @@
 {
   "name": "platform-deploy-client",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Client library for managing Platform Deployments",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
