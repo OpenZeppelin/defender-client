@@ -2,7 +2,13 @@
   "npmClient": "yarn",
   "useWorkspaces": true,
   "packages": [
-    "packages/*"
+    "packages/admin",
+    "packages/autotask-client",
+    "packages/autotask-utils",
+    "packages/base",
+    "packages/kvstore",
+    "packages/relay",
+    "packages/sentinel"
   ],
   "version": "1.38.0-rc.2"
 }

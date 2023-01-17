@@ -23,7 +23,9 @@ Run `yarn lint` at the project root.
 
 ## Publish
 
-Use `lerna` for publishing a new version of all packages. 
+### Defender Client
+
+Use `lerna` for publishing a new version of all Defender Client packages. 
 
 The following publishes a release candidate with the npm tag `next`:
 
@@ -36,6 +38,10 @@ And to publish the final release:
 ```
 yarn run lerna publish --exact --force-publish
 ```
+
+### Platform Deploy Client
+
+
 
 ## Examples
 
