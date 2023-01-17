@@ -7,7 +7,8 @@
     "packages/base",
     "packages/kvstore",
     "packages/relay",
-    "packages/sentinel"
+    "packages/sentinel",
+    "examples/*"
   ],
   "version": "1.38.0-rc.2"
 }
