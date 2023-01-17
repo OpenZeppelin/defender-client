@@ -10,5 +10,5 @@
     "packages/sentinel",
     "examples/*"
   ],
-  "version": "1.38.0-rc.2"
+  "version": "1.38.0"
 }
