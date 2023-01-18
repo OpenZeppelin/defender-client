@@ -287,6 +287,7 @@ export class SentinelClient extends BaseApiClient {
         autotaskId: sentinel.autotaskTrigger ? sentinel.autotaskTrigger : undefined,
         timeoutMs: sentinel.alertTimeoutMs ? sentinel.alertTimeoutMs : 0,
         messageBody: sentinel.alertMessageBody ? sentinel.alertMessageBody : undefined,
+        messageSubject: sentinel.alertMessageSubject ? sentinel.alertMessageSubject : undefined,
       },
       paused: sentinel.paused ? sentinel.paused : false,
       stackResourceId: sentinel.stackResourceId,
