@@ -25,7 +25,7 @@ Run `yarn lint` at the project root.
 
 ### Defender Client
 
-Use `lerna` for publishing a new version of all Defender Client packages (excludes Platform Deploy Client as it is versioned separately). 
+Use `lerna` for publishing a new version of all Defender Client packages (excludes Platform Deploy Client as it is versioned separately).
 
 The following publishes a release candidate with the npm tag `next`:
 
@@ -50,6 +50,8 @@ git checkout master
 git pull origin master
 yarn publish --no-git-tag-version
 # enter new version at prompt
+git add package.json
+git commit -m 'Bump Platform Deploy Client version to {version here}'
 git push origin master
 ```
 
@@ -58,7 +60,7 @@ git push origin master
 The `examples` repo has sample code for both clients. Note that most examples rely on dotenv for loading API keys and secrets. Note that you can set the following environment variables to control to which instance your client will connect to, which is useful for testing against your Defender development instance:
 
 ```
-# Example config 
+# Example config
 # relay signer
 DEFENDER_RELAY_SIGNER_API_URL=
 DEFENDER_RELAY_SIGNER_POOL_ID=
