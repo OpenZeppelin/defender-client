@@ -16,6 +16,7 @@ export interface ExternalBaseCreateSubscriberRequest {
   autotaskTrigger?: string;
   alertTimeoutMs?: number;
   alertMessageBody?: string;
+  alertMessageSubject?: string;
   notificationChannels: string[];
   notificationCategoryId?: string;
   type: 'FORTA' | 'BLOCK';
