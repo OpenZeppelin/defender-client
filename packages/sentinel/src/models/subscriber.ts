@@ -20,6 +20,7 @@ export interface ExternalBaseCreateSubscriberRequest {
   notificationChannels: string[];
   notificationCategoryId?: string;
   type: 'FORTA' | 'BLOCK';
+  riskCategory?: SubscriberRiskCategory;
   stackResourceId?: string;
 }
 export interface ExternalCreateBlockSubscriberRequest extends ExternalBaseCreateSubscriberRequest {
@@ -72,6 +73,7 @@ export interface BaseCreateSubscriberRequest {
   paused: boolean;
   alertThreshold?: Threshold;
   notifyConfig?: Notifications;
+  riskCategory?: SubscriberRiskCategory;
   stackResourceId?: string;
 }
 
@@ -127,6 +129,8 @@ export enum SubscriberType {
   BLOCK = 'BLOCK',
   FORTA = 'FORTA',
 }
+
+export type SubscriberRiskCategory = 'NONE' | 'GOVERNANCE' | 'PRIVILEGED' | 'SUSPICIOUS' | 'FINANCIAL' | 'TECHNICAL';
 
 export type Address = string;
 export interface AddressRule {

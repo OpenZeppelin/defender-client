@@ -54,6 +54,8 @@ async function main() {
     // optional
     alertTimeoutMs: 0,
     notificationChannels: [notification.notificationId],
+    // optional
+    riskCategory: "TECHNICAL"
   }
 
   const fortaRequestParameters = {
