@@ -290,6 +290,7 @@ export class SentinelClient extends BaseApiClient {
         messageSubject: sentinel.alertMessageSubject ? sentinel.alertMessageSubject : undefined,
       },
       paused: sentinel.paused ? sentinel.paused : false,
+      riskCategory: sentinel.riskCategory,
       stackResourceId: sentinel.stackResourceId,
     };
   }
