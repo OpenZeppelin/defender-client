@@ -20,6 +20,11 @@ type PublicNetwork =
   | 'optimism'
   | 'optimism-goerli'
   | 'arbitrum'
+<<<<<<< Updated upstream
+=======
+  | 'arbitrum-nova'
+  | 'arbitrum-rinkeby'
+>>>>>>> Stashed changes
   | 'arbitrum-goerli'
   | 'celo'
   | 'alfajores'
@@ -55,6 +60,11 @@ export const Networks: Network[] = [
   'optimism',
   'optimism-goerli',
   'arbitrum',
+<<<<<<< Updated upstream
+=======
+  'arbitrum-nova',
+  'arbitrum-rinkeby',
+>>>>>>> Stashed changes
   'arbitrum-goerli',
   'celo',
   'alfajores',
@@ -101,6 +111,11 @@ const chainIds: { [key in Network]: number } = {
   optimism: 10,
   'optimism-goerli': 420,
   arbitrum: 42161,
+<<<<<<< Updated upstream
+=======
+  'arbitrum-nova': 42170,
+  'arbitrum-rinkeby': 421611,
+>>>>>>> Stashed changes
   'arbitrum-goerli': 421613,
   celo: 42220,
   alfajores: 44787,
