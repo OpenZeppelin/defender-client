@@ -21,7 +21,6 @@ type PublicNetwork =
   | 'optimism-goerli'
   | 'arbitrum'
   | 'arbitrum-nova'
-  | 'arbitrum-rinkeby'
   | 'arbitrum-goerli'
   | 'celo'
   | 'alfajores'
@@ -58,7 +57,6 @@ export const Networks: Network[] = [
   'optimism-goerli',
   'arbitrum',
   'arbitrum-nova',
-  'arbitrum-rinkeby',
   'arbitrum-goerli',
   'celo',
   'alfajores',
@@ -106,7 +104,6 @@ const chainIds: { [key in Network]: number } = {
   'optimism-goerli': 420,
   arbitrum: 42161,
   'arbitrum-nova': 42170,
-  'arbitrum-rinkeby': 421611,
   'arbitrum-goerli': 421613,
   celo: 42220,
   alfajores: 44787,
