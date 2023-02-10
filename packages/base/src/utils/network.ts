@@ -20,11 +20,8 @@ type PublicNetwork =
   | 'optimism'
   | 'optimism-goerli'
   | 'arbitrum'
-<<<<<<< Updated upstream
-=======
   | 'arbitrum-nova'
   | 'arbitrum-rinkeby'
->>>>>>> Stashed changes
   | 'arbitrum-goerli'
   | 'celo'
   | 'alfajores'
