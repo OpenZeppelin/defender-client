@@ -1,6 +1,6 @@
 {
   "name": "defender-relay-client",
-  "version": "1.38.0",
+  "version": "1.39.0",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -33,7 +33,7 @@
   "dependencies": {
     "amazon-cognito-identity-js": "^6.0.1",
     "axios": "^0.21.2",
-    "defender-base-client": "1.38.0",
+    "defender-base-client": "1.39.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },
