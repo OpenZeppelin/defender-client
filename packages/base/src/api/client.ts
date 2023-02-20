@@ -1,10 +1,13 @@
+import { CognitoUserSession } from 'amazon-cognito-identity-js';
 import { AxiosInstance } from 'axios';
 import https from 'https';
 import { createAuthenticatedApi } from './api';
+import { authenticate, refreshSession } from './auth';
 
 export abstract class BaseApiClient {
   private api: Promise<AxiosInstance> | undefined;
   private apiKey: string;
+  private session: CognitoUserSession | undefined;
   private apiSecret: string;
   private httpsAgent?: https.Agent;
 
@@ -19,15 +22,33 @@ export abstract class BaseApiClient {
     this.apiKey = params.apiKey;
     this.apiSecret = params.apiSecret;
     this.httpsAgent = params.httpsAgent;
+    this.session = undefined;
   }
 
   protected async init(): Promise<AxiosInstance> {
     if (!this.api) {
       const userPass = { Username: this.apiKey, Password: this.apiSecret };
       const poolData = { UserPoolId: this.getPoolId(), ClientId: this.getPoolClientId() };
-      this.api = createAuthenticatedApi(userPass, poolData, this.getApiUrl(), this.httpsAgent);
+      this.session = await authenticate(userPass, poolData);
+      this.api = createAuthenticatedApi(userPass.Username, this.session, this.getApiUrl(), this.httpsAgent);
     }
     return this.api;
+  }
+
+  protected async refresh(): Promise<AxiosInstance> {
+    if (!this.session) {
+      return this.init();
+    }
+    try {
+      const userPass = { Username: this.apiKey, Password: this.apiSecret };
+      const poolData = { UserPoolId: this.getPoolId(), ClientId: this.getPoolClientId() };
+      this.session = await refreshSession(userPass, poolData, this.session);
+      this.api = createAuthenticatedApi(userPass.Username, this.session, this.getApiUrl(), this.httpsAgent);
+
+      return this.api;
+    } catch (e) {
+      return this.init();
+    }
   }
 
   protected async apiCall<T>(fn: (api: AxiosInstance) => Promise<T>): Promise<T> {
@@ -38,7 +59,8 @@ export abstract class BaseApiClient {
       // this means ID token has expired so we'll recreate session and try again
       if (error.response && error.response.status === 401 && error.response.statusText === 'Unauthorized') {
         this.api = undefined;
-        const api = await this.init();
+
+        const api = await this.refresh();
         return await fn(api);
       }
       throw error;

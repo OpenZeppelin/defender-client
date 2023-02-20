@@ -1,7 +1,7 @@
+import { CognitoUserSession } from 'amazon-cognito-identity-js';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import https from 'https';
 import { DefenderApiResponseError } from './api-error';
-import { authenticate, PoolData, UserPass } from './auth';
 
 export function rejectWithDefenderApiError(axiosError: AxiosError): Promise<never> {
   return Promise.reject(new DefenderApiResponseError(axiosError));
@@ -23,12 +23,13 @@ export function createApi(key: string, token: string, apiUrl: string, httpsAgent
 }
 
 export async function createAuthenticatedApi(
-  userPass: UserPass,
-  poolData: PoolData,
+  username: string,
+  session: CognitoUserSession,
   apiUrl: string,
   httpsAgent?: https.Agent,
 ): Promise<AxiosInstance> {
-  const token = await authenticate(userPass, poolData);
-  const api = createApi(userPass.Username, token, apiUrl, httpsAgent);
+  const accessToken = session.getAccessToken().getJwtToken();
+  const api = createApi(username, accessToken, apiUrl, httpsAgent);
+
   return api;
 }
