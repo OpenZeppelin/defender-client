@@ -1,11 +1,12 @@
 import { CognitoUserSession } from 'amazon-cognito-identity-js';
 import { AxiosInstance } from 'axios';
 import https from 'https';
+
 import { createAuthenticatedApi } from './api';
 import { authenticate, refreshSession } from './auth';
 
 export abstract class BaseApiClient {
-  private api: Promise<AxiosInstance> | undefined;
+  private api: AxiosInstance | undefined;
   private apiKey: string;
   private session: CognitoUserSession | undefined;
   private apiSecret: string;
@@ -22,7 +23,6 @@ export abstract class BaseApiClient {
     this.apiKey = params.apiKey;
     this.apiSecret = params.apiSecret;
     this.httpsAgent = params.httpsAgent;
-    this.session = undefined;
   }
 
   protected async init(): Promise<AxiosInstance> {
