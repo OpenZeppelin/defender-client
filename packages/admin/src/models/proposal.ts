@@ -16,10 +16,11 @@ export interface ExternalApiCreateProposalRequest {
   type: ProposalType;
   metadata?: ProposalMetadata;
   via?: Address;
-  viaType?: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig';
+  viaType?: 'EOA' | 'Gnosis Safe' | 'Gnosis Multisig' | 'Relayer';
   functionInterface?: ProposalTargetFunction;
   functionInputs?: ProposalFunctionInputs;
   steps?: ProposalStep[];
+  relayerId?: string;
 }
 
 export interface PartialContract {
