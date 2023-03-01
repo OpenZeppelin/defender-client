@@ -1,7 +1,7 @@
 export type SentinelConfirmation = number | 'safe' | 'finalized';
 
 export interface PreviousAutotaskRunInfo {
-  trigger: 'schedule' | 'webhook' | 'sentinel' | 'manual' | 'manual-api';
+  trigger: 'schedule' | 'webhook' | 'sentinel' | 'monitor-filter' | 'manual' | 'manual-api';
   status: 'pending' | 'throttled' | 'error' | 'success';
   createdAt: string;
   autotaskId: string;
