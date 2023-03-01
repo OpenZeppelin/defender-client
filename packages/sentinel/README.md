@@ -229,7 +229,7 @@ An example for a `BLOCK` sentinel is provided below. This sentinel will be named
 The alert threshold is set to 2 times within 1 hour, and the user will be notified via email.
 
 Furthermore, you may optionally set the `riskCategory` property of your sentinel, which labels your sentinel under a certain category:
-`type SubscriberRiskCategory = 'NONE' | 'GOVERNANCE' | 'PRIVILEGED' | 'SUSPICIOUS' | 'FINANCIAL' | 'TECHNICAL';`.
+`type SubscriberRiskCategory = 'NONE' | 'GOVERNANCE' | 'ACCESS-CONTROL' | 'SUSPICIOUS' | 'FINANCIAL' | 'TECHNICAL';`.
 
 ```js
 const requestParameters = {
