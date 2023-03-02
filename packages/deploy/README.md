@@ -135,6 +135,5 @@ And updating the Api Key for a given network
 const apiKeyId = '8181d9e0-88ce-4db0-802a-2b56e2e6a7b1';
 await client.BlockExplorerApiKey.update(apiKeyId, {
   key: 'LDNWOWFNEJ2WEL4WLKNWEF8F2MNWKEF',
-  network: 'goerli',
 });
 ```

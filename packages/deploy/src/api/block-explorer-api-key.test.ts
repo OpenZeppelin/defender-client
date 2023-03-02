@@ -1,5 +1,5 @@
 import { BlockExplorerApiKeyClient } from './block-explorer-api-key';
-import { CreateBlockExplorerApiKeyRequest } from '../models';
+import { CreateBlockExplorerApiKeyRequest, UpdateBlockExplorerApiKeyRequest } from '../models';
 import { TestClient } from '../utils/index';
 
 jest.mock('defender-base-client');
@@ -15,6 +15,9 @@ describe('Block Explorer Api Key Client', () => {
   const createPaylod: CreateBlockExplorerApiKeyRequest = {
     key: 'random-key',
     network: 'goerli',
+  };
+  const updatePaylod: UpdateBlockExplorerApiKeyRequest = {
+    key: 'random-key',
   };
   beforeEach(() => {
     blockExplorerClient = new BlockExplorerApiKeyClient({
@@ -82,8 +85,8 @@ describe('Block Explorer Api Key Client', () => {
   });
   describe('update', () => {
     it('calls API correctly', async () => {
-      await blockExplorerClient.update('api-key-id', createPaylod);
-      expect(blockExplorerClient.api.put).toBeCalledWith('/block-explorer-api-key/api-key-id', createPaylod);
+      await blockExplorerClient.update('api-key-id', updatePaylod);
+      expect(blockExplorerClient.api.put).toBeCalledWith('/block-explorer-api-key/api-key-id', updatePaylod);
       expect(createAuthenticatedApi).toBeCalled();
     });
   });

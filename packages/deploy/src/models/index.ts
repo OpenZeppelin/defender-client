@@ -84,6 +84,10 @@ export interface CreateBlockExplorerApiKeyRequest {
   stackResourceId?: string;
 }
 
+export interface UpdateBlockExplorerApiKeyRequest {
+  key: string;
+  stackResourceId?: string;
+}
 export interface BlockExplorerApiKeyResponse {
   blockExplorerApiKeyId: string;
   createdAt: string;

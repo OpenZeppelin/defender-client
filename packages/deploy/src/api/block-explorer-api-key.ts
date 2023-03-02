@@ -1,5 +1,10 @@
 import { PlatformApiClient } from './platform';
-import { BlockExplorerApiKeyResponse, CreateBlockExplorerApiKeyRequest, RemoveResponse } from '../models';
+import {
+  BlockExplorerApiKeyResponse,
+  CreateBlockExplorerApiKeyRequest,
+  RemoveResponse,
+  UpdateBlockExplorerApiKeyRequest,
+} from '../models';
 
 const PATH = '/block-explorer-api-key';
 
@@ -23,7 +28,7 @@ export class BlockExplorerApiKeyClient extends PlatformApiClient {
 
   public async update(
     blockExplorerApiKeyId: string,
-    payload: CreateBlockExplorerApiKeyRequest,
+    payload: UpdateBlockExplorerApiKeyRequest,
   ): Promise<BlockExplorerApiKeyResponse> {
     return this.apiCall(async (api) => {
       return api.put(`${PATH}/${blockExplorerApiKeyId}`, payload);
