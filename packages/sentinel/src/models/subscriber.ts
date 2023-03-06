@@ -130,7 +130,13 @@ export enum SubscriberType {
   FORTA = 'FORTA',
 }
 
-export type SubscriberRiskCategory = 'NONE' | 'GOVERNANCE' | 'PRIVILEGED' | 'SUSPICIOUS' | 'FINANCIAL' | 'TECHNICAL';
+export type SubscriberRiskCategory =
+  | 'NONE'
+  | 'GOVERNANCE'
+  | 'ACCESS-CONTROL'
+  | 'SUSPICIOUS'
+  | 'FINANCIAL'
+  | 'TECHNICAL';
 
 export type Address = string;
 export interface AddressRule {
