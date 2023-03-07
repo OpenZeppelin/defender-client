@@ -75,7 +75,7 @@ interface CreateAutotaskRequest {
   encodedZippedCode: string;
   relayerId?: string;
   trigger: {
-    type: 'schedule' | 'webhook' | 'sentinel' | 'monitor-filter',
+    type: 'schedule' | 'webhook' | 'sentinel' | 'monitor-filter' | 'scenario',
     frequencyMinutes?: number,
     cron?: string,
   };
@@ -109,7 +109,7 @@ interface UpdateAutotaskRequest {
   encodedZippedCode?: string;
   relayerId?: string;
   trigger: {
-    type: 'schedule' | 'webhook' | 'sentinel' | 'monitor-filter',
+    type: 'schedule' | 'webhook' | 'sentinel' | 'monitor-filter' | 'scenario',
     frequencyMinutes?: number,
     cron?: string,
   };
