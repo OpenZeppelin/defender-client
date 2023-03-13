@@ -184,19 +184,19 @@ interface SentinelBaseAbiConditionSummary extends SentinelBaseConditionSummary {
   params: { [key: string]: any };
 }
 
-interface EventConditionSummary extends SentinelBaseAbiConditionSummary {
+export interface EventConditionSummary extends SentinelBaseAbiConditionSummary {
   type: 'event';
 }
 
-interface FunctionConditionSummary extends SentinelBaseAbiConditionSummary {
+export interface FunctionConditionSummary extends SentinelBaseAbiConditionSummary {
   type: 'function';
 }
 
-interface InternalFunctionConditionSummary extends SentinelBaseAbiConditionSummary {
+export interface InternalFunctionConditionSummary extends SentinelBaseAbiConditionSummary {
   type: 'internal-function';
 }
 
-interface TransactionConditionSummary extends SentinelBaseConditionSummary {
+export interface TransactionConditionSummary extends SentinelBaseConditionSummary {
   type: 'transaction';
 }
 
