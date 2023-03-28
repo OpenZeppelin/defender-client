@@ -30,6 +30,7 @@ type PublicNetwork =
   | 'auroratest'
   | 'hedera'
   | 'hederatest'
+  | 'zksync'
   | 'zksync-goerli';
 
 type CustomNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
@@ -66,6 +67,7 @@ export const Networks: Network[] = [
   'auroratest',
   'hedera',
   'hederatest',
+  'zksync',
   'zksync-goerli',
   'x-dfk-avax-chain',
   'x-dfk-avax-chain-test',
@@ -113,6 +115,7 @@ const chainIds: { [key in Network]: number } = {
   auroratest: 1313161555,
   hedera: 295,
   hederatest: 296,
+  zksync: 324,
   'zksync-goerli': 280,
   'x-dfk-avax-chain': 53935,
   'x-dfk-avax-chain-test': 335,
