@@ -31,7 +31,8 @@ type PublicNetwork =
   | 'hedera'
   | 'hederatest'
   | 'zksync'
-  | 'zksync-goerli';
+  | 'zksync-goerli'
+  | 'base-goerli';
 
 type CustomNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
 
@@ -116,6 +117,7 @@ const chainIds: { [key in Network]: number } = {
   hedera: 295,
   hederatest: 296,
   zksync: 324,
+  'base-goerli': 84531,
   'zksync-goerli': 280,
   'x-dfk-avax-chain': 53935,
   'x-dfk-avax-chain-test': 335,
