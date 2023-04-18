@@ -13,6 +13,7 @@ export interface UpgradeContractRequest {
 export interface UpgradeContractResponse {
   proposalId: string;
   transaction?: ProposalTransaction;
+  externalUrl?: string;
 }
 
 export interface ProposalTransaction {
