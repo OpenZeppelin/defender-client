@@ -16,6 +16,10 @@ async function main() {
     const keys = await client.BlockExplorerApiKey.list();
     console.log(keys);
 
+    // Get approval process for deployment on Goerli
+    const config = await client.Deployment.getApprovalProcess("goerli");
+    console.log(config);
+
     const deployment = await client.Deployment.deploy({
         contractName: 'Box',
         contractPath: 'contracts/Box.sol',

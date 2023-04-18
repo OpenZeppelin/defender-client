@@ -1,10 +1,17 @@
 import { isEmpty } from 'lodash';
+import { Network } from 'defender-base-client';
 import { PlatformApiClient } from './platform';
-import { DeployContractRequest, DeploymentResponse } from '../models';
+import { DeployApprovalProcessConfig, DeployContractRequest, DeploymentResponse } from '../models';
 
 const PATH = '/deployments';
 
 export class DeploymentClient extends PlatformApiClient {
+  public async getApprovalProcess(network: Network): Promise<DeployApprovalProcessConfig> {
+    return this.apiCall(async (api) => {
+      return api.get(`${PATH}/config/${network}`);
+    });
+  }
+
   public async deploy(payload: DeployContractRequest): Promise<DeploymentResponse> {
     if (isEmpty(payload.artifactUri) && isEmpty(payload.artifactPayload))
       throw new Error(
