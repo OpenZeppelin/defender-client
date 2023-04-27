@@ -6763,9 +6763,9 @@ json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
   integrity sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==
 
 json5@2.x, json5@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
-  integrity sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
+  integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
 jsonfile@^4.0.0:
   version "4.0.0"
@@ -8250,6 +8250,17 @@ pkg-dir@^4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+platform-deploy-client@^0.3.2:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/platform-deploy-client/-/platform-deploy-client-0.3.3.tgz#7358d3ee2747fdc8c094d8fed66929d8caeb09c7"
+  integrity sha512-CO7P0h8OHSa19QjA7hWbpmLPE0TPacDgdwA8Vwu9NnUdlYvXfF+q4f0FwaeS0vb1ruWtpkTfeIxy7Sc+TxgcNQ==
+  dependencies:
+    "@ethersproject/abi" "^5.6.3"
+    axios "^0.21.2"
+    defender-base-client "^1.40.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
 
 pn@^1.1.0:
   version "1.1.0"
