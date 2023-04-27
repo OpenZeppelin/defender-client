@@ -8,6 +8,7 @@ export interface UpgradeContractRequest {
   newImplementationABI?: string;
   newImplementationAddress: Address;
   network: Network;
+  approvalProcessId?: string;
 }
 
 export interface UpgradeContractResponse {

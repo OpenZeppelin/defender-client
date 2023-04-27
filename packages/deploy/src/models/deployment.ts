@@ -29,6 +29,7 @@ export interface DeployContractRequest {
   licenseType?: SourceCodeLicense;
   libraries?: DeployRequestLibraries;
   constructorInputs?: (string | boolean | number)[];
+  relayerId?: string;
 }
 export interface DeployRequestLibraries {
   [k: string]: string;
