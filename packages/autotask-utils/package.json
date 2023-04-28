@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "test": "yarn test:unit",
-    "test:unit": "jest --verbose --passWithNoTests",
+    "test:unit": "jest --verbose --passWithNoTests --coverage",
     "watch": "tsc -w",
     "prepare": "yarn build"
   },
