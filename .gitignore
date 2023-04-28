@@ -8,3 +8,4 @@ lib
 *.tgz
 coverage
 .env
+.vscode
