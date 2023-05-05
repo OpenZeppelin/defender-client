@@ -4,7 +4,7 @@ import { Address } from '.';
 export interface UpgradeContractRequest {
   proxyAddress: Address;
   senderAddress?: Address;
-  proxyAdminAddress: Address;
+  proxyAdminAddress?: Address;
   newImplementationABI?: string;
   newImplementationAddress: Address;
   network: Network;
