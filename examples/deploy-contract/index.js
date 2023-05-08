@@ -16,7 +16,7 @@ async function main() {
   const keys = await client.BlockExplorerApiKey.list();
   console.log(keys);
 
-  //   Get approval process for deployment on Goerli
+  // Get approval process for deployment on Goerli
   const config = await client.Deployment.getApprovalProcess('goerli');
   console.log(config);
 
