@@ -16,7 +16,7 @@ yarn add platform-deploy-client
 
 Start by creating a new _Team API Key_ in Defender, and granting it the capability to manage deployments. Use the newly created API key to initialize an instance of the Deployment client.
 
-You can create instances of the clients using the `PlatformClient` helper function which returns an object with the 3 clients `DeploymentClient`, `DeploymentConfigClient` and `BlockExplorerApiKeyClient`.
+You can create instances of the clients using the `PlatformClient` helper function which returns an object with the 4 clients `DeploymentClient`, `DeploymentConfigClient`, `UpgradeClient`, and `BlockExplorerApiKeyClient`.
 
 ```js
 const { PlatformClient } = require('platform-deploy-client');
@@ -30,7 +30,12 @@ const { DeploymentClient } = require('platform-deploy-client');
 const client = new DeploymentClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
-### Deployment Config
+```js
+const { UpgradeClient } = require('platform-deploy-client');
+const client = new UpgradeClient({ apiKey: API_KEY, apiSecret: API_SECRET });
+```
+
+### Deployment Config (DEPRECATED)
 
 To deploy a contract, you will need to create a deployment config. The config consists of the ID belonging to the Relayer you want to use for deployments. You can only specify one deployment config per network, so if you create a config with a Relayer on the `goerli` testnet, all your deployments on `goerli` will be sent via that Relayer.
 
@@ -78,6 +83,7 @@ There are a number of optional fields depending on what you are deploying, these
 - `salt` - deployments are done using the CREATE2 opcode, you can provide a salt or we can generate one for you if none is supplied
 - `licenseType` - This will be displayed on Etherscan e.g MIT
 - `libraries` - If you contract uses any external libraries they will need to be added here in the format `{ [LibraryName]: LibraryAddress }`
+- `walletId` - The wallet ID in case you wish to override the default global approval process
 
 Below is an example of a contract deployment request which responds with a `DeploymentResponse`
 
@@ -103,6 +109,45 @@ As well as fetching a deployment via it's ID
 ```js
 const deploymentId = '8181d9e0-88ce-4db0-802a-2b56e2e6a7b1';
 await client.Deployment.get(deploymentId);
+```
+
+You can also retrieve the deploy approval process for a given network, which will return a `ApprovalProcessResponse` object
+
+```js
+await client.Deployment.getApprovalProcess('goerli');
+```
+
+### Upgrade
+
+To upgrade a contract you need to provide these required fields:
+
+- `proxyAddress`
+- `newImplementationAddress`
+- `network`
+
+There are a number of optional fields, these include:
+
+- `senderAddress` - The address you wish to create the Gnosis proposal with
+- `proxyAdminAddress` - The Proxy Admin address in case you are upgrading with a transparent proxy
+- `newImplementationABI` - The ABI of the new implementation address. This will be required if the implementation contract does not exist in the OpenZeppelin Platform.
+- `approvalProcessId` - The approval process ID in case you wish to override the default global approval process
+
+Below is an example of a contract upgrade request which responds with a `UpgradeContractResponse`
+
+```js
+await client.Upgrade.upgrade({
+  proxyAddress: '0xABC1234...',
+  proxyAdminAddress: '0xDEF1234...',
+  newImplementationABI: JSON.stringify(boxABIFile),
+  newImplementationAddress: '0xABCDEF1....',
+  network: 'goerli',
+});
+```
+
+You can also retrieve the upgrade approval process for a given network, which will return a `ApprovalProcessResponse` object
+
+```js
+await client.Upgrade.getApprovalProcess('goerli');
 ```
 
 ### Block Explorer Verification
