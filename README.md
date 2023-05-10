@@ -57,6 +57,8 @@ git push origin master
 
 test
 
+another meaningless commit
+
 ## Examples
 
 The `examples` repo has sample code for both clients. Note that most examples rely on dotenv for loading API keys and secrets. Note that you can set the following environment variables to control to which instance your client will connect to, which is useful for testing against your Defender development instance:
