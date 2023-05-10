@@ -55,6 +55,8 @@ git commit -m 'Bump Platform Deploy Client version to {version here}'
 git push origin master
 ```
 
+test
+
 ## Examples
 
 The `examples` repo has sample code for both clients. Note that most examples rely on dotenv for loading API keys and secrets. Note that you can set the following environment variables to control to which instance your client will connect to, which is useful for testing against your Defender development instance:
