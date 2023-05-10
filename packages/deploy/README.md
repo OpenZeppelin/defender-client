@@ -35,34 +35,6 @@ const { UpgradeClient } = require('platform-deploy-client');
 const client = new UpgradeClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
-### Deployment Config (DEPRECATED)
-
-To deploy a contract, you will need to create a deployment config. The config consists of the ID belonging to the Relayer you want to use for deployments. You can only specify one deployment config per network, so if you create a config with a Relayer on the `goerli` testnet, all your deployments on `goerli` will be sent via that Relayer.
-
-```js
-await client.DeploymentConfig.create({ relayerId: 'dfa8b9a6-0f88-4d28-892a-93e1f5a8d2a7' });
-```
-
-You can also list your deployment configs, which will return a `DeploymentConfigResponse[]` object
-
-```js
-await client.DeploymentConfig.list();
-```
-
-As well as fetching a config via it's ID
-
-```js
-const deploymentConfigId = 'e595ce88-f525-4d5d-b4b9-8e859310b6fb';
-await client.DeploymentConfig.get(deploymentConfigId);
-```
-
-If you want to change the relayer used in a deploy config you can update it
-
-```js
-const deploymentConfigId = 'e595ce88-f525-4d5d-b4b9-8e859310b6fb';
-await client.DeploymentConfig.update(deploymentConfigId, { relayerId: '3dcfee82-f5bd-43e3-8480-0676e5c28964' });
-```
-
 ### Deployment
 
 To deploy a contract you need to provide these required fields:
@@ -83,7 +55,7 @@ There are a number of optional fields depending on what you are deploying, these
 - `salt` - deployments are done using the CREATE2 opcode, you can provide a salt or we can generate one for you if none is supplied
 - `licenseType` - This will be displayed on Etherscan e.g MIT
 - `libraries` - If you contract uses any external libraries they will need to be added here in the format `{ [LibraryName]: LibraryAddress }`
-- `walletId` - The wallet ID in case you wish to override the default global approval process
+- `walletId` - This property will override the default wallet assigned to the approval process for deployments. You may define this property if you wish to use a different wallet than the one assigned to the approval process in the deploy environment.
 
 Below is an example of a contract deployment request which responds with a `DeploymentResponse`
 
@@ -127,10 +99,10 @@ To upgrade a contract you need to provide these required fields:
 
 There are a number of optional fields, these include:
 
-- `senderAddress` - The address you wish to create the Gnosis proposal with
 - `proxyAdminAddress` - The Proxy Admin address in case you are upgrading with a transparent proxy
 - `newImplementationABI` - The ABI of the new implementation address. This will be required if the implementation contract does not exist in the OpenZeppelin Platform.
 - `approvalProcessId` - The approval process ID in case you wish to override the default global approval process
+- `senderAddress` - The address you wish to create the Gnosis proposal with. When creating an upgrade proposal, we provide you with an external link to the Gnosis Safe UI. This will lead you to a proposal ready to be signed. This proposal will contain information about what upgrade to execute, as well as who initiated the proposal. The `senderAddress` property lets you customise define which address this is.
 
 Below is an example of a contract upgrade request which responds with a `UpgradeContractResponse`
 

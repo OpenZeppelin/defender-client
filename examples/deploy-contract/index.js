@@ -6,7 +6,7 @@ const artifactFile = require('./artifacts/Box.json');
 
 async function main() {
   const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };
-  const client = new PlatformClient(creds);
+  const client = PlatformClient(creds);
 
   await client.BlockExplorerApiKey.create({
     network: 'goerli',
