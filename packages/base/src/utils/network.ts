@@ -2,6 +2,7 @@ import { findKey } from 'lodash';
 
 type PublicNetwork =
   | 'mainnet'
+  | 'sepolia'
   | 'goerli'
   | 'xdai'
   | 'sokol'
@@ -40,6 +41,7 @@ export type Network = PublicNetwork | CustomNetwork;
 
 export const Networks: Network[] = [
   'mainnet',
+  'sepolia',
   'goerli',
   'xdai',
   'sokol',
@@ -88,6 +90,7 @@ export function toChainId(network: Network): number | undefined {
 
 const chainIds: { [key in Network]: number } = {
   mainnet: 1,
+  sepolia: 11155111,
   goerli: 5,
   xdai: 100,
   sokol: 77,
