@@ -56,8 +56,7 @@ yarn build
 To publish a release candidate:
 
 ```
-yarn publish --no-git-tag-version
-yarn publish --new-version 0.5.1-rc.1 --tag next
+yarn publish --new-version <version> --tag next # version should be of format 0.5.1-rc.1
 ```
 
 And to publish the final release:
