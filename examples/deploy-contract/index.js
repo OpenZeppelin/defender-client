@@ -9,21 +9,21 @@ async function main() {
   const client = PlatformClient(creds);
 
   await client.BlockExplorerApiKey.create({
-    network: 'goerli',
+    network: 'sepolia',
     key: 'AAABBBCCC...', // Add your Block Explorer API Key here
   });
 
   const keys = await client.BlockExplorerApiKey.list();
   console.log(keys);
 
-  // Get approval process for deployment on Goerli
-  const config = await client.Deployment.getApprovalProcess('goerli');
+  // Get approval process for deployment on sepolia
+  const config = await client.Deployment.getApprovalProcess('sepolia');
   console.log(config);
 
   const deployment = await client.Deployment.deploy({
     contractName: 'Box',
     contractPath: 'contracts/Box.sol',
-    network: 'goerli',
+    network: 'sepolia',
     artifactPayload: JSON.stringify(artifactFile),
     licenseType: 'MIT',
     verifySourceCode: true,

@@ -51,10 +51,10 @@ Additionally you must provide your compilation artifact from hardhat. The compil
 There are a number of optional fields depending on what you are deploying, these include:
 
 - `constructorInputs` - The inputs to your contract constructor,
-- `value` - ETH to be sent with the deployment
-- `salt` - deployments are done using the CREATE2 opcode, you can provide a salt or we can generate one for you if none is supplied
-- `licenseType` - This will be displayed on Etherscan e.g MIT
-- `libraries` - If you contract uses any external libraries they will need to be added here in the format `{ [LibraryName]: LibraryAddress }`
+- `value` - ETH to be sent with the deployment.
+- `salt` - deployments are done using the CREATE2 opcode, you can provide a salt or we can generate one for you if none is supplied.
+- `licenseType` - This will be displayed on Etherscan e.g MIT.
+- `libraries` - If you contract uses any external libraries they will need to be added here in the format `{ [LibraryName]: LibraryAddress }`.
 - `walletId` - This property will override the default wallet assigned to the approval process for deployments. You may define this property if you wish to use a different wallet than the one assigned to the approval process in the deploy environment.
 
 Below is an example of a contract deployment request which responds with a `DeploymentResponse`
@@ -63,7 +63,7 @@ Below is an example of a contract deployment request which responds with a `Depl
 await client.Deployment.deploy({
   contractName: 'Greeter',
   contractPath: 'contracts/Greeter.sol',
-  network: 'goerli',
+  network: 'sepolia',
   artifactPayload: JSON.stringify(artifactFile),
   licenseType: 'MIT',
   constructorInputs: ['Hello World!'],
@@ -86,7 +86,7 @@ await client.Deployment.get(deploymentId);
 You can also retrieve the deploy approval process for a given network, which will return a `ApprovalProcessResponse` object
 
 ```js
-await client.Deployment.getApprovalProcess('goerli');
+await client.Deployment.getApprovalProcess('sepolia');
 ```
 
 ### Upgrade
@@ -99,9 +99,9 @@ To upgrade a contract you need to provide these required fields:
 
 There are a number of optional fields, these include:
 
-- `proxyAdminAddress` - The Proxy Admin address in case you are upgrading with a transparent proxy
+- `proxyAdminAddress` - The Proxy Admin address in case you are upgrading with a transparent proxy.
 - `newImplementationABI` - The ABI of the new implementation address. This will be required if the implementation contract does not exist in the OpenZeppelin Platform.
-- `approvalProcessId` - The approval process ID in case you wish to override the default global approval process
+- `approvalProcessId` - The approval process ID in case you wish to override the default global approval process.
 - `senderAddress` - The address you wish to create the Gnosis proposal with. When creating an upgrade proposal, we provide you with an external link to the Gnosis Safe UI. This will lead you to a proposal ready to be signed. This proposal will contain information about what upgrade to execute, as well as who initiated the proposal. The `senderAddress` property lets you customise define which address this is.
 
 Below is an example of a contract upgrade request which responds with a `UpgradeContractResponse`
@@ -112,24 +112,24 @@ await client.Upgrade.upgrade({
   proxyAdminAddress: '0xDEF1234...',
   newImplementationABI: JSON.stringify(boxABIFile),
   newImplementationAddress: '0xABCDEF1....',
-  network: 'goerli',
+  network: 'sepolia',
 });
 ```
 
 You can also retrieve the upgrade approval process for a given network, which will return a `ApprovalProcessResponse` object
 
 ```js
-await client.Upgrade.getApprovalProcess('goerli');
+await client.Upgrade.getApprovalProcess('sepolia');
 ```
 
 ### Block Explorer Verification
 
-In order to have your contract source code verified on Etherscan you must provide your Etherscan Api Keys along with the network those keys will belong to. If you want to use the same Api Key for 2 different networks, e.g Ethereum Mainnet and Goerli Testnet, you must add the Api Key for both networks individually.
+In order to have your contract source code verified on Etherscan you must provide your Etherscan Api Keys along with the network those keys will belong to. If you want to use the same Api Key for 2 different networks, e.g Ethereum Mainnet and Sepolia Testnet, you must add the Api Key for both networks individually.
 
 ```js
 await client.BlockExplorerApiKey.create({
   key: 'RKI7QAFIZJYAEF45GDSTA9EAEKZFW591D',
-  network: 'goerli',
+  network: 'sepolia',
 });
 ```
 
