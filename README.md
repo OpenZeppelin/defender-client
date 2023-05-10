@@ -40,11 +40,26 @@ Run `yarn lint` at the project root.
 
 Change to the `packages/deploy` directory, login to npm, and publish using the native `yarn publish` command as shown below. We are not tagging versions for the time being as they conflict with previous Defender Client releases. Note this process is being introduced for the Platform Deploy Client v0 release, but will be migrated to a new Platform Client-specific repository.
 
+To prepare a publish:
+
 ```bash
 npm login
 cd packages/deploy
 git checkout master
 git pull origin master
+yarn build
+```
+
+To publish a release candidate:
+
+```
+yarn publish --no-git-tag-version
+yarn publish --new-version 0.5.1-rc.1 --tag next
+```
+
+And to publish the final release:
+
+```
 yarn publish --no-git-tag-version
 # enter new version at prompt
 git add package.json
