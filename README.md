@@ -29,13 +29,13 @@ Use `lerna` for publishing a new version of all Defender Client packages (exclud
 
 The following publishes a release candidate with the npm tag `next`:
 
-```
+```bash
 yarn run lerna publish v1.3.0-rc.4 --preid rc --dist-tag next --pre-dist-tag next --exact
 ```
 
 And to publish the final release:
 
-```
+```bash
 yarn run lerna publish --exact --force-publish
 ```
 
@@ -43,7 +43,7 @@ yarn run lerna publish --exact --force-publish
 
 Change to the `packages/deploy` directory, login to npm, and publish using the native `yarn publish` command as shown below. We are not tagging versions for the time being as they conflict with previous Defender Client releases. Note this process is being introduced for the Platform Deploy Client v0 release, but will be migrated to a new Platform Client-specific repository.
 
-```
+```bash
 npm login
 cd packages/deploy
 git checkout master
@@ -59,7 +59,7 @@ git push origin master
 
 The `examples` repo has sample code for both clients. Note that most examples rely on dotenv for loading API keys and secrets. Note that you can set the following environment variables to control to which instance your client will connect to, which is useful for testing against your Defender development instance:
 
-```
+```bash
 # Example config
 # relay signer
 DEFENDER_RELAY_SIGNER_API_URL=
