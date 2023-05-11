@@ -19,11 +19,11 @@ async function main() {
     description: 'Call the Flash() function',
     type: 'custom',
     metadata: {
-      sendTo: "0xA91382E82fB676d4c935E601305E5253b3829dCD",
-      sendValue: "10000000000000000",
+      sendTo: '0xA91382E82fB676d4c935E601305E5253b3829dCD',
+      sendValue: '10000000000000000',
       sendCurrency: {
-        name: "Ethereum",
-        symbol: "ETH",
+        name: 'Ethereum',
+        symbol: 'ETH',
         decimals: 18,
         type: 'native',
       },
@@ -36,10 +36,9 @@ async function main() {
 
   console.log(`Created proposal (${proposal.proposalId})`);
 
-
   const contractInterface = new utils.Interface(contractABI);
   // encode function data
-  const data = contractInterface.encodeFunctionData(proposal.functionInterface.name, proposal.functionInputs)
+  const data = contractInterface.encodeFunctionData(proposal.functionInterface.name, proposal.functionInputs);
 
   try {
     // Simulate the proposal
@@ -48,22 +47,22 @@ async function main() {
       proposal.proposalId, // proposalId
       {
         transactionData: {
-          from: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266", // change this to impersonate the `from` address
+          from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266', // change this to impersonate the `from` address
           data,
           to: proposal.contract.address,
-          value: proposal.metadata.sendValue ?? "10000000000000000"
+          value: proposal.metadata.sendValue ?? '10000000000000000',
         },
-        // default to latest finalized block, 
-        // can be up to 100 blocks ahead of current block, 
+        // default to latest finalized block,
+        // can be up to 100 blocks ahead of current block,
         // does not support previous blocks
-        blockNumber: undefined
-      }
+        blockNumber: undefined,
+      },
     );
 
-    // Check if simulation reverted under `simulation.meta.reverted` 
+    // Check if simulation reverted under `simulation.meta.reverted`
     // and the reason string `simulation.meta.returnString`
     if (simulation.meta.reverted) {
-      console.log("Transaction reverted:", simulation.meta.returnString ?? simulation.meta.returnValue)
+      console.log('Transaction reverted:', simulation.meta.returnString ?? simulation.meta.returnValue);
     } else {
       console.log(simulation);
     }
@@ -87,11 +86,11 @@ async function main() {
     description: 'Call the Flash() function',
     type: 'custom',
     metadata: {
-      sendTo: "0xA91382E82fB676d4c935E601305E5253b3829dCD",
-      sendValue: "10000000000000000",
+      sendTo: '0xA91382E82fB676d4c935E601305E5253b3829dCD',
+      sendValue: '10000000000000000',
       sendCurrency: {
-        name: "Ethereum",
-        symbol: "ETH",
+        name: 'Ethereum',
+        symbol: 'ETH',
         decimals: 18,
         type: 'native',
       },
@@ -106,19 +105,21 @@ async function main() {
     overrideSimulationOpts: {
       transactionData: {
         // or instead of ABI, you can provide data
-        data: "0xd336c82d"
-      }
-    }
+        data: '0xd336c82d',
+      },
+    },
   });
 
   console.log(`Created proposal (${proposalWithSimulation.proposalId})`);
 
   if (proposalWithSimulation.simulation.meta.reverted) {
-    console.log("Transaction reverted:", proposalWithSimulation.simulation.meta.returnString ?? proposalWithSimulation.simulation.meta.returnValue)
+    console.log(
+      'Transaction reverted:',
+      proposalWithSimulation.simulation.meta.returnString ?? proposalWithSimulation.simulation.meta.returnValue,
+    );
   } else {
     console.log(proposalWithSimulation.simulation);
   }
-
 }
 
 if (require.main === module) {

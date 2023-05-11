@@ -8,13 +8,13 @@
     "examples/*"
   ],
   "devDependencies": {
+    "@npmcli/fs": "3.1.0",
+    "@types/glob": "^8.1.0",
     "@types/jest": "^24.0.23",
     "@types/lodash": "^4.14.157",
     "@types/node": "^12.12.7",
     "@typescript-eslint/eslint-plugin": "^3.7.0",
     "@typescript-eslint/parser": "^2.1.0",
-    "@types/glob": "^8.1.0",
-    "@npmcli/fs": "3.1.0",
     "code-style": "git+https://github.com/OpenZeppelin/code-style.git",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.2.0",
@@ -23,13 +23,17 @@
     "lerna": "^6.6.1",
     "prettier": "^2.0.4",
     "ts-jest": "^25.3.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.2",
+    "nx-cloud": "latest"
   },
   "scripts": {
-    "build": "lerna run build",
+    "build": "nx run-many -t build",
     "lint": "yarn lint:check --fix",
+    "format:check": "prettier --check '**/*.{js,ts,tsx}'",
+    "format": "yarn format:check --write",
     "lint:check": "eslint 'packages/**/src/**/*.{js,ts}' --quiet",
-    "test": "lerna run test"
+    "test": "nx run-many -t test",
+    "style": "yarn lint && yarn format"
   },
   "repository": {
     "type": "git",
@@ -40,5 +44,8 @@
   "bugs": {
     "url": "https://github.com/OpenZeppelin/defender-client/issues"
   },
-  "homepage": "https://github.com/OpenZeppelin/defender-client#readme"
+  "homepage": "https://github.com/OpenZeppelin/defender-client#readme",
+  "dependencies": {
+    "nx": "^16.1.4"
+  }
 }

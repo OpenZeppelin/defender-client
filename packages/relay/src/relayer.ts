@@ -185,9 +185,10 @@ export function isLegacyTx<TransactionLikeType>(
 }
 
 // If a tx-like object is representing a EIP1559 transaction (type 2)
-export function isEIP1559Tx<TransactionLikeType>(
-  tx: TransactionLikeType,
-): tx is TransactionLikeType & { maxPriorityFeePerGas: NonNullable<unknown>; maxFeePerGas: NonNullable<unknown> } {
+export function isEIP1559Tx<TransactionLikeType>(tx: TransactionLikeType): tx is TransactionLikeType & {
+  maxPriorityFeePerGas: NonNullable<unknown>;
+  maxFeePerGas: NonNullable<unknown>;
+} {
   return 'maxPriorityFeePerGas' in tx && 'maxFeePerGas' in tx;
 }
 

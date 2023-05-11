@@ -1,12 +1,26 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [assigned, opened, synchronize, reopened, labeled]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
 
 jobs:
   build:
 
     runs-on: ubuntu-22.04
-    
+
     steps:
     - uses: actions/checkout@v3.1.0
 
@@ -69,6 +83,9 @@ jobs:
 
     - name: Install dependencies
       run: yarn --frozen-lockfile
+
+    - name: Lint & format checks
+      run: yarn style
 
     - name: Build
       run: yarn build

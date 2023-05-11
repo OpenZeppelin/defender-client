@@ -15,7 +15,7 @@ async function main() {
       via: '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1',
       viaType: 'Gnosis Safe',
     },
-    { network, address }
+    { network, address },
   );
 
   const siteUrl = process.env.SITE_URL || 'https://defender.openzeppelin.com';

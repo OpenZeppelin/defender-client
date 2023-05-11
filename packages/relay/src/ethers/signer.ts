@@ -38,7 +38,9 @@ export type DefenderRelaySignerOptions = Partial<
   }
 >;
 
-type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
+type ProviderWithWrapTransaction = Provider & {
+  _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse;
+};
 
 export class DefenderRelaySigner extends Signer implements TypedDataSigner {
   private readonly relayer: Relayer;

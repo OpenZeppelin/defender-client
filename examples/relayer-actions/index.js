@@ -44,7 +44,7 @@ async function query(id) {
 
 async function list() {
   const list = await relayer.list({ limit: 3 });
-  console.log(list.map(tx => JSON.stringify(tx, null, 2)).join('\n'));
+  console.log(list.map((tx) => JSON.stringify(tx, null, 2)).join('\n'));
 }
 
 async function balance(addr) {

@@ -1,0 +1,14 @@
+---
+# This action can be used to draft the next release notes as pull requests are merged into the master.
+name: Release Drafter
+on:
+  push:
+    branches:
+      - master
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
