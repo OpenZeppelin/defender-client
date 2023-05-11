@@ -27,8 +27,6 @@ repos:
   - repo: local
     hooks:
       - id: style-fixes
-        stages:
-          - push
         name: Run lint & format with fixes
         exclude: (\.md|\.sh)$
         entry: yarn style
