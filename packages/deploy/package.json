@@ -24,7 +24,7 @@
   "dependencies": {
     "@ethersproject/abi": "^5.6.3",
     "axios": "^0.21.2",
-    "defender-base-client": "^1.40.0",
+    "defender-base-client": "^1.44.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },
