@@ -1,0 +1,3 @@
+# Write github action to deploy to npm using lerna for all packages in this monorepo
+
+name: Deploy to npm
