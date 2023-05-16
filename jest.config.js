@@ -8,4 +8,9 @@ module.exports = {
       diagnostics: true,
     },
   },
+  collectCoverage : true,
+  collectCoverageFrom: ['packages/**/src/**/*.{js,ts}', 'packages/**/fixtures/**/*.{js.ts}'],
+  //coverageReporters: ['json', 'lcov', 'text', 'clover'],
+  coverageDirectory: 'coverage',
+  coverageProvider: 'v8',
 };

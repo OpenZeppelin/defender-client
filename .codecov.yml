@@ -1,0 +1,58 @@
+---
+comment: false
+coverage:
+  status:
+    patch:
+      default:
+        target: 95%
+        only_pulls: true
+    project:
+      default: false
+      base:
+        # basic settings
+        target: 95%
+        paths:
+          - packages/base/
+        only_pulls: true
+      admin:
+        # basic settings
+        target: 95%
+        paths:
+          - packages/admin/
+        only_pulls: true
+      autotask-client:
+        # basic settings
+        target: 95%
+        paths:
+          - packages/autotask-client/
+        only_pulls: true
+      autotask-utils:
+        # basic settings
+        target: 95%
+        paths:
+          - packages/autotask-utils/
+        only_pulls: true
+      deploy:
+        # basic settings
+        target: 95%
+        paths:
+          - packages/deploy/
+        only_pulls: true
+      kvstore:
+        # basic settings
+        target: 95%
+        paths:
+          - packages/kvstore/
+        only_pulls: true
+      relay:
+        # basic settings
+        target: 95%
+        paths:
+          - packages/relay/
+        only_pulls: true
+      sentinel:
+        # basic settings
+        target: 95%
+        paths:
+          - packages/sentinel/
+        only_pulls: true
