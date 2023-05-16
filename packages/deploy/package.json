@@ -1,5 +1,5 @@
 {
-  "name": "platform-deploy-client",
+  "name": "@openzeppelin/platform-deploy-client",
   "version": "0.6.0",
   "description": "Client library for managing Platform Deployments",
   "main": "./lib/index.js",
@@ -24,7 +24,7 @@
   "dependencies": {
     "@ethersproject/abi": "^5.6.3",
     "axios": "^0.21.2",
-    "defender-base-client": "^1.44.0",
+    "@openzeppelin/defender-base-client": "^1.44.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },

@@ -1,7 +1,7 @@
 {
   "name": "defender-client",
   "private": true,
-  "version": "1.3.0-rc.5",
+  "version": "1.44.0",
   "description": "Root package for the defender-client set of packages",
   "workspaces": [
     "packages/*",
@@ -20,7 +20,7 @@
     "eslint-config-prettier": "^6.2.0",
     "eslint-plugin-prettier": "^3.1.0",
     "jest": "^25.2.4",
-    "lerna": "^6.6.1",
+    "lerna": "^6.6.2",
     "prettier": "^2.0.4",
     "ts-jest": "^25.3.0",
     "typescript": "^3.6.2",
@@ -33,7 +33,15 @@
     "format": "yarn format:check --write",
     "lint:check": "eslint 'packages/**/src/**/*.{js,ts}' --quiet",
     "test": "nx run-many -t test",
-    "style": "yarn lint && yarn format"
+    "style": "yarn lint && yarn format",
+    "versionup:preminor": "lerna version preminor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup-deploy:preminor": "cd packages/deploy && lerna version preminor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup:premajor": "lerna version premajor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup-deploy:premajor": "cd packages/deploy && lerna version premajor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup:stableminor": "lerna version minor --conventional-commits --yes --exact --no-changelog",
+    "versionup-deploy:stableminor": "cd packages/deploy && lerna version minor --conventional-commits --yes --exact --no-changelog",
+    "versionup:stablemajor": "lerna version major --conventional-commits --yes --exact --no-changelog",
+    "versionup-deploy:stablemajor": "cd packages/deploy &&  lerna version major --conventional-commits --yes --exact --no-changelog"
   },
   "repository": {
     "type": "git",

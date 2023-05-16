@@ -1,0 +1,112 @@
+# Write github action in yaml for publishing packages from this mono repo to npm using lerna everytime there is a push to master
+
+name: Publish to NPM
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use node@16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.20
+
+      - name: Node modules cache
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            ~/.cache/node-gyp-cache
+          key: "${{ runner.os }}-yarn-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}"
+          restore-keys: |
+            ${{ runner.os }}-yarn-${{ env.cache-name }}-
+        env:
+          cache-name: v4
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Check build
+        run: yarn build
+
+      - name: Check linting
+        run: yarn lint:check
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-22.04
+    needs: build
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3.5.2
+
+    - name: Use node@16
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.20
+
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Node modules cache
+      uses: actions/cache@v3
+      id: yarn-cache
+      with:
+        path: |
+          ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          ~/.cache/node-gyp-cache
+        key: "${{ runner.os }}-yarn-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}"
+        restore-keys: |
+          ${{ runner.os }}-yarn-${{ env.cache-name }}-
+      env:
+        cache-name: v4
+
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
+
+    - name: Lint & format checks
+      run: yarn style
+
+    - name: Build
+      run: yarn build
+
+    - name: Run tests
+      run: yarn test
+
+  # Git tag the commit for publishing
+  tag:
+    name: Tag RC candidate for all packages
+    runs-on: ubuntu-22.04
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.5.2
+
+      - name: Update RC candidate version for deploy client
+        run: |
+          yarn versionup-deploy:preminor
+
+      - name: Update RC candidate version ( excluding deploy client )
+        id: update_version
+        run: |
+          yarn versionup:preminor
+          TAG_NAME=$(node -p "require('./lerna.json').version")
+          git add .
+          git commit -m "Update version to $TAG_NAME" --no-verify
+          echo "::set-output name=next_rc_version::$TAG_NAME"
+
+      - name: Create Tag
+        run: |
+          git tag -s ${{ steps.update_version.outputs.next_rc_version }}
+          git push origin ${{ steps.update_version.outputs.next_rc_version }}
