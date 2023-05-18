@@ -1,6 +1,6 @@
 # Write github action in yaml for publishing packages from this mono repo to npm using lerna everytime there is a push to master
 
-name: Create Git Tag with RC
+name: Tag
 on:
   push:
     branches:
@@ -20,7 +20,7 @@ jobs:
       - name: Use node@16
         uses: actions/setup-node@v3
         with:
-          node-version: 16.20
+          node-version: 16.20.0
 
       - name: Node modules cache
         uses: actions/cache@v3
@@ -56,7 +56,7 @@ jobs:
     - name: Use node@16
       uses: actions/setup-node@v3
       with:
-        node-version: 16.20
+        node-version: 16.20.0
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
