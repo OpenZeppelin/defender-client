@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        description: Tag to trigger release
+        type: string
+      prerelease:
+        required: true
+        description: Whether to release as a prerelease
+        type: boolean
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+      prerelease:
+        type: boolean
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3.5.2
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ inputs.tag }}
+          skipIfReleaseExists: true
+          generateReleaseNotes: true
+          draft: ${{ github.event.inputs.prerelease }}
+          prerelease: ${{ inputs.prerelease }}

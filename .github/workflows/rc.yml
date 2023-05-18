@@ -1,6 +1,6 @@
 # Write github action in yaml for publishing packages from this mono repo to npm using lerna everytime there is a push to master
 
-name: Tag
+name: Tag & Release
 on:
   push:
     branches:
@@ -92,6 +92,8 @@ jobs:
     name: Tag RC candidate for all packages
     runs-on: ubuntu-22.04
     needs: test
+    outputs:
+      next_rc_version: ${{ steps.update_version.outputs.next_rc_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3.5.2
@@ -105,6 +107,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
 
+      - name: Update RC candidate version for deploy client
+        run: |
+          yarn versionup-deploy:preminor
+
       - name: Tag Check
         id: tag_check
         run: |
@@ -113,17 +119,13 @@ jobs:
           http_status_code=$(curl -LI $GET_API_URL -o /dev/null -w '%{http_code}\n' -s \
             -H "Authorization: token ${GITHUB_TOKEN}")
           if [ "$http_status_code" -ne "404" ] ; then
-            echo "::set-output name=exists_tag::true"
+            echo "tag_exists=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=exists_tag::false"
+            echo "tag_exists=false" >> $GITHUB_OUTPUT
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Update RC candidate version for deploy client
-        run: |
-          yarn versionup-deploy:preminor
 
       - name: Update RC candidate version ( excluding deploy client )
         id: update_version
@@ -132,10 +134,19 @@ jobs:
           TAG_NAME=$(node -p "require('./lerna.json').version")
           git add .
           git commit -m "Update version to $TAG_NAME" --no-verify
-          echo "::set-output name=next_rc_version::$TAG_NAME"
+          echo "next_rc_version=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Create Tag
-        if: steps.tag_check.outputs.exists_tag == 'false'
+        if: steps.tag_check.outputs.tag_exists == 'false'
         run: |
           git tag -s ${{ steps.update_version.outputs.next_rc_version }}
           git push origin ${{ steps.update_version.outputs.next_rc_version }}
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-22.04
+    needs: tag
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.tag.outputs.next_rc_version }}
+      prerelease: true
