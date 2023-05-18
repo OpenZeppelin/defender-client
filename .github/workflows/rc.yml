@@ -142,9 +142,8 @@ jobs:
           git tag -s ${{ steps.update_version.outputs.next_rc_version }}
           git push origin ${{ steps.update_version.outputs.next_rc_version }}
 
-  release:
+  create-release:
     name: Create Release
-    runs-on: ubuntu-22.04
     needs: tag
     uses: ./.github/workflows/release.yml
     with:
