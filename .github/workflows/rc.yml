@@ -100,12 +100,12 @@ jobs:
 
       - name: Git Identity
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          git config --global user.name 'svc-gh-is-01'
+          git config --global user.email '116854830+svc-gh-is-01@users.noreply.github.com'
+          echo "${{ secrets.SVC_GPG_KEY }}" | base64 --decode | gpg --batch --import
+          echo "${{ secrets.SVC_GPG_PASSPHRASE }}" | gpg-connect-agent --no-autostart --quiet /bye
+          git config --global commit.gpgsign true
+          export GPG_TTY=$(tty)
 
       - name: Update RC candidate version for deploy client
         run: |
@@ -117,7 +117,7 @@ jobs:
           yarn versionup:preminor
           TAG_NAME=$(node -p "require('./lerna.json').version")
           git add .
-          git commit -m "Update version to $TAG_NAME" --no-verify
+          git commit -S -m "Update version to $TAG_NAME" --no-verify
           echo "next_rc_version=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Tag Check
@@ -139,7 +139,7 @@ jobs:
       - name: Create Tag
         if: steps.tag_check.outputs.tag_exists == 'false'
         run: |
-          git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "Release ${{ steps.update_version.outputs.next_rc_version }}"
+          git tag -s -a ${{ steps.update_version.outputs.next_rc_version }} -m "Release ${{ steps.update_version.outputs.next_rc_version }}"
           git push origin ${{ steps.update_version.outputs.next_rc_version }} --no-verify
 
   create-release:
