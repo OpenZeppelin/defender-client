@@ -1,6 +1,7 @@
 # Ignore relevant files in fixtures, sometimes they are intentionally malformed
 packages/**/fixtures/**/*.json
 packages/**/fixtures/**/*.md
+packages/**/fixtures/**/*.js
 
 # Ignore all YAML file
 *.yaml
