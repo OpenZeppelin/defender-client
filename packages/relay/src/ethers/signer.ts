@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { toUtf8Bytes } from '@ethersproject/strings';
 import { Provider, TransactionRequest, TransactionResponse } from '@ethersproject/abstract-provider';
 import { Signer, TypedDataDomain, TypedDataField, TypedDataSigner } from '@ethersproject/abstract-signer';

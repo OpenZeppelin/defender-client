@@ -24,6 +24,7 @@ repos:
         files: \.yaml$
       - id: trailing-whitespace
       - id: end-of-file-fixer
+        exclude: fixtures/.*
   - repo: local
     hooks:
       - id: style-fixes
