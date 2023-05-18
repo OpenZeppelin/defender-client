@@ -1,18 +1,21 @@
 # Write github action in yaml for publishing packages from this mono repo to npm using lerna everytime there is a push to master
 
-name: Publish to NPM
+name: Create Git Tag with RC
 on:
   push:
     branches:
-      - master
+      - improve-ci-cd
+
+permissions:
+  contents: write # for checkout and tag
+  pull-requests: write  # for comments
+
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v3.5.2
 
       - name: Use node@16
         uses: actions/setup-node@v3
@@ -93,6 +96,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3.5.2
 
+      - name: Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Tag Check
+        id: tag_check
+        run: |
+          CURRENT_VERSION=$(node -p 'require("./lerna.json").version')
+          GET_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/git/ref/tags/v${CURRENT_VERSION}"
+          http_status_code=$(curl -LI $GET_API_URL -o /dev/null -w '%{http_code}\n' -s \
+            -H "Authorization: token ${GITHUB_TOKEN}")
+          if [ "$http_status_code" -ne "404" ] ; then
+            echo "::set-output name=exists_tag::true"
+          else
+            echo "::set-output name=exists_tag::false"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
       - name: Update RC candidate version for deploy client
         run: |
           yarn versionup-deploy:preminor
@@ -107,6 +135,7 @@ jobs:
           echo "::set-output name=next_rc_version::$TAG_NAME"
 
       - name: Create Tag
+        if: steps.tag_check.outputs.exists_tag == 'false'
         run: |
           git tag -s ${{ steps.update_version.outputs.next_rc_version }}
           git push origin ${{ steps.update_version.outputs.next_rc_version }}
