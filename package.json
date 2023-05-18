@@ -1,5 +1,5 @@
 {
-  "name": "defender-client",
+  "name": "@openzeppelin/defender-client",
   "private": true,
   "version": "1.44.0",
   "description": "Root package for the defender-client set of packages",
@@ -55,5 +55,8 @@
   "homepage": "https://github.com/OpenZeppelin/defender-client#readme",
   "dependencies": {
     "nx": "^16.1.4"
+  },
+  "resolutions": {
+    "@ethersproject/abstract-provider": "^5.6.1"
   }
 }
