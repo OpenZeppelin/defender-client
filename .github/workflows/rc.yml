@@ -111,6 +111,15 @@ jobs:
         run: |
           yarn versionup-deploy:preminor
 
+      - name: Update RC candidate version ( excluding deploy client )
+        id: update_version
+        run: |
+          yarn versionup:preminor
+          TAG_NAME=$(node -p "require('./lerna.json').version")
+          git add .
+          git commit -m "Update version to $TAG_NAME" --no-verify
+          echo "next_rc_version=$TAG_NAME" >> $GITHUB_OUTPUT
+
       - name: Tag Check
         id: tag_check
         run: |
@@ -123,23 +132,12 @@ jobs:
           else
             echo "tag_exists=false" >> $GITHUB_OUTPUT
           fi
-          echo $http_status_code
-          echo $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Update RC candidate version ( excluding deploy client )
-        id: update_version
-        run: |
-          yarn versionup:preminor
-          TAG_NAME=$(node -p "require('./lerna.json').version")
-          git add .
-          git commit -m "Update version to $TAG_NAME" --no-verify
-          echo "next_rc_version=$TAG_NAME" >> $GITHUB_OUTPUT
-
       - name: Create Tag
-        if: steps.tag_check.outputs.tag_exists == false
+        if: steps.tag_check.outputs.tag_exists == 'false'
         run: |
           git tag -s ${{ steps.update_version.outputs.next_rc_version }}
           git push origin ${{ steps.update_version.outputs.next_rc_version }}
