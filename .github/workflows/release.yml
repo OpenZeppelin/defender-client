@@ -1,4 +1,4 @@
-name: Release
+name: release
 
 on:
   workflow_dispatch:
@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3.5.2
+        with:
+          ref: refs/tags/${{ inputs.tag }}
       - name: Create release
         uses: ncipollo/release-action@v1
         with:

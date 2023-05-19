@@ -1,18 +1,38 @@
-# Write github action in yaml for publishing packages from this mono repo to npm using lerna everytime there is a push to master
-
-name: Tag & Release
+name: tag-release-candidate
 on:
   push:
     branches:
-      - improve-ci-cd
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 
 permissions:
   contents: write # for checkout and tag
   pull-requests: write  # for comments
 
 jobs:
-  build:
+  check_author:
     runs-on: ubuntu-22.04
+    outputs:
+      latest_commit_author: ${{ steps.commit.outputs.author }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3.5.2
+
+      - name: Get last commit details
+        id: commit
+        run: |
+          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_DETAILS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                          "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
+          echo "author=$(echo $COMMIT_DETAILS | yq '.author.login')" >> $GITHUB_OUTPUT
+  build:
+    needs: check_author
+    runs-on: ubuntu-22.04
+    if: ${{ needs.check_author.outputs.latest_commit_author != 'svc-gh-is-01' }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3.5.2
@@ -60,7 +80,7 @@ jobs:
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
+      run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
     - name: Node modules cache
       uses: actions/cache@v3
@@ -140,7 +160,6 @@ jobs:
       - name: Create Tag
         if: steps.tag_check.outputs.tag_exists == 'false'
         run: |
-          git config --list
           git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "Release ${{ steps.update_version.outputs.next_rc_version }}"
           git push origin ${{ steps.update_version.outputs.next_rc_version }} --no-verify
 
