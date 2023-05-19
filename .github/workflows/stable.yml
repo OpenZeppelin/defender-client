@@ -90,7 +90,7 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3.5.2
-         with:
+        with:
           ref: refs/tags/${{ needs.tag.outputs.next_stable_version }}
 
       - name: Use node@16
