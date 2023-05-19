@@ -8,19 +8,23 @@ on:
 
 jobs:
   publish:
-    - name: Checkout Repo
-      uses: actions/checkout@v3.5.2
-      with:
-        ref: ${{ github.ref }}
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3.5.2
+        with:
+          ref: ${{ github.ref }}
 
-    - name: Use node@16
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16.20.0
+      - name: Use node@16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.20.0
 
-    - name: Authenticate NPM
-      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      - name: Authenticate NPM
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-    - name: Publish
-      run: |
-        yarn publish
+      - name: Publish
+        run: |
+          yarn publish
