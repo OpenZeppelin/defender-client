@@ -2,12 +2,8 @@ name: publish-stable
 
 on:
   workflow_dispatch:
-    inputs:
-      branch:
-        required: true
-        description: Branch to trigger publish
-        type: string
-        default: master
+    branches:
+      - master
 
 jobs:
   tag:
@@ -20,7 +16,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3.5.2
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: master
 
       - name: Use node@16
         uses: actions/setup-node@v3
@@ -103,4 +99,4 @@ jobs:
 
       - name: Publish
         run: |
-          yarn publish:stable
+          yarn publish

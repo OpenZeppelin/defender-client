@@ -93,3 +93,4 @@ DEFENDER_SENTINEL_POOL_CLIENT_ID=
   - `ci.yml` - runs on every push to any branch --> runs tests.
   - `rc.yml` - runs on every push to master --> creates a rc tag --> creates a pre-release draft.
   - `stable.yml` - Manual trigger workflow --> creates a stable tag --> creates a latest release --> publishes to npm.
+  - `publish.yml` - Manual trigger workflow ( for any given tag ) --> publishes to npm.

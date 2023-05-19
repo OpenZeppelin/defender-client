@@ -42,7 +42,7 @@
     "versionup-deploy:stableminor": "cd packages/deploy && lerna version minor --conventional-commits --yes --exact --no-changelog",
     "versionup:stablemajor": "lerna version major --conventional-commits --yes --exact --no-changelog",
     "versionup-deploy:stablemajor": "cd packages/deploy &&  lerna version major --conventional-commits --yes --exact --no-changelog",
-    "publish:stable": "lerna publish from-git --yes --exact --no-changelog --force-publish"
+    "publish": "lerna publish from-git --yes --exact --no-changelog --force-publish"
   },
   "repository": {
     "type": "git",
