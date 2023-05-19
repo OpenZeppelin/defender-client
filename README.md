@@ -35,8 +35,10 @@ yarn run lerna publish v1.3.0-rc.4 --preid rc --dist-tag next --pre-dist-tag nex
 
 And to publish the final release:
 
+- Make sure the tag is stable (e.g. `v1.3.0`) and not a release candidate (e.g. `v1.3.0-rc.4`)
+
 ```bash
-yarn run lerna publish --exact --force-publish
+yarn publish:stable
 ```
 
 ### Platform Deploy Client
@@ -82,3 +84,12 @@ DEFENDER_SENTINEL_API_URL=
 DEFENDER_SENTINEL_POOL_ID=
 DEFENDER_SENTINEL_POOL_CLIENT_ID=
 ```
+
+---
+
+### CI/CD
+
+- We use github actions for CI/CD. See [workflows](.github/workflows) for more info.
+  - `ci.yml` - runs on every push to any branch --> runs tests.
+  - `rc.yml` - runs on every push to master --> creates a rc tag --> creates a pre-release draft.
+  - `stable.yml` - Manual trigger workflow --> creates a stable tag --> creates a latest release --> publishes to npm.
