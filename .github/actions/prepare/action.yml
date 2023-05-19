@@ -13,6 +13,7 @@ runs:
 
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
+      shell: bash
       run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
     - name: Node modules cache
@@ -29,10 +30,13 @@ runs:
         cache-name: v4
 
     - name: Install dependencies
+      shell: bash
       run: yarn --frozen-lockfile
 
     - name: Lint & format checks
+      shell: bash
       run: yarn style
 
     - name: Build
+      shell: bash
       run: yarn build
