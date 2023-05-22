@@ -100,3 +100,5 @@ jobs:
       - name: Publish
         run: |
           yarn publish
+        env:
+          NPM_CONFIG_PROVENANCE: true

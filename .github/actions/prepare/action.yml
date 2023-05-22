@@ -3,6 +3,14 @@ name: Pre-requisites
 description: |
   Setup Pre-requisites
 
+outputs:
+  package-name: ${{ steps.provenance.package-name }}
+  package-download-name: ${{ steps.provenance.package-download-name }}
+  package-download-sha256: ${{ steps.provenance.package-download-sha256 }}
+  provenance-name: ${{ steps.provenance.provenance-name }}
+  provenance-download-name: ${{ steps.provenance.provenance-download-name }}
+  provenance-download-sha256: ${{ steps.provenance.provenance-download-sha256 }}
+
 runs:
   using: composite
   steps:
@@ -29,14 +37,8 @@ runs:
       env:
         cache-name: v4
 
-    - name: Install dependencies
-      shell: bash
-      run: yarn --frozen-lockfile
-
-    - name: Lint & format checks
-      shell: bash
-      run: yarn style
-
     - name: Build
-      shell: bash
-      run: yarn build
+      id: provenance
+      uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
+      with:
+        run-scripts: "yarn --frozen-lockfile, yarn style, yarn build"
