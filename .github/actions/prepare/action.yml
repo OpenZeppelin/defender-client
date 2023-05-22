@@ -4,12 +4,18 @@ description: |
   Setup Pre-requisites
 
 outputs:
-  package-name: ${{ steps.provenance.package-name }}
-  package-download-name: ${{ steps.provenance.package-download-name }}
-  package-download-sha256: ${{ steps.provenance.package-download-sha256 }}
-  provenance-name: ${{ steps.provenance.provenance-name }}
-  provenance-download-name: ${{ steps.provenance.provenance-download-name }}
-  provenance-download-sha256: ${{ steps.provenance.provenance-download-sha256 }}
+  package-name:
+    value: ${{ steps.provenance.package-name }}
+  package-download-name:
+    value: ${{ steps.provenance.package-download-name }}
+  package-download-sha256:
+    value: ${{ steps.provenance.package-download-sha256 }}
+  provenance-name:
+    value: ${{ steps.provenance.provenance-name }}
+  provenance-download-name:
+    value: ${{ steps.provenance.provenance-download-name }}
+  provenance-download-sha256:
+    value: ${{ steps.provenance.provenance-download-sha256 }}
 
 runs:
   using: composite
