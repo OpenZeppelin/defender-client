@@ -3,19 +3,19 @@ name: Pre-requisites
 description: |
   Setup Pre-requisites
 
-outputs:
-  package-name:
-    value: ${{ steps.provenance.package-name }}
-  package-download-name:
-    value: ${{ steps.provenance.package-download-name }}
-  package-download-sha256:
-    value: ${{ steps.provenance.package-download-sha256 }}
-  provenance-name:
-    value: ${{ steps.provenance.provenance-name }}
-  provenance-download-name:
-    value: ${{ steps.provenance.provenance-download-name }}
-  provenance-download-sha256:
-    value: ${{ steps.provenance.provenance-download-sha256 }}
+# outputs:
+#   package-name:
+#     value: ${{ steps.provenance.package-name }}
+#   package-download-name:
+#     value: ${{ steps.provenance.package-download-name }}
+#   package-download-sha256:
+#     value: ${{ steps.provenance.package-download-sha256 }}
+#   provenance-name:
+#     value: ${{ steps.provenance.provenance-name }}
+#   provenance-download-name:
+#     value: ${{ steps.provenance.provenance-download-name }}
+#   provenance-download-sha256:
+#     value: ${{ steps.provenance.provenance-download-sha256 }}
 
 runs:
   using: composite
@@ -42,9 +42,3 @@ runs:
           ${{ runner.os }}-yarn-${{ env.cache-name }}-
       env:
         cache-name: v4
-
-    - name: Build
-      id: provenance
-      uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
-      with:
-        run-scripts: "yarn --frozen-lockfile, yarn style, yarn build"
