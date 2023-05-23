@@ -28,7 +28,10 @@
   },
   "scripts": {
     "install-deps": "yarn install --frozen-lockfile",
-    "build": "nx run-many -t build --skip-nx-cache",
+    "nx-build-skip-cache": "yarn build --skip-nx-cache",
+    "nx-build-test-skip-cache": "yarn build-test --skip-nx-cache",
+    "build": "nx run-many -t build",
+    "build-test": "nx run-many -t style,build,test",
     "lint": "yarn lint:check --fix",
     "format:check": "prettier --check '**/*.{js,ts,tsx}'",
     "format": "yarn format:check --write",

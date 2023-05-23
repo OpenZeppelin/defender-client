@@ -26,32 +26,59 @@ jobs:
     - name: Prepare pre-requisites
       uses: ./.github/actions/prepare
 
+  # Deterministic Build & tests
   provenance:
     needs: prepare
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
-      run-scripts: "install-deps, build"
+      run-scripts: "install-deps, build-test"
+      node-version: "16.20.0"
 
-  test:
+  publish:
+    name: Publish
     needs: provenance
-    name: Unit Tests
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      id-token: write
+      actions: read
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3.5.2
+      - name: Checkout Repo
+        uses: actions/checkout@v3.5.2
+        with:
+          ref: refs/tags/${{ needs.tag.outputs.next_stable_version }}
 
-    - name: Build
-      id: build
-      uses: ./.github/actions/prepare
+      - name: Use node@16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.20.0
 
-    - name: Get outputs
-      run: |
-        echo "package_name=${{ needs.provenance.outputs.package-name }}" >> $GITHUB_OUTPUT
-        echo "package_download_name=${{ needs.provenance.outputs.package-download-name }}" >> $GITHUB_OUTPUT
-        echo "package_download_sha256: ${{ needs.provenance.outputs.package-download-sha256 }}" >> $GITHUB_OUTPUT
-        echo "provenance_name: ${{ needs.provenance.outputs.provenance-name }}" >> $GITHUB_OUTPUT
-        echo "provenance_download_name: ${{ needs.provenance.outputs.provenance-download-name }}" >> $GITHUB_OUTPUT
-        echo "provenance_download_sha256: ${{ needs.provenance.outputs.provenance-download-sha256 }}" >> $GITHUB_OUTPUT
-        echo $GITHUB_OUTPUT
-    - name: Run tests
-      run: yarn test
+      - name: Create temp dir
+        id: temp-dir
+        run: |
+          set -euo pipefail
+
+          temp_dir=$(mktemp -d)
+          echo "path=${temp_dir}" >>"${GITHUB_OUTPUT}"
+
+      - name: Download tarball
+        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@main
+        with:
+          name: ${{ needs.provenance.outputs.package-download-name }}
+          path: "${{ steps.temp-dir.outputs.path }}/${{ needs.provenance.outputs.package-name }}"
+          sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
+
+      - name: Download provenance
+        uses: slsa-framework/slsa-github-generator/actions/secure-attestations-download@v1.6.0
+        with:
+          name: ${{ needs.provenance.outputs.provenance-download-name }}
+          path: "${{ steps.temp-dir.outputs.path }}"
+          sha256: ${{ needs.provenance.outputs.provenance-download-sha256 }}
+
+      - name: Verify downloaded artifacts
+        run: |
+          set -euo pipefail
+
+          cd ${{ steps.temp-dir.outputs.path }}/${{ needs.provenance.outputs.package-name }}
+          ls -al
+          cd packages/

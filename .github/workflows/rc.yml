@@ -10,8 +10,9 @@ concurrency:
 
 
 permissions:
-  contents: write # for checkout and tag
-  pull-requests: write  # for comments
+  contents: write
+  actions: read
+  id-token: write
 
 jobs:
   check_author:
@@ -36,7 +37,7 @@ jobs:
           COMMIT_DETAILS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                           "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
           echo "author=$(echo $COMMIT_DETAILS | yq '.author.login')" >> $GITHUB_OUTPUT
-  build:
+  prepare:
     needs: check_author
     runs-on: ubuntu-22.04
     if: ${{ needs.check_author.outputs.latest_commit_author != 'svc-gh-is-01' }}
@@ -47,32 +48,26 @@ jobs:
       - name: Prepare pre-requisites
         uses: ./.github/actions/prepare
 
-  test:
-    name: Unit Tests
-    runs-on: ubuntu-22.04
-    needs: build
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3.5.2
-
-    - name: Prepare pre-requisites
-      uses: ./.github/actions/prepare
-
-    - name: Run tests
-      run: yarn test
+  # Deterministic Build & tests
+  provenance:
+    needs: prepare
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
+    with:
+      run-scripts: "install-deps, build-test"
+      node-version: "16.20.0"
 
   # Git tag the commit for publishing
   tag:
     name: Tag RC candidate for all packages
     runs-on: ubuntu-22.04
-    needs: test
+    needs: provenance
     outputs:
       next_rc_version: ${{ steps.update_version.outputs.next_rc_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3.5.2
 
+      # For signing commits & Tags
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v5
         with:
