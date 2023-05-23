@@ -70,6 +70,12 @@ jobs:
 
           cd "${{ steps.temp-dir.outputs.path }}"
           tar -xzvf "${{ needs.provenance.outputs.package-name }}"
-          cd package/; yarn publish
+          cd package/
+          if [[ ${GITHUB_REF#refs/tags/}" != *rc* ]]; then
+            yarn publish
+          else
+            yarn publish-rc
+          fi
+
         env:
           NPM_CONFIG_PROVENANCE: true

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv').config();
 
 const { SentinelClient } = require('defender-sentinel-client');
