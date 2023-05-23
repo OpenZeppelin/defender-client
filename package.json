@@ -27,12 +27,13 @@
     "nx-cloud": "latest"
   },
   "scripts": {
-    "build": "nx run-many -t build",
+    "build": "nx run-many -t build --skip-nx-cache",
+    "install": "yarn install --frozen-lockfile",
     "lint": "yarn lint:check --fix",
     "format:check": "prettier --check '**/*.{js,ts,tsx}'",
     "format": "yarn format:check --write",
     "lint:check": "eslint 'packages/**/src/**/*.{js,ts}' --quiet",
-    "test": "nx run-many -t test",
+    "test": "nx run-many -t test --skip-nx-cache",
     "style": "yarn lint && yarn format",
     "versionup:preminor": "lerna version preminor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
     "versionup-deploy:preminor": "cd packages/deploy && lerna version preminor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",

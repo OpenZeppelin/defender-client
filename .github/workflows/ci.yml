@@ -19,7 +19,7 @@ jobs:
   provenance:
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
-      run-scripts: "yarn --frozen-lockfile, yarn style, yarn build"
+      run-scripts: "install, build"
   test:
     needs: provenance
     name: Unit Tests
