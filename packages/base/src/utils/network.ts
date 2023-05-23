@@ -74,6 +74,7 @@ export const Networks: Network[] = [
   'zksync-goerli',
   'x-dfk-avax-chain',
   'x-dfk-avax-chain-test',
+  'base-goerli',
 ];
 
 export function isValidNetwork(text: string): text is Network {
