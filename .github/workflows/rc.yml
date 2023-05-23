@@ -20,8 +20,13 @@ jobs:
     outputs:
       latest_commit_author: ${{ steps.commit.outputs.author }}
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
       - name: Checkout Repo
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
       - name: Install yq
         run: |
@@ -42,8 +47,13 @@ jobs:
     runs-on: ubuntu-22.04
     if: ${{ needs.check_author.outputs.latest_commit_author != 'svc-gh-is-01' }}
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
       - name: Checkout Repo
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
       - name: Prepare pre-requisites
         uses: ./.github/actions/prepare
@@ -64,12 +74,17 @@ jobs:
     outputs:
       next_rc_version: ${{ steps.update_version.outputs.next_rc_version }}
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
       - name: Checkout
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
       # For signing commits & Tags
       - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v5
+        uses: crazy-max/ghaction-import-gpg@72b6676b71ab476b77e676928516f6982eef7a41 # v5.3.0
         with:
           gpg_private_key: ${{ secrets.SVC_GPG_KEY }}
           passphrase: ${{ secrets.SVC_GPG_PASSPHRASE }}

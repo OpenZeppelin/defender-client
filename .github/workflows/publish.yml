@@ -29,13 +29,18 @@ jobs:
       id-token: write # For signing
       actions: read
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
       - name: Checkout Repo
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
         with:
           ref: ${{ github.ref }}
 
       - name: Use node@16
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
         with:
           node-version: 16.20.0
 
@@ -48,14 +53,14 @@ jobs:
           echo "path=${temp_dir}" >>"${GITHUB_OUTPUT}"
 
       - name: Download tarball
-        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@main
+        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@934435652996c02a6317092984312602dfaf2a21 # main
         with:
           name: ${{ needs.provenance.outputs.package-download-name }}
           path: "${{ steps.temp-dir.outputs.path }}/${{ needs.provenance.outputs.package-name }}"
           sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
 
       - name: Download provenance
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@v1.6.0
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@0779f7bec68e2bf54a7b0a32bf4763f25ab29702 # v1.6.0
         with:
           name: ${{ needs.provenance.outputs.provenance-download-name }}
           path: "${{ steps.temp-dir.outputs.path }}"
@@ -76,6 +81,5 @@ jobs:
           else
             yarn publish-rc
           fi
-
         env:
           NPM_CONFIG_PROVENANCE: true
