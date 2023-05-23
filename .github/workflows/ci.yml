@@ -79,6 +79,6 @@ jobs:
         run: |
           set -euo pipefail
 
-          cd ${{ steps.temp-dir.outputs.path }}/${{ needs.provenance.outputs.package-name }}
+          cd ${{ steps.temp-dir.outputs.path }}; tar -xzvf ${{ needs.provenance.outputs.package-name }}
           ls -al
-          cd packages/
+          cd openzeppelin-defender-client-1.44.0
