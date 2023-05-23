@@ -134,8 +134,12 @@ jobs:
       - name: Authenticate NPM
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-      - name: Publish
+      - name: Unpack the zipped artifact
         run: |
-          yarn publish
+          set -euo pipefail
+
+          cd "${{ steps.temp-dir.outputs.path }}"
+          tar -xzvf "${{ needs.provenance.outputs.package-name }}"
+          cd package/; yarn publish
         env:
           NPM_CONFIG_PROVENANCE: true

@@ -7,6 +7,20 @@ on:
       - 'v*'
 
 jobs:
+
+  provenance:
+    permissions:
+      contents: read
+      id-token: write
+      actions: read
+
+    # Deterministic Build & tests
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
+    with:
+      run-scripts: "install-deps, build-test"
+      node-version: "16.20.0"
+
+
   publish:
     runs-on: ubuntu-22.04
     permissions:
@@ -20,11 +34,42 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - name: Use node@16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.20.0
+
+      - name: Create temp dir
+        id: temp-dir
+        run: |
+          set -euo pipefail
+
+          temp_dir=$(mktemp -d)
+          echo "path=${temp_dir}" >>"${GITHUB_OUTPUT}"
+
+      - name: Download tarball
+        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@main
+        with:
+          name: ${{ needs.provenance.outputs.package-download-name }}
+          path: "${{ steps.temp-dir.outputs.path }}/${{ needs.provenance.outputs.package-name }}"
+          sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
+
+      - name: Download provenance
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@v1.6.0
+        with:
+          name: ${{ needs.provenance.outputs.provenance-download-name }}
+          path: "${{ steps.temp-dir.outputs.path }}"
+          sha256: ${{ needs.provenance.outputs.provenance-download-sha256 }}
+
       - name: Authenticate NPM
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-      - name: Publish
+      - name: Unpack the zipped artifact
         run: |
-          yarn publish
+          set -euo pipefail
+
+          cd "${{ steps.temp-dir.outputs.path }}"
+          tar -xzvf "${{ needs.provenance.outputs.package-name }}"
+          cd package/; yarn publish
         env:
           NPM_CONFIG_PROVENANCE: true
