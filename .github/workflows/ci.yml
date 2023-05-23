@@ -16,10 +16,22 @@ permissions:
   id-token: write
 
 jobs:
+  prepare:
+    name: Prepare pre-requisites
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3.5.2
+
+    - name: Prepare pre-requisites
+      uses: ./.github/actions/prepare
+
   provenance:
+    needs: prepare
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
       run-scripts: "install, build"
+
   test:
     needs: provenance
     name: Unit Tests
