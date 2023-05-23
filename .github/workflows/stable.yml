@@ -125,7 +125,7 @@ jobs:
           sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
 
       - name: Download provenance
-        uses: slsa-framework/slsa-github-generator/actions/secure-attestations-download@v1.6.0
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@v1.6.0
         with:
           name: ${{ needs.provenance.outputs.provenance-download-name }}
           path: "${{ steps.temp-dir.outputs.path }}"
