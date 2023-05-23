@@ -45,8 +45,8 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3.5.2
-        with:
-          ref: refs/tags/${{ needs.tag.outputs.next_stable_version }}
+        # with:
+        #   ref: refs/tags/${{ needs.tag.outputs.next_stable_version }}
 
       - name: Use node@16
         uses: actions/setup-node@v3
