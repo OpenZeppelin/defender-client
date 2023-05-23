@@ -1,4 +1,10 @@
-# Defender Clients
+# Defender Client Packages
+
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/OpenZeppelin/defender-client/badge)](https://api.securityscorecards.dev/projects/github.com/OpenZeppelin/defender-client)
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/7395/badge)](https://bestpractices.coreinfrastructure.org/projects/7395)
+[![Stable Git Release](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml)
+[![RC Git Release](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml)
+[![CI](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml)
 
 Monorepo that contains Defender typescript clients. Check out the individual packages for more info:
 
@@ -81,4 +87,11 @@ DEFENDER_SENTINEL_POOL_CLIENT_ID=
   - `ci.yml` - runs on every push to any branch --> runs tests.
   - `rc.yml` - runs on every push to master --> creates a rc tag --> creates a pre-release draft.
   - `stable.yml` - Manual trigger workflow --> creates a stable tag --> creates a latest release --> publishes to npm.
+  - `release.yml` - Manual trigger workflow --> create a git release for a given tag.
   - `publish.yml` - Manual trigger workflow ( for any given tag ) --> publishes to npm.
+
+---
+
+### Determinstic Builds & Secure Publishes
+
+- We use [slsa framework](https://slsa.dev/) _pronounced "salsa"_ for reproducible builds & secure pushes. Verification is done using [provenance](https://slsa.dev/provenance/v1)
