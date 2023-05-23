@@ -13,7 +13,7 @@ export function createApi(key: string, token: string, apiUrl: string, httpsAgent
     baseURL: apiUrl,
     headers: {
       'X-Api-Key': key,
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
     httpsAgent,

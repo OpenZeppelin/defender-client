@@ -1,0 +1,30 @@
+---
+name: Pre-requisites
+description: |
+  Setup Pre-requisites
+
+runs:
+  using: composite
+  steps:
+    - name: Use node@16
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.20.0
+
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      shell: bash
+      run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+    - name: Node modules cache
+      uses: actions/cache@v3
+      id: yarn-cache
+      with:
+        path: |
+          ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          ~/.cache/node-gyp-cache
+        key: "${{ runner.os }}-yarn-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}"
+        restore-keys: |
+          ${{ runner.os }}-yarn-${{ env.cache-name }}-
+      env:
+        cache-name: v4

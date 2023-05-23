@@ -6,7 +6,9 @@ import { Relayer, RelayerTransaction } from '../relayer';
 import { DefenderRelayQueryProvider } from './query';
 import { DefenderRelaySenderOptions, DefenderRelaySenderProvider } from './sender';
 
-type DefenderRelaySenderProviderWithOptions = DefenderRelaySenderProvider & { options: DefenderRelaySenderOptions };
+type DefenderRelaySenderProviderWithOptions = DefenderRelaySenderProvider & {
+  options: DefenderRelaySenderOptions;
+};
 
 describe('web3/sender', () => {
   const relayer = mock<Relayer>();

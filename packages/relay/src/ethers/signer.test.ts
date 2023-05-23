@@ -10,7 +10,9 @@ import { randomBytes } from '@ethersproject/random';
 import { DefenderRelaySigner } from './signer';
 import { _TypedDataEncoder } from '@ethersproject/hash';
 
-type ProviderWithWrapTransaction = Provider & { _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse };
+type ProviderWithWrapTransaction = Provider & {
+  _wrapTransaction(tx: Transaction, hash?: string): TransactionResponse;
+};
 
 describe('ethers/signer', () => {
   const relayer = mock<Relayer>();
@@ -130,7 +132,10 @@ describe('ethers/signer', () => {
   });
 
   it('sends a tx with fixed gasPrice', async () => {
-    relayer.sendTransaction.mockResolvedValue({ ...omit(tx, 'maxFeePerGas', 'maxPriorityFeePerGas'), gasPrice: 1e9 });
+    relayer.sendTransaction.mockResolvedValue({
+      ...omit(tx, 'maxFeePerGas', 'maxPriorityFeePerGas'),
+      gasPrice: 1e9,
+    });
 
     const signer = new DefenderRelaySigner(relayer, provider, { speed: 'safeLow' });
     const request = { ...pick(tx, 'to', 'data', 'value', 'gasLimit'), gasPrice: 1e9 };

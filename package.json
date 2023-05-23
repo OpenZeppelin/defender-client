@@ -1,35 +1,53 @@
 {
-  "name": "defender-client",
+  "name": "@openzeppelin/defender-client",
   "private": true,
-  "version": "1.3.0-rc.5",
+  "version": "1.44.0",
   "description": "Root package for the defender-client set of packages",
   "workspaces": [
     "packages/*",
     "examples/*"
   ],
   "devDependencies": {
+    "@npmcli/fs": "3.1.0",
+    "@types/glob": "^8.1.0",
     "@types/jest": "^24.0.23",
     "@types/lodash": "^4.14.157",
     "@types/node": "^12.12.7",
     "@typescript-eslint/eslint-plugin": "^3.7.0",
     "@typescript-eslint/parser": "^2.1.0",
-    "@types/glob": "^8.1.0",
-    "@npmcli/fs": "3.1.0",
     "code-style": "git+https://github.com/OpenZeppelin/code-style.git",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.2.0",
     "eslint-plugin-prettier": "^3.1.0",
     "jest": "^25.2.4",
-    "lerna": "^6.6.1",
+    "lerna": "^6.6.2",
     "prettier": "^2.0.4",
     "ts-jest": "^25.3.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.2",
+    "nx-cloud": "latest"
   },
   "scripts": {
-    "build": "lerna run build",
+    "install-deps": "yarn install --frozen-lockfile",
+    "nx-build-skip-cache": "yarn build --skip-nx-cache",
+    "nx-build-test-skip-cache": "yarn build-test --skip-nx-cache",
+    "build": "nx run-many -t build",
+    "build-test": "nx run-many -t style,build,test",
     "lint": "yarn lint:check --fix",
+    "format:check": "prettier --check '**/*.{js,ts,tsx}'",
+    "format": "yarn format:check --write",
     "lint:check": "eslint 'packages/**/src/**/*.{js,ts}' --quiet",
-    "test": "lerna run test"
+    "test": "nx run-many -t test --skip-nx-cache",
+    "style": "yarn lint && yarn format",
+    "versionup:preminor": "lerna version preminor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup-deploy:preminor": "cd packages/deploy && lerna version preminor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup:premajor": "lerna version premajor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup-deploy:premajor": "cd packages/deploy && lerna version premajor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup:stableminor": "lerna version minor --conventional-commits --yes --exact --no-changelog",
+    "versionup-deploy:stableminor": "cd packages/deploy && lerna version minor --conventional-commits --yes --exact --no-changelog",
+    "versionup:stablemajor": "lerna version major --conventional-commits --yes --exact --no-changelog",
+    "versionup-deploy:stablemajor": "cd packages/deploy &&  lerna version major --conventional-commits --yes --exact --no-changelog",
+    "publish-rc": "yarn publish --dist-tag beta",
+    "publish": "lerna publish from-git --yes --exact --no-changelog --force-publish"
   },
   "repository": {
     "type": "git",
@@ -40,5 +58,11 @@
   "bugs": {
     "url": "https://github.com/OpenZeppelin/defender-client/issues"
   },
-  "homepage": "https://github.com/OpenZeppelin/defender-client#readme"
+  "homepage": "https://github.com/OpenZeppelin/defender-client#readme",
+  "dependencies": {
+    "nx": "^16.1.4"
+  },
+  "resolutions": {
+    "@ethersproject/abstract-provider": "^5.6.1"
+  }
 }

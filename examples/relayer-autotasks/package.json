@@ -5,7 +5,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "defender-relay-client": "1.44.0",
+    "@openzeppelin/defender-relay-client": "1.44.0",
     "dotenv": "^8.2.0"
   }
 }

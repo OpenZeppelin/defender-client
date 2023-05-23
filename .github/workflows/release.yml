@@ -1,0 +1,45 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        description: Tag to trigger release
+        type: string
+      prerelease:
+        required: true
+        description: Whether to release as a prerelease
+        type: boolean
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+      prerelease:
+        type: boolean
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout Repo
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+      - name: Create release
+        uses: ncipollo/release-action@a2e71bdd4e7dab70ca26a852f29600c98b33153e # v1.12.0
+        with:
+          tag: ${{ inputs.tag }}
+          skipIfReleaseExists: true
+          generateReleaseNotes: true
+          draft: ${{ github.event.inputs.prerelease }}
+          prerelease: ${{ inputs.prerelease }}

@@ -10,5 +10,6 @@
     "packages/sentinel",
     "examples/*"
   ],
+  "useNx": true,
   "version": "1.44.0"
 }

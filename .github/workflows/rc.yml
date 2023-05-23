@@ -1,0 +1,138 @@
+name: tag-release-candidate
+on:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+
+permissions:
+  contents: write
+  actions: read
+  id-token: write
+
+jobs:
+  check_author:
+    runs-on: ubuntu-22.04
+    outputs:
+      latest_commit_author: ${{ steps.commit.outputs.author }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout Repo
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Install yq
+        run: |
+          sudo apt-get update &&\
+          sudo apt-get install wget -y &&\
+          sudo wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY} -O /usr/bin/yq &&\
+          sudo chmod +x /usr/bin/yq
+
+      - name: Get last commit details
+        id: commit
+        run: |
+          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_DETAILS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                          "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
+          echo "author=$(echo $COMMIT_DETAILS | yq '.author.login')" >> $GITHUB_OUTPUT
+  prepare:
+    needs: check_author
+    runs-on: ubuntu-22.04
+    if: ${{ needs.check_author.outputs.latest_commit_author != 'svc-gh-is-01' }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout Repo
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Prepare pre-requisites
+        uses: ./.github/actions/prepare
+
+  # Deterministic Build & tests
+  provenance:
+    needs: prepare
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
+    with:
+      run-scripts: "install-deps, nx-build-test-skip-cache"
+      node-version: "16.20.0"
+
+  # Git tag the commit for publishing
+  tag:
+    name: Tag RC candidate for all packages
+    runs-on: ubuntu-22.04
+    needs: provenance
+    outputs:
+      next_rc_version: ${{ steps.update_version.outputs.next_rc_version }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      # For signing commits & Tags
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@72b6676b71ab476b77e676928516f6982eef7a41 # v5.3.0
+        with:
+          gpg_private_key: ${{ secrets.SVC_GPG_KEY }}
+          passphrase: ${{ secrets.SVC_GPG_PASSPHRASE }}
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Update RC candidate version for deploy client
+        run: |
+          yarn versionup-deploy:preminor
+
+      - name: Update RC candidate version ( excluding deploy client )
+        id: update_version
+        run: |
+          yarn versionup:preminor
+          TAG_NAME=$(node -p "require('./lerna.json').version")
+          git add .
+          git commit -m "Update version to $TAG_NAME" --no-verify
+          echo "next_rc_version=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Tag Check
+        id: tag_check
+        run: |
+          CURRENT_VERSION=$(node -p 'require("./lerna.json").version')
+          GET_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/git/ref/tags/v${CURRENT_VERSION}"
+          http_status_code=$(curl -LI $GET_API_URL -o /dev/null -w '%{http_code}\n' -s \
+            -H "Authorization: token ${GITHUB_TOKEN}")
+          if [ "$http_status_code" -ne "404" ] ; then
+            echo "tag_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "tag_exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Create Tag
+        if: steps.tag_check.outputs.tag_exists == 'false'
+        run: |
+          git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "Release ${{ steps.update_version.outputs.next_rc_version }}"
+          git push origin ${{ steps.update_version.outputs.next_rc_version }} --no-verify
+          git push origin master --no-verify
+
+  create-release:
+    name: Create Release
+    needs: tag
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.tag.outputs.next_rc_version }}
+      prerelease: true

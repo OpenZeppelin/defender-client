@@ -1,4 +1,10 @@
-# Defender Clients
+# Defender Client Packages
+
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/OpenZeppelin/defender-client/badge)](https://api.securityscorecards.dev/projects/github.com/OpenZeppelin/defender-client)
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/7395/badge)](https://bestpractices.coreinfrastructure.org/projects/7395)
+[![Stable Git Release](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml)
+[![RC Git Release](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml)
+[![CI](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml)
 
 Monorepo that contains Defender typescript clients. Check out the individual packages for more info:
 
@@ -25,25 +31,15 @@ Run `yarn lint` at the project root.
 
 ### Defender Client
 
-Use `lerna` for publishing a new version of all Defender Client packages (excludes Platform Deploy Client as it is versioned separately).
+> We Use `lerna` for publishing a new version of all Defender Client packages (excludes Platform Deploy Client as it is versioned separately).
 
-The following publishes a release candidate with the npm tag `next`:
-
-```
-yarn run lerna publish v1.3.0-rc.4 --preid rc --dist-tag next --pre-dist-tag next --exact
-```
-
-And to publish the final release:
-
-```
-yarn run lerna publish --exact --force-publish
-```
+- We use github actions for CI/CD to tag, release & publish the packages. See details about workflows below.
 
 ### Platform Deploy Client
 
 Change to the `packages/deploy` directory, login to npm, and publish using the native `yarn publish` command as shown below. We are not tagging versions for the time being as they conflict with previous Defender Client releases. Note this process is being introduced for the Platform Deploy Client v0 release, but will be migrated to a new Platform Client-specific repository.
 
-```
+```bash
 npm login
 cd packages/deploy
 git checkout master
@@ -59,7 +55,7 @@ git push origin master
 
 The `examples` repo has sample code for both clients. Note that most examples rely on dotenv for loading API keys and secrets. Note that you can set the following environment variables to control to which instance your client will connect to, which is useful for testing against your Defender development instance:
 
-```
+```bash
 # Example config
 # relay signer
 DEFENDER_RELAY_SIGNER_API_URL=
@@ -82,3 +78,20 @@ DEFENDER_SENTINEL_API_URL=
 DEFENDER_SENTINEL_POOL_ID=
 DEFENDER_SENTINEL_POOL_CLIENT_ID=
 ```
+
+---
+
+### CI/CD
+
+- We use github actions for CI/CD. See [workflows](.github/workflows) for more info.
+  - `ci.yml` - runs on every push to any branch --> runs tests.
+  - `rc.yml` - runs on every push to master --> creates a rc tag --> creates a pre-release draft.
+  - `stable.yml` - Manual trigger workflow --> creates a stable tag --> creates a latest release --> publishes to npm.
+  - `release.yml` - Manual trigger workflow --> create a git release for a given tag.
+  - `publish.yml` - Manual trigger workflow ( for any given tag ) --> publishes to npm.
+
+---
+
+### Determinstic Builds & Secure Publishes
+
+- We use [slsa framework](https://slsa.dev/) _pronounced "salsa"_ for reproducible builds & secure pushes. Verification is done using [provenance](https://slsa.dev/provenance/v1)
