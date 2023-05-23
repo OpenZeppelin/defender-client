@@ -2,8 +2,8 @@
 
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/OpenZeppelin/defender-client/badge)](https://api.securityscorecards.dev/projects/github.com/OpenZeppelin/defender-client)
 [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/7395/badge)](https://bestpractices.coreinfrastructure.org/projects/7395)
-[![Stable Git Release](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml)
-[![RC Git Release](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml)
+[![Stable Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/stable.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml)
+[![RC Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/rc.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml)
 [![CI](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml)
 
 Monorepo that contains Defender typescript clients. Check out the individual packages for more info:
