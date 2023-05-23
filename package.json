@@ -27,8 +27,8 @@
     "nx-cloud": "latest"
   },
   "scripts": {
+    "install-deps": "yarn install --frozen-lockfile",
     "build": "nx run-many -t build --skip-nx-cache",
-    "install": "yarn install --frozen-lockfile",
     "lint": "yarn lint:check --fix",
     "format:check": "prettier --check '**/*.{js,ts,tsx}'",
     "format": "yarn format:check --write",

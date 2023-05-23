@@ -30,7 +30,7 @@ jobs:
     needs: prepare
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
-      run-scripts: "install, build"
+      run-scripts: "install-deps, build"
 
   test:
     needs: provenance
