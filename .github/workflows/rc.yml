@@ -2,7 +2,7 @@ name: tag-release-candidate
 on:
   push:
     branches:
-      - master
+      - fix-wf-permissions
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
@@ -137,9 +137,6 @@ jobs:
           git push origin master --no-verify
 
   create-release:
-    permissions:
-      contents: write
-      actions: read
     name: Create Release
     needs: tag
     uses: ./.github/workflows/release.yml
