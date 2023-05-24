@@ -9,10 +9,10 @@ concurrency:
   cancel-in-progress: true
 
 
-permissions:
-  contents: write
-  actions: read
-  id-token: write
+# Declare default permissions as read only.
+permissions: read-all
+
+
 
 jobs:
   check_author:
@@ -60,6 +60,8 @@ jobs:
 
   # Deterministic Build & tests
   provenance:
+    permissions:
+      id-token: write
     needs: prepare
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
@@ -68,6 +70,9 @@ jobs:
 
   # Git tag the commit for publishing
   tag:
+    permissions:
+      contents: write
+      actions: read
     name: Tag RC candidate for all packages
     runs-on: ubuntu-22.04
     needs: provenance
@@ -130,6 +135,9 @@ jobs:
           git push origin master --no-verify
 
   create-release:
+    permissions:
+      contents: write
+      actions: read
     name: Create Release
     needs: tag
     uses: ./.github/workflows/release.yml

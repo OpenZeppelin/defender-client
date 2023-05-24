@@ -6,13 +6,14 @@ on:
     tags:
       - 'v*'
 
+# Declare default permissions as read only.
+permissions: read-all
+
 jobs:
 
   provenance:
     permissions:
-      contents: read
       id-token: write
-      actions: read
 
     # Deterministic Build & tests
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
@@ -27,7 +28,6 @@ jobs:
       contents: write
       checks: write
       id-token: write # For signing
-      actions: read
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0

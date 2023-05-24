@@ -20,6 +20,10 @@ on:
         type: boolean
         required: true
 
+
+# Declare default permissions as read only.
+permissions: read-all
+
 jobs:
   release:
     runs-on: ubuntu-22.04

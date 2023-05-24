@@ -5,6 +5,10 @@ on:
     branches:
       - master
 
+
+# Declare default permissions as read only.
+permissions: read-all
+
 jobs:
   tag:
     runs-on: ubuntu-22.04
