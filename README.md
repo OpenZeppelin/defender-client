@@ -84,7 +84,7 @@ DEFENDER_SENTINEL_POOL_CLIENT_ID=
 
 ### CI/CD
 
-- We use github action for CI/CD. See [workflows](.github/workflows) for more info.
+- We use github actions for CI/CD. See [workflows](.github/workflows) for more info.
   - `ci.yml` - runs on every push to any branch --> runs tests.
   - `rc.yml` - runs on every push to master --> creates a rc tag --> creates a pre-release draft.
   - `stable.yml` - Manual trigger workflow --> creates a stable tag --> creates a latest release --> publishes to npm.
