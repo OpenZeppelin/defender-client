@@ -18,7 +18,7 @@ jobs:
     # Deterministic Build & tests
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
-      run-scripts: "install-deps, nx-build-test-skip-cache"
+      run-scripts: "install-deps, nx-build-skip-cache, test"
       node-version: "16.20.0"
 
 
@@ -77,10 +77,11 @@ jobs:
           cd "${{ steps.temp-dir.outputs.path }}"
           tar -xzvf "${{ needs.provenance.outputs.package-name }}"
           cd package/
-          if [[ ${GITHUB_REF#refs/tags/}" != *rc* ]]; then
-            yarn publish
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          if [[ ${TAG_VERSION} != *rc* ]]; then
+            yarn publish-stable ${TAG_VERSION}
           else
-            yarn publish-rc
+            yarn publish-rc ${TAG_VERSION}
           fi
         env:
           NPM_CONFIG_PROVENANCE: true
