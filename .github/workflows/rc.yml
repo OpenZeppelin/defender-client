@@ -137,6 +137,8 @@ jobs:
           #git push origin master --no-verify
 
   create-release:
+    permissions:
+      contents: write
     name: Create Release
     needs: tag
     uses: ./.github/workflows/release.yml
