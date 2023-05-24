@@ -14,7 +14,8 @@ jobs:
   provenance:
     permissions:
       id-token: write
-
+      contents: read
+      actions: read
     # Deterministic Build & tests
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
