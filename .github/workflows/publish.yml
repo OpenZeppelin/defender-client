@@ -1,5 +1,4 @@
 name: publish
-description:
 
 on:
   workflow_dispatch:
@@ -24,6 +23,7 @@ jobs:
 
 
   publish:
+    needs: provenance
     runs-on: ubuntu-22.04
     permissions:
       contents: write

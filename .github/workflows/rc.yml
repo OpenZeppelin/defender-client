@@ -2,12 +2,7 @@ name: tag-release-candidate
 on:
   push:
     branches:
-      - master
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
+      - test-svc-pushes
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -71,10 +66,11 @@ jobs:
 
   # Git tag the commit for publishing
   tag:
+    name: Tag RC candidate for all packages
     permissions:
+      id-token: write
       contents: write
       actions: read
-    name: Tag RC candidate for all packages
     runs-on: ubuntu-22.04
     needs: provenance
     outputs:
@@ -87,6 +83,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        with:
+          token: ${{secrets.SAI_PAT}}
 
       # For signing commits & Tags
       - name: Import GPG key
@@ -109,8 +107,8 @@ jobs:
           yarn versionup:preminor
           TAG_NAME=$(node -p "require('./lerna.json').version")
           git add .
-          git commit -m "Update version to $TAG_NAME" --no-verify
-          echo "next_rc_version=$TAG_NAME" >> $GITHUB_OUTPUT
+          git commit -m "Update version to v$TAG_NAME" --no-verify
+          echo "next_rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Tag Check
         id: tag_check
@@ -129,11 +127,11 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: Create Tag
-        if: steps.tag_check.outputs.tag_exists == 'false'
+        #if: steps.tag_check.outputs.tag_exists == 'false'
         run: |
           git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "Release ${{ steps.update_version.outputs.next_rc_version }}"
           git push origin ${{ steps.update_version.outputs.next_rc_version }} --no-verify
-          git push origin master --no-verify
+          git push origin test-svc-pushes
 
   create-release:
     permissions:
