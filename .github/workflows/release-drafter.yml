@@ -5,6 +5,11 @@ on:
   push:
     branches:
       - master
+
+# Declare default permissions as read only.
+permissions: read-all
+
+
 jobs:
   update_release_draft:
     runs-on: ubuntu-22.04

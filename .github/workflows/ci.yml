@@ -8,12 +8,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
-permissions:
-  checks: write
-  pull-requests: read
-  contents: write
-  actions: read
-  id-token: write
+# Declare default permissions as read only.
+permissions: read-all
 
 jobs:
   prepare:
@@ -33,6 +29,10 @@ jobs:
 
   # Deterministic Build & tests
   provenance:
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
     needs: prepare
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
