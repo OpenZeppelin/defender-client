@@ -38,16 +38,13 @@
     "lint:check": "eslint 'packages/**/src/**/*.{js,ts}' --quiet",
     "test": "nx run-many -t test --skip-nx-cache",
     "style": "yarn lint && yarn format",
-    "versionup:preminor": "lerna version preminor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
-    "versionup-deploy:preminor": "cd packages/deploy && lerna version preminor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog && ../../hack/cross-dependency.sh",
-    "versionup:premajor": "lerna version premajor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
-    "versionup-deploy:premajor": "cd packages/deploy && lerna version premajor --conventional-commits --conventional-prerelease --preid=rc --no-git-tag-version --yes --exact --no-changelog",
-    "versionup:stableminor": "lerna version minor --conventional-commits --no-git-tag-version --yes --exact --no-changelog",
-    "versionup-deploy:stableminor": "cd packages/deploy && lerna version minor --conventional-commits --no-git-tag-version --yes --exact --no-changelog && ../../hack/cross-dependency.sh",
-    "versionup:stablemajor": "lerna version major --conventional-commits --yes --exact --no-changelog",
-    "versionup-deploy:stablemajor": "cd packages/deploy &&  lerna version major --conventional-commits --yes --exact --no-changelog && ../../hack/cross-dependency.sh",
-    "publish-rc": "yarn run publish-stable --dist-tag rc --pre-dist-tag rc",
-    "publish-stable": "lerna publish --no-git-tag-version --yes --exact --no-changelog --force-publish"
+    "skip-lib-ignore": "./hack/skip-lib-ignore.sh",
+    "versionup:rcminor": "lerna version --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup:preminor": "yarn versionup:rcminor preminor",
+    "versionup:prerelease": "yarn versionup:rcminor prerelease",
+    "versionup:stableminor": "lerna version minor --conventional-graduate --no-git-tag-version --yes --exact --no-changelog",
+    "publish-rc": "yarn run publish-stable --dist-tag rc --pre-dist-tag rc --no-git-tag-version",
+    "publish-stable": "lerna publish --no-git-tag-version --ignore-scripts --yes --exact --no-changelog --force-publish"
   },
   "repository": {
     "type": "git",

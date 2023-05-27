@@ -36,5 +36,5 @@ jobs:
     needs: prepare
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
-      run-scripts: "install-deps, nx-build-skip-cache, test"
+      run-scripts: "install-deps, nx-build-test-skip-cache"
       node-version: "16.20.0"
