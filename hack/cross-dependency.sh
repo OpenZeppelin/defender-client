@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Update the cross-dependency version in the deploy package.json and root package.json
 # Read root lerna config and update the version of the cross-dependency
 VERSION=$(node -p "require('./lerna.json').version")
 
