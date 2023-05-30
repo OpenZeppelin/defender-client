@@ -41,5 +41,5 @@ jobs:
           tag: ${{ inputs.tag }}
           skipIfReleaseExists: true
           generateReleaseNotes: true
-          draft: ${{ github.event.inputs.prerelease }}
+          draft: ${{ inputs.prerelease }}
           prerelease: ${{ inputs.prerelease }}

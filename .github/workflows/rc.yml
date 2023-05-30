@@ -4,11 +4,6 @@ on:
     branches:
       - master
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
-
 # Declare default permissions as read only.
 permissions: read-all
 
@@ -71,10 +66,11 @@ jobs:
 
   # Git tag the commit for publishing
   tag:
+    name: Tag RC candidate for all packages
     permissions:
+      id-token: write
       contents: write
       actions: read
-    name: Tag RC candidate for all packages
     runs-on: ubuntu-22.04
     needs: provenance
     outputs:
@@ -87,6 +83,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        with:
+          token: ${{ secrets.SAI_PAT }}
 
       # For signing commits & Tags
       - name: Import GPG key
@@ -99,41 +97,35 @@ jobs:
           git_user_signingkey: true
           git_commit_gpgsign: true
 
-      - name: Update RC candidate version for deploy client
+
+      - name: Get latest git tag and verify package changes
+        id: tag_check_changes
         run: |
-          yarn versionup-deploy:preminor
+          echo 'latest_tag=$(git describe --tags --abbrev=0 --match "v*")' >> $GITHUB_OUTPUT
+          echo 'changed_packages=$(lerna changed --json)' >> $GITHUB_OUTPUT
 
       - name: Update RC candidate version ( excluding deploy client )
+        if: ${{ steps.tag_check_changes.outputs.changed_packages != '[]' }}
+        run: |
+          if [[ ${{ steps.tag_check_changes.outputs.latest_tag }} != *"rc"* ]]; then
+            yarn versionup:preminor && ./hack/cross-dependency.sh
+          else
+            yarn versionup:prerelease && ./hack/cross-dependency.sh
+          fi
+
+      - name: Commit changes
         id: update_version
         run: |
-          yarn versionup:preminor
           TAG_NAME=$(node -p "require('./lerna.json').version")
           git add .
-          git commit -m "Update version to $TAG_NAME" --no-verify
-          echo "next_rc_version=$TAG_NAME" >> $GITHUB_OUTPUT
-
-      - name: Tag Check
-        id: tag_check
-        run: |
-          CURRENT_VERSION=$(node -p 'require("./lerna.json").version')
-          GET_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/git/ref/tags/v${CURRENT_VERSION}"
-          http_status_code=$(curl -LI $GET_API_URL -o /dev/null -w '%{http_code}\n' -s \
-            -H "Authorization: token ${GITHUB_TOKEN}")
-          if [ "$http_status_code" -ne "404" ] ; then
-            echo "tag_exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "tag_exists=false" >> $GITHUB_OUTPUT
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          git commit -m "Update version to v$TAG_NAME"
+          echo "next_rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Create Tag
-        if: steps.tag_check.outputs.tag_exists == 'false'
         run: |
-          git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "Release ${{ steps.update_version.outputs.next_rc_version }}"
-          git push origin ${{ steps.update_version.outputs.next_rc_version }} --no-verify
-          git push origin master --no-verify
+          git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "${{ steps.update_version.outputs.next_rc_version }}"
+          git push origin ${{ steps.update_version.outputs.next_rc_version }}
+          git push origin master
 
   create-release:
     permissions:

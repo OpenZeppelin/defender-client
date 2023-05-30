@@ -28,7 +28,7 @@ jobs:
       uses: ./.github/actions/prepare
 
   # Deterministic Build & tests
-  provenance:
+  test:
     permissions:
       id-token: write
       contents: read

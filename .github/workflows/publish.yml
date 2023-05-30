@@ -1,10 +1,12 @@
 name: publish
-description:
 
 on:
   workflow_dispatch:
-    tags:
-      - 'v*'
+    inputs:
+      tag:
+        required: true
+        description: Tag to publish, pattern is v1.x.x
+        type: string
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -19,11 +21,12 @@ jobs:
     # Deterministic Build & tests
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
-      run-scripts: "install-deps, nx-build-test-skip-cache"
+      run-scripts: "install-deps, nx-build-test-skip-cache, skip-lib-ignore"
       node-version: "16.20.0"
 
 
   publish:
+    needs: provenance
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -38,7 +41,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
         with:
-          ref: ${{ github.ref }}
+          ref: refs/tag/${{ inputs.tag }}
 
       - name: Use node@16
         uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
@@ -77,10 +80,11 @@ jobs:
           cd "${{ steps.temp-dir.outputs.path }}"
           tar -xzvf "${{ needs.provenance.outputs.package-name }}"
           cd package/
-          if [[ ${GITHUB_REF#refs/tags/}" != *rc* ]]; then
-            yarn publish
+          TAG_VERSION=${{ inputs.tag }}
+          if [[ ${TAG_VERSION} != *rc* ]]; then
+            yarn publish-stable ${TAG_VERSION}
           else
-            yarn publish-rc
+            yarn publish-rc ${TAG_VERSION}
           fi
         env:
           NPM_CONFIG_PROVENANCE: true

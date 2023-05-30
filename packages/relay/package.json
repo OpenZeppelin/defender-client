@@ -46,5 +46,8 @@
     "web3-core": "^1.8.2",
     "web3-core-helpers": "^1.8.2"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "gitHead": "a7c4808dd11e708df42d110de230c264061c72c3"
 }
