@@ -55,7 +55,7 @@ There are a number of optional fields depending on what you are deploying, these
 - `salt` - deployments are done using the CREATE2 opcode, you can provide a salt or we can generate one for you if none is supplied.
 - `licenseType` - This will be displayed on Etherscan e.g MIT.
 - `libraries` - If you contract uses any external libraries they will need to be added here in the format `{ [LibraryName]: LibraryAddress }`.
-- `relayerId` - This property will override the default wallet assigned to the approval process for deployments. You may define this property if you wish to use a different wallet than the one assigned to the approval process in the deploy environment.
+- `relayerId` - This property will override the default relayer assigned to the approval process for deployments. You may define this property if you wish to use a different relayer than the one assigned to the approval process in the deploy environment.
 
 Below is an example of a contract deployment request which responds with a `DeploymentResponse`
 
