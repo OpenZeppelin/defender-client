@@ -137,7 +137,7 @@ jobs:
       contents: write
     name: Create Release
     needs: tag
-    if: steps.tag.outputs.changed_packages != ''
+    if: needs.tag.outputs.changed_packages != ''
     uses: ./.github/workflows/release.yml
     with:
       tag: ${{ needs.tag.outputs.next_rc_version }}
