@@ -105,10 +105,11 @@ jobs:
           git fetch --prune --unshallow --tags
           latest_tag=$(git describe --tags --abbrev=0 --match "v*")
           echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
-          echo "changed_packages=$(lerna changed --json)" >> $GITHUB_OUTPUT
+          changed_packages=$(lerna changed --json | jq -r 'length')
+          echo "changed_packages=${changed_packages:-0}" >> $GITHUB_OUTPUT
 
       - name: Update RC candidate version ( excluding deploy client )
-        if: steps.tag_check_changes.outputs.changed_packages != ''
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           if [[ ${{ steps.tag_check_changes.outputs.latest_tag }} != *"rc"* ]]; then
             yarn versionup:preminor && ./hack/cross-dependency.sh
@@ -117,7 +118,7 @@ jobs:
           fi
 
       - name: Commit changes
-        if: steps.tag_check_changes.outputs.changed_packages != ''
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         id: update_version
         run: |
           TAG_NAME=$(node -p "require('./lerna.json').version")
@@ -126,7 +127,7 @@ jobs:
           echo "next_rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Create Tag
-        if: steps.tag_check_changes.outputs.changed_packages != ''
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "${{ steps.update_version.outputs.next_rc_version }}"
           git push origin ${{ steps.update_version.outputs.next_rc_version }}
@@ -137,7 +138,7 @@ jobs:
       contents: write
     name: Create Release
     needs: tag
-    if: needs.tag.outputs.changed_packages != ''
+    if: needs.tag.outputs.changed_packages > 0
     uses: ./.github/workflows/release.yml
     with:
       tag: ${{ needs.tag.outputs.next_rc_version }}
