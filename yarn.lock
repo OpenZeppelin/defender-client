@@ -10265,13 +10265,21 @@ web3-bzz@1.9.0:
     got "12.1.0"
     swarm-js "^0.1.40"
 
-web3-core-helpers@1.9.0, web3-core-helpers@^1.8.2:
+web3-core-helpers@1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/web3-core-helpers/-/web3-core-helpers-1.9.0.tgz#a1ca4ac7b9cec822886643312d2e98b0e4d8f1bc"
   integrity sha512-NeJzylAp9Yj9xAt2uTT+kyug3X0DLnfBdnAcGZuY6HhoNPDIfQRA9CkJjLngVRlGTLZGjNp9x9eR+RyZQgUlXg==
   dependencies:
     web3-eth-iban "1.9.0"
     web3-utils "1.9.0"
+
+web3-core-helpers@^1.8.2:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/web3-core-helpers/-/web3-core-helpers-1.10.0.tgz#1016534c51a5df77ed4f94d1fcce31de4af37fad"
+  integrity sha512-pIxAzFDS5vnbXvfvLSpaA1tfRykAe9adw43YCKsEYQwH0gCLL0kMLkaCX3q+Q8EVmAh+e1jWL/nl9U0de1+++g==
+  dependencies:
+    web3-eth-iban "1.10.0"
+    web3-utils "1.10.0"
 
 web3-core-method@1.9.0:
   version "1.9.0"
@@ -10375,6 +10383,14 @@ web3-eth-ens@1.9.0:
     web3-eth-contract "1.9.0"
     web3-utils "1.9.0"
 
+web3-eth-iban@1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/web3-eth-iban/-/web3-eth-iban-1.10.0.tgz#5a46646401965b0f09a4f58e7248c8a8cd22538a"
+  integrity sha512-0l+SP3IGhInw7Q20LY3IVafYEuufo4Dn75jAHT7c2aDJsIolvf2Lc6ugHkBajlwUneGfbRQs/ccYPQ9JeMUbrg==
+  dependencies:
+    bn.js "^5.2.1"
+    web3-utils "1.10.0"
+
 web3-eth-iban@1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/web3-eth-iban/-/web3-eth-iban-1.9.0.tgz#a8f838e42c20d49ff58aaa9f67ece47a968e40b1"
@@ -10458,6 +10474,19 @@ web3-shh@1.9.0:
     web3-core-method "1.9.0"
     web3-core-subscriptions "1.9.0"
     web3-net "1.9.0"
+
+web3-utils@1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.10.0.tgz#ca4c1b431a765c14ac7f773e92e0fd9377ccf578"
+  integrity sha512-kSaCM0uMcZTNUSmn5vMEhlo02RObGNRRCkdX0V9UTAU0+lrvn0HSaudyCo6CQzuXUsnuY2ERJGCGPfeWmv19Rg==
+  dependencies:
+    bn.js "^5.2.1"
+    ethereum-bloom-filters "^1.0.6"
+    ethereumjs-util "^7.1.0"
+    ethjs-unit "0.1.6"
+    number-to-bn "1.7.0"
+    randombytes "^2.1.0"
+    utf8 "3.0.0"
 
 web3-utils@1.9.0:
   version "1.9.0"
