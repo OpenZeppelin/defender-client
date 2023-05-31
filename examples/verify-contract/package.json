@@ -1,6 +1,6 @@
 {
   "name": "example-verify-contract",
-  "version": "1.45.0-rc.0",
+  "version": "1.45.0-rc.1",
   "description": "",
   "private": true,
   "main": "index.js",
@@ -10,7 +10,7 @@
   "author": "Martin Verzilli <mverzilli@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "@openzeppelin/defender-admin-client": "1.45.0-rc.0",
+    "@openzeppelin/defender-admin-client": "1.45.0-rc.1",
     "dotenv": "^8.2.0"
   }
 }
