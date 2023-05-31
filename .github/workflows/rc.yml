@@ -2,7 +2,7 @@ name: tag-release-candidate
 on:
   push:
     branches:
-      - fix-rc-bug
+      - master
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -101,16 +101,14 @@ jobs:
       - name: Get latest git tag and verify package changes
         id: tag_check_changes
         run: |
-          git fetch --tags
-          echo 'latest_tag=$(git describe --tags --abbrev=0 --match "v*")' >> $GITHUB_OUTPUT
-          echo 'changed_packages=$(lerna changed --json)' >> $GITHUB_OUTPUT
-          echo $changed_packages
-          echo $latest_tag
+          git fetch --prune --unshallow --tags
+          latest_tag=$(git describe --tags --abbrev=0 --match "v*")
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          echo "changed_packages=$(lerna changed --json)" >> $GITHUB_OUTPUT
 
       - name: Update RC candidate version ( excluding deploy client )
-        if: ${{ steps.tag_check_changes.outputs.changed_packages != '[]' }}
+        if: steps.tag_check_changes.outputs.changed_packages != ''
         run: |
-
           if [[ ${{ steps.tag_check_changes.outputs.latest_tag }} != *"rc"* ]]; then
             yarn versionup:preminor && ./hack/cross-dependency.sh
           else
@@ -118,7 +116,7 @@ jobs:
           fi
 
       - name: Commit changes
-        if: ${{ steps.tag_check_changes.outputs.changed_packages != '[]' }}
+        if: steps.tag_check_changes.outputs.changed_packages != ''
         id: update_version
         run: |
           TAG_NAME=$(node -p "require('./lerna.json').version")
@@ -127,11 +125,11 @@ jobs:
           echo "next_rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Create Tag
-        if: ${{ steps.tag_check_changes.outputs.changed_packages != '[]' }}
+        if: steps.tag_check_changes.outputs.changed_packages != ''
         run: |
           git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "${{ steps.update_version.outputs.next_rc_version }}"
           git push origin ${{ steps.update_version.outputs.next_rc_version }}
-          git push origin fix-rc-bug
+          git push origin master
 
   create-release:
     permissions:
