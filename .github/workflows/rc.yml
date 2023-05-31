@@ -1,4 +1,4 @@
-name: tag-release-candidate
+name: tag-rc
 on:
   push:
     branches:
