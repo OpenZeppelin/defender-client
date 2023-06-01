@@ -35,6 +35,14 @@ jobs:
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
         with:
           ref: refs/tags/${{ inputs.tag }}
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@4d571ad1038a9cc29d676154ef265ab8f9027042 # v0.14.2
+        with:
+          artifact-name: sbom-${{ github.event.repository.name }}-${{ inputs.tag }}.spdx.json
+          output-file: sbom-${{ github.event.repository.name }}-${{ inputs.tag }}.spdx.json
+          upload-artifact-retention: 7
+
       - name: Create release
         uses: ncipollo/release-action@a2e71bdd4e7dab70ca26a852f29600c98b33153e # v1.12.0
         with:
