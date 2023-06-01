@@ -1,4 +1,4 @@
-name: test
+name: ci
 
 on:
   pull_request:
@@ -36,66 +36,5 @@ jobs:
     needs: prepare
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
-      run-scripts: "install-deps, nx-build-test-skip-cache, skip-lib-ignore"
+      run-scripts: "install-deps, nx-build-test-skip-cache"
       node-version: "16.20.0"
-
-  # Test SBOM generation
-  generate-sbom:
-    needs: test
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: write
-      checks: write
-      id-token: write # For signing
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
-        with:
-          egress-policy: audit
-
-      - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-        with:
-          fetch-depth: 0
-
-      - name: Use node@16
-        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
-        with:
-          node-version: 16.20.0
-
-      - name: Create temp dir
-        id: temp-dir
-        run: |
-          set -euo pipefail
-
-          temp_dir=$(mktemp -d)
-          echo "path=${temp_dir}" >>"${GITHUB_OUTPUT}"
-
-      - name: Download tarball
-        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@934435652996c02a6317092984312602dfaf2a21 # main
-        with:
-          name: ${{ needs.test.outputs.package-download-name }}
-          path: "${{ steps.temp-dir.outputs.path }}/${{ needs.test.outputs.package-name }}"
-          sha256: ${{ needs.test.outputs.package-download-sha256 }}
-
-      - name: Download provenance
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@0779f7bec68e2bf54a7b0a32bf4763f25ab29702 # v1.6.0
-        with:
-          name: ${{ needs.test.outputs.provenance-download-name }}
-          path: "${{ steps.temp-dir.outputs.path }}"
-          sha256: ${{ needs.test.outputs.provenance-download-sha256 }}
-
-      - name: Unpack the zipped artifact
-        run: |
-          set -euo pipefail
-
-          cd "${{ steps.temp-dir.outputs.path }}"
-          tar -xzvf "${{ needs.test.outputs.package-name }}"
-          cd -
-      - name: Generate SBOM
-        uses: anchore/sbom-action@4d571ad1038a9cc29d676154ef265ab8f9027042 # v0.14.2
-        with:
-          artifact-name: sbom-${{ github.event.repository.name }}-${{ github.sha }}.spdx.json
-          output-file: sbom-${{ github.event.repository.name }}-${{ github.sha }}.spdx.json
-          path: "${{ steps.temp-dir.outputs.path }}/package"
-          upload-artifact-retention: 1
