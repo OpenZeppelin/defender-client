@@ -24,3 +24,158 @@ updates:
       - vulnerabilites
     # Allow up to 5 open pull requests
     open-pull-requests-limit: 5
+
+  - package-ecosystem: npm
+    directory: /examples/action-proposal
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/batch-proposal
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/create-autotask
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/create-relayer-key
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/create-relayer
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/create-secret
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/create-sentinel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/deploy-contract
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/ethers-signer
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/keeper-network
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/pause-proposal
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/relayer-actions
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/relayer-autotasks
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/simulate-proposal
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/unpause-proposal
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/update-autotask
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/update-notification-category
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/update-relayer
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/update-sentinel
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/upgrade-contract
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/upgrade-proposal
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/verify-contract
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /examples/web3-provider
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/admin
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/autotask-client
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/autotask-utils
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/base
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/deploy
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/kvstore
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/relay
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /packages/sentinel
+    schedule:
+      interval: daily
