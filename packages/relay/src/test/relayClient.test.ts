@@ -82,11 +82,17 @@ describe('RelayClient', () => {
       [policiesUpdate1, policiesUpdate1.policies as UpdateRelayerPoliciesRequest],
       [
         policiesUpdate2,
-        { ...mockRelayerResponseWithPolicies.policies, ...policiesUpdate2.policies } as UpdateRelayerPoliciesRequest,
+        {
+          ...mockRelayerResponseWithPolicies.policies,
+          ...policiesUpdate2.policies,
+        } as UpdateRelayerPoliciesRequest,
       ],
       [
         policiesUpdate3,
-        { ...mockRelayerResponseWithPolicies.policies, ...policiesUpdate3.policies } as UpdateRelayerPoliciesRequest,
+        {
+          ...mockRelayerResponseWithPolicies.policies,
+          ...policiesUpdate3.policies,
+        } as UpdateRelayerPoliciesRequest,
       ],
     ])(
       'calls put with expected policy update given base policy %s',

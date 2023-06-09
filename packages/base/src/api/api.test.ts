@@ -14,7 +14,7 @@ describe('createApi', () => {
       baseURL: apiUrl,
       headers: {
         'X-Api-Key': key,
-        Authorization: `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });

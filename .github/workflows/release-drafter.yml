@@ -1,0 +1,24 @@
+---
+# This action can be used to draft the next release notes as pull requests are merged into the master.
+name: Release Drafter
+on:
+  push:
+    branches:
+      - master
+
+# Declare default permissions as read only.
+permissions: read-all
+
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
+      - uses: release-drafter/release-drafter@569eb7ee3a85817ab916c8f8ff03a5bd96c9c83e # v5.23.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

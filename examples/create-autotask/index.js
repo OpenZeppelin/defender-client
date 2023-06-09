@@ -7,17 +7,17 @@ async function main() {
   const client = new AutotaskClient(creds);
 
   const myAutotask = {
-    name: "my-autotask",
+    name: 'my-autotask',
     encodedZippedCode: await client.getEncodedZippedCodeFromFolder('./code'),
     trigger: {
       type: 'schedule',
       frequencyMinutes: 1500,
     },
-    paused: false
+    paused: false,
   };
 
   const createdAutotask = await client.create(myAutotask);
-  console.log(createdAutotask)
+  console.log(createdAutotask);
 }
 
 if (require.main === module) {

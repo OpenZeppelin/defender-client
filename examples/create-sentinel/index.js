@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv').config();
 
 const abi = require('./abis/erc721.json');
@@ -36,8 +37,11 @@ async function main() {
     // optional
     paused: false,
     eventConditions: [
-      { eventSignature: 'OwnershipTransferred(address,address)', expression: 'previousOwner=0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2' },
-      { eventSignature: 'Transfer(address,address,uint256)' }
+      {
+        eventSignature: 'OwnershipTransferred(address,address)',
+        expression: 'previousOwner=0x0f06aB75c7DD497981b75CD82F6566e3a5CAd8f2',
+      },
+      { eventSignature: 'Transfer(address,address,uint256)' },
     ],
     functionConditions: [{ functionSignature: 'renounceOwnership()' }],
     // optional
@@ -55,8 +59,8 @@ async function main() {
     alertTimeoutMs: 0,
     notificationChannels: [notification.notificationId],
     // optional
-    riskCategory: "TECHNICAL"
-  }
+    riskCategory: 'TECHNICAL',
+  };
 
   const fortaRequestParameters = {
     type: 'FORTA', // BLOCK or FORTA
@@ -86,7 +90,7 @@ async function main() {
     // optional
     alertTimeoutMs: 0,
     notificationChannels: [notification.notificationId],
-  }
+  };
 
   // call create with the request parameters
   const sentinelResponse = await client.create(blockRequestParameters); // or fortaRequestParameters

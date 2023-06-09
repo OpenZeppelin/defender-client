@@ -1,6 +1,6 @@
 {
-  "name": "platform-deploy-client",
-  "version": "0.5.0",
+  "name": "@openzeppelin/platform-deploy-client",
+  "version": "0.6.0",
   "description": "Client library for managing Platform Deployments",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -23,10 +23,13 @@
   "license": "MIT",
   "dependencies": {
     "@ethersproject/abi": "^5.6.3",
+    "@openzeppelin/defender-base-client": "^1.45.0-rc.1",
     "axios": "^0.21.2",
-    "defender-base-client": "^1.40.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e"
 }

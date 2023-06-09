@@ -23,15 +23,8 @@
       },
       "outputSelection": {
         "*": {
-          "*": [
-            "abi",
-            "evm.bytecode",
-            "evm.deployedBytecode",
-            "evm.methodIdentifiers"
-          ],
-          "": [
-            "ast"
-          ]
+          "*": ["abi", "evm.bytecode", "evm.deployedBytecode", "evm.methodIdentifiers"],
+          "": ["ast"]
         }
       }
     }
@@ -52341,30 +52334,14 @@
         "ast": {
           "absolutePath": "contracts/Proxiable.sol",
           "exportedSymbols": {
-            "Address": [
-              348
-            ],
-            "ERC1967Proxy": [
-              881
-            ],
-            "ERC1967Storage": [
-              495
-            ],
-            "ERC1967Upgrade": [
-              739
-            ],
-            "IBeacon": [
-              356
-            ],
-            "Proxiable": [
-              783
-            ],
-            "Proxy": [
-              833
-            ],
-            "StorageSlot": [
-              54
-            ]
+            "Address": [348],
+            "ERC1967Proxy": [881],
+            "ERC1967Storage": [495],
+            "ERC1967Upgrade": [739],
+            "IBeacon": [356],
+            "Proxiable": [783],
+            "Proxy": [833],
+            "StorageSlot": [54]
           },
           "id": 882,
           "license": "MIT",
@@ -52372,12 +52349,7 @@
           "nodes": [
             {
               "id": 1,
-              "literals": [
-                "solidity",
-                "^",
-                "0.8",
-                ".0"
-              ],
+              "literals": ["solidity", "^", "0.8", ".0"],
               "nodeType": "PragmaDirective",
               "src": "33:23:0"
             },
@@ -52388,9 +52360,7 @@
               "contractKind": "library",
               "fullyImplemented": true,
               "id": 54,
-              "linearizedBaseContracts": [
-                54
-              ],
+              "linearizedBaseContracts": [54],
               "name": "StorageSlot",
               "nameLocation": "66:11:0",
               "nodeType": "ContractDefinition",
@@ -53133,9 +53103,7 @@
               },
               "fullyImplemented": true,
               "id": 348,
-              "linearizedBaseContracts": [
-                348
-              ],
+              "linearizedBaseContracts": [348],
               "name": "Address",
               "nameLocation": "835:7:0",
               "nodeType": "ContractDefinition",
@@ -53147,9 +53115,7 @@
                     "src": "1485:347:0",
                     "statements": [
                       {
-                        "assignments": [
-                          64
-                        ],
+                        "assignments": [64],
                         "declarations": [
                           {
                             "constant": false,
@@ -53520,10 +53486,7 @@
                             "id": 80,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "2830:7:0",
                             "typeDescriptions": {
@@ -53551,10 +53514,7 @@
                         "src": "2830:73:0"
                       },
                       {
-                        "assignments": [
-                          92,
-                          null
-                        ],
+                        "assignments": [92, null],
                         "declarations": [
                           {
                             "constant": false,
@@ -53649,9 +53609,7 @@
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
-                            "names": [
-                              "value"
-                            ],
+                            "names": ["value"],
                             "nodeType": "FunctionCallOptions",
                             "options": [
                               {
@@ -53737,10 +53695,7 @@
                             "id": 100,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "3055:7:0",
                             "typeDescriptions": {
@@ -53924,10 +53879,7 @@
                             "id": 116,
                             "name": "functionCall",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              123,
-                              143
-                            ],
+                            "overloadedDeclarations": [123, 143],
                             "referencedDeclaration": 143,
                             "src": "3985:12:0",
                             "typeDescriptions": {
@@ -54156,10 +54108,7 @@
                             "id": 135,
                             "name": "functionCallWithValue",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              163,
-                              213
-                            ],
+                            "overloadedDeclarations": [163, 213],
                             "referencedDeclaration": 213,
                             "src": "4408:21:0",
                             "typeDescriptions": {
@@ -54415,10 +54364,7 @@
                             "id": 155,
                             "name": "functionCallWithValue",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              163,
-                              213
-                            ],
+                            "overloadedDeclarations": [163, 213],
                             "referencedDeclaration": 213,
                             "src": "4959:21:0",
                             "typeDescriptions": {
@@ -54730,10 +54676,7 @@
                             "id": 177,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "5452:7:0",
                             "typeDescriptions": {
@@ -54842,10 +54785,7 @@
                             "id": 188,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "5543:7:0",
                             "typeDescriptions": {
@@ -54873,10 +54813,7 @@
                         "src": "5543:60:0"
                       },
                       {
-                        "assignments": [
-                          196,
-                          198
-                        ],
+                        "assignments": [196, 198],
                         "declarations": [
                           {
                             "constant": false,
@@ -54993,9 +54930,7 @@
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
-                            "names": [
-                              "value"
-                            ],
+                            "names": ["value"],
                             "nodeType": "FunctionCallOptions",
                             "options": [
                               {
@@ -55360,10 +55295,7 @@
                             "id": 223,
                             "name": "functionStaticCall",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              230,
-                              265
-                            ],
+                            "overloadedDeclarations": [230, 265],
                             "referencedDeclaration": 265,
                             "src": "6118:18:0",
                             "typeDescriptions": {
@@ -55596,10 +55528,7 @@
                             "id": 242,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "6520:7:0",
                             "typeDescriptions": {
@@ -55627,10 +55556,7 @@
                         "src": "6520:67:0"
                       },
                       {
-                        "assignments": [
-                          250,
-                          252
-                        ],
+                        "assignments": [250, 252],
                         "declarations": [
                           {
                             "constant": false,
@@ -56051,10 +55977,7 @@
                             "id": 275,
                             "name": "functionDelegateCall",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              282,
-                              317
-                            ],
+                            "overloadedDeclarations": [282, 317],
                             "referencedDeclaration": 317,
                             "src": "7091:20:0",
                             "typeDescriptions": {
@@ -56287,10 +56210,7 @@
                             "id": 294,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "7496:7:0",
                             "typeDescriptions": {
@@ -56318,10 +56238,7 @@
                         "src": "7496:69:0"
                       },
                       {
-                        "assignments": [
-                          302,
-                          304
-                        ],
+                        "assignments": [302, 304],
                         "declarations": [
                           {
                             "constant": false,
@@ -56790,10 +56707,7 @@
                                         "id": 338,
                                         "name": "revert",
                                         "nodeType": "Identifier",
-                                        "overloadedDeclarations": [
-                                          -19,
-                                          -19
-                                        ],
+                                        "overloadedDeclarations": [-19, -19],
                                         "referencedDeclaration": -19,
                                         "src": "8458:6:0",
                                         "typeDescriptions": {
@@ -57117,9 +57031,7 @@
               },
               "fullyImplemented": false,
               "id": 356,
-              "linearizedBaseContracts": [
-                356
-              ],
+              "linearizedBaseContracts": [356],
               "name": "IBeacon",
               "nameLocation": "8604:7:0",
               "nodeType": "ContractDefinition",
@@ -57203,9 +57115,7 @@
               },
               "fullyImplemented": true,
               "id": 495,
-              "linearizedBaseContracts": [
-                495
-              ],
+              "linearizedBaseContracts": [495],
               "name": "ERC1967Storage",
               "nameLocation": "9017:14:0",
               "nodeType": "ContractDefinition",
@@ -57514,10 +57424,7 @@
                             "id": 380,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "9756:7:0",
                             "typeDescriptions": {
@@ -58019,10 +57926,7 @@
                             "id": 421,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "10619:7:0",
                             "typeDescriptions": {
@@ -58215,10 +58119,7 @@
                             "id": 429,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "10742:7:0",
                             "typeDescriptions": {
@@ -58747,10 +58648,7 @@
                             "id": 474,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "11595:7:0",
                             "typeDescriptions": {
@@ -58968,9 +58866,7 @@
                   "src": "11923:14:0"
                 }
               ],
-              "contractDependencies": [
-                495
-              ],
+              "contractDependencies": [495],
               "contractKind": "contract",
               "documentation": {
                 "id": 496,
@@ -58980,10 +58876,7 @@
               },
               "fullyImplemented": true,
               "id": 739,
-              "linearizedBaseContracts": [
-                739,
-                495
-              ],
+              "linearizedBaseContracts": [739, 495],
               "name": "ERC1967Upgrade",
               "nameLocation": "11905:14:0",
               "nodeType": "ContractDefinition",
@@ -59278,10 +59171,7 @@
                             "id": 526,
                             "name": "_upgradeToAndCall",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              533,
-                              566
-                            ],
+                            "overloadedDeclarations": [533, 566],
                             "referencedDeclaration": 566,
                             "src": "12753:17:0",
                             "typeDescriptions": {
@@ -59873,10 +59763,7 @@
                             "id": 574,
                             "name": "_upgradeToAndCallSecure",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              581,
-                              669
-                            ],
+                            "overloadedDeclarations": [581, 669],
                             "referencedDeclaration": 669,
                             "src": "13383:23:0",
                             "typeDescriptions": {
@@ -59999,9 +59886,7 @@
                     "src": "13555:1172:0",
                     "statements": [
                       {
-                        "assignments": [
-                          591
-                        ],
+                        "assignments": [591],
                         "declarations": [
                           {
                             "constant": false,
@@ -60067,9 +59952,7 @@
                         "src": "13565:48:0"
                       },
                       {
-                        "assignments": [
-                          599
-                        ],
+                        "assignments": [599],
                         "declarations": [
                           {
                             "constant": false,
@@ -60835,10 +60718,7 @@
                                   "id": 650,
                                   "name": "require",
                                   "nodeType": "Identifier",
-                                  "overloadedDeclarations": [
-                                    -18,
-                                    -18
-                                  ],
+                                  "overloadedDeclarations": [-18, -18],
                                   "referencedDeclaration": -18,
                                   "src": "14457:7:0",
                                   "typeDescriptions": {
@@ -61152,10 +61032,7 @@
                             "id": 677,
                             "name": "_upgradeBeaconToAndCall",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              684,
-                              721
-                            ],
+                            "overloadedDeclarations": [684, 721],
                             "referencedDeclaration": 721,
                             "src": "14953:23:0",
                             "typeDescriptions": {
@@ -61976,18 +61853,11 @@
                   "src": "15607:14:0"
                 }
               ],
-              "contractDependencies": [
-                495,
-                739
-              ],
+              "contractDependencies": [495, 739],
               "contractKind": "contract",
               "fullyImplemented": false,
               "id": 783,
-              "linearizedBaseContracts": [
-                783,
-                739,
-                495
-              ],
+              "linearizedBaseContracts": [783, 739, 495],
               "name": "Proxiable",
               "nameLocation": "15594:9:0",
               "nodeType": "ContractDefinition",
@@ -62141,10 +62011,7 @@
                             "id": 750,
                             "name": "_upgradeToAndCallSecure",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              581,
-                              669
-                            ],
+                            "overloadedDeclarations": [581, 669],
                             "referencedDeclaration": 581,
                             "src": "15744:23:0",
                             "typeDescriptions": {
@@ -62349,10 +62216,7 @@
                             "id": 770,
                             "name": "_upgradeToAndCallSecure",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              581,
-                              669
-                            ],
+                            "overloadedDeclarations": [581, 669],
                             "referencedDeclaration": 669,
                             "src": "15960:23:0",
                             "typeDescriptions": {
@@ -62535,9 +62399,7 @@
               },
               "fullyImplemented": false,
               "id": 833,
-              "linearizedBaseContracts": [
-                833
-              ],
+              "linearizedBaseContracts": [833],
               "name": "Proxy",
               "nameLocation": "16716:5:0",
               "nodeType": "ContractDefinition",
@@ -63305,11 +63167,7 @@
                   "src": "19636:14:0"
                 }
               ],
-              "contractDependencies": [
-                495,
-                739,
-                833
-              ],
+              "contractDependencies": [495, 739, 833],
               "contractKind": "contract",
               "documentation": {
                 "id": 834,
@@ -63319,12 +63177,7 @@
               },
               "fullyImplemented": true,
               "id": 881,
-              "linearizedBaseContracts": [
-                881,
-                739,
-                495,
-                833
-              ],
+              "linearizedBaseContracts": [881, 739, 495, 833],
               "name": "ERC1967Proxy",
               "nameLocation": "19613:12:0",
               "nodeType": "ContractDefinition",
@@ -63622,10 +63475,7 @@
                             "id": 862,
                             "name": "_upgradeToAndCall",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              533,
-                              566
-                            ],
+                            "overloadedDeclarations": [533, 566],
                             "referencedDeclaration": 533,
                             "src": "20168:17:0",
                             "typeDescriptions": {
@@ -63742,9 +63592,7 @@
                   "visibility": "public"
                 },
                 {
-                  "baseFunctions": [
-                    798
-                  ],
+                  "baseFunctions": [798],
                   "body": {
                     "id": 879,
                     "nodeType": "Block",
@@ -63882,15 +63730,9 @@
         "ast": {
           "absolutePath": "contracts/Vault.sol",
           "exportedSymbols": {
-            "Vault": [
-              1076
-            ],
-            "VaultV2": [
-              1161
-            ],
-            "VaultV3": [
-              1173
-            ]
+            "Vault": [1076],
+            "VaultV2": [1161],
+            "VaultV3": [1173]
           },
           "id": 1174,
           "license": "MIT",
@@ -63898,12 +63740,7 @@
           "nodes": [
             {
               "id": 883,
-              "literals": [
-                "solidity",
-                "^",
-                "0.8",
-                ".0"
-              ],
+              "literals": ["solidity", "^", "0.8", ".0"],
               "nodeType": "PragmaDirective",
               "src": "31:23:1"
             },
@@ -63914,9 +63751,7 @@
               "contractKind": "contract",
               "fullyImplemented": true,
               "id": 1076,
-              "linearizedBaseContracts": [
-                1076
-              ],
+              "linearizedBaseContracts": [1076],
               "name": "Vault",
               "nameLocation": "65:5:1",
               "nodeType": "ContractDefinition",
@@ -64465,10 +64300,7 @@
                             "id": 921,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "470:7:1",
                             "typeDescriptions": {
@@ -64646,10 +64478,7 @@
                             "id": 940,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "618:7:1",
                             "typeDescriptions": {
@@ -65008,9 +64837,7 @@
                     "src": "877:177:1",
                     "statements": [
                       {
-                        "assignments": [
-                          975
-                        ],
+                        "assignments": [975],
                         "declarations": [
                           {
                             "constant": false,
@@ -65467,9 +65294,7 @@
                     "src": "1093:157:1",
                     "statements": [
                       {
-                        "assignments": [
-                          1011
-                        ],
+                        "assignments": [1011],
                         "declarations": [
                           {
                             "constant": false,
@@ -66285,16 +66110,11 @@
                   "src": "1518:5:1"
                 }
               ],
-              "contractDependencies": [
-                1076
-              ],
+              "contractDependencies": [1076],
               "contractKind": "contract",
               "fullyImplemented": true,
               "id": 1161,
-              "linearizedBaseContracts": [
-                1161,
-                1076
-              ],
+              "linearizedBaseContracts": [1161, 1076],
               "name": "VaultV2",
               "nameLocation": "1507:7:1",
               "nodeType": "ContractDefinition",
@@ -66422,10 +66242,7 @@
                             "id": 1086,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "1621:7:1",
                             "typeDescriptions": {
@@ -66474,9 +66291,7 @@
                   "visibility": "internal"
                 },
                 {
-                  "baseFunctions": [
-                    971
-                  ],
+                  "baseFunctions": [971],
                   "body": {
                     "id": 1102,
                     "nodeType": "Block",
@@ -66633,10 +66448,7 @@
                             "id": 1106,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "1803:7:1",
                             "typeDescriptions": {
@@ -66825,10 +66637,7 @@
                             "id": 1123,
                             "name": "require",
                             "nodeType": "Identifier",
-                            "overloadedDeclarations": [
-                              -18,
-                              -18
-                            ],
+                            "overloadedDeclarations": [-18, -18],
                             "referencedDeclaration": -18,
                             "src": "1925:7:1",
                             "typeDescriptions": {
@@ -66966,9 +66775,7 @@
                   "visibility": "public"
                 },
                 {
-                  "baseFunctions": [
-                    1040
-                  ],
+                  "baseFunctions": [1040],
                   "body": {
                     "id": 1147,
                     "nodeType": "Block",
@@ -67072,9 +66879,7 @@
                   "visibility": "public"
                 },
                 {
-                  "baseFunctions": [
-                    1007
-                  ],
+                  "baseFunctions": [1007],
                   "body": {
                     "id": 1159,
                     "nodeType": "Block",
@@ -67197,26 +67002,17 @@
                   "src": "2201:7:1"
                 }
               ],
-              "contractDependencies": [
-                1076,
-                1161
-              ],
+              "contractDependencies": [1076, 1161],
               "contractKind": "contract",
               "fullyImplemented": true,
               "id": 1173,
-              "linearizedBaseContracts": [
-                1173,
-                1161,
-                1076
-              ],
+              "linearizedBaseContracts": [1173, 1161, 1076],
               "name": "VaultV3",
               "nameLocation": "2190:7:1",
               "nodeType": "ContractDefinition",
               "nodes": [
                 {
-                  "baseFunctions": [
-                    1103
-                  ],
+                  "baseFunctions": [1103],
                   "body": {
                     "id": 1171,
                     "nodeType": "Block",
@@ -67319,48 +67115,20 @@
         "ast": {
           "absolutePath": "contracts/VaultUUPS.sol",
           "exportedSymbols": {
-            "Address": [
-              348
-            ],
-            "ERC1967Proxy": [
-              881
-            ],
-            "ERC1967Storage": [
-              495
-            ],
-            "ERC1967Upgrade": [
-              739
-            ],
-            "IBeacon": [
-              356
-            ],
-            "Proxiable": [
-              783
-            ],
-            "Proxy": [
-              833
-            ],
-            "StorageSlot": [
-              54
-            ],
-            "Vault": [
-              1076
-            ],
-            "VaultProxiable": [
-              1191
-            ],
-            "VaultProxiableV2": [
-              1205
-            ],
-            "VaultProxiableV3": [
-              1219
-            ],
-            "VaultV2": [
-              1161
-            ],
-            "VaultV3": [
-              1173
-            ]
+            "Address": [348],
+            "ERC1967Proxy": [881],
+            "ERC1967Storage": [495],
+            "ERC1967Upgrade": [739],
+            "IBeacon": [356],
+            "Proxiable": [783],
+            "Proxy": [833],
+            "StorageSlot": [54],
+            "Vault": [1076],
+            "VaultProxiable": [1191],
+            "VaultProxiableV2": [1205],
+            "VaultProxiableV3": [1219],
+            "VaultV2": [1161],
+            "VaultV3": [1173]
           },
           "id": 1220,
           "license": "MIT",
@@ -67368,12 +67136,7 @@
           "nodes": [
             {
               "id": 1175,
-              "literals": [
-                "solidity",
-                "^",
-                "0.8",
-                ".0"
-              ],
+              "literals": ["solidity", "^", "0.8", ".0"],
               "nodeType": "PragmaDirective",
               "src": "31:23:2"
             },
@@ -67429,30 +67192,17 @@
                   "src": "139:9:2"
                 }
               ],
-              "contractDependencies": [
-                495,
-                739,
-                783,
-                1076
-              ],
+              "contractDependencies": [495, 739, 783, 1076],
               "contractKind": "contract",
               "fullyImplemented": true,
               "id": 1191,
-              "linearizedBaseContracts": [
-                1191,
-                783,
-                739,
-                495,
-                1076
-              ],
+              "linearizedBaseContracts": [1191, 783, 739, 495, 1076],
               "name": "VaultProxiable",
               "nameLocation": "114:14:2",
               "nodeType": "ContractDefinition",
               "nodes": [
                 {
-                  "baseFunctions": [
-                    782
-                  ],
+                  "baseFunctions": [782],
                   "body": {
                     "id": 1189,
                     "nodeType": "Block",
@@ -67564,32 +67314,17 @@
                   "src": "287:9:2"
                 }
               ],
-              "contractDependencies": [
-                495,
-                739,
-                783,
-                1076,
-                1161
-              ],
+              "contractDependencies": [495, 739, 783, 1076, 1161],
               "contractKind": "contract",
               "fullyImplemented": true,
               "id": 1205,
-              "linearizedBaseContracts": [
-                1205,
-                783,
-                739,
-                495,
-                1161,
-                1076
-              ],
+              "linearizedBaseContracts": [1205, 783, 739, 495, 1161, 1076],
               "name": "VaultProxiableV2",
               "nameLocation": "258:16:2",
               "nodeType": "ContractDefinition",
               "nodes": [
                 {
-                  "baseFunctions": [
-                    782
-                  ],
+                  "baseFunctions": [782],
                   "body": {
                     "id": 1203,
                     "nodeType": "Block",
@@ -67701,34 +67436,17 @@
                   "src": "435:9:2"
                 }
               ],
-              "contractDependencies": [
-                495,
-                739,
-                783,
-                1076,
-                1161,
-                1173
-              ],
+              "contractDependencies": [495, 739, 783, 1076, 1161, 1173],
               "contractKind": "contract",
               "fullyImplemented": true,
               "id": 1219,
-              "linearizedBaseContracts": [
-                1219,
-                783,
-                739,
-                495,
-                1173,
-                1161,
-                1076
-              ],
+              "linearizedBaseContracts": [1219, 783, 739, 495, 1173, 1161, 1076],
               "name": "VaultProxiableV3",
               "nameLocation": "406:16:2",
               "nodeType": "ContractDefinition",
               "nodes": [
                 {
-                  "baseFunctions": [
-                    782
-                  ],
+                  "baseFunctions": [782],
                   "body": {
                     "id": 1217,
                     "nodeType": "Block",

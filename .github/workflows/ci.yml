@@ -1,77 +1,40 @@
-name: CI
+name: ci
 
-on: [push]
+on:
+  pull_request:
+    types: [assigned, opened, synchronize, reopened, labeled]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+# Declare default permissions as read only.
+permissions: read-all
 
 jobs:
-  build:
-
+  prepare:
+    name: Prepare pre-requisites
     runs-on: ubuntu-22.04
-    
     steps:
-    - uses: actions/checkout@v3.1.0
-
-    - name: Use node@16
-      uses: actions/setup-node@v3
+    - name: Harden Runner
+      uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
       with:
-        node-version: 16.x
+        egress-policy: audit
 
-    - name: Node modules cache
-      uses: actions/cache@v3
-      id: yarn-cache
-      with:
-        path: |
-          ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          ~/.cache/node-gyp-cache
-        key: "${{ runner.os }}-yarn-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}"
-        restore-keys: |
-          ${{ runner.os }}-yarn-${{ env.cache-name }}-
-      env:
-        cache-name: v4
+    - name: Checkout
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
-    - name: Install dependencies
-      run: yarn --frozen-lockfile
+    - name: Prepare pre-requisites
+      uses: ./.github/actions/prepare
 
-    - name: Check build
-      run: yarn build
-
-    - name: Check linting
-      run: yarn lint:check
-
+  # Deterministic Build & tests
   test:
-    name: Unit Tests
-    runs-on: ubuntu-22.04
-    needs: build
-
-    steps:
-    - uses: actions/checkout@v3.1.0
-
-    - name: Use node@16
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16.x
-
-    - name: Get yarn cache directory path
-      id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
-
-    - name: Node modules cache
-      uses: actions/cache@v3
-      id: yarn-cache
-      with:
-        path: |
-          ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          ~/.cache/node-gyp-cache
-        key: "${{ runner.os }}-yarn-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}"
-        restore-keys: |
-          ${{ runner.os }}-yarn-${{ env.cache-name }}-
-      env:
-        cache-name: v4
-
-    - name: Install dependencies
-      run: yarn --frozen-lockfile
-
-    - name: Build
-      run: yarn build
-
-    - name: Run tests
-      run: yarn test
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+    needs: prepare
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
+    with:
+      run-scripts: "install-deps, nx-build-test-skip-cache"
+      node-version: "16.20.0"

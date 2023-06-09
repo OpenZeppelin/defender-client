@@ -1,6 +1,6 @@
 {
-  "name": "defender-kvstore-client",
-  "version": "1.44.0-rc.1",
+  "name": "@openzeppelin/defender-kvstore-client",
+  "version": "1.45.0-rc.1",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -21,14 +21,17 @@
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
+    "@openzeppelin/defender-base-client": "1.45.0-rc.1",
     "axios": "^0.21.2",
-    "defender-base-client": "1.44.0-rc.1",
     "fs-extra": "^10.0.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.11"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e"
 }

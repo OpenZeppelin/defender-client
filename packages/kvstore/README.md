@@ -31,10 +31,10 @@ exports.handler = async function(event) {
 
   // Associates myValue to myKey
   await store.put('myKey', 'myValue');
-  
+
   // Returns myValue associated to myKey
   const value = await store.get('myKey');
-  
+
   // Deletes the entry for myKey
   await store.del('myKey');
 }
@@ -58,7 +58,7 @@ async function local() {
 
 ## Considerations
 
-- All data in the key-value store is persisted as strings, both keys and values. 
+- All data in the key-value store is persisted as strings, both keys and values.
 - Keys are limited to 1kb in size, and values to 300kb.
 - The data store is shared across all your Autotasks; consider prefixing the keys with a namespace if you want to have different data buckets.
 - A key-value entry is expired after 90 days of the last time it was `put` into the store.
