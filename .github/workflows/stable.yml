@@ -69,7 +69,6 @@ jobs:
   publish:
     name: Publish
     needs: [tag, create-release]
-    runs-on: ubuntu-22.04
     uses: ./.github/workflows/publish.yml
     with:
       tag: ${{ needs.tag.outputs.next_stable_version }}
