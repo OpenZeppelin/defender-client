@@ -7,6 +7,14 @@ on:
         required: true
         description: Tag to publish, pattern is v1.x.x
         type: string
+  # create workflow_call event for the workflow_dispatch event
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        description: Tag to publish, pattern is v1.x.x
+        type: string
+
 
 # Declare default permissions as read only.
 permissions: read-all
