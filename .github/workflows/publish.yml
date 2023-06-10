@@ -49,8 +49,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
         with:
-          fetch-depth: 0
-          ref: refs/tag/${{ inputs.tag }}
+          ref: refs/tags/${{ inputs.tag }}
 
       - name: Use node@16
         uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
