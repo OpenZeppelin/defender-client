@@ -8,3 +8,4 @@ lib
 coverage
 .env
 .vscode
+.DS_Store
