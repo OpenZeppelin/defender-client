@@ -1,38 +1,29 @@
 name: publish
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        required: true
-        description: Tag to publish, pattern is v1.x.x
-        type: string
-  # create workflow_call event for the workflow_dispatch event
-  workflow_call:
-    inputs:
-      tag:
-        required: true
-        description: Tag to publish, pattern is v1.x.x
-        type: string
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch: {}
 
 
 # Declare default permissions as read only.
 permissions: read-all
 
 jobs:
-
   provenance:
     permissions:
       id-token: write
       contents: read
       actions: read
-    if: startsWith(github.ref, 'refs/tags/')
+    if: |
+      (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags/v')) ||
+      (startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-rc.'))
     # Deterministic Build & tests
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
       run-scripts: "install-deps, nx-build-test-skip-cache, skip-lib-ignore"
       node-version: "16.20.0"
-
 
   publish:
     needs: provenance
@@ -46,12 +37,6 @@ jobs:
         uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
         with:
           egress-policy: audit
-
-      - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-        with:
-          fetch-depth: 0
-          ref: refs/tag/${{ inputs.tag }}
 
       - name: Use node@16
         uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
@@ -81,7 +66,10 @@ jobs:
           sha256: ${{ needs.provenance.outputs.provenance-download-sha256 }}
 
       - name: Authenticate NPM
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          echo "@openzeppelin:registry https://registry.npmjs.org" >> ~/.npmrc
+          echo "provenance=true" >> ~/.npmrc
 
       - name: Unpack the zipped artifact
         run: |
@@ -89,12 +77,13 @@ jobs:
 
           cd "${{ steps.temp-dir.outputs.path }}"
           tar -xzvf "${{ needs.provenance.outputs.package-name }}"
-          cd package/
-          TAG_VERSION=${{ inputs.tag }}
-          if [[ ${TAG_VERSION} != *rc* ]]; then
-            yarn publish-stable ${TAG_VERSION}
+          cd package/; git init
+          tag_ref=${{ github.ref }}
+          tag_version=${tag_ref#refs/tags/}
+          if [[ $tag_version != *rc* ]]; then
+            yarn publish-stable $tag_version
           else
-            yarn publish-rc ${TAG_VERSION}
+            yarn publish-rc $tag_version
           fi
         env:
           NPM_CONFIG_PROVENANCE: true

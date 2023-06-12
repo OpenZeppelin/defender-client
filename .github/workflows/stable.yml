@@ -68,24 +68,3 @@ jobs:
     with:
       tag: ${{ needs.tag.outputs.next_stable_version }}
       prerelease: false
-
-  publish:
-    name: Publish
-    needs: [tag, create-release]
-    permissions:
-      contents: write
-      checks: write
-      id-token: write
-      actions: read
-      deployments: read
-      discussions: read
-      issues: read
-      packages: read
-      pages: read
-      pull-requests: read
-      repository-projects: read
-      statuses: read
-      security-events: read
-    uses: ./.github/workflows/publish.yml
-    with:
-      tag: ${{ needs.tag.outputs.next_stable_version }}
