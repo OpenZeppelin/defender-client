@@ -1,4 +1,4 @@
-import { BaseApiClient, Network } from 'defender-base-client';
+import { BaseApiClient } from '@openzeppelin/defender-base-client';
 import { capitalize, isArray, isEmpty } from 'lodash';
 import { Interface } from 'ethers/lib/utils';
 

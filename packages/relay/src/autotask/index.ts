@@ -11,7 +11,7 @@ import {
   SignMessagePayload,
 } from '../relayer';
 
-import { BaseAutotaskClient } from 'defender-base-client/lib/autotask';
+import { BaseAutotaskClient } from '@openzeppelin/defender-base-client/lib/autotask';
 import { SignTypedDataPayload } from '..';
 
 export type SendTxRequest = {

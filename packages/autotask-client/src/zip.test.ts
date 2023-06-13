@@ -1,7 +1,6 @@
 import JSZip from 'jszip';
 import { zipFolder, zipSources } from './zip';
 import { resolve } from 'path';
-import os from 'os';
 
 describe('zip', () => {
   describe('zipSources', () => {

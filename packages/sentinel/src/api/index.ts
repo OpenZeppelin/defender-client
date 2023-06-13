@@ -1,4 +1,4 @@
-import { BaseApiClient, Network } from 'defender-base-client';
+import { BaseApiClient, Network } from '@openzeppelin/defender-base-client';
 import {
   ConditionSet,
   CreateSubscriberRequest,

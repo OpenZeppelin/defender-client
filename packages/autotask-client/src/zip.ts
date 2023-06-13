@@ -1,4 +1,4 @@
-import JSZip, { folder } from 'jszip';
+import JSZip from 'jszip';
 import glob from 'glob';
 import { promisify } from 'util';
 import { readFile } from 'fs';

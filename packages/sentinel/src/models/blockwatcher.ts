@@ -1,4 +1,4 @@
-import { Network } from 'defender-base-client';
+import { Network } from '@openzeppelin/defender-base-client';
 import { SentinelConfirmation } from './subscriber';
 export interface BlockWatcherOptions {
   processBlockAttempts?: number;

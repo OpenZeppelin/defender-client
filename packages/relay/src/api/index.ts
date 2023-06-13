@@ -1,4 +1,4 @@
-import { BaseApiClient } from 'defender-base-client';
+import { BaseApiClient } from '@openzeppelin/defender-base-client';
 import {
   ApiRelayerParams,
   IRelayer,

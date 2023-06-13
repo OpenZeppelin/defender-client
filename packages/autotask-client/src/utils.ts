@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { existsSync } from 'fs';
 import { AutotaskClient } from './api';
 import {

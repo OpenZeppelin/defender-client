@@ -1,4 +1,4 @@
-import { Network } from 'defender-base-client';
+import { Network } from '@openzeppelin/defender-base-client';
 
 // Copied from openzeppelin/defender/models/src/types/proposal-api.req.d.ts
 export type Hex = string;

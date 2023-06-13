@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import { Network } from 'defender-base-client';
+import { Network } from '@openzeppelin/defender-base-client';
 import { PlatformApiClient } from './platform';
 import { ApprovalProcessResponse, DeployContractRequest, DeploymentResponse } from '../models';
 

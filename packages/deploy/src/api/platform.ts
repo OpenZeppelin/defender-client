@@ -1,4 +1,4 @@
-import { BaseApiClient } from 'defender-base-client';
+import { BaseApiClient } from '@openzeppelin/defender-base-client';
 
 export class PlatformApiClient extends BaseApiClient {
   protected getPoolId(): string {
