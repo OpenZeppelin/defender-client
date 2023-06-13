@@ -25,7 +25,6 @@ import { BlockWatcher } from '../models/blockwatcher';
 import _ from 'lodash';
 import getConditionSets, { getSentinelConditions } from '../utils';
 import {
-  CreateNotificationCategoryRequest,
   NotificationCategory as NotificationCategoryResponse,
   UpdateNotificationCategoryRequest,
 } from '../models/category';
