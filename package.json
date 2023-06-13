@@ -42,9 +42,7 @@
     "versionup:rcminor": "lerna version --preid=rc --no-git-tag-version --yes --exact --no-changelog",
     "versionup:preminor": "yarn versionup:rcminor preminor",
     "versionup:prerelease": "yarn versionup:rcminor prerelease",
-    "versionup:stableminor": "lerna version minor --conventional-graduate --no-git-tag-version --yes --exact --no-changelog",
-    "publish-rc": "yarn run publish-stable --dist-tag rc --pre-dist-tag rc",
-    "publish-stable": "lerna publish --no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
+    "versionup:stableminor": "lerna version minor --conventional-graduate --no-git-tag-version --yes --exact --no-changelog"
   },
   "repository": {
     "type": "git",
