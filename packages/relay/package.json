@@ -5,7 +5,8 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf lib && tsc",
+    "build-deps": "nx run @openzeppelin/defender-base-client:build",
+    "build": "rm -rf lib && yarn build-deps && tsc",
     "test": "yarn test:unit",
     "test:unit": "jest --verbose",
     "watch": "tsc -w",
