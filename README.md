@@ -6,6 +6,7 @@
 [![Stable Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/stable.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml)
 [![RC Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/rc.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml)
 [![CI](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml)
+[![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
 
 Monorepo that contains Defender typescript clients. Check out the individual packages for more info:
 
@@ -110,3 +111,9 @@ DEFENDER_SENTINEL_POOL_CLIENT_ID=
 ### Determinstic Builds & Secure Publishes
 
 - We use [slsa framework](https://slsa.dev/) _pronounced "salsa"_ for reproducible builds & secure pushes. Verification is done using [provenance](https://slsa.dev/provenance/v1)
+
+---
+
+### Known Issues [Resolution in progress]
+
+- `lerna publish` with github actions fails due to npm permission issues due to using 2fa. Currently we use `NPM_TOKEN` in github actions which throws forbidden error. To overcome we use 2fa from local machine to publish the packages.
