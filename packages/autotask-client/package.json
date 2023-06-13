@@ -8,8 +8,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build-deps": "nx run @openzeppelin/defender-base-client:build",
-    "build": "rm -rf lib && yarn build-deps && tsc && chmod a+x ./lib/bin.js",
+    "build": "rm -rf lib && tsc && chmod a+x ./lib/bin.js",
     "test": "yarn test:unit",
     "test:unit": "jest --verbose --passWithNoTests",
     "watch": "tsc -w",
