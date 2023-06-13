@@ -110,3 +110,9 @@ DEFENDER_SENTINEL_POOL_CLIENT_ID=
 ### Determinstic Builds & Secure Publishes
 
 - We use [slsa framework](https://slsa.dev/) _pronounced "salsa"_ for reproducible builds & secure pushes. Verification is done using [provenance](https://slsa.dev/provenance/v1)
+
+---
+
+### Known Issues [Resolution in progress]
+
+- `lerna publish` with github actions fails due to npm permission issues due to using 2fa. Currently we use `NPM_TOKEN` in github actions which throws forbidden error. To overcome we use 2fa from local machine to publish the packages.
