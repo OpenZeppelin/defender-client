@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { AdminClient } = require('defender-admin-client');
+const { AdminClient } = require('@openzeppelin/defender-admin-client');
 
 const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };
 const client = new AdminClient(creds);

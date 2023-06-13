@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { AdminClient } = require('defender-admin-client');
+const { AdminClient } = require('@openzeppelin/defender-admin-client');
 
 const address = '0xB07b1C80371915dEFd254d1C57BeF2bDe6D3b610';
 const network = 'goerli';

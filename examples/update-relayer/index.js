@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { RelayClient } = require('defender-relay-client');
+const { RelayClient } = require('@openzeppelin/defender-relay-client');
 
 async function main() {
   const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };

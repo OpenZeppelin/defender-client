@@ -1,5 +1,5 @@
 const { ethers } = require('ethers');
-const { DefenderRelaySigner } = require('defender-relay-client/lib/ethers');
+const { DefenderRelaySigner } = require('@openzeppelin/defender-relay-client/lib/ethers');
 
 // ABIs for jobs and registry (contain only the methods needed, not the full ABIs of the contracts)
 const ABIs = {

@@ -13,11 +13,11 @@ defender-autotask update-code 19ef0257-bba4-4723-a18f-67d96726213e ./lib/my-auto
 ## Install
 
 ```bash
-npm install defender-autotask-client
+npm install @openzeppelin/defender-autotask-client
 ```
 
 ```bash
-yarn add defender-autotask-client
+yarn add @openzeppelin/defender-autotask-client
 ```
 
 ## Usage
@@ -53,7 +53,7 @@ Beware that the `defender-autotask` CLI will automatically load environment vari
 Use the Team API key to initialize an instance of the Defender Autotask client:
 
 ```js
-const { AutotaskClient } = require('defender-autotask-client');
+const { AutotaskClient } = require('@openzeppelin/defender-autotask-client');
 const client = new AutotaskClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 

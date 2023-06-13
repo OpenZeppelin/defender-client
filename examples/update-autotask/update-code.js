@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { AutotaskClient } = require('defender-autotask-client');
+const { AutotaskClient } = require('@openzeppelin/defender-autotask-client');
 
 async function main() {
   // Gather autotaskId and api key

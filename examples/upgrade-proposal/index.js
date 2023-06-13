@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { AdminClient } = require('defender-admin-client');
+const { AdminClient } = require('@openzeppelin/defender-admin-client');
 
 const proxy = '0xB07b1C80371915dEFd254d1C57BeF2bDe6D3b610';
 const newImplementation = '0x86690db6c757fcc71ff1b69cf24529e5ab6481fb';

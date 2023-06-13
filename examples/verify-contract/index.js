@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { AdminClient } = require('defender-admin-client');
+const { AdminClient } = require('@openzeppelin/defender-admin-client');
 
 function printVerificationToConsole(verification) {
   if (verification) {

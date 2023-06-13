@@ -11,11 +11,11 @@ _Note that this package will not work outisde the Autotasks environment._
 This package is included in the Autotask runtime environment, so you do not need to bundle it in your code. To install it for local development and typescript type completion, run:
 
 ```bash
-npm install defender-kvstore-client
+npm install @openzeppelin/defender-kvstore-client
 ```
 
 ```bash
-yarn add defender-kvstore-client
+yarn add @openzeppelin/defender-kvstore-client
 ```
 
 ## Usage
@@ -23,9 +23,9 @@ yarn add defender-kvstore-client
 You can interact with your key-value store through an instance of the `KeyValueStoreClient`, which is initialized with the payload injected in the your Autotask `handler` function. Once initialized, you can `get`, `put`, or `del` key-value pairs from the store.
 
 ```js
-const { KeyValueStoreClient } = require('defender-kvstore-client');
+const { KeyValueStoreClient } = require('@openzeppelin/defender-kvstore-client');
 
-exports.handler = async function(event) {
+exports.handler = async function (event) {
   // Creates an instance of the key-value store client
   const store = new KeyValueStoreClient(event);
 
@@ -37,7 +37,7 @@ exports.handler = async function(event) {
 
   // Deletes the entry for myKey
   await store.del('myKey');
-}
+};
 ```
 
 ## Local development
@@ -45,7 +45,7 @@ exports.handler = async function(event) {
 The Defender key-value store is only accessible from within an Autotask. To simplify local development, you can create an instance of a `KeyValueStoreClient` providing an object with a `path` property. The client will use a local json file at that path for all operations.
 
 ```js
-const { KeyValueStoreClient } = require('defender-kvstore-client');
+const { KeyValueStoreClient } = require('@openzeppelin/defender-kvstore-client');
 
 async function local() {
   // Creates an instance of the client that will write to a local file

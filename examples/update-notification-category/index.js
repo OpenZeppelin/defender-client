@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv').config();
 
-const { SentinelClient } = require('defender-sentinel-client');
+const { SentinelClient } = require('@openzeppelin/defender-sentinel-client');
 
 async function main() {
   const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };

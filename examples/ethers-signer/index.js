@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { DefenderRelaySigner, DefenderRelayProvider } = require('defender-relay-client/lib/ethers');
+const { DefenderRelaySigner, DefenderRelayProvider } = require('@openzeppelin/defender-relay-client/lib/ethers');
 const { ethers } = require('ethers');
 const ERC20Abi = require('./erc20.json');
 const ERC20Bytecode = require('./bytecode.json')[0].data.bytecode.object;

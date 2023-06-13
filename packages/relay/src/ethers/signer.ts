@@ -12,7 +12,7 @@ import { Relayer, Speed, RelayerParams, isRelayer, isEIP1559Tx, isLegacyTx } fro
 import { Transaction } from '@ethersproject/transactions';
 import { omit } from 'lodash';
 
-const logger = new Logger(`defender-relay-client`);
+const logger = new Logger(`@openzeppelin/defender-relay-client`);
 
 const allowedTransactionKeys: Array<string> = [
   'chainId',

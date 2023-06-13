@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { AdminClient } = require('defender-admin-client');
+const { AdminClient } = require('@openzeppelin/defender-admin-client');
 const { utils } = require('ethers');
 
 const contractABI = require('./abi/demoflash.json');
