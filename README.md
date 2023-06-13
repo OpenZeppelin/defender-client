@@ -6,6 +6,7 @@
 [![Stable Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/stable.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml)
 [![RC Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/rc.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml)
 [![CI](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml)
+[![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
 
 Monorepo that contains Defender typescript clients. Check out the individual packages for more info:
 
