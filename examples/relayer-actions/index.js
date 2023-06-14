@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { Relayer, VERSION } = require('defender-relay-client');
+const { Relayer, VERSION } = require('@openzeppelin/defender-relay-client');
 
 const params = { apiKey: process.env.API_KEY, apiSecret: process.env.API_SECRET };
 const relayer = new Relayer(params);

@@ -1,12 +1,12 @@
 import { AxiosInstance } from 'axios';
 import { ApiRelayer } from '../api';
 
-jest.mock('defender-base-client');
+jest.mock('@openzeppelin/defender-base-client');
 jest.mock('aws-sdk');
 jest.mock('axios');
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { createAuthenticatedApi } = require('defender-base-client');
+const { createAuthenticatedApi } = require('@openzeppelin/defender-base-client');
 
 type TestApiRelayer = Omit<ApiRelayer, 'api'> & {
   api: AxiosInstance;

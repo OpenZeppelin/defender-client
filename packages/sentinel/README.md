@@ -7,11 +7,11 @@ Further information can be found on the OpenZeppelin documentation page: https:/
 ## Install
 
 ```bash
-npm install defender-sentinel-client
+npm install @openzeppelin/defender-sentinel-client
 ```
 
 ```bash
-yarn add defender-sentinel-client
+yarn add @openzeppelin/defender-sentinel-client
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ yarn add defender-sentinel-client
 Start by creating a new _Team API Key_ in Defender, and granting it the capability to manage sentinels. Use the newly created API key to initialize an instance of the Sentinel client.
 
 ```js
-const { SentinelClient } = require('defender-sentinel-client');
+const { SentinelClient } = require('@openzeppelin/defender-sentinel-client');
 const client = new SentinelClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 

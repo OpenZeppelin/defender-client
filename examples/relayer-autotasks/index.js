@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { Relayer } = require('defender-relay-client');
+const { Relayer } = require('@openzeppelin/defender-relay-client');
 
 // Allows to invoke a relayer method using an access key, a secret, session token, and ARN.
 // You have to provide these values to make it work. Keep in mind sessions expire in 900 seconds.

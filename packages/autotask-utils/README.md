@@ -9,11 +9,11 @@ _Note: For programmatically interacting with your Autotasks, such as updating th
 ## Install
 
 ```bash
-npm install defender-autotask-utils
+npm install @openzeppelin/defender-autotask-utils
 ```
 
 ```bash
-yarn add defender-autotask-utils
+yarn add @openzeppelin/defender-autotask-utils
 ```
 
 ## Typings
@@ -39,7 +39,7 @@ import {
   FortaTriggerEvent,
   isTxAlert,
   isBlockAlert,
-} from 'defender-autotask-utils';
+} from '@openzeppelin/defender-autotask-utils';
 
 export async function handler(event: AutotaskEvent) {
   const payload = event.request.body as SentinelTriggerEvent;
@@ -84,7 +84,7 @@ import {
   SubscriberType,
   isTxAlert,
   isBlockAlert,
-} from 'defender-autotask-utils';
+} from '@openzeppelin/defender-autotask-utils';
 
 export async function handler(event: AutotaskEvent): Promise<SentinelConditionResponse> {
   const { events } = event.request.body as SentinelConditionRequest;

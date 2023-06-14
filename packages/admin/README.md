@@ -7,11 +7,11 @@ To interact with your contracts, you create _proposals_ that need to be reviewed
 ## Install
 
 ```bash
-npm install defender-admin-client
+npm install @openzeppelin/defender-admin-client
 ```
 
 ```bash
-yarn add defender-admin-client
+yarn add @openzeppelin/defender-admin-client
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ yarn add defender-admin-client
 Start by creating a new _Team API Key_ in Defender, and granting it the capability to create new proposals. Use the newly created API key to initialize an instance of the Admin client.
 
 ```js
-const { AdminClient } = require('defender-admin-client');
+const { AdminClient } = require('@openzeppelin/defender-admin-client');
 const client = new AdminClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 

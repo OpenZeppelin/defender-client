@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { DefenderRelayProvider, DefenderRelaySenderProvider } = require('defender-relay-client/lib/web3');
+const { DefenderRelayProvider } = require('@openzeppelin/defender-relay-client/lib/web3');
 const Web3 = require('web3');
 const ERC20Abi = require('./erc20.json');
 const ERC20Bytecode = require('./bytecode.json')[0].data.bytecode.object;

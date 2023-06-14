@@ -15,11 +15,11 @@ There are 2 modules included in this package:
 ## Install
 
 ```bash
-npm install defender-relay-client
+npm install @openzeppelin/defender-relay-client
 ```
 
 ```bash
-yarn add defender-relay-client
+yarn add @openzeppelin/defender-relay-client
 ```
 
 ## Relay Client
@@ -31,7 +31,7 @@ Defender Relay Client enables creating, reading, and updating relayers and their
 To get started, instantiate `RelayClient`:
 
 ```js
-import { RelayClient } from 'defender-relay-client';
+import { RelayClient } from '@openzeppelin/defender-relay-client';
 const relayClient = new RelayClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
@@ -105,7 +105,7 @@ This library also includes an [ethers.js](https://docs.ethers.io/v5/) signer and
 Start by creating a new relayer using either the Defender console or API for a network of your choice. Write down the API key and secret. Then use them to create a new `Relayer` instance in your code:
 
 ```js
-import { Relayer } from 'defender-relay-client';
+import { Relayer } from '@openzeppelin/defender-relay-client';
 const relayer = new Relayer({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
@@ -251,7 +251,7 @@ You can use the `defender-relay-client` with [ethers.js v5](https://github.com/e
 Make sure to have `ethers` installed in your project, and initialize a new defender signer instance like:
 
 ```js
-const { DefenderRelayProvider, DefenderRelaySigner } = require('defender-relay-client/lib/ethers');
+const { DefenderRelayProvider, DefenderRelaySigner } = require('@openzeppelin/defender-relay-client/lib/ethers');
 const { ethers } = require('ethers');
 
 const credentials = { apiKey: API_KEY, apiSecret: API_SECRET };
@@ -291,7 +291,7 @@ The current implementation of the `DefenderRelaySigner` for ethers.js has the fo
 You can also use the `defender-relay-client` with [web3.js](https://web3js.readthedocs.io/) via a `DefenderRelayProvider` which routes all JSON RPC calls through Defender, and uses a Relayer for signing and broadcasting transactions.
 
 ```js
-const { DefenderRelayProvider } = require('defender-relay-client/lib/web3');
+const { DefenderRelayProvider } = require('@openzeppelin/defender-relay-client/lib/web3');
 const Web3 = require('web3');
 
 const credentials = { apiKey: API_KEY, apiSecret: API_SECRET };
@@ -322,7 +322,7 @@ Note that these web3.js providers currently have the same limitations as the eth
 [Defender Autotasks](https://docs.openzeppelin.com/defender/autotasks) natively support integration with Defender Relay, allowing to send transactions without providing API keys. In your autotask's code, just `require('defender-relay-client')` and construct a new relayer instance using the `credentials` object injected by the autotask. This will give you a relayer object already configured.
 
 ```js
-const { Relayer } = require('defender-relay-client');
+const { Relayer } = require('@openzeppelin/defender-relay-client');
 
 exports.handler = async function (event) {
   const relayer = new Relayer(event);

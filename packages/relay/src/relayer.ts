@@ -1,4 +1,4 @@
-import { Network } from 'defender-base-client';
+import { Network } from '@openzeppelin/defender-base-client';
 import https from 'https';
 import { ApiRelayer } from './api';
 export type Address = string;

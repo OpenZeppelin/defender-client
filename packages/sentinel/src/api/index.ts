@@ -1,4 +1,4 @@
-import { BaseApiClient, Network } from 'defender-base-client';
+import { BaseApiClient, Network } from '@openzeppelin/defender-base-client';
 import {
   ConditionSet,
   CreateSubscriberRequest,
@@ -25,7 +25,6 @@ import { BlockWatcher } from '../models/blockwatcher';
 import _ from 'lodash';
 import getConditionSets, { getSentinelConditions } from '../utils';
 import {
-  CreateNotificationCategoryRequest,
   NotificationCategory as NotificationCategoryResponse,
   UpdateNotificationCategoryRequest,
 } from '../models/category';

@@ -1,4 +1,4 @@
-import { BaseAutotaskClient } from 'defender-base-client/lib/autotask';
+import { BaseAutotaskClient } from '@openzeppelin/defender-base-client/lib/autotask';
 import { IKeyValueStoreClient, KeyValueStoreCreateParams, KeyValueStoreRequest } from './types';
 
 export class KeyValueStoreAutotaskClient extends BaseAutotaskClient implements IKeyValueStoreClient {
