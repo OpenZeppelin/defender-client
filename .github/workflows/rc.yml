@@ -1,8 +1,8 @@
-name: tag-release-candidate
+name: tag-rc
 on:
   push:
     branches:
-      - fix-rc-workflow-2
+      - master
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -20,7 +20,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Install yq
         run: |
@@ -47,7 +47,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Prepare pre-requisites
         uses: ./.github/actions/prepare
@@ -61,7 +61,7 @@ jobs:
     needs: prepare
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
     with:
-      run-scripts: "install-deps, nx-build-skip-cache, test"
+      run-scripts: "install-deps, nx-build-test-skip-cache"
       node-version: "16.20.0"
 
   # Git tag the commit for publishing
@@ -75,6 +75,7 @@ jobs:
     needs: provenance
     outputs:
       next_rc_version: ${{ steps.update_version.outputs.next_rc_version }}
+      changed_packages: ${{ steps.tag_check_changes.outputs.changed_packages }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
@@ -82,7 +83,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           token: ${{ secrets.SAI_PAT }}
 
@@ -101,11 +102,14 @@ jobs:
       - name: Get latest git tag and verify package changes
         id: tag_check_changes
         run: |
-          echo 'latest_tag=$(git describe --tags --abbrev=0 --match "v*")' >> $GITHUB_OUTPUT
-          echo 'changed_packages=$(lerna changed --json)' >> $GITHUB_OUTPUT
+          git fetch --prune --unshallow --tags
+          latest_tag=$(git describe --tags --abbrev=0 --match "v*")
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          changed_packages=$(lerna changed --json | jq -r 'length')
+          echo "changed_packages=${changed_packages:-0}" >> $GITHUB_OUTPUT
 
       - name: Update RC candidate version ( excluding deploy client )
-        if: ${{ steps.tag_check_changes.outputs.changed_packages != '[]' }}
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           if [[ ${{ steps.tag_check_changes.outputs.latest_tag }} != *"rc"* ]]; then
             yarn versionup:preminor && ./hack/cross-dependency.sh
@@ -114,6 +118,7 @@ jobs:
           fi
 
       - name: Commit changes
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         id: update_version
         run: |
           TAG_NAME=$(node -p "require('./lerna.json').version")
@@ -122,6 +127,7 @@ jobs:
           echo "next_rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Create Tag
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "${{ steps.update_version.outputs.next_rc_version }}"
           git push origin ${{ steps.update_version.outputs.next_rc_version }}
@@ -132,6 +138,7 @@ jobs:
       contents: write
     name: Create Release
     needs: tag
+    if: needs.tag.outputs.changed_packages > 0
     uses: ./.github/workflows/release.yml
     with:
       tag: ${{ needs.tag.outputs.next_rc_version }}

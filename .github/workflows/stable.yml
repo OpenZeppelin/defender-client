@@ -21,9 +21,10 @@ jobs:
           egress-policy: audit
 
       - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           ref: master
+          token: ${{ secrets.SAI_PAT }}
 
       - name: Use node@16
         uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
@@ -61,79 +62,9 @@ jobs:
   create-release:
     name: Create Release
     needs: tag
+    permissions:
+      contents: write
     uses: ./.github/workflows/release.yml
     with:
       tag: ${{ needs.tag.outputs.next_stable_version }}
       prerelease: false
-
-  provenance:
-    permissions:
-      contents: read
-      id-token: write
-      actions: read
-
-    # Deterministic Build & tests
-    needs: [tag, create-release]
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
-    with:
-      run-scripts: "install-deps, nx-build-skip-cache, test"
-      node-version: "16.20.0"
-
-  publish:
-    name: Publish
-    needs: provenance
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: write
-      id-token: write
-      actions: read
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
-        with:
-          egress-policy: audit
-
-      - name: Checkout Repo
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-        with:
-          ref: refs/tags/${{ needs.tag.outputs.next_stable_version }}
-
-      - name: Use node@16
-        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
-        with:
-          node-version: 16.20.0
-
-      - name: Create temp dir
-        id: temp-dir
-        run: |
-          set -euo pipefail
-
-          temp_dir=$(mktemp -d)
-          echo "path=${temp_dir}" >>"${GITHUB_OUTPUT}"
-
-      - name: Download tarball
-        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@934435652996c02a6317092984312602dfaf2a21 # main
-        with:
-          name: ${{ needs.provenance.outputs.package-download-name }}
-          path: "${{ steps.temp-dir.outputs.path }}/${{ needs.provenance.outputs.package-name }}"
-          sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
-
-      - name: Download provenance
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@0779f7bec68e2bf54a7b0a32bf4763f25ab29702 # v1.6.0
-        with:
-          name: ${{ needs.provenance.outputs.provenance-download-name }}
-          path: "${{ steps.temp-dir.outputs.path }}"
-          sha256: ${{ needs.provenance.outputs.provenance-download-sha256 }}
-
-      - name: Authenticate NPM
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-
-      - name: Unpack the zipped artifact
-        run: |
-          set -euo pipefail
-
-          cd "${{ steps.temp-dir.outputs.path }}"
-          tar -xzvf "${{ needs.provenance.outputs.package-name }}"
-          cd package/; yarn publish-stable
-        env:
-          NPM_CONFIG_PROVENANCE: true

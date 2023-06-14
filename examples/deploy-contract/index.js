@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { PlatformClient } = require('@openzeppelin/platform-deploy-client');
+const { PlatformClient } = require('platform-deploy-client');
 
 const artifactFile = require('./artifacts/Box.json');
 
