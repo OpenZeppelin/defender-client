@@ -8,5 +8,15 @@
       }
     }
   },
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
+    }
+  }
 }

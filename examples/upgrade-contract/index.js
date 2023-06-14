@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { PlatformClient } = require('platform-deploy-client');
+const { PlatformClient } = require('@openzeppelin/platform-deploy-client');
 
 const boxAbiFile = require('./abis/Box.json');
 // const tokenAbiFile = require('./abis/Box.json');
