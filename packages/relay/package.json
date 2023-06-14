@@ -33,7 +33,7 @@
   "dependencies": {
     "@openzeppelin/defender-base-client": "1.46.0",
     "amazon-cognito-identity-js": "^6.0.1",
-    "axios": "^0.21.2",
+    "axios": "^0.27.2",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },
