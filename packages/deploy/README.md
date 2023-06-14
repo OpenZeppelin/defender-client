@@ -5,11 +5,11 @@ Platform Deployment Client allows you to deploy contracts through the OpenZeppel
 ## Install
 
 ```bash
-npm install platform-deploy-client
+npm install @openzeppelin/platform-deploy-client
 ```
 
 ```bash
-yarn add platform-deploy-client
+yarn add @openzeppelin/platform-deploy-client
 ```
 
 ## Usage
@@ -19,19 +19,19 @@ Start by creating a new _Team API Key_ in Defender, and granting it the capabili
 You can create instances of the clients using the `PlatformClient` helper function which returns an object with the 4 clients `DeploymentClient`, `DeploymentConfigClient`, `UpgradeClient`, and `BlockExplorerApiKeyClient`.
 
 ```js
-const { PlatformClient } = require('platform-deploy-client');
+const { PlatformClient } = require('@openzeppelin/platform-deploy-client');
 const client = PlatformClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
 Alternatively you can instantiate whichever client you need individually
 
 ```js
-const { DeploymentClient } = require('platform-deploy-client');
+const { DeploymentClient } = require('@openzeppelin/platform-deploy-client');
 const client = new DeploymentClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 
 ```js
-const { UpgradeClient } = require('platform-deploy-client');
+const { UpgradeClient } = require('@openzeppelin/platform-deploy-client');
 const client = new UpgradeClient({ apiKey: API_KEY, apiSecret: API_SECRET });
 ```
 

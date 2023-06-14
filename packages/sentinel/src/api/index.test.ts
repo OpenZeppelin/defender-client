@@ -124,7 +124,8 @@ describe('SentinelClient', () => {
   };
 
   beforeEach(() => {
-    sentinel = new SentinelClient({ apiKey: 'key', apiSecret: 'secret' }) as unknown as TestSentinelClient;
+    const sentinel = new SentinelClient({ apiKey: 'key', apiSecret: 'secret' }) as unknown as TestSentinelClient;
+    console.log('sentinel', sentinel);
     createAuthenticatedApi.mockClear();
     listBlockwatchersSpy = jest.spyOn(sentinel, 'listBlockwatchers').mockImplementation(async () => [
       {
