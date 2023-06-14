@@ -15,6 +15,10 @@
         {
           "target": "build",
           "projects": "dependencies"
+        },
+        {
+          "target": "test",
+          "projects": "dependencies"
         }
       ]
     }
