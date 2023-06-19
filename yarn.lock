@@ -1476,6 +1476,17 @@
   dependencies:
     "@octokit/openapi-types" "^17.0.0"
 
+"@openzeppelin/platform-deploy-client@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/platform-deploy-client/-/platform-deploy-client-0.7.0.tgz#e74eb6baa4b098ce8c1e15a6f1bfd9789edd6c08"
+  integrity sha512-3M8IaDuWUQ8n/Z8InI4pxGdc0G9zInZLSyH1zAvJyJ1JvR/IltXB5qG6pfWlqTFzuT/75W4pMdmu8zo71Dct6w==
+  dependencies:
+    "@ethersproject/abi" "^5.6.3"
+    "@openzeppelin/defender-base-client" "^1.45.0"
+    axios "^0.21.2"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
 "@parcel/watcher@2.0.4":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@parcel/watcher/-/watcher-2.0.4.tgz#f300fef4cc38008ff4b8c29d92588eced3ce014b"
@@ -1672,9 +1683,9 @@
     "@types/node" "*"
 
 "@types/lodash@^4.14.157":
-  version "4.14.182"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.182.tgz#05301a4d5e62963227eaafe0ce04dd77c54ea5c2"
-  integrity sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==
+  version "4.14.195"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.195.tgz#bafc975b252eb6cea78882ce8a7b6bf22a6de632"
+  integrity sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==
 
 "@types/minimatch@^3.0.3":
   version "3.0.5"
