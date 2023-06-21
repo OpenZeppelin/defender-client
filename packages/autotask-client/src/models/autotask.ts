@@ -3,7 +3,7 @@ export interface CreateAutotaskRequest {
   encodedZippedCode: string;
   relayerId?: string;
   trigger: {
-    type: 'schedule' | 'webhook' | 'sentinel' | 'monitor-filter';
+    type: 'schedule' | 'webhook' | 'sentinel' | 'monitor-filter' | 'scenario';
     frequencyMinutes?: number;
     cron?: string;
   };
@@ -36,11 +36,15 @@ export interface MonitorFilterTrigger {
   type: 'monitor-filter';
 }
 
+export type ScenarioTrigger = {
+  type: 'scenario';
+};
+
 export interface Autotask
   extends Pick<CreateAutotaskRequest, 'name' | 'relayerId' | 'paused' | 'stackResourceId' | 'dependenciesVersion'> {
   autotaskId: string;
   encodedZippedCode?: string;
-  trigger: ScheduleTrigger | WebhookTrigger | SentinelTrigger | MonitorFilterTrigger;
+  trigger: ScheduleTrigger | WebhookTrigger | SentinelTrigger | MonitorFilterTrigger | ScenarioTrigger;
   createdAt?: string;
   codeDigest?: string;
 }
