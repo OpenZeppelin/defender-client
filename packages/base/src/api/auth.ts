@@ -21,8 +21,8 @@ export async function authenticate(authenticationData: UserPass, poolData: PoolD
 
   try {
     return retry(() => doAuthenticate(cognitoUser, authenticationDetails), { retries: 3 });
-  } catch (err) {
-    throw new Error(`Failed to get a token for the API key ${authenticationData.Username}: ${err.message || err}`);
+  } catch (err: any) {
+    throw new Error(`Failed to authenticate the API key ${authenticationData.Username}: ${err.message || err}`);
   }
 }
 
@@ -52,7 +52,7 @@ export async function refreshSession(
   const cognitoUser = new CognitoUser(userData);
   try {
     return retry(() => doRefreshSession(cognitoUser, session), { retries: 3 });
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(`Failed to refresh token for the API key ${authenticationData.Username}: ${err.message || err}`);
   }
 }

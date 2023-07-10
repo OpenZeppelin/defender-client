@@ -27,7 +27,7 @@
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "@openzeppelin/defender-base-client": "1.46.0",
+    "@openzeppelin/defender-base-client": "1.47.0-rc.0",
     "axios": "^0.21.2",
     "dotenv": "^10.0.0",
     "glob": "^7.1.6",

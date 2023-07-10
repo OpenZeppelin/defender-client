@@ -17,17 +17,8 @@
       },
       "outputSelection": {
         "*": {
-          "*": [
-            "abi",
-            "evm.bytecode",
-            "evm.deployedBytecode",
-            "evm.methodIdentifiers",
-            "metadata",
-            "storageLayout"
-          ],
-          "": [
-            "ast"
-          ]
+          "*": ["abi", "evm.bytecode", "evm.deployedBytecode", "evm.methodIdentifiers", "metadata", "storageLayout"],
+          "": ["ast"]
         }
       }
     }
@@ -401,9 +392,7 @@
         "ast": {
           "absolutePath": "contracts/Box.sol",
           "exportedSymbols": {
-            "Box": [
-              30
-            ]
+            "Box": [30]
           },
           "id": 31,
           "license": "MIT",
@@ -411,12 +400,7 @@
           "nodes": [
             {
               "id": 1,
-              "literals": [
-                "solidity",
-                "^",
-                "0.8",
-                ".0"
-              ],
+              "literals": ["solidity", "^", "0.8", ".0"],
               "nodeType": "PragmaDirective",
               "src": "53:23:0"
             },
@@ -428,9 +412,7 @@
               "contractKind": "contract",
               "fullyImplemented": true,
               "id": 30,
-              "linearizedBaseContracts": [
-                30
-              ],
+              "linearizedBaseContracts": [30],
               "name": "Box",
               "nameLocation": "87:3:0",
               "nodeType": "ContractDefinition",
