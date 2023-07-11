@@ -52,6 +52,8 @@ export async function tailLogsFor(client: AutotaskClient, autotaskId: string) {
       // If cached last run id has changed
       if (newRuns.items[0]?.autotaskRunId !== lastRun?.autotaskRunId) {
         lastRun = newRuns.items[0]; // cache new last run to avoid duplicates.
+        if (!lastRun) return;
+
         const status = lastRun.status as AutotaskRunStatus;
         if (status === 'pending') {
           lastRun = undefined; // clean up so we can check it again on the next poll.
@@ -59,7 +61,7 @@ export async function tailLogsFor(client: AutotaskClient, autotaskId: string) {
           const runDetails = (await client.getAutotaskRun(lastRun.autotaskRunId)) as AutotaskRunErrorData;
           console.log(`\nError: ${runDetails.message}`);
           runDetails.decodedLogs ? console.log(`\n${runDetails.decodedLogs}`) : console.log(`No logs available.`);
-        } else if (status === 'success') {
+        } else if (status === 'success' ) {
           const runDetails = (await client.getAutotaskRun(lastRun.autotaskRunId)) as AutotaskRunSuccessData;
           console.log(`\n${runDetails.decodedLogs}`);
         } else if (status === 'throttled') {

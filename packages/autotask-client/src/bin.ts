@@ -55,6 +55,8 @@ async function updateCode() {
   const autotaskId = argv[3];
   const path = argv[4];
   try {
+    if (!autotaskId || !path) throw new Error('must provide autotaskId and path');
+
     validateId(autotaskId);
     validatePath(path);
 
@@ -74,6 +76,7 @@ async function updateCode() {
 async function tailRuns() {
   const autotaskId = argv[3];
   try {
+    if (!autotaskId) throw new Error('must provide autotaskId');
     await tailLogsFor(initClient(), autotaskId);
   } catch (e) {
     const err = e as Error | AxiosError;
@@ -87,6 +90,7 @@ async function tailRuns() {
  */
 async function executeRun() {
   const autotaskId = argv[3];
+  if (!autotaskId) throw new Error('must provide autotaskId');
   try {
     validateId(autotaskId);
     const client = initClient();
