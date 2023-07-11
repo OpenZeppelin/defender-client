@@ -14,7 +14,7 @@ describe('utils/rate-limit', () => {
       rateLimit.checkRateFor(rateEntryName);
 
       fail('Should have errored');
-    } catch (error: any) {
+    } catch (error) {
       expect(error.message).toBe('Rate limit exceeded');
     }
   });
