@@ -22,7 +22,9 @@ export async function authenticate(authenticationData: UserPass, poolData: PoolD
   try {
     return retry(() => doAuthenticate(cognitoUser, authenticationDetails), { retries: 3 });
   } catch (err) {
-    throw new Error(`Failed to authenticate the API key ${authenticationData.Username}: ${(err as any).message || err}`);
+    throw new Error(
+      `Failed to authenticate the API key ${authenticationData.Username}: ${(err as any).message || err}`,
+    );
   }
 }
 

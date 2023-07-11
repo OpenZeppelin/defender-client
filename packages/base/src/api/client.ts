@@ -56,7 +56,7 @@ export abstract class BaseApiClient {
     try {
       return await fn(api);
     } catch (error) {
-      const err = error as any
+      const err = error as any;
       // this means ID token has expired so we'll recreate session and try again
       if (err.response && err.response.status === 401 && err.response.statusText === 'Unauthorized') {
         this.api = undefined;
