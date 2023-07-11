@@ -3052,9 +3052,9 @@ co@^4.6.0:
   resolved "https://registry.npmjs.org/co/-/co-4.6.0.tgz"
   integrity sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==
 
-"code-style@git+https://github.com/OpenZeppelin/code-style.git":
+"code-style@https://github.com/OpenZeppelin/code-style.git":
   version "0.1.0"
-  resolved "git+ssh://git@github.com/OpenZeppelin/code-style.git#0c7b3073da623d1112e4f9c3f186586167ab2d03"
+  resolved "https://github.com/OpenZeppelin/code-style.git#0c7b3073da623d1112e4f9c3f186586167ab2d03"
 
 collect-v8-coverage@^1.0.0:
   version "1.0.1"
