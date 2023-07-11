@@ -391,8 +391,8 @@ describe('SentinelClient', () => {
         name,
         addressRules: [
           {
-            abi: oldBlockSentinel.addressRules[0].abi,
-            addresses: oldBlockSentinel.addressRules[0].addresses,
+            abi: oldBlockSentinel.addressRules[0]?.abi,
+            addresses: oldBlockSentinel.addressRules[0]?.addresses,
             autotaskCondition: undefined,
             conditions: [],
           },
@@ -545,6 +545,7 @@ describe('SentinelClient', () => {
     it('finds blockwatchers for network when there are available', async () => {
       // Make sure the network provided is the network mocked above
       const results = await sentinel.getBlockwatcherIdByNetwork('goerli');
+      if (!results[0]) throw new Error('results is empty');
       expect(results[0].blockWatcherId).toEqual('i-am-the-watcher');
     });
 
