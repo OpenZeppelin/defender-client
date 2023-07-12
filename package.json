@@ -15,7 +15,7 @@
     "@types/node": "^16.1.0",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
-    "code-style": "git+https://github.com/OpenZeppelin/code-style.git",
+    "code-style": "https://github.com/OpenZeppelin/code-style.git",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
