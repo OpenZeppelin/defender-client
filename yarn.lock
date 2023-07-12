@@ -6870,7 +6870,7 @@ nx@15.9.4, "nx@>=15.5.2 < 16":
     "@nrwl/nx-win32-arm64-msvc" "15.9.4"
     "@nrwl/nx-win32-x64-msvc" "15.9.4"
 
-nx@16.5.1, nx@^16.1.4:
+nx@16.5.1, nx@^16.5.1:
   version "16.5.1"
   resolved "https://registry.yarnpkg.com/nx/-/nx-16.5.1.tgz#fc0d19090d8faae5f431f9fec199adf95881150c"
   integrity sha512-I3hJRE4hG7JWAtncWwDEO3GVeGPpN0TtM8xH5ArZXyDuVeTth/i3TtJzdDzqXO1HHtIoAQN0xeq4n9cLuMil5g==
