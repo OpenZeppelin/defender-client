@@ -52,6 +52,8 @@ export async function tailLogsFor(client: AutotaskClient, autotaskId: string) {
       // If cached last run id has changed
       if (newRuns.items[0]?.autotaskRunId !== lastRun?.autotaskRunId) {
         lastRun = newRuns.items[0]; // cache new last run to avoid duplicates.
+        if (!lastRun) throw new Error('last run not found');
+
         const status = lastRun.status as AutotaskRunStatus;
         if (status === 'pending') {
           lastRun = undefined; // clean up so we can check it again on the next poll.

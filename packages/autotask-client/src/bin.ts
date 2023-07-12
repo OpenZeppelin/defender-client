@@ -52,8 +52,8 @@ function mandatoryParamGuard(command: Command) {
  * Utilizes the Autotask API to update the code of a given autotask.
  */
 async function updateCode() {
-  const autotaskId = argv[3];
-  const path = argv[4];
+  const autotaskId = argv[3] as string;
+  const path = argv[4] as string;
   try {
     validateId(autotaskId);
     validatePath(path);
@@ -72,7 +72,7 @@ async function updateCode() {
  * Utilizes the Autotask API to poll for new runs and print them out.
  */
 async function tailRuns() {
-  const autotaskId = argv[3];
+  const autotaskId = argv[3] as string;
   try {
     await tailLogsFor(initClient(), autotaskId);
   } catch (e) {
@@ -86,7 +86,7 @@ async function tailRuns() {
  * Utilizes the Autotask API to trigger autotask run manually.
  */
 async function executeRun() {
-  const autotaskId = argv[3];
+  const autotaskId = argv[3] as string;
   try {
     validateId(autotaskId);
     const client = initClient();
