@@ -61,7 +61,7 @@ export async function tailLogsFor(client: AutotaskClient, autotaskId: string) {
           const runDetails = (await client.getAutotaskRun(lastRun.autotaskRunId)) as AutotaskRunErrorData;
           console.log(`\nError: ${runDetails.message}`);
           runDetails.decodedLogs ? console.log(`\n${runDetails.decodedLogs}`) : console.log(`No logs available.`);
-        } else if (status === 'success' ) {
+        } else if (status === 'success') {
           const runDetails = (await client.getAutotaskRun(lastRun.autotaskRunId)) as AutotaskRunSuccessData;
           console.log(`\n${runDetails.decodedLogs}`);
         } else if (status === 'throttled') {
