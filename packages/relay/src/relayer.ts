@@ -175,7 +175,7 @@ function isApiCredentials(credentials: AutotaskRelayerParams | ApiRelayerParams)
 }
 
 // If a tx-like object is representing a legacy transaction (type 0)
-export function isLegacyTx<TransactionLikeType>(
+export function isLegacyTx<TransactionLikeType extends object>(
   tx: TransactionLikeType,
 ): tx is TransactionLikeType & { gasPrice: NonNullable<unknown> } {
   // Consider that an EIP1559 tx may have `gasPrice` after
@@ -185,7 +185,9 @@ export function isLegacyTx<TransactionLikeType>(
 }
 
 // If a tx-like object is representing a EIP1559 transaction (type 2)
-export function isEIP1559Tx<TransactionLikeType>(tx: TransactionLikeType): tx is TransactionLikeType & {
+export function isEIP1559Tx<TransactionLikeType extends object>(
+  tx: TransactionLikeType,
+): tx is TransactionLikeType & {
   maxPriorityFeePerGas: NonNullable<unknown>;
   maxFeePerGas: NonNullable<unknown>;
 } {
@@ -193,7 +195,10 @@ export function isEIP1559Tx<TransactionLikeType>(tx: TransactionLikeType): tx is
 }
 
 function validatePayload(payload: RelayerTransactionPayload) {
-  if (isEIP1559Tx(payload) && BigInt(payload.maxFeePerGas) < BigInt(payload.maxPriorityFeePerGas)) {
+  if (
+    isEIP1559Tx(payload) &&
+    BigInt(payload.maxFeePerGas as BigUInt) < BigInt(payload.maxPriorityFeePerGas as BigUInt)
+  ) {
     throw new Error('maxFeePerGas should be greater or equal to maxPriorityFeePerGas');
   }
   if (payload.validUntil && new Date(payload.validUntil).getTime() < new Date().getTime()) {

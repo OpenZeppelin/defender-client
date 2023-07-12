@@ -47,7 +47,7 @@ describe('AutotaskRelayer', () => {
         Array.from({ length: 302 }).map(async (ignore, index) => {
           try {
             await relayer.query('42');
-          } catch (error) {
+          } catch (error: any) {
             expect(index).toBe(rateLimit + 1);
             expect(error.message).toBe('Rate limit exceeded');
             hasBeenRateLimited = true;

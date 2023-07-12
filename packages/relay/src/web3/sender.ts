@@ -125,7 +125,7 @@ export class DefenderRelaySenderProvider {
       tx.gas ??
       (await promisify(this.send.bind(this))({
         method: 'eth_estimateGas',
-        params: [{ from: relayerAddress, gasLimit: 1e6, ...tx }],
+        params: [{ gasLimit: 1e6, ...tx }],
         jsonrpc: '2.0',
         id: 1,
       }).then((response) => {

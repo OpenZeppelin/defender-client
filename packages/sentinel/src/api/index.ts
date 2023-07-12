@@ -181,13 +181,15 @@ export class SentinelClient extends BaseApiClient {
   ): Promise<PartialCreateBlockSubscriberRequest> {
     const blockWatchers = await this.getBlockwatcherIdByNetwork(sentinel.network);
 
-    let blockWatcherId =
-      blockWatchers.length > 0
-        ? _.sortBy(
-            blockWatchers.filter(({ confirmLevel }) => _.isNumber(confirmLevel)), // Only consider numberish confirmLevels
-            ['confirmLevel'],
-          ).reverse()[0].blockWatcherId
-        : undefined;
+    let blockWatcherId;
+
+    if (blockWatchers?.length > 0) {
+      const blockWatchersSorted = _.sortBy(
+        blockWatchers.filter(({ confirmLevel }) => _.isNumber(confirmLevel)), // Only consider numberish confirmLevels
+        ['confirmLevel'],
+      ).reverse();
+      blockWatcherId = blockWatchersSorted[0]?.blockWatcherId;
+    }
 
     if (sentinel.confirmLevel) {
       blockWatcherId = blockWatchers.find((watcher) => watcher.confirmLevel === sentinel.confirmLevel)?.blockWatcherId;
@@ -297,6 +299,8 @@ export class SentinelClient extends BaseApiClient {
   private toCreateBlockSentinelRequest(sentinel: CreateBlockSubscriberResponse): CreateBlockSentinelRequest {
     const rule = sentinel.addressRules[0];
     let txCondition;
+
+    if (!rule) throw new Error(`No rule found for monitor ${sentinel.name}`);
 
     for (const condition of rule.conditions) {
       for (const cond of condition.txConditions) {
