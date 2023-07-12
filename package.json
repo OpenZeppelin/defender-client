@@ -37,7 +37,7 @@
     "format:check": "prettier --check '**/*.{js,ts,tsx}'",
     "format": "yarn format:check --write",
     "lint:check": "eslint 'packages/**/src/**/*.{js,ts}' --quiet",
-    "test": "nx run-many -t test --skip-nx-cache",
+    "test": "nx run-many -t test --skip-nx-cache --forceExit",
     "style": "yarn lint && yarn format",
     "skip-lib-ignore": "./hack/skip-lib-ignore.sh",
     "versionup:rcminor": "lerna version --preid=rc --no-git-tag-version --yes --exact --no-changelog",
