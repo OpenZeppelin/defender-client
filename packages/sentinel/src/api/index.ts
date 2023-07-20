@@ -28,6 +28,7 @@ import {
   NotificationCategory as NotificationCategoryResponse,
   UpdateNotificationCategoryRequest,
 } from '../models/category';
+import { NetworkType } from '../models/networks';
 
 export class SentinelClient extends BaseApiClient {
   protected getPoolId(): string {
@@ -40,6 +41,12 @@ export class SentinelClient extends BaseApiClient {
 
   protected getApiUrl(): string {
     return process.env.DEFENDER_SENTINEL_API_URL || 'https://defender-api.openzeppelin.com/sentinel/';
+  }
+
+  public async listNetworks(type?: NetworkType): Promise<Network[]> {
+    return this.apiCall(async (api) => {
+      return await api.get(type ? `/networks?type=${type}` : `/networks`);
+    });
   }
 
   public async list(): Promise<ListSentinelResponse> {

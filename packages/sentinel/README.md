@@ -373,6 +373,16 @@ await client.pause('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1');
 await client.unpause('8181d9e0-88ce-4db0-802a-2b56e2e6a7b1');
 ```
 
+### List Networks
+
+To list tenant enabled networks, you can call the `listNetworks` function on the client, which returns a `Network[]` object:
+
+```js
+await client.listNetworks(); // lists all networks
+await client.listNetworks('prod'); // lists only production networks
+await client.listNetworks('test'); // lists only test networks
+```
+
 ### Failed Requests
 
 Failed requests might return the following example response object:
