@@ -133,6 +133,7 @@ export interface BlockTriggerEvent {
   transaction: EthReceipt;
   matchReasons: SentinelConditionSummary[];
   matchedAddresses: string[];
+  matchedChecksumAddresses: string[];
   sentinel: BlockSubscriberSummary;
   metadata?: { [k: string]: unknown };
 }
