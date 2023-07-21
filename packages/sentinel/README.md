@@ -379,7 +379,7 @@ To list tenant enabled networks, you can call the `listNetworks` function on the
 
 ```js
 await client.listNetworks(); // lists all networks
-await client.listNetworks('prod'); // lists only production networks
+await client.listNetworks('production'); // lists only production networks
 await client.listNetworks('test'); // lists only test networks
 ```
 

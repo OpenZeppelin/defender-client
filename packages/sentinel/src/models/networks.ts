@@ -1,1 +1,1 @@
-export type NetworkType = 'prod' | 'test';
+export type NetworkType = 'production' | 'test';

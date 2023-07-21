@@ -5,7 +5,7 @@ const { SentinelClient } = require('@openzeppelin/defender-sentinel-client');
 async function main() {
   const creds = { apiKey: process.env.ADMIN_API_KEY, apiSecret: process.env.ADMIN_API_SECRET };
   const client = new SentinelClient(creds);
-  const networks = await client.listNetworks('prod');
+  const networks = await client.listNetworks('production');
   console.log(networks);
 }
 
