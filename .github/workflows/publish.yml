@@ -69,7 +69,6 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           echo "@openzeppelin:registry https://registry.npmjs.org" >> ~/.npmrc
-          echo "provenance=true" >> ~/.npmrc
 
       - name: Unpack the zipped artifact
         run: |
@@ -86,5 +85,3 @@ jobs:
           else
             lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc
           fi
-        env:
-          NPM_CONFIG_PROVENANCE: true
