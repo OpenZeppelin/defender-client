@@ -1,0 +1,15 @@
+{
+  "name": "list-networks",
+  "version": "1.47.0",
+  "private": true,
+  "main": "index.js",
+  "author": "Nami Shah <nami@openzeppelin.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@openzeppelin/defender-sentinel-client": "1.47.0",
+    "dotenv": "^8.2.0"
+  }
+}
