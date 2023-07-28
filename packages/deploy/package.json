@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/platform-deploy-client",
-  "version": "0.8.0",
+  "version": "1.47.1",
   "description": "Client library for managing Platform Deployments",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
