@@ -15,7 +15,7 @@ jobs:
       latest_commit_author: ${{ steps.commit.outputs.author }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        uses: step-security/harden-runner@cba0d00b1fc9a034e1e642ea0f1103c282990604 # v2.5.0
         with:
           egress-policy: audit
 
@@ -42,7 +42,7 @@ jobs:
     if: ${{ needs.check_author.outputs.latest_commit_author != 'svc-gh-is-01' }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        uses: step-security/harden-runner@cba0d00b1fc9a034e1e642ea0f1103c282990604 # v2.5.0
         with:
           egress-policy: audit
 
@@ -78,7 +78,7 @@ jobs:
       changed_packages: ${{ steps.tag_check_changes.outputs.changed_packages }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        uses: step-security/harden-runner@cba0d00b1fc9a034e1e642ea0f1103c282990604 # v2.5.0
         with:
           egress-policy: audit
 
