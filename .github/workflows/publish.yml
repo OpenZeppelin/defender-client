@@ -20,7 +20,7 @@ jobs:
       (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags/v')) ||
       (startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-rc.'))
     # Deterministic Build & tests
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.8.0
     with:
       run-scripts: "install-deps, style, nx-build-skip-cache, nx-test-skip-cache, skip-lib-ignore"
       node-version: "16.20.0"
@@ -52,14 +52,14 @@ jobs:
           echo "path=${temp_dir}" >>"${GITHUB_OUTPUT}"
 
       - name: Download tarball
-        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@934435652996c02a6317092984312602dfaf2a21 # main
+        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@v1.8.0 # main
         with:
           name: ${{ needs.provenance.outputs.package-download-name }}
           path: "${{ steps.temp-dir.outputs.path }}/${{ needs.provenance.outputs.package-name }}"
           sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
 
       - name: Download provenance
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@0779f7bec68e2bf54a7b0a32bf4763f25ab29702 # v1.6.0
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@v1.8.0 # v1.6.0
         with:
           name: ${{ needs.provenance.outputs.provenance-download-name }}
           path: "${{ steps.temp-dir.outputs.path }}"
