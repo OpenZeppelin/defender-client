@@ -35,6 +35,7 @@ type PublicNetwork =
   | 'zksync-goerli'
   | 'base'
   | 'base-goerli'
+  | 'linea'
   | 'linea-goerli';
 
 type CustomNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
@@ -76,6 +77,7 @@ export const Networks: Network[] = [
   'zksync-goerli',
   'base',
   'base-goerli',
+  'linea',
   'linea-goerli',
   'x-dfk-avax-chain',
   'x-dfk-avax-chain-test',
@@ -128,6 +130,7 @@ const chainIds: { [key in Network]: number } = {
   'zksync-goerli': 280,
   'base': 8453,
   'base-goerli': 84531,
+  'linea': 59144,
   'linea-goerli': 59140,
   'x-dfk-avax-chain': 53935,
   'x-dfk-avax-chain-test': 335,
