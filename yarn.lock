@@ -1321,6 +1321,17 @@
   dependencies:
     "@octokit/openapi-types" "^18.0.0"
 
+"@openzeppelin/defender-base-client@1.47.0":
+  version "1.47.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.47.0.tgz#f9d47f4cf0a75b4e4e5139dec780a3f26f5e2019"
+  integrity sha512-y9dDm+gX0MHHEn17W7f7oO3X083JAVMk3YcuXHavSE7kjiCLoFOaZ23joYqoHeaccL10nGt7KOOzZ0sh9iJHTQ==
+  dependencies:
+    amazon-cognito-identity-js "^6.0.1"
+    async-retry "^1.3.3"
+    axios "^1.4.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
 "@openzeppelin/defender-base-client@^1.45.0":
   version "1.46.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.46.0.tgz#aa5177f8fbad23fd03d78f3dbe06664bbe9333ff"
@@ -1329,6 +1340,17 @@
     amazon-cognito-identity-js "^6.0.1"
     async-retry "^1.3.3"
     axios "^0.21.2"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
+"@openzeppelin/defender-sentinel-client@1.47.0":
+  version "1.47.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sentinel-client/-/defender-sentinel-client-1.47.0.tgz#eaed39153729c66aa6bb69277cbdeaafc4003dcd"
+  integrity sha512-PCk25UYKosQWJTKJBGDTRC/MrLuz0GKFn4VEXa12RSUpdVdMoEcGwC5eFkbw8UkYnG1sh7xT3T1V2MuVsh4ULg==
+  dependencies:
+    "@ethersproject/abi" "^5.6.3"
+    "@openzeppelin/defender-base-client" "1.47.0"
+    axios "^1.4.0"
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
