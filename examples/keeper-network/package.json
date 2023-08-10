@@ -1,11 +1,11 @@
 {
   "name": "example-keeper-network",
-  "version": "1.48.0-rc.1",
+  "version": "1.48.0-rc.2",
   "main": "index.js",
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@openzeppelin/defender-relay-client": "1.48.0-rc.1",
+    "@openzeppelin/defender-relay-client": "1.48.0-rc.2",
     "dotenv": "^8.2.0",
     "ethers": "^5.7.2"
   }
