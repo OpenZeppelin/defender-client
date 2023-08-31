@@ -1,4 +1,4 @@
-import { BaseApiClient } from '@openzeppelin/defender-base-client';
+import { BaseApiClient, ApiVersion } from '@openzeppelin/defender-base-client';
 import { capitalize, isArray, isEmpty } from 'lodash';
 import { Interface } from 'ethers/lib/utils';
 
@@ -54,7 +54,10 @@ export class AdminClient extends BaseApiClient {
     return process.env.DEFENDER_ADMIN_POOL_CLIENT_ID || '40e58hbc7pktmnp9i26hh5nsav';
   }
 
-  protected getApiUrl(): string {
+  protected getApiUrl(v: ApiVersion): string {
+    if (v === 'v2') {
+      return process.env.DEFENDER_API_URL || 'https://defender-api.openzeppelin.com/v2/';
+    }
     return process.env.DEFENDER_ADMIN_API_URL || 'https://defender-api.openzeppelin.com/admin/';
   }
 
@@ -160,22 +163,18 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
-  public async archiveProposal(contractId: string, proposalId: string): Promise<ProposalResponseWithUrl> {
+  public async archiveProposal(_: string, proposalId: string): Promise<ProposalResponseWithUrl> {
     return this.apiCall(async (api) => {
-      const response = (await api.put(`/contracts/${contractId}/proposals/${proposalId}/archived`, {
-        archived: true,
-      })) as ProposalResponse;
+      const response = (await api.put(`proposals/archive/${proposalId}`)) as ProposalResponse;
       return { ...response, url: getProposalUrl(response) };
-    });
+    }, 'v2');
   }
 
-  public async unarchiveProposal(contractId: string, proposalId: string): Promise<ProposalResponseWithUrl> {
+  public async unarchiveProposal(_: string, proposalId: string): Promise<ProposalResponseWithUrl> {
     return this.apiCall(async (api) => {
-      const response = (await api.put(`/contracts/${contractId}/proposals/${proposalId}/archived`, {
-        archived: false,
-      })) as ProposalResponse;
+      const response = (await api.put(`proposals/unarchive/${proposalId}`)) as ProposalResponse;
       return { ...response, url: getProposalUrl(response) };
-    });
+    }, 'v2');
   }
 
   public async getProposalSimulation(contractId: string, proposalId: string): Promise<SimulationResponse> {

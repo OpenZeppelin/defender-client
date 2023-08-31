@@ -1,4 +1,4 @@
-import { BaseApiClient, Network } from '@openzeppelin/defender-base-client';
+import { BaseApiClient, Network, ApiVersion } from '@openzeppelin/defender-base-client';
 import {
   ConditionSet,
   CreateSubscriberRequest,
@@ -39,7 +39,10 @@ export class SentinelClient extends BaseApiClient {
     return process.env.DEFENDER_SENTINEL_POOL_CLIENT_ID || '40e58hbc7pktmnp9i26hh5nsav';
   }
 
-  protected getApiUrl(): string {
+  protected getApiUrl(v: ApiVersion): string {
+    if (v === 'v2') {
+      return process.env.DEFENDER_API_URL || 'https://defender-api.openzeppelin.com/v2/';
+    }
     return process.env.DEFENDER_SENTINEL_API_URL || 'https://defender-api.openzeppelin.com/sentinel/';
   }
 

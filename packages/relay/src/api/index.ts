@@ -1,4 +1,4 @@
-import { BaseApiClient } from '@openzeppelin/defender-base-client';
+import { BaseApiClient, ApiVersion } from '@openzeppelin/defender-base-client';
 import {
   ApiRelayerParams,
   IRelayer,
@@ -30,7 +30,10 @@ export class RelayClient extends BaseApiClient {
     return process.env.DEFENDER_RELAY_POOL_CLIENT_ID || '40e58hbc7pktmnp9i26hh5nsav';
   }
 
-  protected getApiUrl(): string {
+  protected getApiUrl(v: ApiVersion): string {
+    if (v === 'v2') {
+      return process.env.DEFENDER_API_URL || 'https://defender-api.openzeppelin.com/v2/';
+    }
     return process.env.DEFENDER_RELAY_API_URL || 'https://defender-api.openzeppelin.com/relayer/';
   }
 
@@ -116,7 +119,7 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
     return process.env.DEFENDER_RELAY_SIGNER_POOL_CLIENT_ID || '1bpd19lcr33qvg5cr3oi79rdap';
   }
 
-  protected getApiUrl(): string {
+  protected getApiUrl(_: ApiVersion): string {
     return RelaySignerApiUrl();
   }
 
