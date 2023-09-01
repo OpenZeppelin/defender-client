@@ -11,7 +11,7 @@ export class PlatformApiClient extends BaseApiClient {
 
   protected getApiUrl(v: ApiVersion): string {
     if (v === 'v2') {
-      return process.env.DEFENDER_API_URL || 'https://defender-api.openzeppelin.com/v2/';
+      return process.env.DEFENDER_API_URL_V2 || 'https://defender-api.openzeppelin.com/v2/';
     }
     return process.env.PLATFORM_API_URL || 'https://defender-api.openzeppelin.com/deployment/';
   }

@@ -28,7 +28,7 @@ export abstract class BaseApiClient {
     this.httpsAgent = params.httpsAgent;
   }
 
-  protected async init(v: ApiVersion): Promise<AxiosInstance> {
+  protected async init(v: ApiVersion = 'v1'): Promise<AxiosInstance> {
     if (!this.api || this.version !== v) {
       const userPass = { Username: this.apiKey, Password: this.apiSecret };
       const poolData = { UserPoolId: this.getPoolId(), ClientId: this.getPoolClientId() };
@@ -39,7 +39,7 @@ export abstract class BaseApiClient {
     return this.api;
   }
 
-  protected async refresh(v: ApiVersion): Promise<AxiosInstance> {
+  protected async refresh(v: ApiVersion = 'v1'): Promise<AxiosInstance> {
     if (!this.session) {
       return this.init(v);
     }
