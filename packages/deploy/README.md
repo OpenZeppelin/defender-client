@@ -5,11 +5,11 @@ Platform Deployment Client allows you to deploy contracts through the OpenZeppel
 ## Install
 
 ```bash
-npm install platform-deploy-client
+npm install @openzeppelin/platform-deploy-client
 ```
 
 ```bash
-yarn add platform-deploy-client
+yarn add @openzeppelin/platform-deploy-client
 ```
 
 ## Usage
