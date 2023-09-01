@@ -29,7 +29,7 @@ export class AutotaskClient extends BaseApiClient {
     return process.env.DEFENDER_AUTOTASK_POOL_CLIENT_ID || '40e58hbc7pktmnp9i26hh5nsav';
   }
 
-  protected getApiUrl(v: ApiVersion): string {
+  protected getApiUrl(v: ApiVersion = 'v1'): string {
     if (v === 'v2') {
       return process.env.DEFENDER_API_URL_V2 || 'https://defender-api.openzeppelin.com/v2/';
     }
