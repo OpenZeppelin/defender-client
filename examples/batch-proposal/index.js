@@ -59,7 +59,7 @@ const steps = [
 ];
 
 async function main() {
-  const { url } = await client.createProposal({
+  const { url, contractId, proposalId } = await client.createProposal({
     contract: contracts,
     title: 'Batch test',
     description: 'Mint, transfer and modify access control',
@@ -71,6 +71,12 @@ async function main() {
   });
 
   console.log(url);
+
+  // archive/unarchive
+  const archived = await client.archiveProposal(contractId, proposalId);
+  console.log('proposal archived', archived.isArchived);
+  const unarchived = await client.unarchiveProposal(contractId, proposalId);
+  console.log('proposal archived', unarchived.isArchived);
 }
 
 if (require.main === module) {
