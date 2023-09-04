@@ -32,7 +32,7 @@ export class RelayClient extends BaseApiClient {
 
   protected getApiUrl(v: ApiVersion = 'v1'): string {
     if (v === 'v2') {
-      return process.env.DEFENDER_API_URL_V2 || 'https://defender-api.openzeppelin.com/v2/';
+      return process.env.DEFENDER_API_V2_URL || 'https://defender-api.openzeppelin.com/v2/';
     }
     return process.env.DEFENDER_RELAY_API_URL || 'https://defender-api.openzeppelin.com/relayer/';
   }
