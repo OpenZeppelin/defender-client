@@ -2613,7 +2613,8 @@ co@^4.6.0:
 
 "code-style@https://github.com/OpenZeppelin/code-style.git":
   version "0.1.0"
-  resolved "https://github.com/OpenZeppelin/code-style.git#0c7b3073da623d1112e4f9c3f186586167ab2d03"
+  uid a6cd128e6f5225b15d76704708c5def97caa8176
+  resolved "https://github.com/OpenZeppelin/code-style.git#a6cd128e6f5225b15d76704708c5def97caa8176"
 
 collect-v8-coverage@^1.0.0:
   version "1.0.2"
