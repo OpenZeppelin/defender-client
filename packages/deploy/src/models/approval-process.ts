@@ -14,6 +14,7 @@ export interface ApprovalProcessResponse {
     | 'Contract'
     | 'Multisig'
     | 'Gnosis Safe'
+    | 'Safe'
     | 'Gnosis Multisig'
     | 'Relayer'
     | 'Unknown'

@@ -65,7 +65,7 @@ async function main() {
     description: 'Mint, transfer and modify access control',
     type: 'batch',
     via: safeAddress,
-    viaType: 'Gnosis Safe',
+    viaType: 'Safe',
     metadata: {}, // Required field but empty
     steps,
   });

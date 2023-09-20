@@ -17,7 +17,7 @@ async function main() {
     functionInterface: { name: 'setNumber', inputs: [{ name: '_value', type: 'uint256' }] },
     functionInputs: ['42'],
     via: '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1',
-    viaType: 'Gnosis Safe',
+    viaType: 'Safe',
   });
 
   console.log(proposal.url);

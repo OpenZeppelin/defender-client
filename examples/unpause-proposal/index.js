@@ -13,7 +13,7 @@ async function main() {
     {
       title: 'Unpause contract',
       via: '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1',
-      viaType: 'Gnosis Safe',
+      viaType: 'Safe',
     },
     { network, address },
   );

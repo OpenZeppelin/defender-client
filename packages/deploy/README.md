@@ -102,7 +102,7 @@ There are a number of optional fields, these include:
 - `proxyAdminAddress` - The Proxy Admin address in case you are upgrading with a transparent proxy.
 - `newImplementationABI` - The ABI of the new implementation address. This will be required if the implementation contract does not exist in the OpenZeppelin Platform.
 - `approvalProcessId` - The approval process ID in case you wish to override the default global approval process.
-- `senderAddress` - The address you wish to create the Gnosis proposal with. When creating an upgrade proposal, we provide you with an external link to the Gnosis Safe UI. This will lead you to a proposal ready to be signed. This proposal will contain information about what upgrade to execute, as well as who initiated the proposal. The `senderAddress` property lets you customise define which address this is.
+- `senderAddress` - The address you wish to create the Gnosis proposal with. When creating an upgrade proposal, we provide you with an external link to the Safe UI. This will lead you to a proposal ready to be signed. This proposal will contain information about what upgrade to execute, as well as who initiated the proposal. The `senderAddress` property lets you customise define which address this is.
 
 Below is an example of a contract upgrade request which responds with a `UpgradeContractResponse`
 
