@@ -133,5 +133,5 @@ const chainIds: { [key in Network]: number } = {
   'linea': 59144,
   'linea-goerli': 59140,
   'x-dfk-avax-chain': 53935,
-  'x-dfk-avax-chain-test': 335
+  'x-dfk-avax-chain-test': 335,
 };
