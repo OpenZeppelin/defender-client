@@ -16,7 +16,7 @@ export interface ExternalApiCreateProposalRequest {
   type: ProposalType;
   metadata?: ProposalMetadata;
   via?: Address;
-  viaType?: 'EOA' | 'Safe' | 'Relayer';
+  viaType?: 'EOA' | 'Safe' | 'Gnosis Multisig' | 'Relayer';
   functionInterface?: ProposalTargetFunction;
   functionInputs?: ProposalFunctionInputs;
   steps?: ProposalStep[];
