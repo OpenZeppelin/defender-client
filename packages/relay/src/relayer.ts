@@ -139,6 +139,7 @@ interface RelayerEIP1559Transaction extends RelayerTransactionBase {
 }
 
 export type RelayerTransaction = RelayerLegacyTransaction | RelayerEIP1559Transaction;
+export type PaginatedTransactionListResponse = RelayerTransaction[] | { items: RelayerTransaction[]; next?: string };
 
 export type RelayerParams = ApiRelayerParams | AutotaskRelayerParams;
 export type ApiRelayerParams = { apiKey: string; apiSecret: string; httpsAgent?: https.Agent };
@@ -215,6 +216,9 @@ export type ListTransactionsRequest = {
   status?: 'pending' | 'mined' | 'failed';
   since?: Date;
   limit?: number;
+  next?: string;
+  sort?: 'asc' | 'desc';
+  usePagination?: boolean;
 };
 
 export interface IRelayer {
@@ -223,7 +227,7 @@ export interface IRelayer {
   replaceTransactionById(id: string, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   replaceTransactionByNonce(nonce: number, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   query(id: string): Promise<RelayerTransaction>;
-  list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]>;
+  list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[] | PaginatedTransactionListResponse>;
   sign(payload: SignMessagePayload): Promise<SignedMessagePayload>;
   signTypedData(payload: SignTypedDataPayload): Promise<SignedMessagePayload>;
   call(method: string, params: string[]): Promise<JsonRpcResponse>;
@@ -281,7 +285,7 @@ export class Relayer implements IRelayer {
     return this.relayer.query(id);
   }
 
-  public list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]> {
+  public list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[] | PaginatedTransactionListResponse> {
     return this.relayer.list(criteria);
   }
 

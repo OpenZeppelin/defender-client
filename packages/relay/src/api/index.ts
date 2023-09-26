@@ -16,6 +16,7 @@ import {
   UpdateRelayerRequest,
   RelayerApiKey,
   DeleteRelayerApiKeyResponse,
+  PaginatedTransactionListResponse,
 } from '../relayer';
 
 export const RelaySignerApiUrl = () =>
@@ -168,9 +169,18 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
     });
   }
 
-  public async list(criteria?: ListTransactionsRequest): Promise<RelayerTransaction[]> {
+  public async list(
+    criteria?: ListTransactionsRequest,
+  ): Promise<RelayerTransaction[] | PaginatedTransactionListResponse> {
     return this.apiCall(async (api) => {
-      return (await api.get(`txs`, { params: criteria ?? {} })) as RelayerTransaction[];
+      const result = (await api.get(`txs`, { params: criteria ?? {} })) as
+        | RelayerTransaction[]
+        | PaginatedTransactionListResponse;
+
+      if (criteria?.usePagination) {
+        return result as PaginatedTransactionListResponse;
+      }
+      return result as RelayerTransaction[];
     });
   }
 
