@@ -36,7 +36,7 @@ await client.createProposal({
   functionInterface: { name: 'setFee', inputs: [{ type: 'uint256', name: 'fee' }] }, // Function ABI
   functionInputs: ['10'], // Arguments to the function
   via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', // Address to execute proposal
-  viaType: 'Gnosis Safe', // 'Gnosis Safe', 'Gnosis Multisig', or 'EOA'
+  viaType: 'Safe', // 'Gnosis Multisig', 'Safe' or 'EOA'
 });
 ```
 
@@ -81,13 +81,13 @@ const proposalWithSimulation = await client.createProposal({
 
 #### Issuing DELEGATECALLs
 
-When invoking a function via a Gnosis Safe, it's possible to call it via a `DELEGATECALL` instruction instead of a regular call. This has the effect of executing the code in the called contract _in the context of the multisig_, meaning any operations that affect storage will affect the multisig, and any calls to additional contracts will be executed as if the `msg.sender` were the multisig. To do this, add a `metadata` parameter with the value `{ operationType: 'delegateCall' }` to your `createProposal` call:
+When invoking a function via a Safe Wallet, it's possible to call it via a `DELEGATECALL` instruction instead of a regular call. This has the effect of executing the code in the called contract _in the context of the multisig_, meaning any operations that affect storage will affect the multisig, and any calls to additional contracts will be executed as if the `msg.sender` were the multisig. To do this, add a `metadata` parameter with the value `{ operationType: 'delegateCall' }` to your `createProposal` call:
 
 ```js
 await client.createProposal({
   // ... Include all parameters from the example above
   via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', // Multisig address
-  viaType: 'Gnosis Safe', // Must be Gnosis Safe to handle delegate calls
+  viaType: 'Safe', // Must be Safe to handle delegate calls
   metadata: { operationType: 'delegateCall' }, // Issue a delegatecall instead of a regular call
 });
 ```
@@ -122,7 +122,7 @@ await client.proposeUpgrade({ newImplementation, newImplementationAbi, proxyAdmi
 ```js
 const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const via = '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1';
-const viaType = 'Gnosis Safe'; // or 'Gnosis Multisig', or 'EOA'
+const viaType = 'Safe'; // 'Gnosis Multisig', 'Safe' or 'EOA'
 const contract = { network: 'goerli', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
 const newImplementationAbi = '[...]';
 await client.proposeUpgrade({ newImplementation, newImplementationAbi, via, viaType }, contract);
@@ -136,10 +136,10 @@ To create `pause` and `unpause` action proposals, you need to provide the contra
 const contract = { network: 'goerli', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
 
 // Create a pause proposal
-await client.proposePause({ via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', viaType: 'Gnosis Safe' }, contract);
+await client.proposePause({ via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', viaType: 'Safe' }, contract);
 
 // Create an unpause proposal
-await client.proposeUnpause({ via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', viaType: 'Gnosis Safe' }, contract);
+await client.proposeUnpause({ via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', viaType: 'Safe' }, contract);
 ```
 
 Note that for `pause` and `unpause` proposals to work, your contract ABI must include corresponding `pause()` and `unpause()` functions.
@@ -208,7 +208,7 @@ await client.createProposal({
   description: 'Mint, transfer and modify access control',
   type: 'batch',
   via: safeAddress,
-  viaType: 'Gnosis Safe',
+  viaType: 'Safe',
   metadata: {}, // Required field but empty
   steps,
 });

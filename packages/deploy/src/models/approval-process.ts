@@ -13,7 +13,7 @@ export interface ApprovalProcessResponse {
     | 'EOA'
     | 'Contract'
     | 'Multisig'
-    | 'Gnosis Safe'
+    | 'Safe'
     | 'Gnosis Multisig'
     | 'Relayer'
     | 'Unknown'
