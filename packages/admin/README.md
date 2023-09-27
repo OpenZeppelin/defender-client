@@ -36,7 +36,7 @@ await client.createProposal({
   functionInterface: { name: 'setFee', inputs: [{ type: 'uint256', name: 'fee' }] }, // Function ABI
   functionInputs: ['10'], // Arguments to the function
   via: '0x22d491Bde2303f2f43325b2108D26f1eAbA1e32b', // Address to execute proposal
-  viaType: 'Safe', // 'Gnosis Multisig' or 'EOA'
+  viaType: 'Safe', // 'Gnosis Multisig', 'Safe' or 'EOA'
 });
 ```
 
@@ -122,7 +122,7 @@ await client.proposeUpgrade({ newImplementation, newImplementationAbi, proxyAdmi
 ```js
 const newImplementation = '0x3E5e9111Ae8eB78Fe1CC3bb8915d5D461F3Ef9A9';
 const via = '0xF608FA64c4fF8aDdbEd106E69f3459effb4bC3D1';
-const viaType = 'Safe'; // 'Gnosis Multisig' or 'EOA'
+const viaType = 'Safe'; // 'Gnosis Multisig', 'Safe' or 'EOA'
 const contract = { network: 'goerli', address: '0x28a8746e75304c0780E011BEd21C72cD78cd535E' };
 const newImplementationAbi = '[...]';
 await client.proposeUpgrade({ newImplementation, newImplementationAbi, via, viaType }, contract);
