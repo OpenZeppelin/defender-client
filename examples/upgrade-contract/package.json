@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@openzeppelin/platform-deploy-client": "^0.7.0",
+    "@openzeppelin/platform-deploy-client": "^0.10.0",
     "dotenv": "^8.2.0"
   }
 }
