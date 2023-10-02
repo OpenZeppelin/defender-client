@@ -109,6 +109,7 @@ DEFENDER_SENTINEL_POOL_CLIENT_ID=
 
 ---
 
+
 ### Determinstic Builds & Secure Publishes
 
 - We use [slsa framework](https://slsa.dev/) _pronounced "salsa"_ for reproducible builds & secure pushes. Verification is done using [provenance](https://slsa.dev/provenance/v1)
