@@ -173,12 +173,35 @@ const latestTx = await relayer.query(tx.transactionId);
 
 Alternatively, the `relayer` can also be used to `list` the latest transactions sent, optionally filtering by status and creation time.
 
+
 ```js
 const since = await relayer.list({
   since: new Date(Date.now() - 60 * 1000),
   status: 'pending', // can be 'pending', 'mined', or 'failed'
   limit: 5,
 });
+```
+
+We have added support for pagination to the `list` operation. To enable pagination, you can set the `usePagination` parameter to true.
+
+```js
+const since = await relayer.list({
+  since: new Date(Date.now() - 60 * 1000),
+  status: 'pending', // can be 'pending', 'mined', or 'failed'
+  limit: 5,
+  usePagination: true,
+  sort: 'desc', // available only in combination with pagination
+  next: '' // optional: include when the response has this value to fetch the next set of results
+});
+```
+
+The `list` function now accepts several parameters to facilitate pagination, such as limit, usePagination, sort, and next. The sort parameter is available only when pagination is enabled, and the next parameter is optional, used to fetch the next set of results when included in the response.
+
+When using pagination by setting `usePagination` to `true`, the format of the response will be different from the default.
+The response will be an object containing two properties: `items` and `next`. The items property is an array of `RelayerTransaction` objects, representing the fetched list of transactions. The next property is an optional string. If present, it can be used as the value for the next parameter in a subsequent request to retrieve the next set of transactions.
+
+```js
+{ items: RelayerTransaction[]; next?: string }
 ```
 
 Defender will update the transaction `status` every minute, marking it as `confirmed` after 12 confirmations. The transaction information will be stored for 30 days.
