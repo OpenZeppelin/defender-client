@@ -221,8 +221,28 @@ export type ListTransactionsRequest = {
   usePagination?: boolean;
 };
 
+export interface RelayerStatus {
+  relayerId: string;
+  name: string;
+  nonce: number;
+  address: string;
+  numberOfPendingTransactions: number;
+  paused: boolean;
+  pendingTxCost?: string;
+  txsQuotaUsage: number;
+  rpcQuotaUsage: number;
+  lastConfirmedTransaction?: {
+    hash: string;
+    status: string;
+    minedAt: string;
+    sentAt: string;
+    nonce: number;
+  };
+}
+
 export interface IRelayer {
   getRelayer(): Promise<RelayerGetResponse>;
+  getRelayerStatus(): Promise<RelayerStatus>;
   sendTransaction(payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   replaceTransactionById(id: string, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
   replaceTransactionByNonce(nonce: number, payload: RelayerTransactionPayload): Promise<RelayerTransaction>;
@@ -256,6 +276,10 @@ export class Relayer implements IRelayer {
 
   public getRelayer(): Promise<RelayerGetResponse> {
     return this.relayer.getRelayer();
+  }
+
+  public getRelayerStatus(): Promise<RelayerStatus> {
+    return this.relayer.getRelayerStatus();
   }
 
   public sign(payload: SignMessagePayload): Promise<SignedMessagePayload> {

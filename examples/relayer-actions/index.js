@@ -10,6 +10,11 @@ async function get() {
   console.log('relayerInfo', JSON.stringify(info, null, 2));
 }
 
+async function status() {
+  const info = await relayer.getRelayerStatus();
+  console.log('relayerStatus', JSON.stringify(info, null, 2));
+}
+
 async function send() {
   const txResponse = await relayer.sendTransaction({
     to: '0x179810822f56b0e79469189741a3fa5f2f9a7631',
@@ -64,7 +69,7 @@ async function jsonrpc(method, payload) {
   try {
     const action = process.argv[2];
     if (!action) {
-      console.error(`Usage: node index.js query|get|send|sign|balance`);
+      console.error(`Usage: node index.js query|get|status|send|sign|balance`);
       process.exit(1);
     }
     console.log(`Using client version`, VERSION);
@@ -73,6 +78,8 @@ async function jsonrpc(method, payload) {
         return await query(process.argv[3]);
       case 'get':
         return await get();
+      case 'status':
+        return await status();
       case 'send':
         return await send();
       case 'replace':

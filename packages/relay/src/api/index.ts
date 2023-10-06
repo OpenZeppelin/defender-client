@@ -17,6 +17,7 @@ import {
   RelayerApiKey,
   DeleteRelayerApiKeyResponse,
   PaginatedTransactionListResponse,
+  RelayerStatus,
 } from '../relayer';
 
 export const RelaySignerApiUrl = () =>
@@ -127,6 +128,12 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
   public async getRelayer(): Promise<RelayerGetResponse> {
     return this.apiCall(async (api) => {
       return (await api.get('/relayer')) as RelayerGetResponse;
+    });
+  }
+
+  public async getRelayerStatus(): Promise<RelayerStatus> {
+    return this.apiCall(async (api) => {
+      return (await api.get('/relayer/status')) as RelayerStatus;
     });
   }
 

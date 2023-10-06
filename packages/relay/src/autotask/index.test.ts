@@ -102,6 +102,17 @@ describe('AutotaskRelayer', () => {
     });
   });
 
+  describe('getRelayerStatus', () => {
+    test('passes correct arguments to the API', async () => {
+      await relayer.getRelayerStatus();
+      expect(relayer.lambda.invoke).toBeCalledWith({
+        FunctionName: 'arn',
+        InvocationType: 'RequestResponse',
+        Payload: '{"action":"get-self-status"}',
+      });
+    });
+  });
+
   describe('sign', () => {
     test('passes correct arguments to the API', async () => {
       await relayer.sign({ message: 'test' });
