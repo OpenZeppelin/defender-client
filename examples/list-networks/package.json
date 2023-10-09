@@ -1,6 +1,6 @@
 {
   "name": "list-networks",
-  "version": "1.48.0",
+  "version": "1.49.0",
   "private": true,
   "main": "index.js",
   "author": "Nami Shah <nami@openzeppelin.com>",
