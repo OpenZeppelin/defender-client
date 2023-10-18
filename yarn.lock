@@ -1393,7 +1393,7 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
-"@openzeppelin/defender-base-client@1.48.0", "@openzeppelin/defender-base-client@^1.49.0-rc.1":
+"@openzeppelin/defender-base-client@1.48.0":
   version "1.48.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.48.0.tgz#9103b1b036db0451b52d7899a277bf24db4c4b06"
   integrity sha512-HFO87s010hRrMjyh2xYOCEAkLe21BfIbho7n5/kikA6A1ZgXi7MsEiqnQv1zP4bxMJgxGZ5b3t4tt6fWrakbag==
@@ -1538,9 +1538,9 @@
     minimatch "^9.0.0"
 
 "@types/async-retry@^1.4.4":
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/@types/async-retry/-/async-retry-1.4.5.tgz#02680eb366739a327550f6ad38bb898a5571a095"
-  integrity sha512-YrdjSD+yQv7h6d5Ip+PMxh3H6ZxKyQk0Ts+PvaNRInxneG9PFVZjFg77ILAN+N6qYf7g4giSJ1l+ZjQ1zeegvA==
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/@types/async-retry/-/async-retry-1.4.7.tgz#2b2bbb44f6755f28eba367a6593d198f5e2cb45b"
+  integrity sha512-4NH5wuf9x7LZWD23/knI6RBywD1qCmLm7wNaqq0riy7hdDrCGGfkPOUvx0Cb78lVrFrEnCvocoL8+UcvSQlBDw==
   dependencies:
     "@types/retry" "*"
 
