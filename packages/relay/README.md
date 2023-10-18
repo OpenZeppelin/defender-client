@@ -173,7 +173,6 @@ const latestTx = await relayer.query(tx.transactionId);
 
 Alternatively, the `relayer` can also be used to `list` the latest transactions sent, optionally filtering by status and creation time.
 
-
 ```js
 const since = await relayer.list({
   since: new Date(Date.now() - 60 * 1000),
@@ -191,7 +190,7 @@ const since = await relayer.list({
   limit: 5,
   usePagination: true,
   sort: 'desc', // available only in combination with pagination
-  next: '' // optional: include when the response has this value to fetch the next set of results
+  next: '', // optional: include when the response has this value to fetch the next set of results
 });
 ```
 
@@ -212,7 +211,43 @@ The `query` function is important to monitor the transaction status, since Defen
 
 Defender may replace a transaction by increasing its gas price if it has not been mined for a period of time, and the gas price costs have increased since the transaction was originally submitted. Also, in a case where a transaction consistently fails to be mined, Defender may replace it by a _no-op_ (a transaction with no value or data) in order to advance the sender account nonce.
 
-#### Replacing transactions
+### Relayer Status
+
+To gain better insight into the current status of a relayer, you can use the `getRelayerStatus` method. This method provides real-time information about a relayer, such as its nonce, transaction quota, and the number of pending transactions.
+
+To get the current status of a relayer:
+
+```js
+const status = await relayer.getRelayerStatus('58b3d255-e357-4b0d-aa16-e86f745e63b9');
+```
+
+The response will be of the shape:
+
+```js
+export interface RelayerStatus {
+  relayerId: string; // Unique identifier for the relayer
+  name: string; // Name of the relayer
+  nonce: number; // Current relayer nonce
+  address: string; // Address of the relayer
+  numberOfPendingTransactions: number; // Number of transactions: pending|sent|submitted|inmempool
+  paused: boolean; // If the relayer is paused or not
+  pendingTxCost?: string; // The total cost of all pending transactions, if available
+  txsQuotaUsage: number; // Used transaction quota for the relayer
+  rpcQuotaUsage: number; // Used RPC quota for the relayer
+  lastConfirmedTransaction?: {
+    // Details of the last confirmed transaction
+    hash: string,
+    status: string,
+    minedAt: string,
+    sentAt: string,
+    nonce: number,
+  };
+}
+```
+
+This method can be particularly helpful in monitoring and managing your relayer resources more effectively.
+
+### Replacing transactions
 
 You can use the relayer methods `replaceTransactionById` or `replaceTransactionByNonce` to replace a transaction given its nonce or transactionId (not hash) if it has not been mined yet. You can use this to increase the speed of a transaction, or replace your tx by an empty value transfer (with a gas limit of 21000) to cancel a transaction that is no longer valid.
 
