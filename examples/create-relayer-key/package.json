@@ -1,6 +1,6 @@
 {
   "name": "example-create-relayer-key",
-  "version": "1.50.0-rc.0",
+  "version": "1.50.0-rc.1",
   "private": true,
   "main": "index.js",
   "author": "Dan McKeon <dan@openzeppelin.com>",
@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@openzeppelin/defender-relay-client": "1.50.0-rc.0",
+    "@openzeppelin/defender-relay-client": "1.50.0-rc.1",
     "dotenv": "^8.2.0"
   }
 }
