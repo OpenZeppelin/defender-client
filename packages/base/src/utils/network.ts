@@ -84,7 +84,7 @@ export const Networks: Network[] = [
   'x-dfk-avax-chain',
   'x-dfk-avax-chain-test',
   'mantle',
-  'scroll-sepolia'
+  'scroll-sepolia',
 ];
 export function isValidNetwork(text: string): text is Network {
   return (Networks as string[]).includes(text);
