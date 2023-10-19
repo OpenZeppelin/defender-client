@@ -8,6 +8,7 @@
     "packages/kvstore",
     "packages/relay",
     "packages/sentinel",
+    "packages/account",
     "examples/*"
   ],
   "useNx": true,
