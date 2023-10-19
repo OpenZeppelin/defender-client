@@ -38,6 +38,7 @@ type PublicNetwork =
   | 'linea'
   | 'linea-goerli'
   | 'mantle'
+  | 'scroll'
   | 'scroll-sepolia';
 
 type CustomNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
@@ -84,6 +85,7 @@ export const Networks: Network[] = [
   'x-dfk-avax-chain',
   'x-dfk-avax-chain-test',
   'mantle',
+  'scroll',
   'scroll-sepolia',
 ];
 export function isValidNetwork(text: string): text is Network {
@@ -138,5 +140,6 @@ const chainIds: { [key in Network]: number } = {
   'x-dfk-avax-chain': 53935,
   'x-dfk-avax-chain-test': 335,
   'mantle': 5000,
+  'scroll': 534352,
   'scroll-sepolia': 534351,
 };
