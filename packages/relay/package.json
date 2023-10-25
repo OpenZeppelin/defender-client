@@ -27,7 +27,7 @@
     "@ethersproject/providers": "^5.6.8",
     "@ethersproject/transactions": "^5.6.2",
     "jest-mock-extended": "^1.0.15",
-    "web3-core": "^1.8.2",
+    "web3-core": "^4.3.0",
     "web3-core-helpers": "^1.8.2"
   },
   "dependencies": {
@@ -43,7 +43,7 @@
     "@ethersproject/hash": "^5.6.1",
     "@ethersproject/providers": "^5.6.8",
     "@ethersproject/transactions": "^5.6.2",
-    "web3-core": "^1.8.2",
+    "web3-core": "^4.3.0",
     "web3-core-helpers": "^1.8.2"
   },
   "publishConfig": {
