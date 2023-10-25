@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/defender-autotask-client",
-  "version": "1.50.0-rc.0",
+  "version": "1.50.0",
   "description": "Client library for managing Defender Autotasks",
   "bin": {
     "defender-autotask": "./lib/bin.js"
@@ -27,7 +27,7 @@
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "@openzeppelin/defender-base-client": "1.50.0-rc.0",
+    "@openzeppelin/defender-base-client": "1.50.0",
     "axios": "^1.4.0",
     "dotenv": "^10.0.0",
     "glob": "^7.1.6",
