@@ -1393,10 +1393,21 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
-"@openzeppelin/defender-base-client@1.48.0", "@openzeppelin/defender-base-client@^1.49.0-rc.1":
+"@openzeppelin/defender-base-client@1.48.0":
   version "1.48.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.48.0.tgz#9103b1b036db0451b52d7899a277bf24db4c4b06"
   integrity sha512-HFO87s010hRrMjyh2xYOCEAkLe21BfIbho7n5/kikA6A1ZgXi7MsEiqnQv1zP4bxMJgxGZ5b3t4tt6fWrakbag==
+  dependencies:
+    amazon-cognito-identity-js "^6.0.1"
+    async-retry "^1.3.3"
+    axios "^1.4.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
+"@openzeppelin/defender-base-client@1.49.0":
+  version "1.49.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.49.0.tgz#01a95103b1584b787a2516b22bc31c032d58c9c0"
+  integrity sha512-nG2jslaAUbo2ZW9yBStstxTPscAchN/vRdJ16M34whuZRtUp1bccCBVLdv3oiPOdjwFaa1OBXJkheN+eF8alzA==
   dependencies:
     amazon-cognito-identity-js "^6.0.1"
     async-retry "^1.3.3"
@@ -2097,9 +2108,9 @@ available-typed-arrays@^1.0.5:
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
 aws-sdk@^2.1366.0:
-  version "2.1414.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1414.0.tgz#5888319adba0e98fc95f7b6044bb598edcbf6713"
-  integrity sha512-WhqTWiTZRUxWITvUG5VMPYGdCLNAm4zOTDIiotbErR9x+uDExk2CAGbXE8HH11+tD8PhZVXyukymSiG+7rJMMg==
+  version "2.1483.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1483.0.tgz#1687731fec00b7196d5fc093a75c8eebb4f0f044"
+  integrity sha512-u1DVpvBd2UeYLXwXgY8tO/SjbdFEE6nRkQWiLaDJaBoHycHpe+DjPtGl1KaLiOIMaDZ+cnIzf3/aRSss/mCeBQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
