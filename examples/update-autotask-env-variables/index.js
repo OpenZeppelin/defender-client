@@ -14,7 +14,7 @@ async function main() {
   const updated = await client.updateEnvironmentVariables(autotaskId, { hello: 'world!', test: '123' });
   console.log(updated.message);
 
-  // Retrieve action and display environment variables
+  // Retrieve autotask and display environment variables
   const autotask = await client.get(autotaskId);
   console.log(`New Autotask Environment Variables:`);
   console.log(autotask.environmentVariables);
