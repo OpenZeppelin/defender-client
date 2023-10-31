@@ -14,6 +14,9 @@ async function main() {
       frequencyMinutes: 1500,
     },
     paused: false,
+    environmentVariables: {
+      hello: 'world!',
+    },
   };
 
   const createdAutotask = await client.create(myAutotask);

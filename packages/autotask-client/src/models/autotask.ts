@@ -10,6 +10,7 @@ export interface CreateAutotaskRequest {
   paused: boolean;
   stackResourceId?: string;
   dependenciesVersion?: string;
+  environmentVariables?: EnvironmentVariables;
 }
 
 export interface UpdateAutotaskRequest extends Omit<CreateAutotaskRequest, 'encodedZippedCode'> {
@@ -41,7 +42,10 @@ export type ScenarioTrigger = {
 };
 
 export interface Autotask
-  extends Pick<CreateAutotaskRequest, 'name' | 'relayerId' | 'paused' | 'stackResourceId' | 'dependenciesVersion'> {
+  extends Pick<
+    CreateAutotaskRequest,
+    'name' | 'relayerId' | 'paused' | 'stackResourceId' | 'dependenciesVersion' | 'environmentVariables'
+  > {
   autotaskId: string;
   encodedZippedCode?: string;
   trigger: ScheduleTrigger | WebhookTrigger | SentinelTrigger | MonitorFilterTrigger | ScenarioTrigger;
@@ -60,3 +64,5 @@ export interface SecretsMap {
 export interface GetSecretsResponse {
   secretNames?: string[];
 }
+
+export type EnvironmentVariables = { [key: string]: string };
