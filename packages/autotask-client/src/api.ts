@@ -140,6 +140,12 @@ export class AutotaskClient extends BaseApiClient {
     });
   }
 
+  public async getEnvironmentVariables(autotaskId: string): Promise<EnvironmentVariables> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/autotasks/${autotaskId}/environment`);
+    });
+  }
+
   public async createSecrets(data: SaveSecretsRequest): Promise<GetSecretsResponse> {
     return this.apiCall(async (api) => {
       return await api.post(`/secrets`, data);
