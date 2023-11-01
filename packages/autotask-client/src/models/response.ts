@@ -11,5 +11,3 @@ export type AutotaskResponse = Autotask;
 export type AutotaskDeleteResponse = {
   message: string;
 };
-
-export type AutotaskMessageResponse = { message: string };

@@ -11,13 +11,8 @@ async function main() {
   const client = new AutotaskClient(creds);
 
   // Update Variables
-  const updated = await client.updateEnvironmentVariables(autotaskId, { hello: 'world!', test: '123' });
-  console.log(updated.message);
-
-  // Retrieve autotask and display environment variables
-  const autotask = await client.get(autotaskId);
-  console.log(`New Autotask Environment Variables:`);
-  console.log(autotask.environmentVariables);
+  const variables = await client.updateEnvironmentVariables(autotaskId, { hello: 'world!', test: '123' });
+  console.log(variables);
 }
 
 if (require.main === module) {
