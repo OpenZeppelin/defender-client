@@ -10,7 +10,7 @@ import {
 } from './models/proposal';
 import { SimulationRequest as SimulationTransaction, SimulationResponse } from './models/simulation';
 import { Contract } from './models/contract';
-import { ExternalApiProposalResponse as ProposalResponse } from './models/response';
+import { ProposalListPaginatedResponse, ExternalApiProposalResponse as ProposalResponse } from './models/response';
 import { getProposalUrl } from './utils';
 import { Verification, VerificationRequest } from './models/verification';
 
@@ -149,10 +149,13 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
-  public async listProposals(opts: { includeArchived?: boolean } = {}): Promise<ProposalResponseWithUrl[]> {
+  public async listProposals(opts: { limit?: number; next?: string; includeArchived?: boolean } = {}): Promise<ProposalResponseWithUrl[] | ProposalListPaginatedResponse> {
     return this.apiCall(async (api) => {
-      const response = (await api.get('/proposals', { params: opts })) as ProposalResponse[];
-      return response.map((proposal) => ({ ...proposal, url: getProposalUrl(proposal) }));
+      const response = (await api.get('/proposals', { params: opts })) as ProposalResponse[] | ProposalListPaginatedResponse;
+      if (Array.isArray(response)) {
+        return response.map((proposal) => ({ ...proposal, url: getProposalUrl(proposal) }));
+      }
+      return response;
     });
   }
 

@@ -1,3 +1,4 @@
+import { ProposalResponse } from '..';
 import { ExternalApiCreateProposalRequest } from './proposal';
 
 export interface ExternalApiProposalResponse extends ExternalApiCreateProposalRequest {
@@ -7,4 +8,9 @@ export interface ExternalApiProposalResponse extends ExternalApiCreateProposalRe
   createdAt: string;
   isActive: boolean;
   isArchived: boolean;
+}
+
+export interface ProposalListPaginatedResponse {
+  items: ProposalResponse[];
+  next?: string;
 }
