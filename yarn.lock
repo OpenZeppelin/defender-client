@@ -1453,6 +1453,17 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
+"@openzeppelin/defender-autotask-client@1.51.0-rc.0":
+  version "1.51.0"
+  dependencies:
+    "@openzeppelin/defender-base-client" "1.51.0"
+    axios "^1.4.0"
+    dotenv "^10.0.0"
+    glob "^7.1.6"
+    jszip "^3.5.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
 "@openzeppelin/defender-base-client@1.47.0":
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.47.0.tgz#f9d47f4cf0a75b4e4e5139dec780a3f26f5e2019"
@@ -1486,7 +1497,7 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
-"@openzeppelin/defender-base-client@1.50.0", "@openzeppelin/defender-base-client@^1.45.0":
+"@openzeppelin/defender-base-client@1.50.0":
   version "1.50.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.50.0.tgz#550b22f04570f5133f302fca6e45a3afdc9d9682"
   integrity sha512-V5uJ4t3kr9ex1RrqGH2DwsHuyW7/hl3VK0sSkq3VVbAewtcsW3cdg/UkXd5ITu6mtz76RoYkvUBHtkYUm0nb+w==

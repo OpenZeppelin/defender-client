@@ -5,6 +5,7 @@ import {
   UpdateAutotaskRequest,
   GetSecretsResponse,
   SaveSecretsRequest,
+  EnvironmentVariables,
 } from './models/autotask';
 import {
   AutotaskRunBase,
@@ -127,6 +128,21 @@ export class AutotaskClient extends BaseApiClient {
   private async updateCode(autotaskId: string, encodedZippedCode: string): Promise<void> {
     return this.apiCall(async (api) => {
       return await api.put(`/autotasks/${autotaskId}/code`, { encodedZippedCode });
+    });
+  }
+
+  public async updateEnvironmentVariables(
+    autotaskId: string,
+    variables: EnvironmentVariables,
+  ): Promise<EnvironmentVariables> {
+    return this.apiCall(async (api) => {
+      return await api.put(`/autotasks/${autotaskId}/environment`, { variables });
+    });
+  }
+
+  public async getEnvironmentVariables(autotaskId: string): Promise<EnvironmentVariables> {
+    return this.apiCall(async (api) => {
+      return await api.get(`/autotasks/${autotaskId}/environment`);
     });
   }
 

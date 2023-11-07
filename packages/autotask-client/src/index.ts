@@ -4,6 +4,7 @@ export {
   UpdateAutotaskRequest,
   GetSecretsResponse,
   SaveSecretsRequest,
+  EnvironmentVariables,
 } from './models/autotask';
 export { AutotaskRunBase, AutotaskRunListResponse, AutotaskRunResponse } from './models/autotask-run.res';
 export { AutotaskDeleteResponse, AutotaskListResponse, AutotaskResponse } from './models/response';
