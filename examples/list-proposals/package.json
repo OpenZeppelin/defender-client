@@ -1,15 +1,15 @@
 {
-  "name": "example-batch-proposal",
+  "name": "example-list-proposals",
   "version": "1.51.0",
   "private": true,
   "main": "index.js",
-  "author": "Ernesto García <ernesto@openzeppelin.com>",
+  "author": "OpenZeppelin Defender <defender@openzeppelin.com>",
   "license": "MIT",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "@openzeppelin/defender-admin-client": "1.51.0",
+    "@openzeppelin/defender-admin-client": "1.50.0",
     "dotenv": "^16.3.1"
   }
 }
