@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@openzeppelin/defender-sentinel-client": "1.48.0",
+    "@openzeppelin/defender-sentinel-client": "1.49.0",
     "dotenv": "^8.2.0"
   }
 }
