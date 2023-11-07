@@ -12,5 +12,5 @@
     "examples/*"
   ],
   "useNx": true,
-  "version": "1.51.0-rc.1"
+  "version": "1.51.0"
 }
