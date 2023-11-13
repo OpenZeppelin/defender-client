@@ -1453,17 +1453,6 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
-"@openzeppelin/defender-autotask-client@1.51.0-rc.0":
-  version "1.51.0"
-  dependencies:
-    "@openzeppelin/defender-base-client" "1.51.0"
-    axios "^1.4.0"
-    dotenv "^10.0.0"
-    glob "^7.1.6"
-    jszip "^3.5.0"
-    lodash "^4.17.19"
-    node-fetch "^2.6.0"
-
 "@openzeppelin/defender-base-client@1.47.0":
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.47.0.tgz#f9d47f4cf0a75b4e4e5139dec780a3f26f5e2019"
@@ -1631,9 +1620,9 @@
     minimatch "^9.0.0"
 
 "@types/async-retry@^1.4.4":
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/@types/async-retry/-/async-retry-1.4.5.tgz#02680eb366739a327550f6ad38bb898a5571a095"
-  integrity sha512-YrdjSD+yQv7h6d5Ip+PMxh3H6ZxKyQk0Ts+PvaNRInxneG9PFVZjFg77ILAN+N6qYf7g4giSJ1l+ZjQ1zeegvA==
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/@types/async-retry/-/async-retry-1.4.8.tgz#eb32df13aceb9ba1a8a80e7fe518ff4e3fe46bb3"
+  integrity sha512-Qup/B5PWLe86yI5I3av6ePGaeQrIHNKCwbsQotD6aHQ6YkHsMUxVZkZsmx/Ry3VZQ6uysHwTjQ7666+k6UjVJA==
   dependencies:
     "@types/retry" "*"
 
