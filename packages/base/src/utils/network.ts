@@ -41,7 +41,9 @@ type PublicNetwork =
   | 'scroll'
   | 'scroll-sepolia'
   | 'meld'
-  | 'meld-kanazawa';
+  | 'meld-kanazawa'
+  | 'edgeware'
+  | 'beresheet';
 
 type CustomNetwork = 'x-dfk-avax-chain' | 'x-dfk-avax-chain-test';
 
@@ -91,6 +93,8 @@ export const Networks: Network[] = [
   'scroll-sepolia',
   'meld',
   'meld-kanazawa',
+  'edgeware',
+  'beresheet',
 ];
 export function isValidNetwork(text: string): text is Network {
   return (Networks as string[]).includes(text);
@@ -148,4 +152,6 @@ const chainIds: { [key in Network]: number } = {
   'scroll-sepolia': 534351,
   'meld': 0x13d92e8d,
   'meld-kanazawa': 0xd3b745e,
+  'edgeware': 2021,
+  'beresheet': 2022,
 };
