@@ -71,6 +71,7 @@ export const Networks: Network[] = [
   'arbitrum',
   'arbitrum-nova',
   'arbitrum-goerli',
+  'arbitrum-sepolia',
   'celo',
   'alfajores',
   'harmony-s0',
