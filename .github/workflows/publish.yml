@@ -86,8 +86,11 @@ jobs:
           tag_version="v1.52.0-rc.2"
           pwd
           lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
-          if [[ $tag_version != *rc* ]]; then
-            lerna publish $tag_version $lerna_options
-          else
-            lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc --loglevel debug
-          fi
+          # if [[ $tag_version != *rc* ]]; then
+          #   lerna publish $tag_version $lerna_options
+          # else
+          #   lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc --loglevel debug
+          # fi
+
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
