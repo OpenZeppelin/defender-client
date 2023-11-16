@@ -83,7 +83,7 @@ jobs:
           tar -xzvf "${{ needs.provenance.outputs.package-name }}"
           cd package/; git init
           tag_ref=${{ github.ref }}
-          tag_version="v1.52.0-rc.1"
+          tag_version="v1.52.0-rc.2"
           pwd
           lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
           if [[ $tag_version != *rc* ]]; then
