@@ -72,6 +72,9 @@ jobs:
       # - name: Setup upterm session
       #   uses: lhotari/action-upterm@v1
 
+      - name: Enable NPM_CONFIG_PROVENANCE
+        run: echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV
+
       - name: Unpack the zipped artifact
         run: |
           set -euo pipefail
@@ -80,12 +83,11 @@ jobs:
           tar -xzvf "${{ needs.provenance.outputs.package-name }}"
           cd package/; git init
           tag_ref=${{ github.ref }}
-          tag_version="v1.52.0-rc.0"
+          tag_version="v1.52.0-rc.1"
           pwd
-          git status
-          # lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
-          # if [[ $tag_version != *rc* ]]; then
-          #   lerna publish $tag_version $lerna_options
-          # else
-          #   lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc --loglevel debug
-          # fi
+          lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
+          if [[ $tag_version != *rc* ]]; then
+            lerna publish $tag_version $lerna_options
+          else
+            lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc --loglevel debug
+          fi
