@@ -69,8 +69,8 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
 
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
+      # - name: Setup upterm session
+      #   uses: lhotari/action-upterm@v1
 
       - name: Unpack the zipped artifact
         run: |
@@ -81,9 +81,11 @@ jobs:
           cd package/; git init
           tag_ref=${{ github.ref }}
           tag_version="v1.52.0-rc.0"
-          lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
-          if [[ $tag_version != *rc* ]]; then
-            lerna publish $tag_version $lerna_options
-          else
-            lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc --loglevel debug
-          fi
+          pwd
+          git status
+          # lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
+          # if [[ $tag_version != *rc* ]]; then
+          #   lerna publish $tag_version $lerna_options
+          # else
+          #   lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc --loglevel debug
+          # fi
