@@ -67,7 +67,7 @@ jobs:
 
       - name: Authenticate NPM
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=examplenotrealtoken" > ~/.npmrc
 
       - name: Unpack the zipped artifact
         run: |
