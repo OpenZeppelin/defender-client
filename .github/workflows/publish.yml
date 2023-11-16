@@ -82,5 +82,5 @@ jobs:
           if [[ $tag_version != *rc* ]]; then
             echo "Main release"
           else
-            lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc
+            lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc --loglevel debug
           fi
