@@ -37,7 +37,9 @@ jobs:
                           "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
           echo "author=$(echo $COMMIT_DETAILS | yq '.author.login')" >> $GITHUB_OUTPUT
   prepare:
+    needs: check_author
     runs-on: ubuntu-22.04
+    if: ${{ needs.check_author.outputs.latest_commit_author == 'svc-gh-is-01' }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
