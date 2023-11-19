@@ -170,6 +170,8 @@ jobs:
         id: update_version
         run: |
           TAG_NAME=$(node -p "require('./lerna.json').version")
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git add .
           git commit -m "Update version to v$TAG_NAME"
           echo "next_rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
