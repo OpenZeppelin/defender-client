@@ -23,5 +23,9 @@
   ],
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenZeppelin/defender-client.git"
+  },
   "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e"
 }
