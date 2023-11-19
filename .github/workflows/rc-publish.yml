@@ -103,11 +103,12 @@ jobs:
       - name: Update the tags
         if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
-          if [[ $tag_version != *rc* ]]; then
-            yarn versionup:preminor && ./hack/cross-dependency.sh
-          else
-            yarn versionup:prerelease && ./hack/cross-dependency.sh
-          fi
+          yarn versionup:prerelease && ./hack/cross-dependency.sh
+          # if [[ $tag_version != *rc* ]]; then
+          #   yarn versionup:preminor && ./hack/cross-dependency.sh
+          # else
+          #   yarn versionup:prerelease && ./hack/cross-dependency.sh
+          # fi
 
       - name: Use node@16
         uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
