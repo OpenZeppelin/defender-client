@@ -74,7 +74,6 @@ jobs:
       id-token: write
       contents: write
       actions: read
-      id-token: write # For signing
     runs-on: ubuntu-22.04
     needs: provenance
     outputs:
