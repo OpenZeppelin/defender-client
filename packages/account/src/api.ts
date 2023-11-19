@@ -2,6 +2,7 @@ import { BaseApiClient, ApiVersion } from '@openzeppelin/defender-base-client';
 
 import { AccountUsageResponse } from './models/account';
 
+// AccountClient class
 export class AccountClient extends BaseApiClient {
   protected getPoolId(): string {
     return process.env.DEFENDER_ADMIN_POOL_ID ?? 'us-west-2_94f3puJWv';
@@ -27,3 +28,4 @@ export class AccountClient extends BaseApiClient {
     return this.apiCall(async (api) => api.get(`/account/usage?${searchParams.toString()}`));
   }
 }
+
