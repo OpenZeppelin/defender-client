@@ -101,7 +101,7 @@ jobs:
           echo "changed_packages=${changed_packages:-0}" >> $GITHUB_OUTPUT
 
       - name: Update the tags
-        if: steps.tag_check_changes.outputs.changed_packages > 0
+        # if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           yarn versionup:prerelease && ./hack/cross-dependency.sh
           # if [[ $tag_version != *rc* ]]; then
