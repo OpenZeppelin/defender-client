@@ -104,6 +104,7 @@ jobs:
         # if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           yarn versionup:prerelease && ./hack/cross-dependency.sh
+          git status
           # if [[ $tag_version != *rc* ]]; then
           #   yarn versionup:preminor && ./hack/cross-dependency.sh
           # else
