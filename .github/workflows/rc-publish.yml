@@ -186,8 +186,8 @@ jobs:
           cd "${{ steps.temp-dir.outputs.path }}"
           tar -xzvf "${{ needs.provenance.outputs.package-name }}"
           cd package/; git init
-          # git config user.name github-actions
-          # git config user.email github-actions@github.com
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git add .
           git commit -m "Add the untracked files"
           tag_ref=${{ steps.update_version.outputs.next_rc_version }}
