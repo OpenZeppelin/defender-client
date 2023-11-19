@@ -144,6 +144,9 @@ jobs:
       - name: Enable NPM PROVENANCE
         run: echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV
 
+      - name: Echo TAG
+        run: echo ${{ steps.update_version.outputs.next_rc_version }}
+
       - name: Unpack the zipped artifact and publish
         run: |
           set -euo pipefail
@@ -157,7 +160,6 @@ jobs:
           # git commit -m "Add the untracked files"
           tag_ref=${{ steps.update_version.outputs.next_rc_version }}
           tag_version=${tag_ref#refs/tags/v}
-          echo $tag_version
           lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
           lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc
           cd ../../
