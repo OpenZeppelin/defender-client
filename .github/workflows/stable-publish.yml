@@ -1,0 +1,193 @@
+name: Publish The Stable Release
+
+on:
+  workflow_dispatch: {}
+
+# Declare default permissions as read only.
+permissions: read-all
+
+jobs:
+  check_author:
+    runs-on: ubuntu-22.04
+    outputs:
+      latest_commit_author: ${{ steps.commit.outputs.author }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout Repo
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - name: Install yq
+        run: |
+          sudo apt-get update &&\
+          sudo apt-get install wget -y &&\
+          sudo wget https://github.com/mikefarah/yq/releases/download/v4.34.1/yq_linux_amd64 -O /usr/bin/yq &&\
+          sudo chmod +x /usr/bin/yq
+
+      - name: Get last commit details
+        id: commit
+        run: |
+          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_DETAILS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                          "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
+          echo "author=$(echo $COMMIT_DETAILS | yq '.author.login')" >> $GITHUB_OUTPUT
+  prepare:
+    needs: check_author
+    runs-on: ubuntu-22.04
+    if: ${{ needs.check_author.outputs.latest_commit_author != 'svc-gh-is-01' }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout Repo
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - name: Prepare pre-requisites
+        uses: ./.github/actions/prepare
+
+  # Deterministic Build & tests
+  provenance:
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+    needs: prepare
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
+    with:
+      run-scripts: "install-deps, style, nx-build-skip-cache, nx-test-skip-cache"
+      node-version: "16.20.0"
+
+  # Git tag the commit for publishing
+  tag:
+    name: Tag stable version for all packages
+    permissions:
+      id-token: write
+      contents: write
+      actions: read
+    runs-on: ubuntu-22.04
+    needs: provenance
+    outputs:
+      next_stable_version: ${{ steps.update_version.outputs.next_stable_version }}
+      changed_packages: ${{ steps.tag_check_changes.outputs.changed_packages }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+        with:
+          token: ${{ secrets.SAI_PAT }}
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@82a020f1f7f605c65dd2449b392a52c3fcfef7ef # v6.0.0
+        with:
+          gpg_private_key: ${{ secrets.SVC_GPG_KEY }}
+          passphrase: ${{ secrets.SVC_GPG_PASSPHRASE }}
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Get latest git tag and verify package changes
+        id: tag_check_changes
+        run: |
+          git fetch --prune --unshallow --tags
+          latest_tag=$(git describe --tags --abbrev=0 --match "v*")
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          changed_packages=$(lerna changed --json | jq -r 'length')
+          echo "changed_packages=${changed_packages:-0}" >> $GITHUB_OUTPUT
+
+      - name: Update the tags
+        if: steps.tag_check_changes.outputs.changed_packages > 0
+        run: |
+          yarn versionup:stableminor && ./hack/cross-dependency.sh
+
+      - name: Use node@16
+        uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+        with:
+          node-version: 16.20.0
+
+      - name: Create temp dir
+        id: temp-dir
+        run: |
+          set -euo pipefail
+
+          temp_dir=$(mktemp -d)
+          echo "path=${temp_dir}" >>"${GITHUB_OUTPUT}"
+
+      - name: Download tarball
+        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@934435652996c02a6317092984312602dfaf2a21 # main
+        with:
+          name: ${{ needs.provenance.outputs.package-download-name }}
+          path: "${{ steps.temp-dir.outputs.path }}/${{ needs.provenance.outputs.package-name }}"
+          sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
+
+      - name: Download provenance
+        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@0779f7bec68e2bf54a7b0a32bf4763f25ab29702 # v1.6.0
+        with:
+          name: ${{ needs.provenance.outputs.provenance-download-name }}
+          path: "${{ steps.temp-dir.outputs.path }}"
+          sha256: ${{ needs.provenance.outputs.provenance-download-sha256 }}
+
+      - name: Authenticate NPM
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          echo "@openzeppelin:registry https://registry.npmjs.org" >> ~/.npmrc
+
+      - name: Enable NPM PROVENANCE
+        run: echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV
+
+      - name: Commit changes
+        if: steps.tag_check_changes.outputs.changed_packages > 0
+        id: update_version
+        run: |
+          TAG_NAME=$(node -p "require('./lerna.json').version")
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Update version to v$TAG_NAME"
+          echo "next_stable_version=v$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Echo TAG
+        run: echo ${{ steps.update_version.outputs.next_stable_version }}
+
+      - name: Unpack the zipped artifact and publish
+        run: |
+          set -euo pipefail
+
+          cd "${{ steps.temp-dir.outputs.path }}"
+          tar -xzvf "${{ needs.provenance.outputs.package-name }}"
+          cd package/; git init
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Add the untracked files"
+          tag_ref=${{ steps.update_version.outputs.next_stable_version }}
+          tag_version=${tag_ref#refs/tags/v}
+          lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
+          lerna publish $tag_version $lerna_options
+          cd ../../
+
+      - name: Create and push tag
+        if: steps.tag_check_changes.outputs.changed_packages > 0
+        run: |
+          git tag -a ${{ steps.update_version.outputs.next_stable_version }} -m "${{ steps.update_version.outputs.next_stable_version }}"
+          git push origin ${{ steps.update_version.outputs.next_stable_version }}
+          git push origin master
+
+  create-release:
+    name: Create Release
+    needs: tag
+    permissions:
+      contents: write
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.tag.outputs.next_stable_version }}
+      prerelease: false
