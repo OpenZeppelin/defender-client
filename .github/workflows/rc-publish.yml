@@ -176,10 +176,10 @@ jobs:
       #     cd ../../
 
       - name: Create and push tag
-        if: steps.tag_check_changes.outputs.changed_packages > 0
+        # if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
-          git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "${{ steps.update_version.outputs.next_rc_version }}"
-          git push origin ${{ steps.update_version.outputs.next_rc_version }}
+          git tag -s test-v1 -m "test-v1"
+          git push origin test-v1
           # git push origin master
 
   # create-release:
