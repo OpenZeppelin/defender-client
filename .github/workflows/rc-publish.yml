@@ -158,37 +158,37 @@ jobs:
       - name: Echo TAG
         run: echo ${{ steps.update_version.outputs.next_rc_version }}
 
-      - name: Unpack the zipped artifact and publish
-        run: |
-          set -euo pipefail
+      # - name: Unpack the zipped artifact and publish
+      #   run: |
+      #     set -euo pipefail
 
-          cd "${{ steps.temp-dir.outputs.path }}"
-          tar -xzvf "${{ needs.provenance.outputs.package-name }}"
-          cd package/; git init
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "Add the untracked files"
-          tag_ref=${{ steps.update_version.outputs.next_rc_version }}
-          tag_version=${tag_ref#refs/tags/v}
-          lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
-          lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc
-          cd ../../
+      #     cd "${{ steps.temp-dir.outputs.path }}"
+      #     tar -xzvf "${{ needs.provenance.outputs.package-name }}"
+      #     cd package/; git init
+      #     git config user.name github-actions
+      #     git config user.email github-actions@github.com
+      #     git add .
+      #     git commit -m "Add the untracked files"
+      #     tag_ref=${{ steps.update_version.outputs.next_rc_version }}
+      #     tag_version=${tag_ref#refs/tags/v}
+      #     lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
+      #     lerna publish $tag_version $lerna_options --dist-tag rc --pre-dist-tag rc
+      #     cd ../../
 
       - name: Create and push tag
         if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           git tag -a ${{ steps.update_version.outputs.next_rc_version }} -m "${{ steps.update_version.outputs.next_rc_version }}"
           git push origin ${{ steps.update_version.outputs.next_rc_version }}
-          git push origin master
+          # git push origin master
 
-  create-release:
-    permissions:
-      contents: write
-    name: Create Release
-    needs: tag
-    if: needs.tag.outputs.changed_packages > 0
-    uses: ./.github/workflows/release.yml
-    with:
-      tag: ${{ needs.tag.outputs.next_rc_version }}
-      prerelease: true
+  # create-release:
+  #   permissions:
+  #     contents: write
+  #   name: Create Release
+  #   needs: tag
+  #   if: needs.tag.outputs.changed_packages > 0
+  #   uses: ./.github/workflows/release.yml
+  #   with:
+  #     tag: ${{ needs.tag.outputs.next_rc_version }}
+  #     prerelease: true
