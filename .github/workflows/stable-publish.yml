@@ -110,12 +110,14 @@ jobs:
           yarn versionup:stableminor && ./hack/cross-dependency.sh
 
       - name: Use node@16
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
         with:
           node-version: 16.20.0
 
       - name: Create temp dir
         id: temp-dir
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           set -euo pipefail
 
@@ -123,6 +125,7 @@ jobs:
           echo "path=${temp_dir}" >>"${GITHUB_OUTPUT}"
 
       - name: Download tarball
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@934435652996c02a6317092984312602dfaf2a21 # main
         with:
           name: ${{ needs.provenance.outputs.package-download-name }}
@@ -130,6 +133,7 @@ jobs:
           sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
 
       - name: Download provenance
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@0779f7bec68e2bf54a7b0a32bf4763f25ab29702 # v1.6.0
         with:
           name: ${{ needs.provenance.outputs.provenance-download-name }}
@@ -137,11 +141,13 @@ jobs:
           sha256: ${{ needs.provenance.outputs.provenance-download-sha256 }}
 
       - name: Authenticate NPM
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           echo "@openzeppelin:registry https://registry.npmjs.org" >> ~/.npmrc
 
       - name: Enable NPM PROVENANCE
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         run: echo "NPM_CONFIG_PROVENANCE=true" >> $GITHUB_ENV
 
       - name: Commit changes
@@ -155,10 +161,8 @@ jobs:
           git commit -m "Update version to v$TAG_NAME"
           echo "next_stable_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
-      - name: Echo TAG
-        run: echo ${{ steps.update_version.outputs.next_stable_version }}
-
       - name: Unpack the zipped artifact and publish
+        if: steps.tag_check_changes.outputs.changed_packages > 0
         run: |
           set -euo pipefail
 
