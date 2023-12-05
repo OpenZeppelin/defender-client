@@ -1248,12 +1248,12 @@
   dependencies:
     "@nx/devkit" "16.9.1"
 
-"@nrwl/nx-cloud@16.0.5":
-  version "16.0.5"
-  resolved "https://registry.yarnpkg.com/@nrwl/nx-cloud/-/nx-cloud-16.0.5.tgz#c963480a71c4afa964fbbe9e4d6bbf222764e9cd"
-  integrity sha512-1p82ym8WE9ziejwgPslstn19iV/VkHfHfKr/5YOnfCHQS+NxUf92ogcYhHXtqWLblVZ9Zs4W4pkSXK4e04wCmQ==
+"@nrwl/nx-cloud@16.5.2":
+  version "16.5.2"
+  resolved "https://registry.yarnpkg.com/@nrwl/nx-cloud/-/nx-cloud-16.5.2.tgz#4874cb01edd48c54de2a4ca69e909c1168c98b2c"
+  integrity sha512-oHO5T1HRJsR9mbRd8eUqMBPCgqVZLSbAh3zJoPFmhEmjbM4YB9ePRpgYFT8dRNeZUOUd/8Yt7Pb6EVWOHvpD/w==
   dependencies:
-    nx-cloud "16.0.5"
+    nx-cloud "16.5.2"
 
 "@nrwl/tao@16.9.1":
   version "16.9.1"
@@ -1453,17 +1453,6 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
-"@openzeppelin/defender-autotask-client@1.51.0-rc.0":
-  version "1.51.0"
-  dependencies:
-    "@openzeppelin/defender-base-client" "1.51.0"
-    axios "^1.4.0"
-    dotenv "^10.0.0"
-    glob "^7.1.6"
-    jszip "^3.5.0"
-    lodash "^4.17.19"
-    node-fetch "^2.6.0"
-
 "@openzeppelin/defender-base-client@1.47.0":
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.47.0.tgz#f9d47f4cf0a75b4e4e5139dec780a3f26f5e2019"
@@ -1501,6 +1490,17 @@
   version "1.50.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.50.0.tgz#550b22f04570f5133f302fca6e45a3afdc9d9682"
   integrity sha512-V5uJ4t3kr9ex1RrqGH2DwsHuyW7/hl3VK0sSkq3VVbAewtcsW3cdg/UkXd5ITu6mtz76RoYkvUBHtkYUm0nb+w==
+  dependencies:
+    amazon-cognito-identity-js "^6.0.1"
+    async-retry "^1.3.3"
+    axios "^1.4.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
+"@openzeppelin/defender-base-client@^1.45.0":
+  version "1.52.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.52.0.tgz#7a000eeba9705c75e6be5de5d32e07d377aed55d"
+  integrity sha512-VFNu/pjVpAnFKIfuKT1cn9dRpbcO8FO8EAmVZ2XrrAsKXEWDZ3TNBtACxmj7fAu0ad/TzRkb66o5rMts7Fv7jw==
   dependencies:
     amazon-cognito-identity-js "^6.0.1"
     async-retry "^1.3.3"
@@ -6387,12 +6387,12 @@ number-to-bn@1.7.0:
     bn.js "4.11.6"
     strip-hex-prefix "1.0.0"
 
-nx-cloud@16.0.5, nx-cloud@latest:
-  version "16.0.5"
-  resolved "https://registry.yarnpkg.com/nx-cloud/-/nx-cloud-16.0.5.tgz#fa0b0185d254405ec47fcbcdbbd8b12ff1add096"
-  integrity sha512-13P7r0aKikjBtmdZrNorwXzVPeVIV4MLEwqGY+DEG6doLBtI5KqEQk/d5B5l2dCF2BEi/LXEmLYCmf9gwbOJ+Q==
+nx-cloud@16.5.2, nx-cloud@latest:
+  version "16.5.2"
+  resolved "https://registry.yarnpkg.com/nx-cloud/-/nx-cloud-16.5.2.tgz#edb7bfc65d0e0cae52947607aa0b44ea163bd4f3"
+  integrity sha512-1t1Ii9gojl8r/8hFGaZ/ZyYR0Cb0hzvXLCsaFuvg+EJEFdvua3P4cfNya/0bdRrm+7Eb/ITUOskbvYq4TSlyGg==
   dependencies:
-    "@nrwl/nx-cloud" "16.0.5"
+    "@nrwl/nx-cloud" "16.5.2"
     axios "1.1.3"
     chalk "^4.1.0"
     dotenv "~10.0.0"
