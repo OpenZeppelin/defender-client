@@ -25,90 +25,81 @@
   "nxJsonPlugins": [],
   "fileMap": {
     "projectFileMap": {
-      "@openzeppelin/defender-autotask-client": [
+      "@openzeppelin/defender-sentinel-client": [
         {
-          "file": "packages/autotask-client/README.md",
-          "hash": "6536681295769524051"
+          "file": "packages/sentinel/README.md",
+          "hash": "18202087768423806573"
         },
         {
-          "file": "packages/autotask-client/fixtures/invalid/notindex.js",
-          "hash": "17136224347858963626"
-        },
-        {
-          "file": "packages/autotask-client/fixtures/valid/data.json",
-          "hash": "14072793459998056372"
-        },
-        {
-          "file": "packages/autotask-client/fixtures/valid/index.js",
-          "hash": "17136224347858963626"
-        },
-        {
-          "file": "packages/autotask-client/fixtures/valid/subfolder/nested.json",
-          "hash": "5210720905863636418"
-        },
-        {
-          "file": "packages/autotask-client/jest.config.js",
+          "file": "packages/sentinel/jest.config.js",
           "hash": "12966926139302408033"
         },
         {
-          "file": "packages/autotask-client/package.json",
-          "hash": "6410198139119009271",
+          "file": "packages/sentinel/package.json",
+          "hash": "1974150192860100637",
           "deps": [
             "@openzeppelin/defender-base-client"
           ]
         },
         {
-          "file": "packages/autotask-client/src/api.ts",
-          "hash": "2583884219720315897"
+          "file": "packages/sentinel/src/__mocks__/@openzeppelin/defender-base-client.ts",
+          "hash": "4318980718058194147"
         },
         {
-          "file": "packages/autotask-client/src/bin.ts",
-          "hash": "4258310818973943968"
+          "file": "packages/sentinel/src/api/index.test.ts",
+          "hash": "16314186069740820672"
         },
         {
-          "file": "packages/autotask-client/src/index.ts",
-          "hash": "2732712712862903712"
+          "file": "packages/sentinel/src/api/index.ts",
+          "hash": "7893121418162011614"
         },
         {
-          "file": "packages/autotask-client/src/models/autotask-run.res.ts",
-          "hash": "4187638074117879402"
+          "file": "packages/sentinel/src/index.ts",
+          "hash": "11552777534155436837"
         },
         {
-          "file": "packages/autotask-client/src/models/autotask.ts",
-          "hash": "1791864776621148315"
+          "file": "packages/sentinel/src/models/blockwatcher.ts",
+          "hash": "17912304914664654945"
         },
         {
-          "file": "packages/autotask-client/src/models/response.ts",
-          "hash": "13448767625901733632"
+          "file": "packages/sentinel/src/models/category.ts",
+          "hash": "4086632683837448152"
         },
         {
-          "file": "packages/autotask-client/src/utils.ts",
-          "hash": "16804432478907789046"
+          "file": "packages/sentinel/src/models/ethers.ts",
+          "hash": "18415121359949458809"
         },
         {
-          "file": "packages/autotask-client/src/zip.test.ts",
-          "hash": "17466767365342933510"
+          "file": "packages/sentinel/src/models/networks.ts",
+          "hash": "11911304986417285879"
         },
         {
-          "file": "packages/autotask-client/src/zip.ts",
-          "hash": "4659201178170426159"
+          "file": "packages/sentinel/src/models/notification.ts",
+          "hash": "1532196626729703608"
         },
         {
-          "file": "packages/autotask-client/tsconfig.json",
-          "hash": "9751562623722216616"
-        }
-      ],
-      "example-relayer-send": [
-        {
-          "file": "examples/relayer-actions/index.js",
-          "hash": "5326139213565904027"
+          "file": "packages/sentinel/src/models/opsgenie.ts",
+          "hash": "16795445595043829181"
         },
         {
-          "file": "examples/relayer-actions/package.json",
-          "hash": "5787209858566348653",
-          "deps": [
-            "@openzeppelin/defender-relay-client"
-          ]
+          "file": "packages/sentinel/src/models/pager-duty.ts",
+          "hash": "17120040616655268886"
+        },
+        {
+          "file": "packages/sentinel/src/models/response.ts",
+          "hash": "16292440740240903305"
+        },
+        {
+          "file": "packages/sentinel/src/models/subscriber.ts",
+          "hash": "3063800648802359012"
+        },
+        {
+          "file": "packages/sentinel/src/utils/index.ts",
+          "hash": "7161323481049543673"
+        },
+        {
+          "file": "packages/sentinel/tsconfig.json",
+          "hash": "11407266455432728675"
         }
       ],
       "example-web3-provider": [
@@ -126,102 +117,237 @@
         },
         {
           "file": "examples/web3-provider/package.json",
-          "hash": "3326453070855769229",
+          "hash": "7063480233215861156",
           "deps": [
             "@openzeppelin/defender-relay-client"
           ]
         }
       ],
-      "@openzeppelin/defender-kvstore-client": [
+      "@openzeppelin/defender-admin-client": [
         {
-          "file": "packages/kvstore/README.md",
-          "hash": "5490355415065765728"
+          "file": "packages/admin/README.md",
+          "hash": "10726798244428879800"
         },
         {
-          "file": "packages/kvstore/__mocks__/aws-sdk/clients/lambda.ts",
-          "hash": "6913506966722630624"
-        },
-        {
-          "file": "packages/kvstore/jest.config.js",
+          "file": "packages/admin/jest.config.js",
           "hash": "12966926139302408033"
         },
         {
-          "file": "packages/kvstore/package.json",
-          "hash": "10289067911680912205",
+          "file": "packages/admin/package.json",
+          "hash": "17498836006454420503",
           "deps": [
             "@openzeppelin/defender-base-client"
           ]
         },
         {
-          "file": "packages/kvstore/src/autotask.test.ts",
-          "hash": "6849386837206012301"
+          "file": "packages/admin/src/api.ts",
+          "hash": "14378826862099182770"
         },
         {
-          "file": "packages/kvstore/src/autotask.ts",
-          "hash": "12779345834981705362"
+          "file": "packages/admin/src/index.ts",
+          "hash": "357008954654697427"
         },
         {
-          "file": "packages/kvstore/src/index.test.ts",
-          "hash": "7166639332046235384"
+          "file": "packages/admin/src/models/contract.ts",
+          "hash": "10209304598533077175"
         },
         {
-          "file": "packages/kvstore/src/index.ts",
-          "hash": "19504319667859607"
+          "file": "packages/admin/src/models/proposal.ts",
+          "hash": "15508872530846460924"
         },
         {
-          "file": "packages/kvstore/src/local.test.ts",
-          "hash": "8655804668871537864"
+          "file": "packages/admin/src/models/response.ts",
+          "hash": "4231992815874598212"
         },
         {
-          "file": "packages/kvstore/src/local.ts",
-          "hash": "10890109383029621243"
+          "file": "packages/admin/src/models/simulation.ts",
+          "hash": "1146582682403296708"
         },
         {
-          "file": "packages/kvstore/src/types.ts",
-          "hash": "6372625922276885341"
+          "file": "packages/admin/src/models/verification.ts",
+          "hash": "1787338385205582455"
         },
         {
-          "file": "packages/kvstore/tsconfig.json",
+          "file": "packages/admin/src/utils.ts",
+          "hash": "7493680782742358997"
+        },
+        {
+          "file": "packages/admin/tsconfig.json",
           "hash": "9751562623722216616"
         }
       ],
-      "example-relayer-autotasks": [
+      "@openzeppelin/defender-autotask-utils": [
         {
-          "file": "examples/relayer-autotasks/index.js",
-          "hash": "9291869583678949242"
+          "file": "packages/autotask-utils/README.md",
+          "hash": "2387152441026461298"
         },
         {
-          "file": "examples/relayer-autotasks/package.json",
-          "hash": "2137523025181587347",
+          "file": "packages/autotask-utils/jest.config.js",
+          "hash": "12966926139302408033"
+        },
+        {
+          "file": "packages/autotask-utils/package.json",
+          "hash": "12659535594759714299"
+        },
+        {
+          "file": "packages/autotask-utils/src/index.ts",
+          "hash": "8574470219266552477"
+        },
+        {
+          "file": "packages/autotask-utils/src/types.ts",
+          "hash": "6805298673199109332"
+        },
+        {
+          "file": "packages/autotask-utils/tsconfig.json",
+          "hash": "9751562623722216616"
+        }
+      ],
+      "example-batch-proposal": [
+        {
+          "file": "examples/batch-proposal/index.js",
+          "hash": "21759094049151298"
+        },
+        {
+          "file": "examples/batch-proposal/package.json",
+          "hash": "10292329828066404634",
+          "deps": [
+            "@openzeppelin/defender-admin-client"
+          ]
+        }
+      ],
+      "deploy-contract": [
+        {
+          "file": "examples/deploy-contract/artifacts/Box.json",
+          "hash": "754958586419862672"
+        },
+        {
+          "file": "examples/deploy-contract/contracts/Box.sol",
+          "hash": "8878078901604982891"
+        },
+        {
+          "file": "examples/deploy-contract/index.js",
+          "hash": "5981607242550461992"
+        },
+        {
+          "file": "examples/deploy-contract/package.json",
+          "hash": "9953907817484743629",
+          "deps": [
+            "@openzeppelin/platform-deploy-client"
+          ]
+        }
+      ],
+      "example-update-relayer": [
+        {
+          "file": "examples/update-relayer/index.js",
+          "hash": "9732880041052895810"
+        },
+        {
+          "file": "examples/update-relayer/package.json",
+          "hash": "10401162216067773378",
           "deps": [
             "@openzeppelin/defender-relay-client"
           ]
         }
       ],
-      "example-upgrade-proposal": [
+      "example-verify-contract": [
         {
-          "file": "examples/upgrade-proposal/index.js",
-          "hash": "987089934869997545"
+          "file": "examples/verify-contract/compilation-artifact.json",
+          "hash": "4725029900212767748"
         },
         {
-          "file": "examples/upgrade-proposal/package.json",
-          "hash": "11394423285039509588",
+          "file": "examples/verify-contract/index.js",
+          "hash": "7379429706199530953"
+        },
+        {
+          "file": "examples/verify-contract/package.json",
+          "hash": "11237241810771280341",
           "deps": [
             "@openzeppelin/defender-admin-client"
           ]
         }
       ],
-      "example-action-proposal": [
+      "example-update-autotask-env-variables": [
         {
-          "file": "examples/action-proposal/index.js",
-          "hash": "5300533886416175864"
+          "file": "examples/update-autotask-env-variables/index.js",
+          "hash": "6906637240051365593"
         },
         {
-          "file": "examples/action-proposal/package.json",
-          "hash": "15538299999811261770",
+          "file": "examples/update-autotask-env-variables/package.json",
+          "hash": "1323605172777194575",
+          "deps": [
+            "@openzeppelin/defender-autotask-client"
+          ]
+        }
+      ],
+      "example-pause-proposal": [
+        {
+          "file": "examples/pause-proposal/index.js",
+          "hash": "17092627676038259988"
+        },
+        {
+          "file": "examples/pause-proposal/package.json",
+          "hash": "4861353313136746095",
           "deps": [
             "@openzeppelin/defender-admin-client"
           ]
+        }
+      ],
+      "@openzeppelin/defender-account-client": [
+        {
+          "file": "packages/account/README.md",
+          "hash": "6445882047060213187"
+        },
+        {
+          "file": "packages/account/jest.config.js",
+          "hash": "12966926139302408033"
+        },
+        {
+          "file": "packages/account/package.json",
+          "hash": "13720726617081466458",
+          "deps": [
+            "@openzeppelin/defender-base-client"
+          ]
+        },
+        {
+          "file": "packages/account/src/api.ts",
+          "hash": "12835581603053586965"
+        },
+        {
+          "file": "packages/account/src/index.ts",
+          "hash": "18270654198805241383"
+        },
+        {
+          "file": "packages/account/src/models/account.ts",
+          "hash": "6395116712560900759"
+        },
+        {
+          "file": "packages/account/tsconfig.json",
+          "hash": "9751562623722216616"
+        }
+      ],
+      "example-ethers-signer": [
+        {
+          "file": "examples/ethers-signer/bytecode.json",
+          "hash": "7482258845204974093"
+        },
+        {
+          "file": "examples/ethers-signer/erc20.json",
+          "hash": "17813659203139691761"
+        },
+        {
+          "file": "examples/ethers-signer/index.js",
+          "hash": "17630382212452498051"
+        },
+        {
+          "file": "examples/ethers-signer/package.json",
+          "hash": "2621635015368038838",
+          "deps": [
+            "@openzeppelin/defender-relay-client"
+          ]
+        },
+        {
+          "file": "examples/ethers-signer/typedData.json",
+          "hash": "6287082506546546996"
         }
       ],
       "example-create-relayer": [
@@ -231,20 +357,41 @@
         },
         {
           "file": "examples/create-relayer/package.json",
-          "hash": "17744207739545037426",
+          "hash": "16134386052454920835",
           "deps": [
             "@openzeppelin/defender-relay-client"
           ]
         }
       ],
-      "example-create-secret": [
+      "example-update-notification-category": [
         {
-          "file": "examples/create-secret/index.js",
-          "hash": "9864217281467896786"
+          "file": "examples/update-notification-category/index.js",
+          "hash": "13445406128796350409"
         },
         {
-          "file": "examples/create-secret/package.json",
-          "hash": "10404735218733863695",
+          "file": "examples/update-notification-category/package.json",
+          "hash": "17324790085442433808",
+          "deps": [
+            "@openzeppelin/defender-sentinel-client"
+          ]
+        }
+      ],
+      "example-create-autotask": [
+        {
+          "file": "examples/create-autotask/code/deps.js",
+          "hash": "11781801341482487166"
+        },
+        {
+          "file": "examples/create-autotask/code/index.js",
+          "hash": "12121887950943165488"
+        },
+        {
+          "file": "examples/create-autotask/index.js",
+          "hash": "7545388706481614085"
+        },
+        {
+          "file": "examples/create-autotask/package.json",
+          "hash": "8326503287492402623",
           "deps": [
             "@openzeppelin/defender-autotask-client"
           ]
@@ -265,7 +412,7 @@
         },
         {
           "file": "packages/deploy/package.json",
-          "hash": "7189386810788989657",
+          "hash": "3088113476559745487",
           "deps": [
             "@openzeppelin/defender-base-client"
           ]
@@ -347,605 +494,6 @@
           "hash": "11407266455432728675"
         }
       ],
-      "example-create-autotask": [
-        {
-          "file": "examples/create-autotask/code/deps.js",
-          "hash": "11781801341482487166"
-        },
-        {
-          "file": "examples/create-autotask/code/index.js",
-          "hash": "12121887950943165488"
-        },
-        {
-          "file": "examples/create-autotask/index.js",
-          "hash": "7545388706481614085"
-        },
-        {
-          "file": "examples/create-autotask/package.json",
-          "hash": "6847869663144121046",
-          "deps": [
-            "@openzeppelin/defender-autotask-client"
-          ]
-        }
-      ],
-      "@openzeppelin/defender-base-client": [
-        {
-          "file": "packages/base/README.md",
-          "hash": "14595042196717906107"
-        },
-        {
-          "file": "packages/base/jest.config.js",
-          "hash": "12966926139302408033"
-        },
-        {
-          "file": "packages/base/package.json",
-          "hash": "968272195445204849"
-        },
-        {
-          "file": "packages/base/src/api/__mocks__/amazon-cognito-identity-js.ts",
-          "hash": "7413124782985973115"
-        },
-        {
-          "file": "packages/base/src/api/__mocks__/axios-error.ts",
-          "hash": "13039948353275558018"
-        },
-        {
-          "file": "packages/base/src/api/__mocks__/axios.ts",
-          "hash": "4455588437068636952"
-        },
-        {
-          "file": "packages/base/src/api/api-error.ts",
-          "hash": "10597803070621672596"
-        },
-        {
-          "file": "packages/base/src/api/api.error.test.ts",
-          "hash": "7715815632121826811"
-        },
-        {
-          "file": "packages/base/src/api/api.test.ts",
-          "hash": "7668182885860262240"
-        },
-        {
-          "file": "packages/base/src/api/api.ts",
-          "hash": "1843105638064369170"
-        },
-        {
-          "file": "packages/base/src/api/auth.test.ts",
-          "hash": "14856233333918825659"
-        },
-        {
-          "file": "packages/base/src/api/auth.ts",
-          "hash": "16428777982574694491"
-        },
-        {
-          "file": "packages/base/src/api/client.ts",
-          "hash": "3236827650174389298"
-        },
-        {
-          "file": "packages/base/src/autotask/index.ts",
-          "hash": "530221829524488059"
-        },
-        {
-          "file": "packages/base/src/index.ts",
-          "hash": "13421524442597604552"
-        },
-        {
-          "file": "packages/base/src/utils/network.test.ts",
-          "hash": "3319201295639210483"
-        },
-        {
-          "file": "packages/base/src/utils/network.ts",
-          "hash": "780408990581105140"
-        },
-        {
-          "file": "packages/base/src/utils/rate-limit.test.ts",
-          "hash": "4037769657330689735"
-        },
-        {
-          "file": "packages/base/src/utils/rate-limit.ts",
-          "hash": "17483502205982779691"
-        },
-        {
-          "file": "packages/base/src/utils/time.ts",
-          "hash": "6605676285987951363"
-        },
-        {
-          "file": "packages/base/tsconfig.json",
-          "hash": "11407266455432728675"
-        }
-      ],
-      "example-update-relayer": [
-        {
-          "file": "examples/update-relayer/index.js",
-          "hash": "9732880041052895810"
-        },
-        {
-          "file": "examples/update-relayer/package.json",
-          "hash": "16121012005074190625",
-          "deps": [
-            "@openzeppelin/defender-relay-client"
-          ]
-        }
-      ],
-      "upgrade-contract": [
-        {
-          "file": "examples/upgrade-contract/abis/Box.json",
-          "hash": "839770181092048369"
-        },
-        {
-          "file": "examples/upgrade-contract/abis/Token.json",
-          "hash": "14439229075282913490"
-        },
-        {
-          "file": "examples/upgrade-contract/index.js",
-          "hash": "11563600675859970189"
-        },
-        {
-          "file": "examples/upgrade-contract/package.json",
-          "hash": "6022565874651992061",
-          "deps": [
-            "@openzeppelin/platform-deploy-client"
-          ]
-        }
-      ],
-      "example-list-proposals": [
-        {
-          "file": "examples/list-proposals/index.js",
-          "hash": "18292916603537952631"
-        },
-        {
-          "file": "examples/list-proposals/package.json",
-          "hash": "14015964600503940288",
-          "deps": [
-            "@openzeppelin/defender-admin-client"
-          ]
-        }
-      ],
-      "@openzeppelin/defender-sentinel-client": [
-        {
-          "file": "packages/sentinel/README.md",
-          "hash": "18202087768423806573"
-        },
-        {
-          "file": "packages/sentinel/jest.config.js",
-          "hash": "12966926139302408033"
-        },
-        {
-          "file": "packages/sentinel/package.json",
-          "hash": "5044631961556840748",
-          "deps": [
-            "@openzeppelin/defender-base-client"
-          ]
-        },
-        {
-          "file": "packages/sentinel/src/__mocks__/@openzeppelin/defender-base-client.ts",
-          "hash": "4318980718058194147"
-        },
-        {
-          "file": "packages/sentinel/src/api/index.test.ts",
-          "hash": "16314186069740820672"
-        },
-        {
-          "file": "packages/sentinel/src/api/index.ts",
-          "hash": "7893121418162011614"
-        },
-        {
-          "file": "packages/sentinel/src/index.ts",
-          "hash": "11552777534155436837"
-        },
-        {
-          "file": "packages/sentinel/src/models/blockwatcher.ts",
-          "hash": "17912304914664654945"
-        },
-        {
-          "file": "packages/sentinel/src/models/category.ts",
-          "hash": "4086632683837448152"
-        },
-        {
-          "file": "packages/sentinel/src/models/ethers.ts",
-          "hash": "18415121359949458809"
-        },
-        {
-          "file": "packages/sentinel/src/models/networks.ts",
-          "hash": "11911304986417285879"
-        },
-        {
-          "file": "packages/sentinel/src/models/notification.ts",
-          "hash": "1532196626729703608"
-        },
-        {
-          "file": "packages/sentinel/src/models/opsgenie.ts",
-          "hash": "16795445595043829181"
-        },
-        {
-          "file": "packages/sentinel/src/models/pager-duty.ts",
-          "hash": "17120040616655268886"
-        },
-        {
-          "file": "packages/sentinel/src/models/response.ts",
-          "hash": "16292440740240903305"
-        },
-        {
-          "file": "packages/sentinel/src/models/subscriber.ts",
-          "hash": "3063800648802359012"
-        },
-        {
-          "file": "packages/sentinel/src/utils/index.ts",
-          "hash": "7161323481049543673"
-        },
-        {
-          "file": "packages/sentinel/tsconfig.json",
-          "hash": "11407266455432728675"
-        }
-      ],
-      "example-keeper-network": [
-        {
-          "file": "examples/keeper-network/index.js",
-          "hash": "12803162425400674366"
-        },
-        {
-          "file": "examples/keeper-network/package.json",
-          "hash": "898433465799370483",
-          "deps": [
-            "@openzeppelin/defender-relay-client"
-          ]
-        }
-      ],
-      "example-verify-contract": [
-        {
-          "file": "examples/verify-contract/compilation-artifact.json",
-          "hash": "4725029900212767748"
-        },
-        {
-          "file": "examples/verify-contract/index.js",
-          "hash": "7379429706199530953"
-        },
-        {
-          "file": "examples/verify-contract/package.json",
-          "hash": "9023601894729174941",
-          "deps": [
-            "@openzeppelin/defender-admin-client"
-          ]
-        }
-      ],
-      "@openzeppelin/defender-admin-client": [
-        {
-          "file": "packages/admin/README.md",
-          "hash": "10726798244428879800"
-        },
-        {
-          "file": "packages/admin/jest.config.js",
-          "hash": "12966926139302408033"
-        },
-        {
-          "file": "packages/admin/package.json",
-          "hash": "5393499021687513408",
-          "deps": [
-            "@openzeppelin/defender-base-client"
-          ]
-        },
-        {
-          "file": "packages/admin/src/api.ts",
-          "hash": "14378826862099182770"
-        },
-        {
-          "file": "packages/admin/src/index.ts",
-          "hash": "357008954654697427"
-        },
-        {
-          "file": "packages/admin/src/models/contract.ts",
-          "hash": "10209304598533077175"
-        },
-        {
-          "file": "packages/admin/src/models/proposal.ts",
-          "hash": "15508872530846460924"
-        },
-        {
-          "file": "packages/admin/src/models/response.ts",
-          "hash": "4231992815874598212"
-        },
-        {
-          "file": "packages/admin/src/models/simulation.ts",
-          "hash": "1146582682403296708"
-        },
-        {
-          "file": "packages/admin/src/models/verification.ts",
-          "hash": "1787338385205582455"
-        },
-        {
-          "file": "packages/admin/src/utils.ts",
-          "hash": "7493680782742358997"
-        },
-        {
-          "file": "packages/admin/tsconfig.json",
-          "hash": "9751562623722216616"
-        }
-      ],
-      "deploy-contract": [
-        {
-          "file": "examples/deploy-contract/artifacts/Box.json",
-          "hash": "754958586419862672"
-        },
-        {
-          "file": "examples/deploy-contract/contracts/Box.sol",
-          "hash": "8878078901604982891"
-        },
-        {
-          "file": "examples/deploy-contract/index.js",
-          "hash": "5981607242550461992"
-        },
-        {
-          "file": "examples/deploy-contract/package.json",
-          "hash": "9953907817484743629",
-          "deps": [
-            "@openzeppelin/platform-deploy-client"
-          ]
-        }
-      ],
-      "@openzeppelin/defender-account-client": [
-        {
-          "file": "packages/account/README.md",
-          "hash": "6445882047060213187"
-        },
-        {
-          "file": "packages/account/jest.config.js",
-          "hash": "12966926139302408033"
-        },
-        {
-          "file": "packages/account/package.json",
-          "hash": "4243515570232785863",
-          "deps": [
-            "@openzeppelin/defender-base-client"
-          ]
-        },
-        {
-          "file": "packages/account/src/api.ts",
-          "hash": "12835581603053586965"
-        },
-        {
-          "file": "packages/account/src/index.ts",
-          "hash": "18270654198805241383"
-        },
-        {
-          "file": "packages/account/src/models/account.ts",
-          "hash": "6395116712560900759"
-        },
-        {
-          "file": "packages/account/tsconfig.json",
-          "hash": "9751562623722216616"
-        }
-      ],
-      "example-simulate-proposal": [
-        {
-          "file": "examples/simulate-proposal/abi/demoflash.json",
-          "hash": "6419327049357222408"
-        },
-        {
-          "file": "examples/simulate-proposal/index.js",
-          "hash": "4067686194830757415"
-        },
-        {
-          "file": "examples/simulate-proposal/package.json",
-          "hash": "14921209909221733878",
-          "deps": [
-            "@openzeppelin/defender-admin-client"
-          ]
-        }
-      ],
-      "example-update-autotask": [
-        {
-          "file": "examples/update-autotask/code/deps.js",
-          "hash": "11781801341482487166"
-        },
-        {
-          "file": "examples/update-autotask/code/index.js",
-          "hash": "7546225781460440783"
-        },
-        {
-          "file": "examples/update-autotask/package.json",
-          "hash": "2238296490850104418",
-          "deps": [
-            "@openzeppelin/defender-autotask-client"
-          ]
-        },
-        {
-          "file": "examples/update-autotask/update-code.js",
-          "hash": "721241047964271563"
-        }
-      ],
-      "example-update-notification-category": [
-        {
-          "file": "examples/update-notification-category/index.js",
-          "hash": "13445406128796350409"
-        },
-        {
-          "file": "examples/update-notification-category/package.json",
-          "hash": "16382103987457579893",
-          "deps": [
-            "@openzeppelin/defender-sentinel-client"
-          ]
-        }
-      ],
-      "example-update-autotask-env-variables": [
-        {
-          "file": "examples/update-autotask-env-variables/index.js",
-          "hash": "6906637240051365593"
-        },
-        {
-          "file": "examples/update-autotask-env-variables/package.json",
-          "hash": "6621760866945710386",
-          "deps": [
-            "@openzeppelin/defender-autotask-client"
-          ]
-        }
-      ],
-      "@openzeppelin/defender-autotask-utils": [
-        {
-          "file": "packages/autotask-utils/README.md",
-          "hash": "2387152441026461298"
-        },
-        {
-          "file": "packages/autotask-utils/jest.config.js",
-          "hash": "12966926139302408033"
-        },
-        {
-          "file": "packages/autotask-utils/package.json",
-          "hash": "12659535594759714299"
-        },
-        {
-          "file": "packages/autotask-utils/src/index.ts",
-          "hash": "8574470219266552477"
-        },
-        {
-          "file": "packages/autotask-utils/src/types.ts",
-          "hash": "6805298673199109332"
-        },
-        {
-          "file": "packages/autotask-utils/tsconfig.json",
-          "hash": "9751562623722216616"
-        }
-      ],
-      "example-batch-proposal": [
-        {
-          "file": "examples/batch-proposal/index.js",
-          "hash": "21759094049151298"
-        },
-        {
-          "file": "examples/batch-proposal/package.json",
-          "hash": "11669107596377695631",
-          "deps": [
-            "@openzeppelin/defender-admin-client"
-          ]
-        }
-      ],
-      "example-create-sentinel": [
-        {
-          "file": "examples/create-sentinel/abis/erc721.json",
-          "hash": "1249574854997980106"
-        },
-        {
-          "file": "examples/create-sentinel/index.js",
-          "hash": "7739508751507672629"
-        },
-        {
-          "file": "examples/create-sentinel/package-lock.json",
-          "hash": "6964197797058008945"
-        },
-        {
-          "file": "examples/create-sentinel/package.json",
-          "hash": "11115339977412975113",
-          "deps": [
-            "@openzeppelin/defender-sentinel-client"
-          ]
-        }
-      ],
-      "example-update-sentinel": [
-        {
-          "file": "examples/update-sentinel/index.js",
-          "hash": "12718640617603968793"
-        },
-        {
-          "file": "examples/update-sentinel/package.json",
-          "hash": "1687684779897094947",
-          "deps": [
-            "@openzeppelin/defender-sentinel-client"
-          ]
-        }
-      ],
-      "get-usage": [
-        {
-          "file": "examples/get-usage/index.ts",
-          "hash": "10907466202347019331"
-        },
-        {
-          "file": "examples/get-usage/package.json",
-          "hash": "2313026635486397793",
-          "deps": [
-            "@openzeppelin/defender-base-client"
-          ]
-        }
-      ],
-      "list-networks": [
-        {
-          "file": "examples/list-networks/index.js",
-          "hash": "9655643918150519188"
-        },
-        {
-          "file": "examples/list-networks/package.json",
-          "hash": "2532764520806243012",
-          "deps": [
-            "@openzeppelin/defender-sentinel-client"
-          ]
-        }
-      ],
-      "example-ethers-signer": [
-        {
-          "file": "examples/ethers-signer/bytecode.json",
-          "hash": "7482258845204974093"
-        },
-        {
-          "file": "examples/ethers-signer/erc20.json",
-          "hash": "17813659203139691761"
-        },
-        {
-          "file": "examples/ethers-signer/index.js",
-          "hash": "17630382212452498051"
-        },
-        {
-          "file": "examples/ethers-signer/package.json",
-          "hash": "403387385251634923",
-          "deps": [
-            "@openzeppelin/defender-relay-client"
-          ]
-        },
-        {
-          "file": "examples/ethers-signer/typedData.json",
-          "hash": "6287082506546546996"
-        }
-      ],
-      "example-unpause-proposal": [
-        {
-          "file": "examples/unpause-proposal/index.js",
-          "hash": "14193148213794349012"
-        },
-        {
-          "file": "examples/unpause-proposal/package.json",
-          "hash": "16493963113156496769",
-          "deps": [
-            "@openzeppelin/defender-admin-client"
-          ]
-        }
-      ],
-      "example-pause-proposal": [
-        {
-          "file": "examples/pause-proposal/index.js",
-          "hash": "17092627676038259988"
-        },
-        {
-          "file": "examples/pause-proposal/package.json",
-          "hash": "9042673692485770662",
-          "deps": [
-            "@openzeppelin/defender-admin-client"
-          ]
-        }
-      ],
-      "example-create-relayer-key": [
-        {
-          "file": "examples/create-relayer-key/index.js",
-          "hash": "17762471522268603151"
-        },
-        {
-          "file": "examples/create-relayer-key/package-lock.json",
-          "hash": "16184544160779490689"
-        },
-        {
-          "file": "examples/create-relayer-key/package.json",
-          "hash": "14190184728679793180",
-          "deps": [
-            "@openzeppelin/defender-relay-client"
-          ]
-        }
-      ],
       "@openzeppelin/defender-relay-client": [
         {
           "file": "packages/relay/README.md",
@@ -957,7 +505,7 @@
         },
         {
           "file": "packages/relay/package.json",
-          "hash": "15484951228556900840",
+          "hash": "8090551755315755462",
           "deps": [
             "@openzeppelin/defender-base-client"
           ]
@@ -1042,6 +590,458 @@
           "file": "packages/relay/tsconfig.json",
           "hash": "11407266455432728675"
         }
+      ],
+      "example-action-proposal": [
+        {
+          "file": "examples/action-proposal/index.js",
+          "hash": "5300533886416175864"
+        },
+        {
+          "file": "examples/action-proposal/package.json",
+          "hash": "938537633393503340",
+          "deps": [
+            "@openzeppelin/defender-admin-client"
+          ]
+        }
+      ],
+      "@openzeppelin/defender-base-client": [
+        {
+          "file": "packages/base/README.md",
+          "hash": "14595042196717906107"
+        },
+        {
+          "file": "packages/base/jest.config.js",
+          "hash": "12966926139302408033"
+        },
+        {
+          "file": "packages/base/package.json",
+          "hash": "13471447944383993208"
+        },
+        {
+          "file": "packages/base/src/api/__mocks__/amazon-cognito-identity-js.ts",
+          "hash": "7413124782985973115"
+        },
+        {
+          "file": "packages/base/src/api/__mocks__/axios-error.ts",
+          "hash": "13039948353275558018"
+        },
+        {
+          "file": "packages/base/src/api/__mocks__/axios.ts",
+          "hash": "4455588437068636952"
+        },
+        {
+          "file": "packages/base/src/api/api-error.ts",
+          "hash": "10597803070621672596"
+        },
+        {
+          "file": "packages/base/src/api/api.error.test.ts",
+          "hash": "7715815632121826811"
+        },
+        {
+          "file": "packages/base/src/api/api.test.ts",
+          "hash": "7668182885860262240"
+        },
+        {
+          "file": "packages/base/src/api/api.ts",
+          "hash": "1843105638064369170"
+        },
+        {
+          "file": "packages/base/src/api/auth.test.ts",
+          "hash": "14856233333918825659"
+        },
+        {
+          "file": "packages/base/src/api/auth.ts",
+          "hash": "16428777982574694491"
+        },
+        {
+          "file": "packages/base/src/api/client.ts",
+          "hash": "3236827650174389298"
+        },
+        {
+          "file": "packages/base/src/autotask/index.ts",
+          "hash": "530221829524488059"
+        },
+        {
+          "file": "packages/base/src/index.ts",
+          "hash": "13421524442597604552"
+        },
+        {
+          "file": "packages/base/src/utils/network.test.ts",
+          "hash": "3319201295639210483"
+        },
+        {
+          "file": "packages/base/src/utils/network.ts",
+          "hash": "16632175508312521591"
+        },
+        {
+          "file": "packages/base/src/utils/rate-limit.test.ts",
+          "hash": "4037769657330689735"
+        },
+        {
+          "file": "packages/base/src/utils/rate-limit.ts",
+          "hash": "17483502205982779691"
+        },
+        {
+          "file": "packages/base/src/utils/time.ts",
+          "hash": "6605676285987951363"
+        },
+        {
+          "file": "packages/base/tsconfig.json",
+          "hash": "11407266455432728675"
+        }
+      ],
+      "example-update-sentinel": [
+        {
+          "file": "examples/update-sentinel/index.js",
+          "hash": "12718640617603968793"
+        },
+        {
+          "file": "examples/update-sentinel/package.json",
+          "hash": "4364302054229735961",
+          "deps": [
+            "@openzeppelin/defender-sentinel-client"
+          ]
+        }
+      ],
+      "example-keeper-network": [
+        {
+          "file": "examples/keeper-network/index.js",
+          "hash": "12803162425400674366"
+        },
+        {
+          "file": "examples/keeper-network/package.json",
+          "hash": "6908990319862510260",
+          "deps": [
+            "@openzeppelin/defender-relay-client"
+          ]
+        }
+      ],
+      "example-update-autotask": [
+        {
+          "file": "examples/update-autotask/code/deps.js",
+          "hash": "11781801341482487166"
+        },
+        {
+          "file": "examples/update-autotask/code/index.js",
+          "hash": "7546225781460440783"
+        },
+        {
+          "file": "examples/update-autotask/package.json",
+          "hash": "11904223860637573974",
+          "deps": [
+            "@openzeppelin/defender-autotask-client"
+          ]
+        },
+        {
+          "file": "examples/update-autotask/update-code.js",
+          "hash": "721241047964271563"
+        }
+      ],
+      "example-simulate-proposal": [
+        {
+          "file": "examples/simulate-proposal/abi/demoflash.json",
+          "hash": "6419327049357222408"
+        },
+        {
+          "file": "examples/simulate-proposal/index.js",
+          "hash": "4067686194830757415"
+        },
+        {
+          "file": "examples/simulate-proposal/package.json",
+          "hash": "15747699363331572650",
+          "deps": [
+            "@openzeppelin/defender-admin-client"
+          ]
+        }
+      ],
+      "upgrade-contract": [
+        {
+          "file": "examples/upgrade-contract/abis/Box.json",
+          "hash": "839770181092048369"
+        },
+        {
+          "file": "examples/upgrade-contract/abis/Token.json",
+          "hash": "14439229075282913490"
+        },
+        {
+          "file": "examples/upgrade-contract/index.js",
+          "hash": "11563600675859970189"
+        },
+        {
+          "file": "examples/upgrade-contract/package.json",
+          "hash": "6022565874651992061",
+          "deps": [
+            "@openzeppelin/platform-deploy-client"
+          ]
+        }
+      ],
+      "list-networks": [
+        {
+          "file": "examples/list-networks/index.js",
+          "hash": "9655643918150519188"
+        },
+        {
+          "file": "examples/list-networks/package.json",
+          "hash": "2532764520806243012",
+          "deps": [
+            "@openzeppelin/defender-sentinel-client"
+          ]
+        }
+      ],
+      "@openzeppelin/defender-autotask-client": [
+        {
+          "file": "packages/autotask-client/README.md",
+          "hash": "6536681295769524051"
+        },
+        {
+          "file": "packages/autotask-client/fixtures/invalid/notindex.js",
+          "hash": "17136224347858963626"
+        },
+        {
+          "file": "packages/autotask-client/fixtures/valid/data.json",
+          "hash": "14072793459998056372"
+        },
+        {
+          "file": "packages/autotask-client/fixtures/valid/index.js",
+          "hash": "17136224347858963626"
+        },
+        {
+          "file": "packages/autotask-client/fixtures/valid/subfolder/nested.json",
+          "hash": "5210720905863636418"
+        },
+        {
+          "file": "packages/autotask-client/jest.config.js",
+          "hash": "12966926139302408033"
+        },
+        {
+          "file": "packages/autotask-client/package.json",
+          "hash": "5500851694036129011",
+          "deps": [
+            "@openzeppelin/defender-base-client"
+          ]
+        },
+        {
+          "file": "packages/autotask-client/src/api.ts",
+          "hash": "2583884219720315897"
+        },
+        {
+          "file": "packages/autotask-client/src/bin.ts",
+          "hash": "4258310818973943968"
+        },
+        {
+          "file": "packages/autotask-client/src/index.ts",
+          "hash": "2732712712862903712"
+        },
+        {
+          "file": "packages/autotask-client/src/models/autotask-run.res.ts",
+          "hash": "4187638074117879402"
+        },
+        {
+          "file": "packages/autotask-client/src/models/autotask.ts",
+          "hash": "1791864776621148315"
+        },
+        {
+          "file": "packages/autotask-client/src/models/response.ts",
+          "hash": "13448767625901733632"
+        },
+        {
+          "file": "packages/autotask-client/src/utils.ts",
+          "hash": "16804432478907789046"
+        },
+        {
+          "file": "packages/autotask-client/src/zip.test.ts",
+          "hash": "17466767365342933510"
+        },
+        {
+          "file": "packages/autotask-client/src/zip.ts",
+          "hash": "4659201178170426159"
+        },
+        {
+          "file": "packages/autotask-client/tsconfig.json",
+          "hash": "9751562623722216616"
+        }
+      ],
+      "get-usage": [
+        {
+          "file": "examples/get-usage/index.ts",
+          "hash": "10907466202347019331"
+        },
+        {
+          "file": "examples/get-usage/package.json",
+          "hash": "2313026635486397793",
+          "deps": [
+            "@openzeppelin/defender-base-client"
+          ]
+        }
+      ],
+      "example-upgrade-proposal": [
+        {
+          "file": "examples/upgrade-proposal/index.js",
+          "hash": "987089934869997545"
+        },
+        {
+          "file": "examples/upgrade-proposal/package.json",
+          "hash": "10267619778871174701",
+          "deps": [
+            "@openzeppelin/defender-admin-client"
+          ]
+        }
+      ],
+      "example-relayer-send": [
+        {
+          "file": "examples/relayer-actions/index.js",
+          "hash": "5326139213565904027"
+        },
+        {
+          "file": "examples/relayer-actions/package.json",
+          "hash": "13018873746501921462",
+          "deps": [
+            "@openzeppelin/defender-relay-client"
+          ]
+        }
+      ],
+      "example-relayer-autotasks": [
+        {
+          "file": "examples/relayer-autotasks/index.js",
+          "hash": "9291869583678949242"
+        },
+        {
+          "file": "examples/relayer-autotasks/package.json",
+          "hash": "13675371507770700257",
+          "deps": [
+            "@openzeppelin/defender-relay-client"
+          ]
+        }
+      ],
+      "example-unpause-proposal": [
+        {
+          "file": "examples/unpause-proposal/index.js",
+          "hash": "14193148213794349012"
+        },
+        {
+          "file": "examples/unpause-proposal/package.json",
+          "hash": "9790142659287919035",
+          "deps": [
+            "@openzeppelin/defender-admin-client"
+          ]
+        }
+      ],
+      "example-create-relayer-key": [
+        {
+          "file": "examples/create-relayer-key/index.js",
+          "hash": "17762471522268603151"
+        },
+        {
+          "file": "examples/create-relayer-key/package-lock.json",
+          "hash": "6599998691972984971"
+        },
+        {
+          "file": "examples/create-relayer-key/package.json",
+          "hash": "7289535720607049351",
+          "deps": [
+            "@openzeppelin/defender-relay-client"
+          ]
+        }
+      ],
+      "example-list-proposals": [
+        {
+          "file": "examples/list-proposals/index.js",
+          "hash": "18292916603537952631"
+        },
+        {
+          "file": "examples/list-proposals/package.json",
+          "hash": "14015964600503940288",
+          "deps": [
+            "@openzeppelin/defender-admin-client"
+          ]
+        }
+      ],
+      "example-create-sentinel": [
+        {
+          "file": "examples/create-sentinel/abis/erc721.json",
+          "hash": "1249574854997980106"
+        },
+        {
+          "file": "examples/create-sentinel/index.js",
+          "hash": "7739508751507672629"
+        },
+        {
+          "file": "examples/create-sentinel/package-lock.json",
+          "hash": "6964197797058008945"
+        },
+        {
+          "file": "examples/create-sentinel/package.json",
+          "hash": "11115339977412975113",
+          "deps": [
+            "@openzeppelin/defender-sentinel-client"
+          ]
+        }
+      ],
+      "@openzeppelin/defender-kvstore-client": [
+        {
+          "file": "packages/kvstore/README.md",
+          "hash": "5490355415065765728"
+        },
+        {
+          "file": "packages/kvstore/__mocks__/aws-sdk/clients/lambda.ts",
+          "hash": "6913506966722630624"
+        },
+        {
+          "file": "packages/kvstore/jest.config.js",
+          "hash": "12966926139302408033"
+        },
+        {
+          "file": "packages/kvstore/package.json",
+          "hash": "17649928687435943935",
+          "deps": [
+            "@openzeppelin/defender-base-client"
+          ]
+        },
+        {
+          "file": "packages/kvstore/src/autotask.test.ts",
+          "hash": "6849386837206012301"
+        },
+        {
+          "file": "packages/kvstore/src/autotask.ts",
+          "hash": "12779345834981705362"
+        },
+        {
+          "file": "packages/kvstore/src/index.test.ts",
+          "hash": "7166639332046235384"
+        },
+        {
+          "file": "packages/kvstore/src/index.ts",
+          "hash": "19504319667859607"
+        },
+        {
+          "file": "packages/kvstore/src/local.test.ts",
+          "hash": "8655804668871537864"
+        },
+        {
+          "file": "packages/kvstore/src/local.ts",
+          "hash": "10890109383029621243"
+        },
+        {
+          "file": "packages/kvstore/src/types.ts",
+          "hash": "6372625922276885341"
+        },
+        {
+          "file": "packages/kvstore/tsconfig.json",
+          "hash": "9751562623722216616"
+        }
+      ],
+      "example-create-secret": [
+        {
+          "file": "examples/create-secret/index.js",
+          "hash": "9864217281467896786"
+        },
+        {
+          "file": "examples/create-secret/package.json",
+          "hash": "16439186692234763307",
+          "deps": [
+            "@openzeppelin/defender-autotask-client"
+          ]
+        }
       ]
     },
     "nonProjectFiles": [
@@ -1059,7 +1059,7 @@
       },
       {
         "file": ".github/dependabot.yml",
-        "hash": "8501142232614575528"
+        "hash": "515683209506995695"
       },
       {
         "file": ".github/release-drafter.yml",
@@ -1107,7 +1107,7 @@
       },
       {
         "file": ".nx/cache/file-map.json",
-        "hash": "10856213525418590048"
+        "hash": "14871858704794233624"
       },
       {
         "file": ".nx/cache/lockfile.hash",
@@ -1163,7 +1163,7 @@
       },
       {
         "file": "lerna.json",
-        "hash": "7013959995654768564"
+        "hash": "1691864904143588850"
       },
       {
         "file": "nx.json",
@@ -1171,7 +1171,7 @@
       },
       {
         "file": "package.json",
-        "hash": "10513536240484686726"
+        "hash": "1893841069012001871"
       },
       {
         "file": "yarn.lock",
