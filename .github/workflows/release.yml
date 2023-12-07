@@ -40,7 +40,7 @@ jobs:
           ref: refs/tags/${{ inputs.tag }}
 
       - name: Generate SBOM
-        uses: anchore/sbom-action@78fc58e266e87a38d4194b2137a3d4e9bcaf7ca1 # v0.14.3
+        uses: anchore/sbom-action@5ecf649a417b8ae17dc8383dc32d46c03f2312df # v0.15.1
         with:
           artifact-name: sbom-${{ github.event.repository.name }}-${{ inputs.tag }}.spdx.json
           output-file: sbom-${{ github.event.repository.name }}-${{ inputs.tag }}.spdx.json
