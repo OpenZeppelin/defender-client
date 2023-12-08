@@ -106,6 +106,8 @@ jobs:
   publish-tag:
     permissions:
       contents: write
+      id-token: write
+      actions: read
     name: Publish & Tag
     needs: commit-push
     uses: ./.github/workflows/rc-publish-test.yml
