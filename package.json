@@ -40,10 +40,10 @@
     "test": "nx run-many -t test --skip-nx-cache --forceExit",
     "style": "yarn lint && yarn format",
     "skip-lib-ignore": "./hack/skip-lib-ignore.sh",
-    "versionup:rcminor": "lerna version --preid=rc --no-git-tag-version --yes --exact --no-changelog",
+    "versionup:rcminor": "lerna version --preid=rc --no-git-tag-version --yes --exact --no-changelog --force-publish",
     "versionup:preminor": "yarn versionup:rcminor preminor",
     "versionup:prerelease": "yarn versionup:rcminor prerelease",
-    "versionup:stableminor": "lerna version minor --conventional-graduate --no-git-tag-version --yes --exact --no-changelog"
+    "versionup:stableminor": "lerna version minor --conventional-graduate --no-git-tag-version --yes --exact --no-changelog --force-publish"
   },
   "repository": {
     "type": "git",

@@ -82,12 +82,12 @@ jobs:
         id: update_version
         run: |
           TAG_NAME=$(node -p "require('./lerna.json').version")
-          echo "next_rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
       # Commit all changed files back to the repository
       - uses: planetscale/ghcommit-action@6ca6b06e9d2de1296143831c53e1d601831ba2a2
         with:
-          commit_message: "🤖 Update version to v$TAG_NAME"
+          commit_message: "🤖 Update version to v${{ steps.update_version.outputs.rc_version }}"
           repo: ${{ github.repository }}
           branch: ${{ github.head_ref || github.ref_name }}
         env:
