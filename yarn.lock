@@ -1497,17 +1497,6 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
-"@openzeppelin/defender-base-client@^1.45.0":
-  version "1.52.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.52.0.tgz#7a000eeba9705c75e6be5de5d32e07d377aed55d"
-  integrity sha512-VFNu/pjVpAnFKIfuKT1cn9dRpbcO8FO8EAmVZ2XrrAsKXEWDZ3TNBtACxmj7fAu0ad/TzRkb66o5rMts7Fv7jw==
-  dependencies:
-    amazon-cognito-identity-js "^6.0.1"
-    async-retry "^1.3.3"
-    axios "^1.4.0"
-    lodash "^4.17.19"
-    node-fetch "^2.6.0"
-
 "@openzeppelin/defender-sentinel-client@1.47.0":
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sentinel-client/-/defender-sentinel-client-1.47.0.tgz#eaed39153729c66aa6bb69277cbdeaafc4003dcd"
