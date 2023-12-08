@@ -1,12 +1,17 @@
 name: Publish rc test
 
-on:
-  workflow_call:
-    inputs:
-      sha:
-        type: string
-        required: false
+# on:
+#   workflow_call:
+#     inputs:
+#       sha:
+#         type: string
+#         required: false
 
+on:
+  workflow_run:
+    workflows: ["push rc test"]
+    types:
+      - completed
 
 # Declare default permissions as read only.
 permissions: read-all
