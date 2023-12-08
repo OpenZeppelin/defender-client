@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/defender-admin-client",
-  "version": "1.60.0-rc.0",
+  "version": "1.61.0-rc.0",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -21,7 +21,7 @@
   "author": "Santiago Palladino <santiago@openzeppelin.com>",
   "license": "MIT",
   "dependencies": {
-    "@openzeppelin/defender-base-client": "1.60.0-rc.0",
+    "@openzeppelin/defender-base-client": "1.61.0-rc.0",
     "axios": "^1.4.0",
     "ethers": "^5.7.2",
     "lodash": "^4.17.19",
