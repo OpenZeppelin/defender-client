@@ -1,4 +1,4 @@
-name: Test
+name: push rc test
 on:
   push:
     branches:
@@ -6,29 +6,17 @@ on:
 
 jobs:
 
-  # Deterministic Build & tests
-  provenance:
-    permissions:
-      id-token: write
-      contents: read
-      actions: read
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
-    with:
-      run-scripts: "install-deps, style, nx-build-skip-cache, nx-test-skip-cache"
-      node-version: "16.20.0"
-
-
-  tag:
-    name: Tag stable version for all packages
+  # check for changed packages
+  verify-packages:
+    name: Verify changed packages
     permissions:
       id-token: write
       contents: write
       actions: read
     runs-on: ubuntu-22.04
-    needs: provenance
     outputs:
-      next_stable_version: ${{ steps.update_version.outputs.next_stable_version }}
       changed_packages: ${{ steps.tag_check_changes.outputs.changed_packages }}
+      latest_tag: ${{ steps.tag_check_changes.outputs.latest_tag }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
@@ -37,18 +25,21 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          token: ${{ secrets.SAI_PAT }}
 
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@82a020f1f7f605c65dd2449b392a52c3fcfef7ef # v6.0.0
-        with:
-          gpg_private_key: ${{ secrets.SVC_GPG_KEY }}
-          passphrase: ${{ secrets.SVC_GPG_PASSPHRASE }}
-          git_config_global: true
-          git_tag_gpgsign: true
-          git_user_signingkey: true
-          git_commit_gpgsign: true
+      - name: Prepare pre-requisites
+        uses: ./.github/actions/prepare
+
+      - name: Install deps
+        run: yarn install-deps
+
+      - name: Style
+        run: yarn style
+
+      - name: Build
+        run: yarn nx-build-skip-cache
+
+      - name: Test
+        run: yarn nx-test-skip-cache
 
       - name: Get latest git tag and verify package changes
         id: tag_check_changes
@@ -59,56 +50,45 @@ jobs:
           changed_packages=$(lerna changed --json | jq -r 'length')
           echo "changed_packages=${changed_packages:-0}" >> $GITHUB_OUTPUT
 
-      - name: Update the tags
+
+  # Commit & Push to branch
+  commit-push:
+    name: Commit and push changes
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+    needs: verify-packages
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+
+      - name: Update RC candidate version ( excluding deploy client )
         run: |
-          yarn versionup:preminor && ./hack/cross-dependency.sh
-
-      - name: Use node@16
-        uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
-        with:
-          node-version: 16.20.0
-
-      - name: Create temp dir
-        id: temp-dir
-        run: |
-          set -euo pipefail
-
-          temp_dir=$(mktemp -d)
-          echo "path=${temp_dir}" >>"${GITHUB_OUTPUT}"
-
-      - name: Download tarball
-        uses: slsa-framework/slsa-github-generator/.github/actions/secure-download-artifact@934435652996c02a6317092984312602dfaf2a21 # main
-        with:
-          name: ${{ needs.provenance.outputs.package-download-name }}
-          path: "${{ steps.temp-dir.outputs.path }}/${{ needs.provenance.outputs.package-name }}"
-          sha256: ${{ needs.provenance.outputs.package-download-sha256 }}
-
-      - name: Download provenance
-        uses: slsa-framework/slsa-github-generator/actions/nodejs/secure-attestations-download@0779f7bec68e2bf54a7b0a32bf4763f25ab29702 # v1.6.0
-        with:
-          name: ${{ needs.provenance.outputs.provenance-download-name }}
-          path: "${{ steps.temp-dir.outputs.path }}"
-          sha256: ${{ needs.provenance.outputs.provenance-download-sha256 }}
+          if [[ ${{ needs.verify-packages.outputs.latest_tag }} != *"rc"* ]]; then
+            yarn versionup:preminor && ./hack/cross-dependency.sh
+          else
+            yarn versionup:prerelease && ./hack/cross-dependency.sh
+          fi
 
       - name: Commit changes
         id: update_version
         run: |
           TAG_NAME=$(node -p "require('./lerna.json').version")
-          git add .
-          git commit -m "Update version to v$TAG_NAME"
           echo "next_rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
-      - name: Unpack the zipped artifact and publish
-        if: steps.tag_check_changes.outputs.changed_packages > 0
-        run: |
-          set -euo pipefail
-
-          cd "${{ steps.temp-dir.outputs.path }}"
-          tar -xzvf "${{ needs.provenance.outputs.package-name }}"
-          cd package/; git init
-          git add .
-          git commit -m "Add the untracked files"
-          git push origin ${GITHUB_REF#refs/heads/}
-          tag_ref=${{ steps.update_version.outputs.next_rc_version }}
-          tag_version=${tag_ref#refs/tags/v}
-          echo "tag_version=$tag_version"
+      # Commit all changed files back to the repository
+      - uses: planetscale/ghcommit-action@6ca6b06e9d2de1296143831c53e1d601831ba2a2
+        with:
+          commit_message: "🤖 Update version to v$TAG_NAME"
+          repo: ${{ github.repository }}
+          branch: ${{ github.head_ref || github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
