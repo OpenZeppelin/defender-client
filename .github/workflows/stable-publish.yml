@@ -159,7 +159,7 @@ jobs:
           git commit -m "Add the untracked files"
           tag_ref=${{ steps.get_version.outputs.stable_version  }}
           tag_version=${tag_ref#refs/tags/v}
-          lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog --force-publish"
+          lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog"
           lerna publish $tag_version $lerna_options
           cd ../../
 
