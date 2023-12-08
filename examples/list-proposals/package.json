@@ -1,6 +1,6 @@
 {
   "name": "example-list-proposals",
-  "version": "1.59.0-rc.0",
+  "version": "1.60.0-rc.0",
   "private": true,
   "main": "index.js",
   "author": "OpenZeppelin Defender <defender@openzeppelin.com>",
