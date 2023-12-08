@@ -85,10 +85,21 @@ jobs:
           echo "rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
       # Commit all changed files back to the repository
-      - uses: planetscale/ghcommit-action@6ca6b06e9d2de1296143831c53e1d601831ba2a2
+      - name: commit to the branch
+        id: commit
+        uses: planetscale/ghcommit-action@6ca6b06e9d2de1296143831c53e1d601831ba2a2
         with:
           commit_message: "🤖 Update version to ${{ steps.update_version.outputs.rc_version }}"
           repo: ${{ github.repository }}
           branch: ${{ github.head_ref || github.ref_name }}
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Set output
+        id: output
+        run: |
+          if [[ "${{ steps.commit.conclusion }}" == "skipped" ]]; then
+            echo "was_skipped=true" >> $GITHUB_OUTPUT
+          else
+            echo "was_skipped=false" >> $GITHUB_OUTPUT
+          fi

@@ -1,9 +1,10 @@
 name: Publish rc test
 
 on:
-  push:
-    branches:
-      - fix-bugs
+  workflow_run:
+    workflows: ["push rc test"]
+    types:
+      - completed
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -11,6 +12,7 @@ permissions: read-all
 jobs:
   check_author:
     runs-on: ubuntu-22.04
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
     outputs:
       latest_commit_author: ${{ steps.commit.outputs.author }}
       commit_message: ${{ steps.commit.outputs.message }}
@@ -68,7 +70,7 @@ jobs:
       node-version: "16.20.0"
 
   tag:
-    name: Publish & Tag RC candidate for all packages
+    name: Tag RC candidate for all packages
     permissions:
       id-token: write
       contents: write
@@ -146,6 +148,8 @@ jobs:
         run: |
           git tag -a ${{ steps.get_version.outputs.rc_version }} -m "${{ steps.get_version.outputs.rc_version }}"
           git push origin ${{ steps.get_version.outputs.rc_version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   create-release:
     permissions:
