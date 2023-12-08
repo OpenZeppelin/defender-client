@@ -60,6 +60,8 @@ jobs:
       contents: write
     needs: verify-packages
     runs-on: ubuntu-22.04
+    outputs:
+      sha: ${{ steps.get_sha.outputs.sha }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
@@ -95,11 +97,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Set output
-        id: output
+      - name: Get commit SHA
+        id: get_sha
         run: |
-          if [[ "${{ steps.commit.conclusion }}" == "skipped" ]]; then
-            echo "was_skipped=true" >> $GITHUB_OUTPUT
-          else
-            echo "was_skipped=false" >> $GITHUB_OUTPUT
-          fi
+          git pull origin ${{ github.head_ref || github.ref_name }}
+          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+  publish-tag:
+    permissions:
+      contents: write
+    name: Publish & Tag
+    needs: commit-push
+    uses: ./.github/workflows/rc-publish-test.yml

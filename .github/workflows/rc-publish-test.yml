@@ -1,10 +1,12 @@
 name: Publish rc test
 
 on:
-  workflow_run:
-    workflows: ["push rc test"]
-    types:
-      - completed
+  workflow_call:
+    inputs:
+      sha:
+        type: string
+        required: false
+
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -12,7 +14,6 @@ permissions: read-all
 jobs:
   check_author:
     runs-on: ubuntu-22.04
-    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
     outputs:
       latest_commit_author: ${{ steps.commit.outputs.author }}
       commit_message: ${{ steps.commit.outputs.message }}
@@ -24,6 +25,8 @@ jobs:
 
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
 
       - name: Install yq
         run: |
@@ -35,6 +38,7 @@ jobs:
       - name: Get last commit details
         id: commit
         run: |
+          echo "received ${{ github.event.inputs.sha }}"
           COMMIT_SHA=$(git rev-parse HEAD)
           COMMIT_DETAILS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                           "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
