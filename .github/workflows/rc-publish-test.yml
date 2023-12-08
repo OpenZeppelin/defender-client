@@ -139,6 +139,8 @@ jobs:
 
           cd "${{ steps.temp-dir.outputs.path }}"
           tar -xzvf "${{ needs.provenance.outputs.package-name }}"
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           cd package/; git init
           git add .
           git commit -m "Add the untracked files"
