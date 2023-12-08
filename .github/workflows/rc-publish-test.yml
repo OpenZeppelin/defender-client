@@ -1,13 +1,12 @@
 name: Publish rc test
 
-# on:
-#   workflow_call:
-#     inputs:
-#       sha:
-#         type: string
-#         required: false
-
 on:
+  workflow_call:
+    inputs:
+      sha:
+        type: string
+        required: false
+
   workflow_run:
     workflows: ["push rc test"]
     types:
