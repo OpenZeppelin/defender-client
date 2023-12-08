@@ -149,9 +149,13 @@ export class AdminClient extends BaseApiClient {
     });
   }
 
-  public async listProposals(opts: { limit?: number; next?: string; includeArchived?: boolean } = {}): Promise<ProposalResponseWithUrl[] | ProposalListPaginatedResponse> {
+  public async listProposals(
+    opts: { limit?: number; next?: string; includeArchived?: boolean } = {},
+  ): Promise<ProposalResponseWithUrl[] | ProposalListPaginatedResponse> {
     return this.apiCall(async (api) => {
-      const response = (await api.get('/proposals', { params: opts })) as ProposalResponse[] | ProposalListPaginatedResponse;
+      const response = (await api.get('/proposals', { params: opts })) as
+        | ProposalResponse[]
+        | ProposalListPaginatedResponse;
       if (Array.isArray(response)) {
         return response.map((proposal) => ({ ...proposal, url: getProposalUrl(proposal) }));
       }

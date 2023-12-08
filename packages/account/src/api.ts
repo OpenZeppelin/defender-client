@@ -28,4 +28,3 @@ export class AccountClient extends BaseApiClient {
     return this.apiCall(async (api) => api.get(`/account/usage?${searchParams.toString()}`));
   }
 }
-
