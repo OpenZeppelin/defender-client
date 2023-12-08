@@ -28,7 +28,7 @@
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.11"
+    "@types/fs-extra": "^11.0.4"
   },
   "publishConfig": {
     "access": "public"
