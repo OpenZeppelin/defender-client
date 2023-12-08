@@ -108,3 +108,4 @@ jobs:
     name: Publish & Tag
     needs: commit-push
     uses: ./.github/workflows/rc-publish-test.yml
+    secrets: inherit
