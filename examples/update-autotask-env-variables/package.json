@@ -1,6 +1,6 @@
 {
   "name": "example-update-autotask-env-variables",
-  "version": "1.64.0-rc.0",
+  "version": "1.65.0-rc.0",
   "private": true,
   "main": "index.js",
   "author": "Nami Shah <nami@openzeppelin.com>",
@@ -9,7 +9,7 @@
     "run": "node index.js"
   },
   "dependencies": {
-    "@openzeppelin/defender-autotask-client": "1.64.0-rc.0",
+    "@openzeppelin/defender-autotask-client": "1.65.0-rc.0",
     "dotenv": "^8.2.0"
   }
 }
