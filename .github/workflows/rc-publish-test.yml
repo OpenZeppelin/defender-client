@@ -22,15 +22,9 @@ jobs:
         with:
           egress-policy: audit
 
-      # - name: Checkout Repo
-      #   uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      #   with:
-      #     fetch-depth: 0
-
-      - name: Checkout
+      - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          token: ${{ secrets.SAI_PAT }}
           fetch-depth: 0
 
       - name: Install yq
@@ -137,6 +131,11 @@ jobs:
         run: |
           TAG_NAME=$(node -p "require('./lerna.json').version")
           echo "rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          token: ${{ secrets.SAI_PAT }}
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@82a020f1f7f605c65dd2449b392a52c3fcfef7ef # v6.0.0
