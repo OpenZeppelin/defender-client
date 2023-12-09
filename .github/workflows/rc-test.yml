@@ -1,6 +1,8 @@
 name: push rc test
 on:
-  workflow_dispatch: {}
+  push:
+    branches:
+      - fix-bugs
 
 jobs:
 
