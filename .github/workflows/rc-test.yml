@@ -115,8 +115,9 @@ jobs:
       # Raise PR to the branch
       - name: Raise PR to the branch
         id: cpr
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38
         with:
+          token: ${{ secrets.SAI_PAT }}
           commit-message: "🤖 Update version to ${{ steps.update_version.outputs.rc_version }}"
           branch: 'update-version/${{ steps.update_version.outputs.rc_version }}'
           title: "🤖 [Automated Pr] Update version to ${{ steps.update_version.outputs.rc_version }}"
