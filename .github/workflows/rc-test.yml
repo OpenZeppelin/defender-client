@@ -1,7 +1,6 @@
 name: push rc test
 on:
-  schedule:
-    - cron: '20 9 * * *'
+  workflow_dispatch: {}
 
 jobs:
 
