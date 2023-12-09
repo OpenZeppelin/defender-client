@@ -58,6 +58,7 @@ jobs:
       # Give the default GITHUB_TOKEN write permission to commit and push the
       # added or changed files to the repository.
       contents: write
+      pull-requests: write
     needs: verify-packages
     runs-on: ubuntu-22.04
     steps:
@@ -119,7 +120,6 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38
         with:
-          token: ${{ secrets.SAI_PAT }}
           commit-message: "🤖 Update version to ${{ steps.update_version.outputs.rc_version }}"
           branch: 'update-version/${{ steps.update_version.outputs.rc_version }}'
           title: "🤖 [Automated Pr] Update version to ${{ steps.update_version.outputs.rc_version }}"
