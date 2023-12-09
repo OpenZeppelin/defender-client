@@ -80,11 +80,25 @@ jobs:
             yarn versionup:prerelease && ./hack/cross-dependency.sh
           fi
 
-      - name: Commit changes
+      - name: get latest version
         id: update_version
         run: |
           TAG_NAME=$(node -p "require('./lerna.json').version")
           echo "rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Verify version
+        id: verify_version
+        run: |
+          CURRENT_VERSION=$(echo "${{ needs.verify-packages.outputs.latest_tag }}" | sed 's/^v//')
+          NEW_VERSION=$(echo "${{ steps.update_version.outputs.rc_version }}" | sed 's/^v//')
+
+          CURRENT_MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
+          NEW_MINOR=$(echo "$NEW_VERSION" | cut -d. -f2)
+
+          if (( NEW_MINOR != CURRENT_MINOR + 1 )); then
+            echo "New version is not one minor version ahead of the current version"
+            exit 1
+          fi
 
       # Commit all changed files back to the repository
       - name: commit to the branch
@@ -97,15 +111,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+      # checkout to get the latest commit sha
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Get commit SHA
         id: get_sha
         run: |
           git stash
           git pull origin ${{ github.head_ref || github.ref_name }}
-          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          SHA=$(git rev-parse HEAD)
+          echo "sha=$SHA" >> $GITHUB_ENV
+          AUTHOR=$(git show -s --format='%an' $(git rev-parse HEAD))
+          echo "author=$AUTHOR" >> $GITHUB_ENV
+          echo "Commt SHA of the latest commit: $SHA"
+          echo "Author of the latest commit: $AUTHOR"
 
-  publish-tag:
-    name: Publish & Tag
-    needs: commit-push
-    uses: ./.github/workflows/rc-publish-test.yml
-    secrets: inherit
+  # publish-tag:
+  #   name: Publish & Tag
+  #   needs: commit-push
+  #   uses: ./.github/workflows/rc-publish-test.yml
+  #   secrets: inherit
+  #   env:
+  #     COMMIT_SHA: ${{ env.sha }}

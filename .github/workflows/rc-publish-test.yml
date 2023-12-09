@@ -5,7 +5,7 @@ on:
     inputs:
       sha:
         type: string
-        required: false
+        required: true
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -25,6 +25,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
+          ref: ${{ github.event.inputs.sha }}
           fetch-depth: 0
 
       - name: Install yq
@@ -43,6 +44,7 @@ jobs:
                           "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
           echo "author=$(echo $COMMIT_DETAILS | yq '.author.login')" >> $GITHUB_OUTPUT
           echo "message=$(echo $COMMIT_DETAILS | yq '.commit.message')" >> $GITHUB_OUTPUT
+
 
   prepare:
     needs: check_author
@@ -161,19 +163,19 @@ jobs:
           lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog"
           cd ../../
 
-      - name: Create and push tag
-        run: |
-          git tag -a ${{ steps.get_version.outputs.rc_version }} -m "${{ steps.get_version.outputs.rc_version }}"
-          git push origin ${{ steps.get_version.outputs.rc_version }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Create and push tag
+      #   run: |
+      #     git tag -a ${{ steps.get_version.outputs.rc_version }} -m "${{ steps.get_version.outputs.rc_version }}"
+      #     git push origin ${{ steps.get_version.outputs.rc_version }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  create-release:
-    permissions:
-      contents: write
-    name: Create Release
-    needs: tag
-    uses: ./.github/workflows/release.yml
-    with:
-      tag: ${{ needs.tag.outputs.rc_version }}
-      prerelease: true
+  # create-release:
+  #   permissions:
+  #     contents: write
+  #   name: Create Release
+  #   needs: tag
+  #   uses: ./.github/workflows/release.yml
+  #   with:
+  #     tag: ${{ needs.tag.outputs.rc_version }}
+  #     prerelease: true
