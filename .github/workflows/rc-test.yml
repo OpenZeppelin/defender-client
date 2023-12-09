@@ -71,6 +71,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
+      - name: Use node@16
+        uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+        with:
+          node-version: 16.20.0
 
       - name: Update RC candidate version ( excluding deploy client )
         run: |
@@ -123,16 +127,14 @@ jobs:
           git stash
           git pull origin ${{ github.head_ref || github.ref_name }}
           SHA=$(git rev-parse HEAD)
-          echo "sha=$SHA" >> $GITHUB_ENV
+          echo "sha=$SHA" >> $GITHUB_OUTPUT
           AUTHOR=$(git show -s --format='%an' $(git rev-parse HEAD))
-          echo "author=$AUTHOR" >> $GITHUB_ENV
-          echo "Commt SHA of the latest commit: $SHA"
-          echo "Author of the latest commit: $AUTHOR"
+          echo "author=$AUTHOR" >> $GITHUB_OUTPUT
 
-  # publish-tag:
-  #   name: Publish & Tag
-  #   needs: commit-push
-  #   uses: ./.github/workflows/rc-publish-test.yml
-  #   secrets: inherit
-  #   env:
-  #     COMMIT_SHA: ${{ env.sha }}
+  publish-tag:
+    name: Publish & Tag
+    needs: commit-push
+    uses: ./.github/workflows/rc-publish-test.yml
+    secrets: inherit
+    with:
+      sha: ${{ needs.commit-push.outputs.sha }}

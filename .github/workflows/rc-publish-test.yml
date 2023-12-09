@@ -39,17 +39,21 @@ jobs:
         id: commit
         run: |
           echo "received ${{ github.event.inputs.sha }}"
-          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_SHA=${{ github.event.inputs.sha }}
           COMMIT_DETAILS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                           "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
-          echo "author=$(echo $COMMIT_DETAILS | yq '.author.login')" >> $GITHUB_OUTPUT
-          echo "message=$(echo $COMMIT_DETAILS | yq '.commit.message')" >> $GITHUB_OUTPUT
+          AUTHOR=$(git show -s --format='%an' ${{ github.event.inputs.sha }})
+          MESSAGE=$(echo $COMMIT_DETAILS | yq '.commit.message')
+          echo "author=$AUTHOR" >> $GITHUB_OUTPUT
+          echo "message=$MESSAGE" >> $GITHUB_OUTPUT
+          echo "Author of the commit is $AUTHOR"
+          echo "Message of the commit is $MESSAGE"
 
 
   prepare:
     needs: check_author
     runs-on: ubuntu-22.04
-    # if: ${{ needs.check_author.outputs.latest_commit_author == 'github-actions[bot]' && contains(needs.check_author.outputs.commit_message, 'rc') }}
+    if: ${{ needs.check_author.outputs.latest_commit_author == 'github-actions[bot]' && contains(needs.check_author.outputs.commit_message, 'rc') }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
@@ -104,9 +108,6 @@ jobs:
           git_tag_gpgsign: true
           git_user_signingkey: true
           git_commit_gpgsign: true
-
-      # - name: Checkout
-      #   uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Use node@16
         uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
@@ -163,19 +164,19 @@ jobs:
           lerna_options="--no-git-tag-version --no-push --ignore-scripts --yes --exact --no-changelog"
           cd ../../
 
-      # - name: Create and push tag
-      #   run: |
-      #     git tag -a ${{ steps.get_version.outputs.rc_version }} -m "${{ steps.get_version.outputs.rc_version }}"
-      #     git push origin ${{ steps.get_version.outputs.rc_version }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create and push tag
+        run: |
+          git tag -a ${{ steps.get_version.outputs.rc_version }} -m "${{ steps.get_version.outputs.rc_version }}"
+          git push origin ${{ steps.get_version.outputs.rc_version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # create-release:
-  #   permissions:
-  #     contents: write
-  #   name: Create Release
-  #   needs: tag
-  #   uses: ./.github/workflows/release.yml
-  #   with:
-  #     tag: ${{ needs.tag.outputs.rc_version }}
-  #     prerelease: true
+  create-release:
+    permissions:
+      contents: write
+    name: Create Release
+    needs: tag
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.tag.outputs.rc_version }}
+      prerelease: true
