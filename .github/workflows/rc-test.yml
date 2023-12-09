@@ -114,34 +114,3 @@ jobs:
           branch: ${{ github.head_ref || github.ref_name }}
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      # checkout to get the latest commit sha
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Get commit SHA
-        id: get_sha
-        run: |
-          git stash
-          git pull origin ${{ github.head_ref || github.ref_name }}
-          SHA=$(git rev-parse HEAD)
-          echo "sha=$SHA" >> $GITHUB_OUTPUT
-          echo $SHA > sha.txt
-          AUTHOR=$(git show -s --format='%an' $(git rev-parse HEAD))
-          echo "author=$AUTHOR" >> $GITHUB_OUTPUT
-
-      - name: Upload SHA as artifact
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32
-        with:
-          name: sha
-          path: sha.txt
-          retention-days: 1
-
-
-  publish-tag:
-    name: Publish & Tag
-    needs: commit-push
-    uses: ./.github/workflows/rc-publish-test.yml
-    secrets: inherit

@@ -1,7 +1,9 @@
 name: Publish rc test
 
 on:
-  workflow_call: {}
+  push:
+    branches:
+      - fix-bugs
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -18,19 +20,9 @@ jobs:
         with:
           egress-policy: audit
 
-      - name: Download SHA artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: sha
-
-      - name: Set SHA as env variable
-        id: set_sha
-        run: echo "sha=$(cat sha.txt)" >> $GITHUB_OUTPUT
-
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          ref: ${{ steps.set_sha.outputs.sha }}
           fetch-depth: 0
 
       - name: Install yq
@@ -43,11 +35,11 @@ jobs:
       - name: Get last commit details
         id: commit
         run: |
-          echo "received ${{ steps.set_sha.outputs.sha }}"
-          COMMIT_SHA=${{ steps.set_sha.outputs.sha }}
+
+          COMMIT_SHA="$(git rev-parse HEAD)"
           COMMIT_DETAILS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                           "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
-          AUTHOR=$(git show -s --format='%an' ${{ steps.set_sha.outputs.sha }})
+          AUTHOR=$(git show -s --format='%an' $COMMIT_SHA)
           MESSAGE=$(echo $COMMIT_DETAILS | yq '.commit.message')
           echo "author=$AUTHOR" >> $GITHUB_OUTPUT
           echo "message=$MESSAGE" >> $GITHUB_OUTPUT
