@@ -131,10 +131,16 @@ jobs:
           AUTHOR=$(git show -s --format='%an' $(git rev-parse HEAD))
           echo "author=$AUTHOR" >> $GITHUB_OUTPUT
 
+      - name: Upload SHA as artifact
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32
+        with:
+          name: sha
+          path: sha.txt
+          retention-days: 1
+
+
   publish-tag:
     name: Publish & Tag
     needs: commit-push
     uses: ./.github/workflows/rc-publish-test.yml
     secrets: inherit
-    with:
-      sha: ${{ needs.commit-push.outputs.sha }}
