@@ -22,6 +22,8 @@ jobs:
 
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
 
       - name: Install yq
         run: |
@@ -33,11 +35,15 @@ jobs:
       - name: Get last commit details
         id: commit
         run: |
-          COMMIT_SHA=$(git rev-parse HEAD)
-          COMMIT_DETAILS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                          "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT_SHA")
-          echo "author=$(echo $COMMIT_DETAILS | yq '.author.login')" >> $GITHUB_OUTPUT
-          echo "message=$(echo $COMMIT_DETAILS | yq '.commit.message')" >> $GITHUB_OUTPUT
+
+          COMMIT_SHA="$(git rev-parse HEAD)"
+          AUTHOR=$(git show -s --format='%an' $COMMIT_SHA)
+          MESSAGE=$(git show -s --format='%s' $COMMIT_SHA)
+          echo "author=$AUTHOR" >> $GITHUB_OUTPUT
+          echo "message=$MESSAGE" >> $GITHUB_OUTPUT
+          echo "Author of the commit is $AUTHOR"
+          echo "Message of the commit is $MESSAGE"
+
 
   prepare:
     needs: check_author
@@ -68,7 +74,7 @@ jobs:
       node-version: "16.20.0"
 
   tag:
-    name: Publish & Tag RC candidate for all packages
+    name: Tag RC candidate for all packages
     permissions:
       id-token: write
       contents: write
@@ -85,6 +91,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          token: ${{ secrets.SAI_PAT }}
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@82a020f1f7f605c65dd2449b392a52c3fcfef7ef # v6.0.0
@@ -156,6 +164,8 @@ jobs:
         run: |
           git tag -a ${{ steps.get_version.outputs.rc_version }} -m "${{ steps.get_version.outputs.rc_version }}"
           git push origin ${{ steps.get_version.outputs.rc_version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   create-release:
     permissions:

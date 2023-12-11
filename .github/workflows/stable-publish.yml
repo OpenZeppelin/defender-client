@@ -1,9 +1,8 @@
 name: Publish stable
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch: {}
+  workflow_call: {}
 
 # Declare default permissions as read only.
 permissions: read-all

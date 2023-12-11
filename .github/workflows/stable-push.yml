@@ -1,4 +1,4 @@
-name: push stable
+name: Push Stable
 
 on:
   workflow_dispatch: {}
@@ -71,7 +71,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-
       - name: Update stable version
         run: |
             yarn versionup:stableminor && ./hack/cross-dependency.sh
@@ -90,3 +89,12 @@ jobs:
           branch: ${{ github.head_ref || github.ref_name }}
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  publish-stable-version:
+    name: Stable Publish
+    needs: tag
+    permissions:
+      contents: write
+    needs: verify-packages
+    if: needs.verify-packages.outputs.changed_packages > 0
+    uses: ./.github/workflows/stable-publish.yml
