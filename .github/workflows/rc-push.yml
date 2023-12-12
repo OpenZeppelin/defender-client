@@ -64,6 +64,7 @@ jobs:
       contents: write
       pull-requests: write
     needs: verify-packages
+    if: needs.verify-packages.outputs.changed_packages > 0
     runs-on: ubuntu-22.04
     steps:
       - name: Harden Runner
