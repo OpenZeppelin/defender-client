@@ -8,5 +8,6 @@ lib
 coverage
 .env
 .vscode
+.nx
 .DS_Store
 .nx

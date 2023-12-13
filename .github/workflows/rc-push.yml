@@ -1,0 +1,139 @@
+name: Push RC
+
+on:
+  schedule:
+    - cron: 0 0 * * *
+  workflow_dispatch: {}
+
+# Declare default permissions as read only.
+permissions: read-all
+
+jobs:
+
+  # check for changed packages
+  verify-packages:
+    name: Verify changed packages
+    permissions:
+      id-token: write
+      contents: write
+      actions: read
+    runs-on: ubuntu-22.04
+    outputs:
+      changed_packages: ${{ steps.tag_check_changes.outputs.changed_packages }}
+      latest_tag: ${{ steps.tag_check_changes.outputs.latest_tag }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Prepare pre-requisites
+        uses: ./.github/actions/prepare
+
+      - name: Install deps
+        run: yarn install-deps
+
+      - name: Style
+        run: yarn style
+
+      - name: Build
+        run: yarn nx-build-skip-cache
+
+      - name: Test
+        run: yarn nx-test-skip-cache
+
+      - name: Get latest git tag and verify package changes
+        id: tag_check_changes
+        run: |
+          git fetch --prune --unshallow --tags
+          latest_tag=$(git describe --tags --abbrev=0 --match "v*")
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          changed_packages=$(lerna changed --json | jq -r 'length')
+          echo "changed_packages=${changed_packages:-0}" >> $GITHUB_OUTPUT
+
+
+  # Commit & Push to branch
+  commit-push:
+    name: Commit and push changes
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+      pull-requests: write
+    needs: verify-packages
+    if: needs.verify-packages.outputs.changed_packages > 0
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          token: ${{ secrets.SAI_PAT }}
+
+      - name: Use node@16
+        uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+        with:
+          node-version: 16.20.0
+
+      - name: Update RC candidate version ( excluding deploy client )
+        run: |
+          if [[ ${{ needs.verify-packages.outputs.latest_tag }} != *"rc"* ]]; then
+            yarn versionup:preminor && ./hack/cross-dependency.sh
+          else
+            yarn versionup:prerelease && ./hack/cross-dependency.sh
+          fi
+
+      - name: get latest version
+        id: update_version
+        run: |
+          TAG_NAME=$(node -p "require('./lerna.json').version")
+          echo "rc_version=v$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Verify version
+        id: verify_version
+        run: |
+          CURRENT_VERSION=$(echo "${{ needs.verify-packages.outputs.latest_tag }}" | sed 's/^v//')
+          NEW_VERSION=$(echo "${{ steps.update_version.outputs.rc_version }}" | sed 's/^v//')
+
+          CURRENT_MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
+          NEW_MINOR=$(echo "$NEW_VERSION" | cut -d. -f2)
+
+          if (( NEW_MINOR != CURRENT_MINOR + 1 )); then
+            echo "New version is not one minor version ahead of the current version"
+            exit 1
+          fi
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@82a020f1f7f605c65dd2449b392a52c3fcfef7ef # v6.0.0
+        with:
+          gpg_private_key: ${{ secrets.SVC_GPG_KEY }}
+          passphrase: ${{ secrets.SVC_GPG_PASSPHRASE }}
+          git_config_global: true
+          git_tag_gpgsign: true
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      # Raise PR to the branch
+      - name: Raise PR to the branch
+        id: cpr
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38
+        with:
+          commit-message: "🤖 Update version to ${{ steps.update_version.outputs.rc_version }}"
+          branch: 'update-version/${{ steps.update_version.outputs.rc_version }}'
+          title: "🤖 [Automated Pr] Update version to ${{ steps.update_version.outputs.rc_version }}"
+          committer: svc-gh-is-01 <116854830+svc-gh-is-01@users.noreply.github.com>
+          author: svc-gh-is-01 <116854830+svc-gh-is-01@users.noreply.github.com>
+          delete-branch: true
+          body: |
+            This PR updates the version to ${{ steps.update_version.outputs.rc_version }}.
+            Please review and merge this PR if it looks good.
+
+
+            This is an automated PR created by github actions.

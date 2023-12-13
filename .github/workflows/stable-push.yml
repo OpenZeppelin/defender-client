@@ -1,0 +1,99 @@
+name: Push Stable
+
+on:
+  workflow_dispatch: {}
+
+# Declare default permissions as read only.
+permissions: read-all
+
+jobs:
+  # check for changed packages
+  verify-packages:
+    name: Verify changed packages
+    permissions:
+      id-token: write
+      contents: write
+      actions: read
+    runs-on: ubuntu-22.04
+    outputs:
+      changed_packages: ${{ steps.tag_check_changes.outputs.changed_packages }}
+      latest_tag: ${{ steps.tag_check_changes.outputs.latest_tag }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Prepare pre-requisites
+        uses: ./.github/actions/prepare
+
+      - name: Install deps
+        run: yarn install-deps
+
+      - name: Style
+        run: yarn style
+
+      - name: Build
+        run: yarn nx-build-skip-cache
+
+      - name: Test
+        run: yarn nx-test-skip-cache
+
+      - name: Get latest git tag and verify package changes
+        id: tag_check_changes
+        run: |
+          git fetch --prune --unshallow --tags
+          latest_tag=$(git describe --tags --abbrev=0 --match "v*")
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          changed_packages=$(lerna changed --json | jq -r 'length')
+          echo "changed_packages=${changed_packages:-0}" >> $GITHUB_OUTPUT
+
+
+  # Commit & Push to branch
+  commit-push:
+    name: Commit and push changes
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+    needs: verify-packages
+    if: needs.verify-packages.outputs.changed_packages > 0
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Update stable version
+        run: |
+            yarn versionup:stableminor && ./hack/cross-dependency.sh
+
+      - name: Commit changes
+        id: update_version
+        run: |
+          TAG_NAME=$(node -p "require('./lerna.json').version")
+          echo "stable_version=v$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Raise PR to the branch
+        id: stable-pr
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38
+        with:
+          commit-message: "🤖 Update version to ${{ steps.update_version.outputs.stable_version }}"
+          branch: 'update-version/${{ steps.update_version.outputs.stable_version }}'
+          title: "🤖 [Automated Pr] Update version to ${{ steps.update_version.outputs.stable_version }}"
+          committer: svc-gh-is-01 <116854830+svc-gh-is-01@users.noreply.github.com>
+          author: svc-gh-is-01 <116854830+svc-gh-is-01@users.noreply.github.com>
+          delete-branch: true
+          body: |
+            This PR updates the version to ${{ steps.update_version.outputs.stable_version }}.
+            Please review and merge this PR if it looks good.
+
+
+            This is an automated PR created by github actions.

@@ -3,8 +3,8 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/OpenZeppelin/defender-client/badge)](https://api.securityscorecards.dev/projects/github.com/OpenZeppelin/defender-client)
 [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/7395/badge)](https://bestpractices.coreinfrastructure.org/projects/7395)
 [![Scorecard supply-chain security](https://github.com/OpenZeppelin/defender-client/actions/workflows/scorecard.yml/badge.svg)](https://github.com/OpenZeppelin/defender-client/actions/workflows/scorecard.yml)
-[![Stable Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/stable.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/stable.yml)
-[![RC Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/rc.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/rc.yml)
+[![Stable Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/stable-push.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/stable-push.yml)
+[![RC Git Release](https://github.com/OpenZeppelin/defender-client/actions/workflows/rc-publish.yml/badge.svg)](https://github.com/OpenZeppelin/defender/actions/workflows/rc-publish.yml)
 [![CI](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenZeppelin/defender-client/actions/workflows/ci.yml)
 [![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
 
