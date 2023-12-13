@@ -1,4 +1,4 @@
-name: push stable
+name: Push Stable
 
 on:
   workflow_dispatch: {}
@@ -71,7 +71,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-
       - name: Update stable version
         run: |
             yarn versionup:stableminor && ./hack/cross-dependency.sh
@@ -82,11 +81,19 @@ jobs:
           TAG_NAME=$(node -p "require('./lerna.json').version")
           echo "stable_version=v$TAG_NAME" >> $GITHUB_OUTPUT
 
-      # Commit all changed files back to the repository
-      - uses: planetscale/ghcommit-action@6ca6b06e9d2de1296143831c53e1d601831ba2a2
+      - name: Raise PR to the branch
+        id: stable-pr
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38
         with:
-          commit_message: "🤖 Update version to ${{ steps.update_version.outputs.stable_version }}"
-          repo: ${{ github.repository }}
-          branch: ${{ github.head_ref || github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          commit-message: "🤖 Update version to ${{ steps.update_version.outputs.stable_version }}"
+          branch: 'update-version/${{ steps.update_version.outputs.stable_version }}'
+          title: "🤖 [Automated Pr] Update version to ${{ steps.update_version.outputs.stable_version }}"
+          committer: svc-gh-is-01 <116854830+svc-gh-is-01@users.noreply.github.com>
+          author: svc-gh-is-01 <116854830+svc-gh-is-01@users.noreply.github.com>
+          delete-branch: true
+          body: |
+            This PR updates the version to ${{ steps.update_version.outputs.stable_version }}.
+            Please review and merge this PR if it looks good.
+
+
+            This is an automated PR created by github actions.
