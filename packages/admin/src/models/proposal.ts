@@ -7,7 +7,12 @@ export type BigUInt = string | number;
 export type ProposalType = ProposalStepType | ProposalBatchType;
 export type ProposalStepType = 'upgrade' | 'custom' | 'pause' | 'send-funds' | 'access-control';
 export type ProposalBatchType = 'batch';
-export type ProposalFunctionInputs = (string | boolean | (string | boolean)[])[];
+type ProposalFunctionInputsArray = (string | boolean)[];
+type ProposalFunctionInputs = (
+  | string
+  | boolean
+  | (string | boolean | (string | boolean | (string | boolean | ProposalFunctionInputsArray)[])[])[]
+)[];
 
 export interface ExternalApiCreateProposalRequest {
   contract: PartialContract | PartialContract[];
