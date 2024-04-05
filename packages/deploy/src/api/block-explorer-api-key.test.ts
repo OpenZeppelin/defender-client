@@ -14,7 +14,7 @@ describe('Block Explorer Api Key Client', () => {
 
   const createPaylod: CreateBlockExplorerApiKeyRequest = {
     key: 'random-key',
-    network: 'goerli',
+    network: 'sepolia',
   };
   const updatePaylod: UpdateBlockExplorerApiKeyRequest = {
     key: 'random-key',

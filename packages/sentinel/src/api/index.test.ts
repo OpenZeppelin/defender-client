@@ -73,7 +73,7 @@ describe('SentinelClient', () => {
     name: 'Test BLOCK sentinel',
     addresses: ['0xdead'],
     notificationChannels: [],
-    network: 'goerli',
+    network: 'sepolia',
     confirmLevel: 1,
     paused: false,
     abi: ABI,
@@ -94,7 +94,7 @@ describe('SentinelClient', () => {
   const createFortaPayload: ExternalCreateFortaSubscriberRequest = {
     type: 'FORTA',
     name: 'Test FORTA sentinel',
-    network: 'goerli',
+    network: 'sepolia',
     addresses: ['0xdead'],
     notificationChannels: [],
     paused: false,
@@ -107,7 +107,7 @@ describe('SentinelClient', () => {
     name: 'Previous sentinel',
     paused: false,
     blockWatcherId: 'i-am-the-watcher',
-    network: 'goerli',
+    network: 'sepolia',
     addressRules: [
       {
         abi: '[{ method: "type" }]',
@@ -344,7 +344,7 @@ describe('SentinelClient', () => {
         subscriberId: 'old-subscriber-id',
         name: 'Previous sentinel',
         paused: false,
-        network: 'goerli',
+        network: 'sepolia',
         fortaRule: {
           addresses: ['0xdead'],
           conditions: {
@@ -544,7 +544,7 @@ describe('SentinelClient', () => {
   describe('getBlockwatcherIdByNetwork', () => {
     it('finds blockwatchers for network when there are available', async () => {
       // Make sure the network provided is the network mocked above
-      const results = await sentinel.getBlockwatcherIdByNetwork('goerli');
+      const results = await sentinel.getBlockwatcherIdByNetwork('sepolia');
       expect(results[0]?.blockWatcherId).toEqual('i-am-the-watcher');
     });
 
