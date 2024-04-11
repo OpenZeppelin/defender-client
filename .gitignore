@@ -7,3 +7,5 @@ lib
 *.tgz
 coverage
 .env
+.DS_Store
+.vscode

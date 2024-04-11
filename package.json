@@ -27,7 +27,8 @@
     "build": "lerna run build",
     "lint": "yarn lint:check --fix",
     "lint:check": "eslint 'packages/**/src/**/*.{js,ts}' --quiet",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "versionup:rcminor": "lerna version --preid=rc --no-git-tag-version --exact --no-changelog --force-publish"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "example-create-relayer",
-  "version": "1.38.0-rc.1",
+  "version": "1.38.1-rc.0",
   "private": true,
   "main": "index.js",
   "author": "Dan McKeon <dan@openzeppelin.com>",
@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "defender-relay-client": "1.38.0-rc.1",
+    "defender-relay-client": "1.38.1-rc.0",
     "dotenv": "^8.2.0"
   }
 }
