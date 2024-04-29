@@ -31,7 +31,7 @@ async function main() {
       'https://raw.githubusercontent.com/OpenZeppelin/defender-client/fa441208febac7f46fe7bb03c787659089315f78/examples/verify-contract/compilation-artifact.json',
     solidityFilePath: 'contracts/Vault.sol',
     contractName: 'VaultV2',
-    contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
+    contractAddress: '0xc1a35c687c72AE7ccF7067F018848e5FceED637F',
     contractNetwork: 'sepolia',
   });
 
@@ -46,7 +46,7 @@ async function main() {
       'https://github.com/OpenZeppelin/defender-client/blob/master/examples/verify-contract/compilation-artifact.json',
     solidityFilePath: 'contracts/Vault.sol',
     contractName: 'VaultV2',
-    contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
+    contractAddress: '0xc1a35c687c72AE7ccF7067F018848e5FceED637F',
     contractNetwork: 'sepolia',
   });
 
@@ -56,7 +56,7 @@ async function main() {
   // state of your contract, you can call `get` providing
   // the address and network
   verification = await client.getDeploymentVerification({
-    contractAddress: '0x38e373CC414e90dDec45cf7166d497409902e998',
+    contractAddress: '0xc1a35c687c72AE7ccF7067F018848e5FceED637F',
     contractNetwork: 'sepolia',
   });
 
