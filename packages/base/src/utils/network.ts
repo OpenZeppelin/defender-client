@@ -3,7 +3,6 @@ import { findKey } from 'lodash';
 type PublicNetwork =
   | 'mainnet'
   | 'sepolia'
-  | 'goerli'
   | 'xdai'
   | 'sokol'
   | 'fuse'
@@ -19,11 +18,9 @@ type PublicNetwork =
   | 'avalanche'
   | 'fuji'
   | 'optimism'
-  | 'optimism-goerli'
   | 'optimism-sepolia'
   | 'arbitrum'
   | 'arbitrum-nova'
-  | 'arbitrum-goerli'
   | 'arbitrum-sepolia'
   | 'celo'
   | 'alfajores'
@@ -34,10 +31,8 @@ type PublicNetwork =
   | 'hedera'
   | 'hederatest'
   | 'zksync'
-  | 'zksync-goerli'
   | 'zksync-sepolia'
   | 'base'
-  | 'base-goerli'
   | 'base-sepolia'
   | 'linea'
   | 'linea-goerli'
@@ -54,7 +49,6 @@ export type Network = PublicNetwork | CustomNetwork;
 export const Networks: Network[] = [
   'mainnet',
   'sepolia',
-  'goerli',
   'xdai',
   'sokol',
   'fuse',
@@ -70,11 +64,9 @@ export const Networks: Network[] = [
   'avalanche',
   'fuji',
   'optimism',
-  'optimism-goerli',
   'optimism-sepolia',
   'arbitrum',
   'arbitrum-nova',
-  'arbitrum-goerli',
   'arbitrum-sepolia',
   'celo',
   'alfajores',
@@ -85,10 +77,8 @@ export const Networks: Network[] = [
   'hedera',
   'hederatest',
   'zksync',
-  'zksync-goerli',
   'zksync-sepolia',
   'base',
-  'base-goerli',
   'base-sepolia',
   'linea',
   'linea-goerli',
@@ -115,7 +105,6 @@ export function toChainId(network: Network): number | undefined {
 const chainIds: { [key in Network]: number } = {
   'mainnet': 1,
   'sepolia': 11155111,
-  'goerli': 5,
   'xdai': 100,
   'sokol': 77,
   'fuse': 122,
@@ -131,11 +120,9 @@ const chainIds: { [key in Network]: number } = {
   'avalanche': 0xa86a,
   'fuji': 0xa869,
   'optimism': 10,
-  'optimism-goerli': 420,
   'optimism-sepolia': 11155420,
   'arbitrum': 42161,
   'arbitrum-nova': 42170,
-  'arbitrum-goerli': 421613,
   'arbitrum-sepolia': 421614,
   'celo': 42220,
   'alfajores': 44787,
@@ -146,10 +133,8 @@ const chainIds: { [key in Network]: number } = {
   'hedera': 295,
   'hederatest': 296,
   'zksync': 324,
-  'zksync-goerli': 280,
   'zksync-sepolia': 300,
   'base': 8453,
-  'base-goerli': 84531,
   'base-sepolia': 84532,
   'linea': 59144,
   'linea-goerli': 59140,

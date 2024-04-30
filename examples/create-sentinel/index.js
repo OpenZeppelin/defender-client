@@ -28,7 +28,7 @@ async function main() {
 
   const blockRequestParameters = {
     type: 'BLOCK', // BLOCK or FORTA
-    network: 'goerli',
+    network: 'sepolia',
     // optional
     confirmLevel: 1, // if not set, we pick the blockwatcher for the chosen network with the lowest offset
     name: 'MyNewSentinel',

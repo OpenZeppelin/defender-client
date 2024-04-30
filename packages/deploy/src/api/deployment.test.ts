@@ -15,7 +15,7 @@ describe('Deploy Client', () => {
   const deployCreatePayload: DeployContractRequest = {
     contractName: 'ERC20',
     contractPath: 'contracts/ERC20.sol',
-    network: 'goerli',
+    network: 'sepolia',
     artifactUri: 'url',
     verifySourceCode: true,
   };

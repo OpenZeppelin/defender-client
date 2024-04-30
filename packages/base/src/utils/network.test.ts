@@ -2,12 +2,12 @@ import { fromChainId, isValidNetwork, Network, toChainId } from './network';
 
 describe('utils/network', () => {
   describe('fromChainId', () => {
-    test('valid chainId', () => expect(fromChainId(5)).toEqual('goerli'));
+    test('valid chainId', () => expect(fromChainId(11155111)).toEqual('sepolia'));
     test('invalid chainId', () => expect(fromChainId(99)).toBeUndefined());
   });
 
   describe('toChainId', () => {
-    test('valid network', () => expect(toChainId('goerli')).toEqual(5));
+    test('valid network', () => expect(toChainId('sepolia')).toEqual(11155111));
     test('invalid network', () => expect(toChainId('invalid' as Network)).toBeUndefined());
   });
 

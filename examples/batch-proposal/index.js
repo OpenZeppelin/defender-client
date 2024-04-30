@@ -12,12 +12,12 @@ const contracts = [
   {
     address: ERC20Token,
     name: 'ERC20 Token',
-    network: 'goerli',
+    network: 'sepolia',
     abi: '[{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}]',
   },
   {
     address: RolesContract,
-    network: 'goerli',
+    network: 'sepolia',
     name: 'Roles Contract',
     abi: '[{"inputs":[{"internalType":"bytes32","name":"role","type":"bytes32"},{"internalType":"address","name":"account","type":"address"}],"name":"grantRole","outputs":[],"stateMutability":"nonpayable","type":"function"}]',
   },
@@ -27,7 +27,7 @@ const safeAddress = '0xba4A8019166BB0E066dF2De99b37fbd5916eCf20';
 
 const steps = [
   {
-    contractId: `goerli-${ERC20Token}`,
+    contractId: `sepolia-${ERC20Token}`,
     targetFunction: {
       name: 'mint',
       inputs: [{ type: 'uint256', name: 'amount' }],
@@ -36,7 +36,7 @@ const steps = [
     type: 'custom',
   },
   {
-    contractId: `goerli-${ERC20Token}`,
+    contractId: `sepolia-${ERC20Token}`,
     targetFunction: {
       name: 'transfer',
       inputs: [
@@ -48,7 +48,7 @@ const steps = [
     type: 'custom',
   },
   {
-    contractId: `goerli-${RolesContract}`,
+    contractId: `sepolia-${RolesContract}`,
     metadata: {
       action: 'grantRole',
       role: '0x0000000000000000000000000000000000000000000000000000000000000000',
