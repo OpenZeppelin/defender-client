@@ -1,5 +1,10 @@
 import { AutotaskRelayer } from '.';
 import Lambda from 'aws-sdk/clients/lambda';
+import { Lambda as LambdaV3 } from '../__mocks__/@aws-sdk/client-lambda';
+jest.mock('node:process', () => ({
+  ...jest.requireActual('node:process'),
+  version: 'v16.0.3',
+}));
 
 type TestAutotaskRelayer = Omit<AutotaskRelayer, 'lambda' | 'relayerARN'> & { lambda: Lambda; arn: string };
 
@@ -29,6 +34,8 @@ describe('AutotaskRelayer', () => {
   let relayer: TestAutotaskRelayer;
 
   beforeEach(async function () {
+    jest.mock('aws-sdk/clients/lambda', () => Lambda);
+    jest.mock('@aws-sdk/client-lambda', () => ({ Lambda: LambdaV3 }));
     relayer = new AutotaskRelayer({
       credentials: JSON.stringify(credentials),
       relayerARN: 'arn',
