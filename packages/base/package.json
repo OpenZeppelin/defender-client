@@ -21,6 +21,7 @@
   "author": "OpenZeppelin Defender <defender@openzeppelin.com>",
   "license": "MIT",
   "devDependencies": {
+    "@aws-sdk/client-lambda": "^3.563.0",
     "@types/async-retry": "^1.4.4",
     "aws-sdk": "^2.1366.0"
   },
