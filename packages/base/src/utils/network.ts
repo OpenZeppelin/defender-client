@@ -68,6 +68,8 @@ export const Networks: Network[] = [
   'moonbeam',
   'matic',
   'mumbai',
+  'matic-zkevm',
+  'matic-zkevm-testnet',
   'avalanche',
   'fuji',
   'optimism',
