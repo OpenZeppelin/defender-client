@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/defender-client",
-  "version": "1.54.1",
+  "version": "1.54.2",
   "private": true,
   "description": "Root package for the defender-client set of packages",
   "workspaces": [
@@ -43,7 +43,8 @@
     "versionup:rcminor": "lerna version --preid=rc --no-git-tag-version --yes --exact --no-changelog",
     "versionup:preminor": "yarn versionup:rcminor preminor --force-publish",
     "versionup:prerelease": "yarn versionup:rcminor prerelease --force-publish",
-    "versionup:stableminor": "lerna version minor --conventional-graduate --no-git-tag-version --yes --exact --no-changelog"
+    "versionup:stableminor": "lerna version minor --conventional-graduate --no-git-tag-version --yes --exact --no-changelog",
+    "versionup:stablepatch": "lerna version patch --conventional-graduate --no-git-tag-version --yes --exact --no-changelog"
   },
   "repository": {
     "type": "git",
