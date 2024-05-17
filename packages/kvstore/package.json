@@ -1,6 +1,6 @@
 {
   "name": "defender-kvstore-client",
-  "version": "1.44.1",
+  "version": "1.44.2",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
