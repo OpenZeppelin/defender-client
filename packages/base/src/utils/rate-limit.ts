@@ -10,6 +10,8 @@ const createRateLimitModule = () => {
 
       const rateLimitForIdentifier = globalCounter[toLimitIdentifier];
 
+      if (!rateLimitForIdentifier) throw new Error('Rate limit identifier not found');
+
       return {
         getRateFor: (rateEntry: unknown) => rateLimitForIdentifier.get(rateEntry) || 0,
         checkRateFor: (rateEntry: unknown) => {
