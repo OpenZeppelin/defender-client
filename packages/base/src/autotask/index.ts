@@ -1,20 +1,22 @@
-import Lambda, { _Blob } from 'aws-sdk/clients/lambda';
+import { _Blob } from 'aws-sdk/clients/lambda';
 import { rateLimitModule, RateLimitModule } from '../utils/rate-limit';
 import { getTimestampInSeconds } from '../utils/time';
-import { getLambdaFromCredentials, isLambdaV3, LambdaLike, PayloadResponseV2, PayloadResponseV3 } from '../utils/lambda';
+import { getLambdaFromCredentials, isLambdaV3, isV3ResponsePayload, LambdaLike, PayloadResponseV2, PayloadResponseV3 } from '../utils/lambda';
 
 // do our best to get .errorMessage, but return object by default
 function cleanError(payload?: PayloadResponseV2 | PayloadResponseV3): PayloadResponseV2 | PayloadResponseV3 {
   if (!payload) {
     return 'Error occurred, but error payload was not defined';
   }
+  const error = isV3ResponsePayload(payload) ? payload.transformToString() : payload;
   try {
-    const errMsg = JSON.parse(payload.toString()).errorMessage;
+    const errMsg = JSON.parse(error.toString()).errorMessage;
     if (errMsg) {
       return errMsg;
     }
   } catch (e) {}
-  return payload;
+
+  return error;
 }
 
 export abstract class BaseAutotaskClient {
