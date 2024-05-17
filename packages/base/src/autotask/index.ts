@@ -1,4 +1,3 @@
-import { _Blob } from 'aws-sdk/clients/lambda';
 import { rateLimitModule, RateLimitModule } from '../utils/rate-limit';
 import { getTimestampInSeconds } from '../utils/time';
 import { getLambdaFromCredentials, isLambdaV3, isV3ResponsePayload, LambdaLike, PayloadResponseV2, PayloadResponseV3 } from '../utils/lambda';
