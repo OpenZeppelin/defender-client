@@ -17,7 +17,7 @@ describe('DefenderApiError', () => {
   test('request rejection reject with a DefenderApiResponseError that include message, request.path, request.method, response.status, response.statusText, response.data', async () => {
     try {
       await rejectWithDefenderApiError(mockAxiosError);
-    } catch (error) {
+    } catch (error: any) {
       expect(error instanceof DefenderApiResponseError).toBe(true);
 
       expect(error.message).toStrictEqual(expectedRejectObjectStructure.message);

@@ -31,10 +31,6 @@ describe('AutotaskRelayer', () => {
     }) as unknown as TestAutotaskRelayer;
   });
 
-  afterAll(() => {
-    expect(true).toBe(false);
-  });
-
   describe('constructor', () => {
     test('calls init', () => {
       expect(relayer.arn).toBe('arn');
