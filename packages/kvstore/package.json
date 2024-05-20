@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/defender-kvstore-client",
-  "version": "1.54.4",
+  "version": "1.54.5",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
