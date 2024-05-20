@@ -6,7 +6,7 @@ To interact with your contracts, you create _proposals_ that need to be reviewed
 
 # End Of Support Notice
 
-We will soon stop supporting this package. Please migrate to `@openzeppelin/defender-sdk`.
+We will no longer be maintaining or supporting any additional releases for defender-client. Please migrate to defender-sdk as soon as possible to get all the benefits of defender 2.0 and more.
 
 ## Install
 
