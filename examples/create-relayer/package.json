@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@openzeppelin/defender-relay-client": "1.54.2",
+    "@openzeppelin/defender-relay-client": "1.54.3",
     "dotenv": "^8.2.0"
   }
 }
