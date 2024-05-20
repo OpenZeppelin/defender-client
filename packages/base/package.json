@@ -1,6 +1,6 @@
 {
   "name": "defender-base-client",
-  "version": "1.44.2",
+  "version": "1.44.3",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
