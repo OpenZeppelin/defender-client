@@ -12,6 +12,10 @@ There are 2 modules included in this package:
 - Execute send, sign, and other operations using a specific relayer
 - Authenticates with bearer token generated using Relayer API Key/Secret (available when relayer is created)
 
+# End Of Support Notice
+
+We will soon stop supporting this package. Please migrate to `@openzeppelin/defender-sdk`.
+
 ## Install
 
 ```bash

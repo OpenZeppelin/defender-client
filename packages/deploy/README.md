@@ -2,6 +2,10 @@
 
 Platform Deployment Client allows you to deploy contracts through the OpenZeppelin Platform, manage deployment configuration and manage block explorer api keys.
 
+# End Of Support Notice
+
+We will soon stop supporting this package. Please migrate to `@openzeppelin/defender-sdk`.
+
 ## Install
 
 ```bash

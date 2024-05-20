@@ -6,6 +6,10 @@ This client allows you to access a simple key-value data store from your Autotas
 
 _Note that this package will not work outisde the Autotasks environment._
 
+# End Of Support Notice
+
+We will soon stop supporting this package. Please migrate to `@openzeppelin/defender-sdk`.
+
 ## Installation
 
 This package is included in the Autotask runtime environment, so you do not need to bundle it in your code. To install it for local development and typescript type completion, run:

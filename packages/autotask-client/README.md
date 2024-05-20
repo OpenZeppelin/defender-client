@@ -4,6 +4,10 @@ The [Defender Autotasks](https://docs.openzeppelin.com/defender/autotasks) servi
 
 This client allows you to update the code of your Autotasks programmatically, so you don't need to copy-paste code into the Defender web application. Additionally, the client allows you to easily create, list, retrieve, delete and update your Autotasks.
 
+# End Of Support Notice
+
+We will soon stop supporting this package. Please migrate to `@openzeppelin/defender-sdk`.
+
 Example usage:
 
 ```bash

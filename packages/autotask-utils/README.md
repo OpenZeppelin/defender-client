@@ -6,6 +6,10 @@ This library provides typings for simplifying the writing of Autotask code when 
 
 _Note: For programmatically interacting with your Autotasks, such as updating their code from your local workstation, check out the [`defender-autotask-client`](https://www.npmjs.com/package/defender-autotask-client) package_.
 
+# End Of Support Notice
+
+We will soon stop supporting this package. Please migrate to `@openzeppelin/defender-sdk`.
+
 ## Install
 
 ```bash

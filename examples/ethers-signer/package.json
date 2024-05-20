@@ -1,6 +1,6 @@
 {
   "name": "example-ethers-signer",
-  "version": "1.54.2",
+  "version": "1.54.4",
   "private": true,
   "main": "index.js",
   "author": "Santiago Palladino <santiago@openzeppelin.com>",

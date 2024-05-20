@@ -2,6 +2,12 @@
 
 Defender Account acts as an interface to manage your account.
 
+# End Of Support Notice
+
+We will soon stop supporting this package. Please migrate to `@openzeppelin/defender-sdk`.
+
+Please 
+
 ## Install
 
 ```bash

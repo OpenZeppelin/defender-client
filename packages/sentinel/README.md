@@ -4,6 +4,10 @@ Defender Sentinel allows you to monitor transactions by defining conditions on e
 
 Further information can be found on the OpenZeppelin documentation page: https://docs.openzeppelin.com/defender/sentinel
 
+# End Of Support Notice
+
+We will soon stop supporting this package. Please migrate to `@openzeppelin/defender-sdk`.
+
 ## Install
 
 ```bash
