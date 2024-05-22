@@ -17,7 +17,7 @@ export function createApi(
     key && token
       ? {
           'X-Api-Key': key,
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         }
       : {};
 

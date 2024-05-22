@@ -31,7 +31,10 @@ export async function authenticate(authenticationData: UserPass, poolData: PoolD
   }
 }
 
-function doAuthenticate(cognitoUser: CognitoUser, authenticationDetails: AuthenticationDetails): Promise<CognitoUserSession> {
+function doAuthenticate(
+  cognitoUser: CognitoUser,
+  authenticationDetails: AuthenticationDetails,
+): Promise<CognitoUserSession> {
   return new Promise((resolve, reject) => {
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: function (session) {
