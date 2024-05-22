@@ -12,6 +12,10 @@ There are 2 modules included in this package:
 - Execute send, sign, and other operations using a specific relayer
 - Authenticates with bearer token generated using Relayer API Key/Secret (available when relayer is created)
 
+# End Of Support Notice
+
+We will no longer be maintaining or supporting any additional releases for defender-client. Please migrate to defender-sdk as soon as possible to get all the benefits of defender 2.0 and more.
+
 ## Install
 
 ```bash

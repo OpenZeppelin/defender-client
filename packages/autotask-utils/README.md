@@ -6,6 +6,10 @@ This library provides typings for simplifying the writing of Autotask code when 
 
 _Note: For programmatically interacting with your Autotasks, such as updating their code from your local workstation, check out the [`defender-autotask-client`](https://www.npmjs.com/package/defender-autotask-client) package_.
 
+# End Of Support Notice
+
+We will no longer be maintaining or supporting any additional releases for defender-client. Please migrate to defender-sdk as soon as possible to get all the benefits of defender 2.0 and more.
+
 ## Install
 
 ```bash

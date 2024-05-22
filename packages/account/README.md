@@ -2,6 +2,12 @@
 
 Defender Account acts as an interface to manage your account.
 
+# End Of Support Notice
+
+We will no longer be maintaining or supporting any additional releases for defender-client. Please migrate to defender-sdk as soon as possible to get all the benefits of defender 2.0 and more.
+
+Please 
+
 ## Install
 
 ```bash

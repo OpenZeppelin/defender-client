@@ -4,6 +4,10 @@ Defender Admin acts as an interface to manage your smart contract project throug
 
 To interact with your contracts, you create _proposals_ that need to be reviewed and approved by the other members of the multi-signature wallets. These proposals can be created directly in the Defender web application, or using this library. You can also rely on this library to add your contracts to the Defender Admin dashboard.
 
+# End Of Support Notice
+
+We will no longer be maintaining or supporting any additional releases for defender-client. Please migrate to defender-sdk as soon as possible to get all the benefits of defender 2.0 and more.
+
 ## Install
 
 ```bash

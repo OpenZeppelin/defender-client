@@ -1,6 +1,6 @@
 {
   "name": "example-verify-contract",
-  "version": "1.54.2",
+  "version": "1.54.4",
   "description": "",
   "private": true,
   "main": "index.js",

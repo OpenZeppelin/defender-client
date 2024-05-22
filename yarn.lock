@@ -1816,6 +1816,30 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
+"@openzeppelin/defender-admin-client@1.54.2":
+  version "1.54.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-admin-client/-/defender-admin-client-1.54.2.tgz#b760ca7644e0f0b5c7dfa99caf0d2e3e09b6b766"
+  integrity sha512-bKU+T/eY9P0rC7o+0av8BDb7/L2Ixgb9LVh+1gVVyg6ZDBT07DoU9VONOXJuL6rbOnlniZVo4xhm/7kNAuLIyw==
+  dependencies:
+    "@openzeppelin/defender-base-client" "1.54.2"
+    axios "^1.4.0"
+    ethers "^5.7.2"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
+"@openzeppelin/defender-autotask-client@1.54.2":
+  version "1.54.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-autotask-client/-/defender-autotask-client-1.54.2.tgz#e9df8af2ca625ee5bf38de822f621aa5c0711d86"
+  integrity sha512-/Ygwjj6ikUcw0NodLt/Ajcq4WNoMMlOiQppqetzD1qN8wmSN0+jwHDabKfIsiWW04HEqTJsj3jRSjjgD3uMamw==
+  dependencies:
+    "@openzeppelin/defender-base-client" "1.54.2"
+    axios "^1.4.0"
+    dotenv "^10.0.0"
+    glob "^7.1.6"
+    jszip "^3.5.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
 "@openzeppelin/defender-base-client@1.47.0":
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-base-client/-/defender-base-client-1.47.0.tgz#f9d47f4cf0a75b4e4e5139dec780a3f26f5e2019"
@@ -1871,6 +1895,17 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
+"@openzeppelin/defender-relay-client@1.54.3":
+  version "1.54.3"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-relay-client/-/defender-relay-client-1.54.3.tgz#bca193d3df44356b99adb78592b6c5c3622fe7e1"
+  integrity sha512-7x3DkL2lTBQnuMnHRqS+7AqxVMr6KJtK4GAeYK4kYNJezXzjGHn3OSgf6g/IlFCAOJTjMFQTcKusj+Gr2dnSUQ==
+  dependencies:
+    "@openzeppelin/defender-base-client" "1.54.2"
+    amazon-cognito-identity-js "^6.0.1"
+    axios "^1.4.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
 "@openzeppelin/defender-sentinel-client@1.47.0":
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sentinel-client/-/defender-sentinel-client-1.47.0.tgz#eaed39153729c66aa6bb69277cbdeaafc4003dcd"
@@ -1889,6 +1924,17 @@
   dependencies:
     "@ethersproject/abi" "^5.6.3"
     "@openzeppelin/defender-base-client" "1.48.0"
+    axios "^1.4.0"
+    lodash "^4.17.19"
+    node-fetch "^2.6.0"
+
+"@openzeppelin/defender-sentinel-client@1.54.2":
+  version "1.54.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sentinel-client/-/defender-sentinel-client-1.54.2.tgz#96da4973965e192514826263d2c3d759d44daf14"
+  integrity sha512-5leiIFRoUq/WG3R/Hv/rROfEeWDpJyMUGBwNj17YrqHIeXn385qgJhtj9YI/C3tCDKh8CAyP0+Y3aZFnFNiutA==
+  dependencies:
+    "@ethersproject/abi" "^5.6.3"
+    "@openzeppelin/defender-base-client" "1.54.2"
     axios "^1.4.0"
     lodash "^4.17.19"
     node-fetch "^2.6.0"
