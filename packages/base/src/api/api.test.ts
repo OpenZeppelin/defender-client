@@ -9,7 +9,7 @@ const token = 'token';
 
 describe('createApi', () => {
   test('passes correct arguments to axios', () => {
-    createApi(key, token, apiUrl);
+    createApi(apiUrl, key, token);
     expect(axios.create).toBeCalledWith({
       baseURL: apiUrl,
       headers: {
