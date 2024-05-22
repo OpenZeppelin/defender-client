@@ -24,7 +24,6 @@ export const RelaySignerApiUrl = () =>
 export const getAdminApiUrl = () => process.env.DEFENDER_API_URL || 'https://defender-api.openzeppelin.com/';
 
 export class RelayClient extends BaseApiClient {
-
   public constructor(params: ApiRelayerParams) {
     super({
       apiKey: params.apiKey,
