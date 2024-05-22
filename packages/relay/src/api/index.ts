@@ -1,4 +1,4 @@
-import { BaseApiClient } from 'defender-base-client';
+import { BaseApiClient, AuthType } from 'defender-base-client';
 import {
   ApiRelayerParams,
   IRelayer,
@@ -21,7 +21,17 @@ import {
 export const RelaySignerApiUrl = () =>
   process.env.DEFENDER_RELAY_SIGNER_API_URL || 'https://api.defender.openzeppelin.com/';
 
+export const getAdminApiUrl = () => process.env.DEFENDER_API_URL || 'https://defender-api.openzeppelin.com/';
+
 export class RelayClient extends BaseApiClient {
+  public constructor(params: ApiRelayerParams) {
+    super({
+      apiKey: params.apiKey,
+      apiSecret: params.apiSecret,
+      httpsAgent: params.httpsAgent,
+      authConfig: { useCredentialsCaching: params.useCredentialsCaching ?? false, type: 'admin' },
+    });
+  }
   protected getPoolId(): string {
     return process.env.DEFENDER_RELAY_POOL_ID || 'us-west-2_94f3puJWv';
   }
@@ -30,7 +40,8 @@ export class RelayClient extends BaseApiClient {
     return process.env.DEFENDER_RELAY_POOL_CLIENT_ID || '40e58hbc7pktmnp9i26hh5nsav';
   }
 
-  protected getApiUrl(): string {
+  protected getApiUrl(type?: AuthType): string {
+    if (type === 'admin') return getAdminApiUrl();
     return process.env.DEFENDER_RELAY_API_URL || 'https://defender-api.openzeppelin.com/relayer/';
   }
 
@@ -104,7 +115,12 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
   private jsonRpcRequestNextId: number;
 
   public constructor(params: ApiRelayerParams) {
-    super(params);
+    super({
+      apiKey: params.apiKey,
+      apiSecret: params.apiSecret,
+      httpsAgent: params.httpsAgent,
+      authConfig: { useCredentialsCaching: params.useCredentialsCaching ?? false, type: 'relay' },
+    });
     this.jsonRpcRequestNextId = 1;
   }
 
@@ -116,7 +132,8 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
     return process.env.DEFENDER_RELAY_SIGNER_POOL_CLIENT_ID || '1bpd19lcr33qvg5cr3oi79rdap';
   }
 
-  protected getApiUrl(): string {
+  protected getApiUrl(type?: AuthType): string {
+    if (type === 'admin') return getAdminApiUrl();
     return RelaySignerApiUrl();
   }
 

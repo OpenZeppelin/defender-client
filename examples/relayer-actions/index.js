@@ -2,8 +2,12 @@ require('dotenv').config();
 
 const { Relayer, VERSION } = require('defender-relay-client');
 
-const params = { apiKey: process.env.API_KEY, apiSecret: process.env.API_SECRET };
-const relayer = new Relayer(params);
+const relayer = new Relayer({ 
+  apiKey: process.env.RELAYER_API_KEY,
+  apiSecret: process.env.RELAYER_API_SECRET,
+  // for high transaction volumes, we cache credentials to avoid rate limiting.
+  useCredentialsCaching: true 
+});
 
 async function get() {
   const info = await relayer.getRelayer();
