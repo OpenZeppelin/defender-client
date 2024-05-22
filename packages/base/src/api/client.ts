@@ -72,7 +72,7 @@ export abstract class BaseApiClient {
       refreshToken: this.sessionV2.refreshToken,
       type: this.authConfig.type,
     };
-    this.sessionV2 = await refreshSessionV2(credentials, this.getApiUrl('v1' ,'admin'));
+    this.sessionV2 = await refreshSessionV2(credentials, this.getApiUrl('v1', 'admin'));
     return this.sessionV2.accessToken;
   }
 

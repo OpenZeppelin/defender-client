@@ -6,7 +6,6 @@ jest.mock('node:process', () => ({
   version: 'v16.0.3',
 }));
 
-
 type TestClient = Omit<KeyValueStoreAutotaskClient, 'lambda'> & { lambda: typeof Lambda };
 
 describe('KeyValueStoreAutotaskClient', () => {

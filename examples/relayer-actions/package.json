@@ -1,6 +1,6 @@
 {
   "name": "example-relayer-send",
-  "version": "1.54.4",
+  "version": "1.54.5",
   "main": "index.js",
   "author": "Igor Yalovoy <igor@openzeppelin.com>",
   "license": "MIT",

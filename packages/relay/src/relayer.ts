@@ -142,8 +142,18 @@ export type RelayerTransaction = RelayerLegacyTransaction | RelayerEIP1559Transa
 export type PaginatedTransactionListResponse = RelayerTransaction[] | { items: RelayerTransaction[]; next?: string };
 
 export type RelayerParams = ApiRelayerParams | AutotaskRelayerParams;
-export type ApiRelayerParams = { apiKey: string; apiSecret: string; httpsAgent?: https.Agent, useCredentialsCaching?: boolean; };
-export type AutotaskRelayerParams = { credentials: string; relayerARN: string; httpsAgent?: https.Agent, useCredentialsCaching?: boolean; };
+export type ApiRelayerParams = {
+  apiKey: string;
+  apiSecret: string;
+  httpsAgent?: https.Agent;
+  useCredentialsCaching?: boolean;
+};
+export type AutotaskRelayerParams = {
+  credentials: string;
+  relayerARN: string;
+  httpsAgent?: https.Agent;
+  useCredentialsCaching?: boolean;
+};
 
 export type JsonRpcResponse = {
   id: number | null;

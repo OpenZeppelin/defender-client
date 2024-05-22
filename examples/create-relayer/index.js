@@ -3,7 +3,7 @@ require('dotenv').config();
 const { RelayClient } = require('@openzeppelin/defender-relay-client');
 
 async function main() {
-  const client = new RelayClient({ 
+  const client = new RelayClient({
     apiKey: process.env.ADMIN_API_KEY,
     apiSecret: process.env.ADMIN_API_SECRET,
     useCredentialsCaching: false,

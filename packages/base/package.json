@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/defender-base-client",
-  "version": "1.54.4",
+  "version": "1.54.5",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -32,7 +32,7 @@
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },
-  "gitHead": "a7c4808dd11e708df42d110de230c264061c72c3",
+  "gitHead": "0fc43da796268b8c75d70179c7ea649b160dfd06",
   "repository": {
     "type": "git",
     "url": "https://github.com/OpenZeppelin/defender-client.git"

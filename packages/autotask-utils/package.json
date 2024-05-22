@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/defender-autotask-utils",
-  "version": "1.54.4",
+  "version": "1.54.5",
   "description": "Utils library for writing Defender Autotasks",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -27,5 +27,5 @@
     "type": "git",
     "url": "https://github.com/OpenZeppelin/defender-client.git"
   },
-  "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e"
+  "gitHead": "0fc43da796268b8c75d70179c7ea649b160dfd06"
 }
