@@ -24,6 +24,15 @@ export const RelaySignerApiUrl = () =>
 export const getAdminApiUrl = () => process.env.DEFENDER_API_URL || 'https://defender-api.openzeppelin.com/';
 
 export class RelayClient extends BaseApiClient {
+
+  public constructor(params: ApiRelayerParams) {
+    super({
+      apiKey: params.apiKey,
+      apiSecret: params.apiSecret,
+      httpsAgent: params.httpsAgent,
+      authConfig: { useCredentialsCaching: params.useCredentialsCaching ?? false, type: 'admin' },
+    });
+  }
   protected getPoolId(): string {
     return process.env.DEFENDER_RELAY_POOL_ID || 'us-west-2_94f3puJWv';
   }
@@ -124,7 +133,8 @@ export class ApiRelayer extends BaseApiClient implements IRelayer {
     return process.env.DEFENDER_RELAY_SIGNER_POOL_CLIENT_ID || '1bpd19lcr33qvg5cr3oi79rdap';
   }
 
-  protected getApiUrl(): string {
+  protected getApiUrl(type?: AuthType): string {
+    if (type === 'admin') return getAdminApiUrl();
     return RelaySignerApiUrl();
   }
 
