@@ -1,6 +1,16 @@
-import { BaseApiClient, ApiVersion } from '@openzeppelin/defender-base-client';
+import { BaseApiClient, ApiVersion, ClientParams } from '@openzeppelin/defender-base-client';
 
 export class PlatformApiClient extends BaseApiClient {
+
+  constructor(params: ClientParams) {
+    super({
+      apiKey: params.apiKey,
+      apiSecret: params.apiSecret,
+      httpsAgent: params.httpsAgent,
+      authConfig: { useCredentialsCaching: params.useCredentialsCaching ?? false, type: 'admin' },
+    });
+  }
+
   protected getPoolId(): string {
     return process.env.PLATFORM_POOL_ID || 'us-west-2_94f3puJWv';
   }

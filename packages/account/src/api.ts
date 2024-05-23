@@ -1,9 +1,20 @@
 import { BaseApiClient, ApiVersion } from '@openzeppelin/defender-base-client';
 
 import { AccountUsageResponse } from './models/account';
+import { ClientParams } from '@openzeppelin/defender-base-client';
 
 // AccountClient class
 export class AccountClient extends BaseApiClient {
+
+  constructor(params: ClientParams) {
+    super({
+      apiKey: params.apiKey,
+      apiSecret: params.apiSecret,
+      httpsAgent: params.httpsAgent,
+      authConfig: { useCredentialsCaching: params.useCredentialsCaching ?? false, type: 'admin' },
+    });
+  }
+
   protected getPoolId(): string {
     return process.env.DEFENDER_ADMIN_POOL_ID ?? 'us-west-2_94f3puJWv';
   }
