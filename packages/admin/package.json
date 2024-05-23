@@ -25,7 +25,7 @@
     "axios": "^1.4.0",
     "ethers": "^5.7.2",
     "lodash": "^4.17.19",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^3.3.2"
   },
   "publishConfig": {
     "access": "public"
