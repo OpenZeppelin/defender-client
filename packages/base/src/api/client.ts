@@ -77,7 +77,7 @@ export abstract class BaseApiClient {
       const accessToken = this.authConfig.useCredentialsCaching
         ? await this.getAccessTokenV2()
         : await this.getAccessToken();
-      this.api = createAuthenticatedApi(this.apiKey, accessToken, this.getApiUrl('admin'), this.httpsAgent);
+      this.api = createAuthenticatedApi(this.apiKey, accessToken, this.getApiUrl(this.authConfig.type ?? 'admin'), this.httpsAgent);
     }
     return this.api;
   }
