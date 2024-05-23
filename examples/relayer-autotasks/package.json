@@ -1,11 +1,11 @@
 {
   "name": "example-relayer-autotasks",
-  "version": "1.54.4",
+  "version": "1.54.6",
   "main": "index.js",
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@openzeppelin/defender-relay-client": "1.54.3",
+    "@openzeppelin/defender-relay-client": "1.54.6",
     "dotenv": "^8.2.0"
   }
 }

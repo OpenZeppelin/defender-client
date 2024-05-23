@@ -1,6 +1,6 @@
 {
   "name": "example-update-relayer",
-  "version": "1.54.4",
+  "version": "1.54.6",
   "private": true,
   "main": "index.js",
   "author": "Dan McKeon <dan@openzeppelin.com>",
@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@openzeppelin/defender-relay-client": "1.54.3",
+    "@openzeppelin/defender-relay-client": "1.54.6",
     "dotenv": "^8.2.0"
   }
 }

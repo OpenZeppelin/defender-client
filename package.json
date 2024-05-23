@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/defender-client",
-  "version": "1.54.2",
+  "version": "1.54.6",
   "private": true,
   "description": "Root package for the defender-client set of packages",
   "workspaces": [

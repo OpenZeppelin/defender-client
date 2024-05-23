@@ -1,6 +1,6 @@
 {
   "name": "example-unpause-proposal",
-  "version": "1.54.4",
+  "version": "1.54.6",
   "private": true,
   "main": "index.js",
   "author": "Martín Verzilli <mverzilli@openzeppelin.com>",

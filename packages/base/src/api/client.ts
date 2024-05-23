@@ -72,7 +72,7 @@ export abstract class BaseApiClient {
       refreshToken: this.sessionV2.refreshToken,
       type: this.authConfig.type,
     };
-    this.sessionV2 = await refreshSessionV2(credentials, this.getApiUrl('v1' ,'admin'));
+    this.sessionV2 = await refreshSessionV2(credentials, this.getApiUrl('v1', 'admin'));
     return this.sessionV2.accessToken;
   }
 
@@ -81,7 +81,12 @@ export abstract class BaseApiClient {
       const accessToken = this.authConfig.useCredentialsCaching
         ? await this.getAccessTokenV2()
         : await this.getAccessToken();
-      this.api = createAuthenticatedApi(this.apiKey, accessToken, this.getApiUrl(v, 'admin'), this.httpsAgent);
+      this.api = createAuthenticatedApi(
+        this.apiKey,
+        accessToken,
+        this.getApiUrl(v, this.authConfig.type ?? 'admin'),
+        this.httpsAgent,
+      );
       this.version = v;
     }
     return this.api;
