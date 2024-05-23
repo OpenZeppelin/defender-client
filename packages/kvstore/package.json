@@ -1,6 +1,6 @@
 {
   "name": "defender-kvstore-client",
-  "version": "1.38.1-rc.0",
+  "version": "1.38.3-rc.0",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.2",
-    "defender-base-client": "1.38.1-rc.0",
+    "defender-base-client": "1.38.3-rc.0",
     "fs-extra": "^10.0.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
@@ -30,5 +30,5 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.11"
   },
-  "gitHead": "daddff62731a4b55075b57905d8c5b8c4eb3b80e"
+  "gitHead": "c5d6787337e2701f0ff35842db46686f555c30a8"
 }
