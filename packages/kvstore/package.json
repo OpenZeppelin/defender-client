@@ -23,7 +23,7 @@
   "dependencies": {
     "@openzeppelin/defender-base-client": "1.54.6",
     "axios": "^1.4.0",
-    "fs-extra": "^10.0.0",
+    "fs-extra": "^11.2.0",
     "lodash": "^4.17.19",
     "node-fetch": "^2.6.0"
   },
