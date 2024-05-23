@@ -1895,17 +1895,6 @@
     lodash "^4.17.19"
     node-fetch "^2.6.0"
 
-"@openzeppelin/defender-relay-client@1.54.3":
-  version "1.54.3"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/defender-relay-client/-/defender-relay-client-1.54.3.tgz#bca193d3df44356b99adb78592b6c5c3622fe7e1"
-  integrity sha512-7x3DkL2lTBQnuMnHRqS+7AqxVMr6KJtK4GAeYK4kYNJezXzjGHn3OSgf6g/IlFCAOJTjMFQTcKusj+Gr2dnSUQ==
-  dependencies:
-    "@openzeppelin/defender-base-client" "1.54.2"
-    amazon-cognito-identity-js "^6.0.1"
-    axios "^1.4.0"
-    lodash "^4.17.19"
-    node-fetch "^2.6.0"
-
 "@openzeppelin/defender-sentinel-client@1.47.0":
   version "1.47.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/defender-sentinel-client/-/defender-sentinel-client-1.47.0.tgz#eaed39153729c66aa6bb69277cbdeaafc4003dcd"
