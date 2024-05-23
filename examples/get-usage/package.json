@@ -1,6 +1,6 @@
 {
   "name": "get-usage",
-  "version": "1.54.5",
+  "version": "1.54.6",
   "private": true,
   "main": "index.js",
   "author": "Zeljko Markovic <zeljko@openzeppelin.com>",

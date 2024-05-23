@@ -1,6 +1,6 @@
 {
   "name": "example-update-autotask",
-  "version": "1.54.5",
+  "version": "1.54.6",
   "private": true,
   "main": "index.js",
   "author": "Santiago Palladino <santiago@openzeppelin.com>",

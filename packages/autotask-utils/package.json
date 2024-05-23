@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/defender-autotask-utils",
-  "version": "1.54.5",
+  "version": "1.54.6",
   "description": "Utils library for writing Defender Autotasks",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",

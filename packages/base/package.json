@@ -1,6 +1,6 @@
 {
   "name": "@openzeppelin/defender-base-client",
-  "version": "1.54.5",
+  "version": "1.54.6",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
