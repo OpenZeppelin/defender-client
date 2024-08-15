@@ -9,8 +9,8 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@openzeppelin/defender-admin-client": "1.54.2",
+    "@openzeppelin/defender-admin-client": "1.54.6",
     "dotenv": "^8.2.0",
-    "ethers": "^5.7.2"
+    "ethers": "^6.0.0"
   }
 }
