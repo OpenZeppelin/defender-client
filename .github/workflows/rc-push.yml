@@ -1,8 +1,6 @@
 name: Push RC
 
 on:
-  schedule:
-    - cron: 0 0 * * *
   workflow_dispatch: {}
 
 # Declare default permissions as read only.
