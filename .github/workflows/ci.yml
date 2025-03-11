@@ -33,7 +33,7 @@ jobs:
       contents: read
       actions: read
     needs: prepare
-    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v1.6.0
+    uses: slsa-framework/slsa-github-generator/.github/workflows/builder_nodejs_slsa3.yml@v2.1.0
     with:
       run-scripts: "install-deps, style, nx-build-skip-cache, nx-test-skip-cache"
       node-version: "16.20.0"
