@@ -2,9 +2,7 @@
 # This action can be used to draft the next release notes as pull requests are merged into the master.
 name: Release Drafter
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch: {}
 
 # Declare default permissions as read only.
 permissions: read-all
