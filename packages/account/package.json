@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@openzeppelin/defender-base-client": "1.54.6",
-    "axios": "^1.4.0"
+    "axios": "^1.7.4"
   },
   "publishConfig": {
     "access": "public"
