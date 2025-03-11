@@ -9,7 +9,7 @@
     "update-code": "node update-code.js"
   },
   "dependencies": {
-    "@openzeppelin/defender-autotask-client": "1.54.2",
+    "@openzeppelin/defender-autotask-client": "1.54.6",
     "dotenv": "^8.2.0"
   }
 }
