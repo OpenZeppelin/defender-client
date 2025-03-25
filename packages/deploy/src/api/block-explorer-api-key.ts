@@ -5,10 +5,21 @@ import {
   RemoveResponse,
   UpdateBlockExplorerApiKeyRequest,
 } from '../models';
+import { ClientParams } from '@openzeppelin/defender-base-client';
 
 const PATH = '/block-explorer-api-key';
 
 export class BlockExplorerApiKeyClient extends PlatformApiClient {
+
+  constructor(params: ClientParams) {
+    super({
+      apiKey: params.apiKey,
+      apiSecret: params.apiSecret,
+      httpsAgent: params.httpsAgent,
+      useCredentialsCaching: params.useCredentialsCaching,
+    });
+  }
+
   public async get(blockExplorerApiKeyId: string): Promise<BlockExplorerApiKeyResponse> {
     return this.apiCall(async (api) => {
       return api.get(`${PATH}/${blockExplorerApiKeyId}`);

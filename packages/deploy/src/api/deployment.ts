@@ -1,11 +1,21 @@
 import { isEmpty } from 'lodash';
-import { Network } from '@openzeppelin/defender-base-client';
+import { ClientParams, Network } from '@openzeppelin/defender-base-client';
 import { PlatformApiClient } from './platform';
 import { ApprovalProcessResponse, DeployContractRequest, DeploymentResponse } from '../models';
 
 const PATH = '/deployments';
 
 export class DeploymentClient extends PlatformApiClient {
+
+  constructor(params: ClientParams) {
+    super({
+      apiKey: params.apiKey,
+      apiSecret: params.apiSecret,
+      httpsAgent: params.httpsAgent,
+      useCredentialsCaching: params.useCredentialsCaching,
+    });
+  }
+
   public async getApprovalProcess(network: Network): Promise<ApprovalProcessResponse> {
     return this.apiCall(async (api) => {
       return api.get(`${PATH}/config/${network}`);

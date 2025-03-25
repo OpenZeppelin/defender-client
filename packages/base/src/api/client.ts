@@ -13,6 +13,20 @@ export type AuthConfig = {
   type: AuthType;
 };
 
+export type BaseApiClientParams = {
+  apiKey: string;
+  apiSecret: string;
+  httpsAgent?: https.Agent;
+  authConfig?: AuthConfig;
+};
+
+export type ClientParams = {
+  apiKey: string;
+  apiSecret: string;
+  httpsAgent?: https.Agent;
+  useCredentialsCaching?: boolean;
+};
+
 export abstract class BaseApiClient {
   private api: AxiosInstance | undefined;
   private version: ApiVersion | undefined;
@@ -27,7 +41,7 @@ export abstract class BaseApiClient {
   protected abstract getPoolClientId(): string;
   protected abstract getApiUrl(v: ApiVersion, type?: AuthType): string;
 
-  public constructor(params: { apiKey: string; apiSecret: string; httpsAgent?: https.Agent; authConfig?: AuthConfig }) {
+  public constructor(params: BaseApiClientParams) {
     if (!params.apiKey) throw new Error(`API key is required`);
     if (!params.apiSecret) throw new Error(`API secret is required`);
 

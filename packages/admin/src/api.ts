@@ -1,4 +1,4 @@
-import { BaseApiClient, ApiVersion } from '@openzeppelin/defender-base-client';
+import { BaseApiClient, ApiVersion, ClientParams } from '@openzeppelin/defender-base-client';
 import { capitalize, isArray, isEmpty } from 'lodash';
 import { Interface } from 'ethers/lib/utils';
 
@@ -46,6 +46,16 @@ export interface ProposalResponseWithUrl extends ProposalResponse {
 }
 
 export class AdminClient extends BaseApiClient {
+
+  constructor(params: ClientParams) {
+    super({
+      apiKey: params.apiKey,
+      apiSecret: params.apiSecret,
+      httpsAgent: params.httpsAgent,
+      authConfig: { useCredentialsCaching: params.useCredentialsCaching ?? false, type: 'admin' },
+    });
+  }
+
   protected getPoolId(): string {
     return process.env.DEFENDER_ADMIN_POOL_ID || 'us-west-2_94f3puJWv';
   }
